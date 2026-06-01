@@ -1366,6 +1366,25 @@ const DATA3_LORE={
   guestwifi:'A decommissioned portal host beaconing to a C2 domain. Confirmed compromise; sever it.',
 };
 const ACT_DATA={2:{S:DATA_SOULS,D:DATA_DETAILS,W:DATA_WHISPERS,L:DATA_LORE},3:{S:DATA3_SOULS,D:DATA3_DETAILS,W:DATA3_WHISPERS,L:DATA3_LORE}};
+// per-act house reskin — same floorplan, but each act names its rooms for its domain (id → [name, zone])
+const ACT_ROOMS={
+  2:{0:['The Ingress','data ingress'],1:['The Data Vault','Tier-0 data'],
+     2:['The SharePoint Vault','sites & files'],3:['The Shared Drive','guest-shared files'],4:['The Cold Storage','archived data'],5:['The Kiosk Cache','cached data'],6:['The Spool Room','service logs'],7:['The Guest Lockers','guest data'],
+     8:['The Counting House','finance data'],9:['The Pipeline','pipeline outputs'],10:['The Data Lake','cloud & SaaS data'],11:['The Boardroom Files','executive docs'],
+     12:['The Dead Archive','decommissioned data'],13:['The Sealed Holds','legal & retention'],14:['The Steward’s Hoard','former-admin data']},
+  3:{0:['The Breach Point','initial access'],1:['The Vault · Tier-0','the objective'],
+     2:['The Compromised Site','data incident'],3:['The Exposed Share','external access'],4:['The Stale Access','seasonal access'],5:['The Shared Endpoints','kiosk incident'],6:['The Service Sprawl','service accounts'],7:['The Rogue Network','guest network'],
+     8:['The Finance Hit','finance assets'],9:['The Automation Pivot','automation'],10:['The Cloud Front','cloud & SaaS'],11:['The Privilege Path','privileged'],
+     12:['The Dead Drop','decommissioned'],13:['The Glass Break','emergency access'],14:['The Admin Trail','former admins']}
+};
+let _roomSnap=null;
+function snapRooms(){if(_roomSnap)return;_roomSnap=ROOMS.map(r=>({name:r.name,zone:r.zone}));}
+function reskinRooms(act){snapRooms();const ov=ACT_ROOMS[act];ROOMS.forEach((r,i)=>{const o=ov&&ov[r.id];if(o){r.name=o[0];r.zone=o[1];}else{r.name=_roomSnap[i].name;r.zone=_roomSnap[i].zone;}});}
+// per-act colour signature (graphics) — a subtle edge-wash: identity violet → data teal → breach red
+(function(){if(typeof document==='undefined')return;var s=document.createElement('style');
+  s.textContent='#actwash{position:fixed;inset:0;pointer-events:none;z-index:8;opacity:0;transition:opacity 1.1s;background:radial-gradient(ellipse at 50% 118%,transparent 56%,var(--aw,rgba(124,58,237,.16)) 132%)}';
+  document.head.appendChild(s);var d=document.createElement('div');d.id='actwash';document.body.appendChild(d);})();
+function actWash(act){var d=document.getElementById('actwash');if(!d)return;var c=act===3?'rgba(255,59,92,.20)':act===2?'rgba(34,205,180,.17)':'rgba(124,58,237,.16)';d.style.setProperty('--aw',c);d.style.opacity='1';}
 let _act1Snap=null;
 function snapAct1(){if(_act1Snap)return;_act1Snap={};Object.keys(SOULS).forEach(k=>{_act1Snap[k]={S:SOULS[k],D:DETAILS[k],W:WHISPERS[k],L:LORE[k]};});}
 function enterAct(act){snapAct1();_act=act;const D=ACT_DATA[act];
@@ -1374,6 +1393,7 @@ function enterAct(act){snapAct1();_act=act;const D=ACT_DATA[act];
     if(D){if(D.S[k])SOULS[k]=D.S[k];if(D.D[k])DETAILS[k]=D.D[k];if(D.W[k])WHISPERS[k]=D.W[k];if(D.L[k])LORE[k]=D.L[k];}
     else{const o=_act1Snap[k];if(o){SOULS[k]=o.S;DETAILS[k]=o.D;WHISPERS[k]=o.W;LORE[k]=o.L;}}});
   RITE_LABEL=Object.assign({},(ACTS[act]||ACTS[1]).short);
+  reskinRooms(act);actWash(act);
   if(typeof closeSanctum==='function')closeSanctum();
   var _e=document.getElementById('end');if(_e){_e.classList.add('hide');setTimeout(function(){_e.style.display='none';},300);}
   timers.length=0;stopAuto();resize();newGame();introCamera();
