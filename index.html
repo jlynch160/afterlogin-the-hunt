@@ -1079,6 +1079,9 @@ const BOSS_ABILITIES3={
      {name:'Tier-0 Assault',fx:'advance',desc:'surges one step toward the Vault'}],
 };
 let BOSSES=BOSSES1,BOSS_ABILITIES=BOSS_ABILITIES1;
+// per-act difficulty curve — each act is tougher (more boss HP/AC + harder-hitting abilities), offset by the Sanctum boons you carry in. Hard, not impossible.
+const ACT_DIFF={1:{hp:1.0,ac:0,dmg:1.0,star:'★'},2:{hp:1.18,ac:0,dmg:1.2,star:'★★'},3:{hp:1.35,ac:1,dmg:1.35,star:'★★★'}};
+function actDiff(){return ACT_DIFF[_act||1]||ACT_DIFF[1];}
 function floorSouls(f){return ROOMS.filter(r=>r.floor===f&&r.soul);}
 function floorThreats(f){return G.threats.filter(t=>!t.banished&&ROOMS[t.room].floor===f);}
 function floorCleared(f){return floorSouls(f).every(r=>r.soul.judged&&r.soul.judged!=='possessed')&&!floorThreats(f).length;}
@@ -1502,8 +1505,8 @@ function renderSanctum(){const m=metaGet(),u=m.upgrades||{};document.getElementB
   document.getElementById('snGrid').innerHTML=SANCTUM.map(s=>{const owned=!!u[s.id],afford=(m.essence||0)>=s.cost;
     return '<div class="sn-card'+(owned?' owned':'')+'"><div class="sn-ic">'+s.ic+'</div><div class="sn-n">'+s.name+'</div><div class="sn-d">'+s.desc+'</div>'+
       (owned?'<div class="sn-own">✓ Attuned</div>':'<button class="sn-buy" '+(afford?'':'disabled')+' onclick="buySanctum(\''+s.id+'\')">✦ '+s.cost+'</button>')+'</div>';}).join('');
-  const acts=[['Act I','The Haunting of Identity','enterAct(1)'],['Act II','The Bleeding Archive','enterAct(2)'],['Act III','The Convergence','enterAct(3)']];
-  document.getElementById('snActs').innerHTML=acts.map(a=>'<div class="sn-act'+(a[2]?'':' lock')+'"'+(a[2]?' style="cursor:pointer" onclick="'+a[2]+'"':'')+'>'+(a[2]?'▶ ':'🔒 ')+'<b>'+a[0]+'</b> · '+a[1]+(a[2]?'':' — coming')+'</div>').join('');}
+  const acts=[['Act I','The Haunting of Identity','enterAct(1)',1],['Act II','The Bleeding Archive','enterAct(2)',2],['Act III','The Convergence','enterAct(3)',3]];
+  document.getElementById('snActs').innerHTML=acts.map(a=>'<div class="sn-act'+(a[2]?'':' lock')+'"'+(a[2]?' style="cursor:pointer" onclick="'+a[2]+'"':'')+'>'+(a[2]?'▶ ':'🔒 ')+'<b>'+a[0]+'</b> · '+a[1]+(a[2]?' <span style="color:#ffb454">'+ACT_DIFF[a[3]].star+'</span>':' — coming')+'</div>').join('');}
 function buySanctum(id){const m=metaGet(),s=SANCTUM.find(x=>x.id===id);if(!s||(m.upgrades&&m.upgrades[id]))return;if((m.essence||0)<s.cost){try{sfx('bad');}catch(e){}return;}
   m.essence-=s.cost;m.upgrades=m.upgrades||{};m.upgrades[id]=true;metaSet(m);try{sfx('triumph');}catch(e){}renderSanctum();}
 
@@ -1534,8 +1537,8 @@ const timers=[];function schedule(at,fn){timers.push({at,fn,done:false});}
 function tickTimers(){for(const tm of timers)if(!tm.done&&G.t>=tm.at){tm.done=true;tm.fn();}}
 
 /* ---- floor guardians + the attic boss ----------------------------------- */
-function spawnFloorBoss(f){if(!BOSSES[f]||(G.floorBoss&&G.floorBoss[f]))return;G.floorBoss[f]=true;const b=BOSSES[f],fin=f===3;
-  G.threats.push({id:'boss'+f,room:b.spawnRoom,prev:-1,name:b.name,hp:b.hp,maxhp:b.hp,ac:b.ac,tier:b.tier,boss:!!b.boss,floor:f,banished:false,_evShown:false,seed:Math.random()*6,evidence:b.evidence.slice(),_next:pick(BOSS_ABILITIES[f]||[])});
+function spawnFloorBoss(f){if(!BOSSES[f]||(G.floorBoss&&G.floorBoss[f]))return;G.floorBoss[f]=true;const b=BOSSES[f],fin=f===3,_d=actDiff(),_hp=Math.round(b.hp*_d.hp);
+  G.threats.push({id:'boss'+f,room:b.spawnRoom,prev:-1,name:b.name,hp:_hp,maxhp:_hp,ac:b.ac+_d.ac,tier:b.tier,boss:!!b.boss,floor:f,banished:false,_evShown:false,seed:Math.random()*6,evidence:b.evidence.slice(),_next:pick(BOSS_ABILITIES[f]||[])});
   shake(16);flash(.55);sfx('alarm');shock();
   showAct(fin?'The Attic · Act III':'Floor '+f+' · Guardian',b.name);
   scry('⚠ <b>'+b.name+'</b> '+(fin?'rises in the Attic — the source of it all':'guards this floor')+'. ♥'+b.hp+' HP · AC '+b.ac+'. '+(fin?'Banish it to end the night.':'Banish it to open the stairs.'),'bad');
@@ -1588,7 +1591,7 @@ function advanceThreats(){const live=G.threats.filter(t=>!t.banished);if(!live.l
 function bossAbility(t){if(t.banished)return;const set=BOSS_ABILITIES[t.tier];if(!set){threatHop(t);return;}
   const tr=ROOMS[t.room],phase=t.hp<=t.maxhp*.4;
   if(phase&&!t._enraged){t._enraged=true;flash(.4);shake(14);sfx('possess');shock();scry('🔥 <b>'+t.name+'</b> is <b>enraged</b> — its attacks come faster and harder.','bad');}
-  const ab=t._next||pick(set);t._next=pick(set);const amt=Math.round((ab.amt||0)*(phase?1.5:1));
+  const ab=t._next||pick(set);t._next=pick(set);const amt=Math.round((ab.amt||0)*(phase?1.5:1)*actDiff().dmg);
   if(ab.fx==='ledger'){G.ledger-=amt;updLedger();floatText(tr.x,tr.y-30,'−'+amt+' Ledger','#ff6a8a',20);flash(.22);shake(7);sfx('bad');scry('⚔ <b>'+t.name+' · '+ab.name+'</b> — '+ab.desc+' (−'+amt+').','bad');}
   else if(ab.fx==='heal'){t.hp=Math.min(t.maxhp,t.hp+amt);floatText(tr.x,tr.y-42,'+'+amt,'#ff3b5c',22);sfx('possess');scry('🩸 <b>'+t.name+' · '+ab.name+'</b> — '+ab.desc+' ('+t.hp+'/'+t.maxhp+').','bad');}
   else if(ab.fx==='shield'){t.ac+=(ab.amt||1);sfx('alarm');scry('🛡 <b>'+t.name+' · '+ab.name+'</b> — '+ab.desc+' (AC '+t.ac+').','bad');}
