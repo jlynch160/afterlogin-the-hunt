@@ -1,0 +1,20 @@
+# Afterlogin — never commit secrets or local config
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+*.p12
+secrets.json
+appsettings.local.json
+.vscode/mcp.json
+.vscode/*.local.json
+
+# dependencies / build / OS cruft
+node_modules/
+dist/
+.DS_Store
+Thumbs.db
+*.log
+.backup/
+.swa/

@@ -1,0 +1,6 @@
+{
+  "name": "afterlogin-api",
+  "version": "1.0.0",
+  "description": "Afterlogin managed API — live Warden reasoning + Foundry IQ grounding (zero deps; Node 18 global fetch).",
+  "engines": { "node": ">=18" }
+}
