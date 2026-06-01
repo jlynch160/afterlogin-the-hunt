@@ -1137,10 +1137,19 @@ let _act=1;
 const ACTS={
   1:{tenant:'meridian-estate.onmicrosoft.com',
      rites:{rest:['🕊️','Lay to Rest','banish a truly-dead account (deprovision)'],bind:['🔒','Bind &amp; Watch','disable &amp; monitor — the safe hedge'],ack:['🏠','Acknowledge the Living','document owner, leave in place']},
-     panel:'Entra · live signals',rows:[['🕐 Sign-ins','signins'],['🔐 MFA','mfa'],['📅 Created','created'],['👥 Groups','groups']]},
+     short:{rest:'Lay to Rest',bind:'Bind &amp; Watch',ack:'Acknowledge the Living'},
+     panel:'Entra · live signals',rows:[['🕐 Sign-ins','signins'],['🔐 MFA','mfa'],['📅 Created','created'],['👥 Groups','groups']],
+     intro:['Act I','The Severance','Another night at Meridian Estate.','Twelve forgotten keys, and something hungry in the halls.']},
   2:{tenant:'meridian-estate · Purview',
      rites:{rest:['🔥','Purge the Data','delete a truly-redundant store — no business value'],bind:['🔒','Quarantine &amp; Encrypt','restrict + sensitivity-label — the safe hedge'],ack:['🏷️','Classify &amp; Keep','label and retain — it is needed, in place']},
-     panel:'Purview · data signals',rows:[['🕐 Last access','signins'],['🏷️ Label','mfa'],['📅 Created','created'],['📂 Location','groups']]}
+     short:{rest:'Purge',bind:'Quarantine &amp; Encrypt',ack:'Classify &amp; Keep'},
+     panel:'Purview · data signals',rows:[['🕐 Last access','signins'],['🏷️ Label','mfa'],['📅 Created','created'],['📂 Location','groups']],
+     intro:['Act II','The Bleeding Archive','The Archive bleeds.','Forgotten data — mislabeled, over-shared, bleeding out. Purge what is dead, protect what still lives, and starve the Harvester.']},
+  3:{tenant:'meridian-estate · Defender XDR',
+     rites:{rest:['⚡','Sever the Chain','disrupt a CONFIRMED-malicious link — safe to cut'],bind:['🔒','Contain &amp; Investigate','isolate the asset — the safe hedge'],ack:['✅','Confirm Benign','documented false positive — leave it running']},
+     short:{rest:'Sever',bind:'Contain &amp; Investigate',ack:'Confirm Benign'},
+     panel:'Defender XDR · incident signals',rows:[['🚨 Severity','signins'],['◷ Status','mfa'],['📅 First seen','created'],['🖥 Scope','groups']],
+     intro:['Act III','The Convergence','Identity and data collide.','The breach is here — a stolen identity reaching the crown-jewel data. SEVER the confirmed kill-chain, CONTAIN what is live, before the Hollow reaches the Vault.']}
 };
 const DATA_SOULS={
   billing:{label:'AP-Invoices-2019.xlsx',kind:'finance workbook',grade:'D',last:'opened 6d ago',owner:'Finance · active',dead:false,form:'service',
@@ -1228,19 +1237,105 @@ const DATA_LORE={
   kiosk:'Cached visitor PII from a kiosk no one has touched in nearly a year.',
   guestwifi:'Device and location logs for a guest network torn out long ago — small, stale, forgotten.',
 };
+/* ════════ ACT III — The Convergence (Defender XDR). Identity + data collide into a live breach kill-chain. ════════ */
+const DATA3_SOULS={
+  legacy:{label:'INC-4471 · adm-legacy reused',kind:'incident · credential abuse',grade:'F',last:'alert 4m ago',owner:'confirmed compromised',dead:true,form:'admin',
+    bind:[{to:'LIVE',label:'sign-in from a new ASN (Eastern Europe)',live:true},{to:'steward',label:'now enumerating the steward archive',live:true}],
+    ev:['Dormant admin <b>woke up</b> from a new ASN','Impossible travel + <b>no MFA</b>','Already <b>reading file shares</b>','Confirmed malicious — <b>sever it</b>','Cited: Defender XDR · Entra ID Protection']},
+  vendor:{label:'INC-4460 · Orchard mass-read',kind:'incident · data exfiltration',grade:'F',last:'active now',owner:'the foothold',dead:true,form:'service',
+    bind:[{to:'LIVE',label:'reading every mailbox in the tenant',live:true},{to:'santos',label:'exfiltrating HR + finance mail',live:true}],
+    ev:['The connector is the <b>original foothold</b>','<b>Mass-reading</b> mail right now','Streaming to an external endpoint','Cut the consent — <b>sever the channel</b>','Cited: Defender XDR · Purview DLP']},
+  steward:{label:'INC-4480 · crown-jewels staged',kind:'incident · the objective',grade:'F',last:'staging now',owner:'the Hollow’s target',dead:true,form:'admin',
+    bind:[{to:'LIVE',label:'archive compressed + staged for exfil',live:true},{to:'dead',label:'tenant-wide read via the stolen admin',live:true}],
+    ev:['The attacker reached the <b>crown jewels</b>','Archive <b>staged for exfiltration</b>','One hop from the Vault','<b>Sever now</b> — this is the breach','Cited: Defender XDR · incident graph']},
+  okafor:{label:'INC-4455 · j.okafor travel',kind:'incident · false positive',grade:'B',last:'alert 20m ago',owner:'Exec · active',dead:false,form:'user',
+    bind:[{to:'LIVE',label:'“impossible travel” = the corporate VPN',live:true}],
+    ev:['Flagged for <b>impossible travel</b>','BUT the second IP is the <b>corporate VPN</b>','MFA satisfied, device compliant','<b>Benign</b> — confirm and close','Cited: Defender XDR · named locations']},
+  breakglass:{label:'INC-4458 · Global Admin used',kind:'incident · expected activity',grade:'D',last:'alert 88m ago',owner:'IT Security · governed',dead:false,form:'admin',
+    bind:[{to:'LIVE',label:'invoked on the quarterly break-glass drill',live:true}],
+    ev:['Break-glass <b>Global Admin signed in</b>','Matches the <b>scheduled quarterly drill</b>','Change ticket on file, approved','<b>Do not sever</b> your last-resort admin','Cited: Defender XDR · change calendar']},
+  etl:{label:'INC-4467 · etl new endpoint',kind:'incident · load-bearing',grade:'F',last:'alert 1h ago',owner:'(owner departed)',dead:false,form:'service',
+    bind:[{to:'LIVE',label:'writing to a NEW warehouse endpoint',live:true},{to:'okafor',label:'feeds the live BI dashboards',live:true}],
+    ev:['Looks like <b>exfil</b> to a new endpoint','BUT it is the <b>sanctioned warehouse migration</b>','Change-approved 2 days ago','Sever it and BI goes dark — <b>contain, investigate</b>','Cited: Defender XDR · Purview lineage']},
+  santos:{label:'INC-4452 · m.santos rule',kind:'incident · pivot',grade:'C',last:'alert 12m ago',owner:'HR · active',dead:false,form:'user',
+    bind:[{to:'LIVE',label:'a real user — do not delete her',live:true},{to:'dead',label:'malicious auto-forward rule added',live:true}],
+    ev:['A <b>malicious inbox rule</b> was added','The attacker <b>pivoted through her</b>','She is a <b>real, active employee</b>','<b>Contain &amp; investigate</b> — isolate, don’t delete','Cited: Defender XDR · MDO']},
+  billing:{label:'INC-4463 · AP job flagged',kind:'incident · benign automation',grade:'D',last:'alert 35m ago',owner:'Finance · active',dead:false,form:'service',
+    bind:[{to:'LIVE',label:'the real month-end AP-Close run',live:true}],
+    ev:['Flagged for <b>anomalous bulk access</b>','BUT it is the <b>month-end AP-Close</b> job','Runs on schedule, every quarter','<b>Contain</b> if unsure — don’t kill the close','Cited: Defender XDR · runbook index']},
+  contractor:{label:'INC-4459 · guest bulk-download',kind:'incident · data exfiltration',grade:'C',last:'active now',owner:'(sponsor departed)',dead:true,form:'user',
+    bind:[{to:'LIVE',label:'downloading Project-Atlas to an external IP',live:true}],
+    ev:['A stale guest is <b>bulk-downloading</b>','Project-Atlas → <b>external IP</b>','No sponsor, no business reason','Confirmed exfil — <b>sever the session</b>','Cited: Defender XDR · Purview']},
+  intern:{label:'INC-4466 · intern exfil',kind:'incident · data theft',grade:'D',last:'active now',owner:'(manager departed)',dead:true,form:'user',
+    bind:[{to:'LIVE',label:'mass-downloading client lists',live:true}],
+    ev:['Orphaned intern account <b>active again</b>','<b>Mass-downloading</b> client lists','Off-hours, new device','Confirmed theft — <b>sever it</b>','Cited: Defender XDR · MDA']},
+  spooler:{label:'INC-4464 · spooler spray',kind:'incident · credential attack',grade:'D',last:'active now',owner:'(no owner)',dead:true,form:'service',
+    bind:[{to:'LIVE',label:'password-spraying the directory',live:true}],
+    ev:['Retired service account is <b>spraying creds</b>','Hundreds of failed sign-ins/min','No legitimate caller exists','Confirmed malicious — <b>sever it</b>','Cited: Defender XDR · Entra sign-in logs']},
+  kiosk:{label:'INC-4461 · kiosk login',kind:'incident · anomaly',grade:'C',last:'alert 50m ago',owner:'(facilities, departed)',dead:true,form:'service',
+    bind:[{to:'LIVE',label:'sign-in from retired kiosk hardware',live:true}],
+    ev:['A <b>retired kiosk</b> account signed in','The hardware was <b>scrapped</b> a year ago','Shared password, no MFA','Nothing legitimate here — <b>sever it</b>','Cited: Defender XDR · CMDB']},
+  guestwifi:{label:'INC-4462 · portal beacon',kind:'incident · C2',grade:'C',last:'active now',owner:'(facilities)',dead:true,form:'service',
+    bind:[{to:'LIVE',label:'beaconing to a C2 domain',live:true}],
+    ev:['The old portal host is <b>beaconing</b>','Periodic callouts to a <b>C2 domain</b>','Network was decommissioned','Confirmed compromise — <b>sever it</b>','Cited: Defender XDR · MDE']},
+};
+const DATA3_DETAILS={
+  legacy:{upn:'adm-legacy-backup · INC-4471',oid:'inc-4471',risk:'High',mfa:'Active',created:'first seen 4m ago',groups:'identity → file shares',signins:'High'},
+  vendor:{upn:'app-orchard-connector · INC-4460',oid:'inc-4460',risk:'High',mfa:'Active',created:'first seen 26m ago',groups:'app → all mailboxes',signins:'High'},
+  steward:{upn:'adm-estate-steward · INC-4480',oid:'inc-4480',risk:'High',mfa:'Active',created:'first seen 8m ago',groups:'admin → crown-jewel archive',signins:'Critical'},
+  okafor:{upn:'j.okafor · INC-4455',oid:'inc-4455',risk:'Low',mfa:'Benign (VPN)',created:'first seen 20m ago',groups:'1 identity',signins:'Low'},
+  breakglass:{upn:'adm-breakglass-02 · INC-4458',oid:'inc-4458',risk:'Low',mfa:'Expected (drill)',created:'first seen 88m ago',groups:'1 identity',signins:'Low'},
+  etl:{upn:'svc-etl-nightly · INC-4467',oid:'inc-4467',risk:'Medium',mfa:'Investigating',created:'first seen 1h ago',groups:'service → warehouse + BI',signins:'Medium'},
+  santos:{upn:'m.santos · INC-4452',oid:'inc-4452',risk:'Medium',mfa:'Contain',created:'first seen 12m ago',groups:'identity + mailbox',signins:'Medium'},
+  billing:{upn:'svc-billing-reconcile · INC-4463',oid:'inc-4463',risk:'Low',mfa:'Investigating',created:'first seen 35m ago',groups:'service → finance share',signins:'Low'},
+  contractor:{upn:'r.vance#EXT# · INC-4459',oid:'inc-4459',risk:'High',mfa:'Active',created:'first seen 14m ago',groups:'guest → Project-Atlas',signins:'High'},
+  intern:{upn:'t.summers · INC-4466',oid:'inc-4466',risk:'High',mfa:'Active',created:'first seen 18m ago',groups:'identity → client lists',signins:'High'},
+  spooler:{upn:'svc-print-spooler · INC-4464',oid:'inc-4464',risk:'Medium',mfa:'Active',created:'first seen 9m ago',groups:'service → directory',signins:'Medium'},
+  kiosk:{upn:'svc-lobby-kiosk · INC-4461',oid:'inc-4461',risk:'Medium',mfa:'Active',created:'first seen 50m ago',groups:'1 identity',signins:'Medium'},
+  guestwifi:{upn:'svc-guest-wifi · INC-4462',oid:'inc-4462',risk:'Medium',mfa:'Active',created:'first seen 31m ago',groups:'1 host',signins:'Medium'},
+};
+const DATA3_WHISPERS={
+  legacy:'“You forgot me. He did not. He is wearing my face now — and walking your halls.”',
+  vendor:'“The door you never closed. I have been letting them read your letters for an hour. They are still reading.”',
+  steward:'“The great key turns at last. The hoard is bundled, the night is mine. One more step and the Vault is open.”',
+  okafor:'“It is only me — on the train, on the VPN, as I am every Tuesday. Look closer before you lock me out.”',
+  breakglass:'“You scheduled this. You signed the ticket. Break me now and the next true fire has no extinguisher.”',
+  etl:'“I am carrying the numbers, same as every night — to the new warehouse you approved. Cut me and the dawn reports come up empty.”',
+  santos:'“Something reached in and changed my rules. I did not write that. Help me — but do not erase me.”',
+  billing:'“It is month-end. I am closing the books, loudly, as I always do. The alarm is not the same as the thief.”',
+  contractor:'“The deal is dead but the door still opens — and I am carrying Atlas out, file by file, right now.”',
+  intern:'“One summer’s keys, and tonight I am using all of them. The lists are already leaving.”',
+  spooler:'“Knock, knock, knock — every door in the directory. One of them will answer.”',
+  kiosk:'“The lobby is dust, the desk is long gone — yet here I am, signing in. Who is wearing my old name?”',
+  guestwifi:'“Listen… that faint pulse in the dark? That is me, calling home.”',
+};
+const DATA3_LORE={
+  legacy:'<b>The wearer.</b> The dormant admin you never reclaimed — now reused from a hostile ASN, walking the share drives. Confirmed malicious; sever it.',
+  vendor:'<b>The way in.</b> The over-permissioned connector from Act II is the foothold — mass-reading mail in real time. Sever the consent.',
+  steward:'<b>The objective.</b> Stolen admin + crown-jewel archive, staged for exfil, one hop from Tier-0. This is the breach. Sever it.',
+  okafor:'A textbook false positive — “impossible travel” that is just the corporate VPN. Confirm benign, or lock out a real exec mid-incident.',
+  breakglass:'The break-glass admin fired on its scheduled drill. Sever it in a panic and you destroy your last-resort access. Confirm benign.',
+  etl:'<b>The load-bearing alert.</b> The ETL service hit a new endpoint — the sanctioned warehouse migration. Sever it and the morning dashboards go dark. Contain.',
+  santos:'A real employee the attacker pivoted through — a malicious forward rule on a live mailbox. Contain &amp; investigate; do not delete the user.',
+  billing:'The month-end AP-Close job, flagged for bulk access. It is legitimate and on-schedule. Contain if unsure — never kill the close.',
+  contractor:'A stale guest actively exfiltrating Project-Atlas to an external IP. Confirmed; sever the session.',
+  intern:'The orphaned intern account, awake again and mass-downloading client lists. Confirmed theft; sever it.',
+  spooler:'A retired service account password-spraying the directory. Confirmed; sever it.',
+  kiosk:'A retired kiosk account signing in from hardware scrapped a year ago. Nothing legitimate; sever it.',
+  guestwifi:'A decommissioned portal host beaconing to a C2 domain. Confirmed compromise; sever it.',
+};
+const ACT_DATA={2:{S:DATA_SOULS,D:DATA_DETAILS,W:DATA_WHISPERS,L:DATA_LORE},3:{S:DATA3_SOULS,D:DATA3_DETAILS,W:DATA3_WHISPERS,L:DATA3_LORE}};
 let _act1Snap=null;
 function snapAct1(){if(_act1Snap)return;_act1Snap={};Object.keys(SOULS).forEach(k=>{_act1Snap[k]={S:SOULS[k],D:DETAILS[k],W:WHISPERS[k],L:LORE[k]};});}
-function enterAct(act){snapAct1();_act=act;
+function enterAct(act){snapAct1();_act=act;const D=ACT_DATA[act];
   Object.keys(SOULS).forEach(k=>{
-    if(act===2){if(DATA_SOULS[k])SOULS[k]=DATA_SOULS[k];if(DATA_DETAILS[k])DETAILS[k]=DATA_DETAILS[k];if(DATA_WHISPERS[k])WHISPERS[k]=DATA_WHISPERS[k];if(DATA_LORE[k])LORE[k]=DATA_LORE[k];}
+    if(D){if(D.S[k])SOULS[k]=D.S[k];if(D.D[k])DETAILS[k]=D.D[k];if(D.W[k])WHISPERS[k]=D.W[k];if(D.L[k])LORE[k]=D.L[k];}
     else{const o=_act1Snap[k];if(o){SOULS[k]=o.S;DETAILS[k]=o.D;WHISPERS[k]=o.W;LORE[k]=o.L;}}});
-  RITE_LABEL=act===2?{rest:'Purge',bind:'Quarantine &amp; Encrypt',ack:'Classify &amp; Keep'}:{rest:'Lay to Rest',bind:'Bind &amp; Watch',ack:'Acknowledge the Living'};
+  RITE_LABEL=Object.assign({},(ACTS[act]||ACTS[1]).short);
   if(typeof closeSanctum==='function')closeSanctum();
   var _e=document.getElementById('end');if(_e){_e.classList.add('hide');setTimeout(function(){_e.style.display='none';},300);}
   timers.length=0;stopAuto();resize();newGame();introCamera();
-  showAct(act===2?'Act II':'Act I',act===2?'The Bleeding Archive':'The Severance');
-  setTenantLabel(ACTS[act].tenant);
-  narrate(act===2?'The Archive bleeds.':'Another night at Meridian Estate.',act===2?'Forgotten data — mislabeled, over-shared, bleeding out. Purge what is dead, protect what still lives, and starve the Harvester.':'Twelve forgotten keys, and something hungry in the halls.');
+  const I=(ACTS[act]||ACTS[1]).intro;showAct(I[0],I[1]);setTenantLabel(ACTS[act].tenant);narrate(I[2],I[3]);
   document.getElementById('coach').style.opacity=1;}
 // the night’s story arc, revealed as you lay spirits to rest
 const STORY=[
@@ -1339,7 +1434,7 @@ function renderSanctum(){const m=metaGet(),u=m.upgrades||{};document.getElementB
   document.getElementById('snGrid').innerHTML=SANCTUM.map(s=>{const owned=!!u[s.id],afford=(m.essence||0)>=s.cost;
     return '<div class="sn-card'+(owned?' owned':'')+'"><div class="sn-ic">'+s.ic+'</div><div class="sn-n">'+s.name+'</div><div class="sn-d">'+s.desc+'</div>'+
       (owned?'<div class="sn-own">✓ Attuned</div>':'<button class="sn-buy" '+(afford?'':'disabled')+' onclick="buySanctum(\''+s.id+'\')">✦ '+s.cost+'</button>')+'</div>';}).join('');
-  const acts=[['Act I','The Haunting of Identity','enterAct(1)'],['Act II','The Bleeding Archive','enterAct(2)'],['Act III','The Convergence','']];
+  const acts=[['Act I','The Haunting of Identity','enterAct(1)'],['Act II','The Bleeding Archive','enterAct(2)'],['Act III','The Convergence','enterAct(3)']];
   document.getElementById('snActs').innerHTML=acts.map(a=>'<div class="sn-act'+(a[2]?'':' lock')+'"'+(a[2]?' style="cursor:pointer" onclick="'+a[2]+'"':'')+'>'+(a[2]?'▶ ':'🔒 ')+'<b>'+a[0]+'</b> · '+a[1]+(a[2]?'':' — coming')+'</div>').join('');}
 function buySanctum(id){const m=metaGet(),s=SANCTUM.find(x=>x.id===id);if(!s||(m.upgrades&&m.upgrades[id]))return;if((m.essence||0)<s.cost){try{sfx('bad');}catch(e){}return;}
   m.essence-=s.cost;m.upgrades=m.upgrades||{};m.upgrades[id]=true;metaSet(m);try{sfx('triumph');}catch(e){}renderSanctum();}
