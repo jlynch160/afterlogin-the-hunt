@@ -1018,7 +1018,7 @@ const FLOORS=[
   {id:3,name:'The Attic',sub:'Tier-0 · the source',boss:true},
 ];
 // floor guardians (mini-bosses) + the attic boss — real identity-attack archetypes
-const BOSSES={
+const BOSSES1={
   1:{name:'The Token Thief',hp:28,ac:13,tier:1,spawnRoom:5,evidence:[
     'Adversary-in-the-middle phishing proxy — <b>session cookie stolen</b>','MFA satisfied by a <b>replayed token</b>','Sign-in: new device · <b>impossible travel</b>','Cited: Entra ID Protection · risky sign-in']},
   2:{name:'The Consent Daemon',hp:56,ac:15,tier:2,spawnRoom:10,evidence:[
@@ -1026,8 +1026,26 @@ const BOSSES={
   3:{name:'The Hollow',hp:108,ac:17,tier:3,boss:true,spawnRoom:16,evidence:[
     'The <b>source</b> — the abandoned master-admin key','<b>Domain compromise</b>: every forgotten key leads here','Golden-key persistence across the whole estate','Cited: Entra roles · Tier-0 privileged audit']},
 };
+// ACT II (Purview) guardians — the data threats
+const BOSSES2={
+  1:{name:'The Oversharer',hp:30,ac:13,tier:1,spawnRoom:5,evidence:[
+    '<b>“Anyone-with-the-link”</b> sprawl across the tenant','One file reshared <b>4,000+</b> times','Sensitive docs surfaced to external search','Cited: Purview · oversharing report']},
+  2:{name:'The Exfiltrator',hp:60,ac:15,tier:2,spawnRoom:10,evidence:[
+    'A connector <b>streaming mailbox data</b> out','DLP policy <b>bypassed</b> via a trusted app','Bulk export to an <b>unmanaged endpoint</b>','Cited: Purview DLP · enterprise apps']},
+  3:{name:'The Hollow',hp:120,ac:17,tier:3,boss:true,spawnRoom:16,evidence:[
+    'The <b>same shadow that fled the identity hunt</b> — now gorged on your data','The crown-jewel archive, bundled for theft','<b>Mass exfiltration</b> at the Vault door — and still he means to slip away','Cited: Purview · data-exfiltration audit']},
+};
+// ACT III (Defender XDR) guardians — the kill-chain, ending in the ULTIMATE boss
+const BOSSES3={
+  1:{name:'The Intruder',hp:32,ac:14,tier:1,spawnRoom:5,evidence:[
+    '<b>Initial access</b> on a stolen token','First host compromised — the beachhead','Recon across identity and data','Cited: Defender XDR · incident graph']},
+  2:{name:'The Pivot',hp:64,ac:16,tier:2,spawnRoom:10,evidence:[
+    '<b>Lateral movement</b> through a pivoted user','Privilege escalation on a live asset','Spreading along the kill-chain','Cited: Defender XDR · lateral-movement alert']},
+  3:{name:'The Hollow Ascendant',hp:150,ac:18,tier:3,boss:true,ultimate:true,spawnRoom:16,evidence:[
+    '<b>Domain compromise</b> — identity and data, one breach','The crown-jewels staged, ransomware armed','Every forgotten key and leaked file made it whole','It stands at the Vault. This is the end. <b>Sever it all.</b>','Cited: Defender XDR · the breach']},
+};
 // each guardian has its own attack set — they fight back, heal, and spread
-const BOSS_ABILITIES={
+const BOSS_ABILITIES1={
   1:[{name:'Token Replay',fx:'ledger',amt:8,desc:'replays a stolen token — your Ledger bleeds'},
      {name:'Session Hijack',fx:'possess',desc:'hijacks a live session, possessing a wraith'}],
   2:[{name:'Mailbox Drain',fx:'ledger',amt:12,desc:'exfiltrates every mailbox — the Ledger drops hard'},
@@ -1038,6 +1056,29 @@ const BOSS_ABILITIES={
      {name:'Domain Sprawl',fx:'summon',desc:'sprouts a Shadow Tendril you must also cut down'},
      {name:'Tier-0 Lurch',fx:'advance',desc:'lurches one step toward the Vault'}],
 };
+const BOSS_ABILITIES2={
+  1:[{name:'Link Sprawl',fx:'ledger',amt:8,desc:'reshares your files — exposure spreads, Ledger bleeds'},
+     {name:'Public Index',fx:'possess',desc:'an external link possesses a data-ghost'}],
+  2:[{name:'Bulk Export',fx:'ledger',amt:12,desc:'exfiltrates a data store — the Ledger drops hard'},
+     {name:'DLP Bypass',fx:'shield',amt:1,desc:'bypasses a control — its AC rises'},
+     {name:'Data Spread',fx:'spread',desc:'replicates the leak — heals &amp; possesses a ghost'}],
+  3:[{name:'Crown Heist',fx:'heal',amt:16,desc:'hoards more data — heals itself'},
+     {name:'Label Shred',fx:'weaken',amt:3,desc:'corrupts your labels — your next strike lands weaker'},
+     {name:'Leak Fan-out',fx:'summon',desc:'spawns a Leak Tendril you must also cut down'},
+     {name:'Vault Drain',fx:'advance',desc:'drags the exfil one step toward the Vault'}],
+};
+const BOSS_ABILITIES3={
+  1:[{name:'Beachhead',fx:'ledger',amt:9,desc:'expands its foothold — Ledger bleeds'},
+     {name:'Session Hijack',fx:'possess',desc:'hijacks a live session, possessing a ghost'}],
+  2:[{name:'Lateral Leap',fx:'ledger',amt:13,desc:'pivots deeper — the Ledger drops hard'},
+     {name:'Privilege Climb',fx:'shield',amt:1,desc:'escalates — its AC rises'},
+     {name:'Kill-chain Spread',fx:'spread',desc:'fans across hosts — heals &amp; possesses a ghost'}],
+  3:[{name:'Golden Ticket',fx:'heal',amt:18,desc:'forges domain persistence — heals itself'},
+     {name:'Hollowing',fx:'weaken',amt:4,desc:'hollows your blade — your next strike lands much weaker'},
+     {name:'Ransom Spawn',fx:'summon',desc:'detonates a Ransom Tendril you must also cut down'},
+     {name:'Tier-0 Assault',fx:'advance',desc:'surges one step toward the Vault'}],
+};
+let BOSSES=BOSSES1,BOSS_ABILITIES=BOSS_ABILITIES1;
 function floorSouls(f){return ROOMS.filter(r=>r.floor===f&&r.soul);}
 function floorThreats(f){return G.threats.filter(t=>!t.banished&&ROOMS[t.room].floor===f);}
 function floorCleared(f){return floorSouls(f).every(r=>r.soul.judged&&r.soul.judged!=='possessed')&&!floorThreats(f).length;}
@@ -1144,7 +1185,7 @@ const ACTS={
      rites:{rest:['🔥','Purge the Data','delete a truly-redundant store — no business value'],bind:['🔒','Quarantine &amp; Encrypt','restrict + sensitivity-label — the safe hedge'],ack:['🏷️','Classify &amp; Keep','label and retain — it is needed, in place']},
      short:{rest:'Purge',bind:'Quarantine &amp; Encrypt',ack:'Classify &amp; Keep'},
      panel:'Purview · data signals',rows:[['🕐 Last access','signins'],['🏷️ Label','mfa'],['📅 Created','created'],['📂 Location','groups']],
-     intro:['Act II','The Bleeding Archive','The Archive bleeds.','Forgotten data — mislabeled, over-shared, bleeding out. Purge what is dead, protect what still lives, and starve the Harvester.']},
+     intro:['Act II','The Bleeding Archive','The Archive bleeds.','The Hollow fled the identity hunt and slipped in here — now feeding on forgotten data. Purge what is dead, protect what still lives, and corner him again.']},
   3:{tenant:'meridian-estate · Defender XDR',
      rites:{rest:['⚡','Sever the Chain','disrupt a CONFIRMED-malicious link — safe to cut'],bind:['🔒','Contain &amp; Investigate','isolate the asset — the safe hedge'],ack:['✅','Confirm Benign','documented false positive — leave it running']},
      short:{rest:'Sever',bind:'Contain &amp; Investigate',ack:'Confirm Benign'},
@@ -1328,6 +1369,7 @@ const ACT_DATA={2:{S:DATA_SOULS,D:DATA_DETAILS,W:DATA_WHISPERS,L:DATA_LORE},3:{S
 let _act1Snap=null;
 function snapAct1(){if(_act1Snap)return;_act1Snap={};Object.keys(SOULS).forEach(k=>{_act1Snap[k]={S:SOULS[k],D:DETAILS[k],W:WHISPERS[k],L:LORE[k]};});}
 function enterAct(act){snapAct1();_act=act;const D=ACT_DATA[act];
+  BOSSES=act===3?BOSSES3:act===2?BOSSES2:BOSSES1;BOSS_ABILITIES=act===3?BOSS_ABILITIES3:act===2?BOSS_ABILITIES2:BOSS_ABILITIES1;
   Object.keys(SOULS).forEach(k=>{
     if(D){if(D.S[k])SOULS[k]=D.S[k];if(D.D[k])DETAILS[k]=D.D[k];if(D.W[k])WHISPERS[k]=D.W[k];if(D.L[k])LORE[k]=D.L[k];}
     else{const o=_act1Snap[k];if(o){SOULS[k]=o.S;DETAILS[k]=o.D;WHISPERS[k]=o.W;LORE[k]=o.L;}}});
@@ -1412,6 +1454,9 @@ const SANCTUM=[
   {id:'sentinel', ic:'⚔',  name:'Sharpened Sentinel',   cost:55, desc:'The Sentinel strikes the Hungry for +3 damage, every run.'},
   {id:'insight',  ic:'🕯',  name:'Warden’s Insight',      cost:50, desc:'Earn +2 Essence each time you judge a spirit.'},
   {id:'wardstone',ic:'🛡', name:'Wardstone',            cost:70, desc:'A permanent ward absorbs one extra strike against the Vault each run.'},
+  {id:'archivist', ic:'📜', name:'Recruit the Archivist', cost:65, desc:'A 4th agent — the Archivist. The first three spirits each run start with their cited Foundry IQ evidence already summoned.'},
+  {id:'cartographer',ic:'🗺', name:'Recruit the Cartographer',cost:60, desc:'A party agent who maps the kill-chain, and grants a free Conditional-Access ward (pins the threat 1 round) each run.'},
+  {id:'oracle',    ic:'🔭', name:'Recruit the Oracle',    cost:80, desc:'A party agent with foresight — boss telegraphs read clearer, and the Vault gains one extra ward each run.'},
 ];
 function applyMeta(){if(!G)return;const u=(metaGet().upgrades)||{};
   if(u.ledger)G.ledger+=25;
@@ -1420,6 +1465,9 @@ function applyMeta(){if(!G)return;const u=(metaGet().upgrades)||{};
   if(u.insight)G.buffs.essBonus=(G.buffs.essBonus||0)+2;
   if(u.wardstone)G.buffs.vaultBuffer=(G.buffs.vaultBuffer||0)+1;
   if(u.skeptic&&G.agents)G.agents.push({role:'L1',name:'Skeptic',room:0,x:ROOMS[0].x,y:ROOMS[0].y,tx:ROOMS[0].x,ty:ROOMS[0].y,spin:2,cd:3,s2:Math.random()*6,status:'doubting every verdict'});
+  if(u.archivist&&G.agents){G.agents.push({role:'L1',name:'Archivist',room:2,x:ROOMS[2].x,y:ROOMS[2].y,tx:ROOMS[2].x,ty:ROOMS[2].y,spin:1,cd:4,s2:Math.random()*6,status:'retrieving the grimoire'});ROOMS.filter(r=>r.soul&&r.floor===1).slice(0,3).forEach(r=>{r.soul.discovered=true;r.soul.summoned=true;});}
+  if(u.cartographer&&G.agents){G.agents.push({role:'L2',name:'Cartographer',room:0,x:ROOMS[0].x,y:ROOMS[0].y,tx:ROOMS[0].x,ty:ROOMS[0].y,spin:2,cd:4,s2:Math.random()*6,status:'mapping the kill-chain'});G.buffs.freeze=(G.buffs.freeze||0)+1;}
+  if(u.oracle&&G.agents){G.agents.push({role:'L3',name:'Oracle',room:0,x:ROOMS[0].x,y:ROOMS[0].y,tx:ROOMS[0].x,ty:ROOMS[0].y,spin:3,cd:4,s2:Math.random()*6,status:'foreseeing the threat'});G.buffs.vaultBuffer=(G.buffs.vaultBuffer||0)+1;}
   if(u.sight)ROOMS.filter(r=>r.soul&&r.floor===1).slice(0,3).forEach(r=>{r.soul.discovered=true;r.soul.divined=true;});}
 function bankEssence(won){const m=metaGet(),run=(G&&G.essence)||0,bank=Math.floor(run*0.6)+(won?25:8)+((G&&G.judged)||0);
   m.essence=(m.essence||0)+bank;m.runs=(m.runs||0)+1;m.best=Math.max(m.best||1,(G&&G.maxFloor)||1);metaSet(m);return bank;}
@@ -1671,32 +1719,37 @@ function selectRoom(r){const th=G.threats.find(t=>t.room===r.id&&!t.banished);
 function divine(){const s=G.sel.room.soul;if(s.divined)return;s.divined=true;sfx('divine');
   burst(G.sel.room.x,G.sel.room.y,16,'#a78bfa','spark');scry('You read the spirit-threads of <b>'+s.label+'</b>.','');renderCase();updateCoach();}
 function summon(){G.sel.room.soul.summoned=true;sfx('page');renderCase();updateCoach();}
+const JUDGE_WORDS={
+  1:{rest:['Laid to rest','deprovision','DEPROVISIONED'],bind:['Bound &amp; watched','quarantine','QUARANTINED'],ack:'Acknowledged the living',pg:'broke a live process'},
+  2:{rest:['Purged','delete','PURGED'],bind:['Quarantined &amp; encrypted','protect','PROTECTED'],ack:'Classified &amp; kept',pg:'deleted live business data'},
+  3:{rest:['Severed','disrupt','SEVERED'],bind:['Contained','isolate','CONTAINED'],ack:'Confirmed benign',pg:'took down a live asset mid-incident'}};
 function judge(rite){const r=G.sel.room,s=r.soul;if(s.judged&&s.judged!=='possessed')return;
+  const JW=JUDGE_WORDS[_act||1];
   if(rite==='rest'){
     if(s.dead){const p=GRADE_PTS[s.grade];G.ledger+=p;G.judged++;sfx('rest');cleanseFX(r,'#bff0d8');
-      scry('Laid to rest: <b>'+s.label+'</b>. +'+p+' to the Ledger.','good');narrate('Rest.','A truly dead account, gone clean — and one less lure for the Hungry.');s.judged='rest';
-      gainEssence((ESS_PTS[s.grade]||4)+G.buffs.essBonus,'laid to rest');
-      startRemediation({title:'Microsoft Graph · deprovision',who:s.label+' — laid to rest',col:'#20F593',stamp:'DEPROVISIONED',dim:.34,calls:remediationPlan(r.account,'rest')});}
+      scry(JW.rest[0]+': <b>'+s.label+'</b>. +'+p+' to the Ledger.','good');narrate(JW.rest[0]+'.','A confirmed-dead target, cleared clean — one less lure for the threat.');s.judged='rest';
+      gainEssence((ESS_PTS[s.grade]||4)+G.buffs.essBonus,JW.rest[0].toLowerCase());
+      startRemediation({title:'Microsoft Graph · '+JW.rest[1],who:s.label+' — '+JW.rest[0].toLowerCase(),col:'#20F593',stamp:JW.rest[2],dim:.34,calls:remediationPlan(r.account,'rest')});}
     else{poltergeist(r,s);return;}
   }else if(rite==='bind'){const p=s.dead?12:18;G.ledger+=p;G.judged++;sfx('bind');cleanseFX(r,'#ffd89a');
-    scry('Bound &amp; watched: <b>'+s.label+'</b>. Quarantined — safe. +'+p+'.','good');narrate('Bound.','Disabled and monitored. The cautious rite.');s.judged='bind';
-    gainEssence((s.grade==='F'||s.grade==='D'?6:4)+G.buffs.essBonus,'bound &amp; watched');
-    startRemediation({title:'Microsoft Graph · quarantine',who:s.label+' — bound &amp; watched',col:'#ffb454',stamp:'QUARANTINED',dim:.34,calls:remediationPlan(r.account,'bind')});
+    scry(JW.bind[0]+': <b>'+s.label+'</b>. +'+p+'.','good');narrate(JW.bind[0]+'.','The cautious rite — contained and watched.');s.judged='bind';
+    gainEssence((s.grade==='F'||s.grade==='D'?6:4)+G.buffs.essBonus,'contained');
+    startRemediation({title:'Microsoft Graph · '+JW.bind[1],who:s.label+' — '+JW.bind[0].toLowerCase(),col:'#ffb454',stamp:JW.bind[2],dim:.34,calls:remediationPlan(r.account,'bind')});
   }else{if(s.dead&&(s.grade==='F'||s.grade==='D')){G.ledger-=20;sfx('bad');
-      scry('You acknowledged a <b>corpse</b> as living. A breach remains — and it will draw the Hungry.','bad');narrate('A costly mercy.','That dead privileged account is exactly the bait a predator hunts.');s.judged=null;}
-    else{G.ledger+=12;G.judged++;sfx('select');scry('Acknowledged the living: <b>'+s.label+'</b>. Owner documented.','good');s.judged='ack';gainEssence(3+G.buffs.essBonus,'acknowledged the living');}}
+      scry('You called a <b>confirmed threat</b> benign. A breach remains — and it will draw the enemy.','bad');narrate('A costly mercy.','That confirmed-malicious target is exactly the bait a predator hunts.');s.judged=null;}
+    else{G.ledger+=12;G.judged++;sfx('select');scry(JW.ack+': <b>'+s.label+'</b>. Documented.','good');s.judged='ack';gainEssence(3+G.buffs.essBonus,'documented');}}
   updLedger();G.sel=null;hideCase();playerTurn();checkDawn();advanceStory();checkFloorClear(G.floor);if(G.view==='room')exitRoom();updateCoach();}
 function poltergeist(r,s){G.ledger-=60;sfx('crash');shake(30);flash(.9);shock();s.judged='broken';
   s.bind.filter(b=>b.live).forEach((b,i)=>{schedule(G.t+.1+i*.15,()=>{const target=(b.to==='LIVE')?ROOMS[1]:(ROOMS.find(x=>x.account===b.to)||ROOMS[1]);
     crack(r.x,r.y,target.x,target.y);burst(target.x,target.y,24,'#ff3b5c','ember');});});
   burst(r.x,r.y,60,'#ff3b5c','ember');
-  scry('POLTERGEIST. <b>'+s.label+'</b> was load-bearing — you broke a live process.','bad');
-  narrate('You exorcised the living.','The nightly AP job is orphaned. This is why the ontology matters.');
+  scry('POLTERGEIST. <b>'+s.label+'</b> was load-bearing — you '+(JUDGE_WORDS[_act||1].pg)+'.','bad');
+  narrate('You struck the living.','A live, load-bearing target — gone. This is why the ontology matters.');
   updLedger();G.sel=null;hideCase();playerTurn();if(G.view==='room')exitRoom();updateCoach();}
 /* banish is now the dice-based smite() defined in the turn engine */
 
 function checkDawn(){const allJ=ROOMS.every(r=>!r.soul||(r.soul.judged&&r.soul.judged!=='possessed'));const noT=G.threats.every(t=>t.banished);
-  if(allJ&&noT&&!G.over){banner('Dawn Breaks','First light spares the estate','#ffd76a');schedule(G.t+.6,()=>endGame(true,'dawn'));}}
+  if(allJ&&noT&&!G.over){const _f=(_act||1)>=3;banner(_f?'Dawn Breaks':'He Escapes…',_f?'First light spares the estate':'The Hollow slips away into the next domain','#ffd76a');schedule(G.t+.6,()=>endGame(true,'dawn'));}}
 /* ── floor progression: clear a floor (spirits judged + guardian banished) to ascend ── */
 function checkFloorClear(f){if(!G||G.over)return;if(!floorCleared(f))return;
   if(G.maxFloor<=f&&f<3){G.maxFloor=f+1;sfx('triumph');flash(.25);banner('Floor Cleared',FLOORS[f-1].name+' is clean','#20F593');
@@ -1736,11 +1789,16 @@ function endGame(won,why){if(G.over)return;stopAuto();G.over=true;G.started=fals
   const rank=!won?(score>40?'C':'D'):score>=180?'S':score>=130?'A':score>=80?'B':'C';
   const rankCol={S:'#ffd76a',A:'#20F593',B:'#7cc6ff',C:'#c0a0ff',D:'#ff7a8a'}[rank];
   const er=document.getElementById('endRank');er.textContent=rank;er.style.color=rankCol;er.style.textShadow='0 0 40px '+rankCol;
-  document.getElementById('endTitle').textContent=won?'Dawn Breaks':'The Vault Falls';
+  const _wAct=_act||1,_final=won&&_wAct>=3;
+  document.getElementById('endTitle').textContent=!won?'The Vault Falls':_final?'Dawn Breaks':(_wAct===2?'He Escapes Again':'He Escapes');
   document.getElementById('endTitle').style.color=won?'':'#ff3b5c';
-  document.getElementById('endVerdict').innerHTML=won
-    ?'You held the manor till first light. Every door accounted for — the estate is clean.'
-    :'The Hungry reached <b>'+why+'</b>. Tier-0 is compromised. Walk the halls again.';
+  const _escape=_wAct===2
+    ?'You corner <b>the Hollow</b> in the Archive — but a hidden hand spirits him away. <b>Someone is helping him.</b> Pursue him into <b>Act III · The Convergence</b> (the Sanctum).'
+    :'<b>The Hollow</b> slips the manor as dawn breaks — a door left unsealed behind him. He flees into your data. Pursue him into <b>Act II · The Bleeding Archive</b> (the Sanctum).';
+  document.getElementById('endVerdict').innerHTML=!won
+    ?'The enemy reached <b>'+why+'</b>. Tier-0 is compromised. Walk the halls again.'
+    :_final?'The <b>Hollow Ascendant</b> falls at the Vault door — <b>no escape this time.</b> First light, and the estate is finally, truly clean.'
+    :_escape;
   document.getElementById('endStats').innerHTML=
     stat(G.ledger,'Ledger of the Dead')+stat(cleared+'/'+total,'Spirits judged')+
     stat(banished,'Hungry banished')+stat(poss,'Possessions allowed');

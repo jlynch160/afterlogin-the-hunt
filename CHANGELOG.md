@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1] - 2026-06-01 — act-aware threats, ultimate boss, recurring nemesis, new recruits
+
+- **Act-aware bosses** — each act has its own three guardians: Act I (Token Thief / Consent Daemon / The Hollow), Act II (Oversharer / Exfiltrator / The Hollow), Act III (Intruder / Pivot / **The Hollow Ascendant**), with act-specific abilities. `BOSSES`/`BOSS_ABILITIES` swap per act in `enterAct`.
+- **The Hollow as a recurring nemesis** — the third boss is the same shadow across all acts: he **escapes** at the end of Act I ("a door left unsealed") and Act II ("someone is helping him"), and is finally destroyed as **The Hollow Ascendant** (HP 150 ultimate) in Act III. Act-aware end-screen title/verdict + dawn banner.
+- **Ultimate final boss** for the last area (The Hollow Ascendant) with escalated stats + abilities.
+- **New Sanctum recruits / agents** — the Archivist (auto-summons evidence), the Cartographer (kill-chain map + CA ward), the Oracle (foresight + vault ward), joining the recruitable Skeptic.
+- **Narrative cleanup** — act-aware judgment feed (Purge/Quarantine for Act II, Sever/Contain for Act III instead of identity wording); act-aware poltergeist text.
+
 ## [0.4.0] - 2026-06-01 — three-act campaign, roguelite meta-loop, live agents
 
 ### Three-act campaign (maps to the Microsoft security stack)
