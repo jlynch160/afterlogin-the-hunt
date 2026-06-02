@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.7] - 2026-06-02 — The d20 actually rolls
+
+- The die now **rolls in from off-screen along a bouncing arc** (three ground contacts), **spinning exactly four turns** so it lands upright, with **motion blur** that clears as it settles and a squash-and-settle **bounce** on landing. Added a **ground shadow** that swells on impact and an **expanding impact ring**; the glow, crit sparkle burst and result label are retimed to fire right as it lands, and the number keeps flickering through the whole roll, locking as it hits. Slightly bigger for demo visibility.
+
 ## [0.5.6] - 2026-06-02 — Juicier d20 roll
 
 - Replaced the flat hexagon die with a **faceted SVG d20** (triangle facets + a centre face for the number) that **tumbles in 3D** (multi-axis rotation), lands with an **overshoot/settle bounce**, and pulses a radial **glow**. Adds a result label ("rolled N"), a **gold critical** treatment with a 12-point **sparkle burst** on a natural 20, and a red **fumble** look on a natural 1. The label is kid-worded in Student mode ("SUPER HIT! ⭐" / "oopsie!").
