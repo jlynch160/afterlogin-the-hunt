@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.2] - 2026-06-02 — "Skills Practiced" competency report on the result screen
+
+- The end screen now includes a **🎓 Skills Practiced** panel that maps the run to real identity-governance competencies, each with an animated progress bar and a **Mastered / Practiced / Keep-practicing** pill:
+  - **Dormant & orphaned account triage** (how many identities you judged)
+  - **Load-bearing vs. truly-dead** (poltergeists = breaking a live account)
+  - **Evidence-based decisioning** (how often you divined threads / summoned evidence first)
+  - **Agent-assisted adjudication** (your agreement % with the council)
+  - **Account-takeover response / ITDR** (threats banished)
+- Kid-worded under the Student theme. Turns each result into a short learning report.
+
 ## [0.6.1] - 2026-06-02 — Achievements + best-rank board
 
 - **Achievements** — medals pop mid-run as a sliding toast and persist across runs (`localStorage al_ach`): First Verdict, Natural 20, Flawless Floor, Guardian Slain, Steady Hand (no poltergeists), Perfect Read (100% agreement, 5+ calls), Hold Until Dawn, The Hollow Ends. Each plays a chime.
