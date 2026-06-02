@@ -746,7 +746,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.6</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.7</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -1808,32 +1808,38 @@ function bossIntro(t,f){var el=document.getElementById('bossintro');if(!el||!t)r
   '#d20{position:fixed;inset:0;z-index:64;pointer-events:none;display:none;place-items:center}#d20.go{display:grid}'+
   '#d20 .d20-dim{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(8,6,20,.5),transparent 56%);opacity:0}'+
   '#d20.go .d20-dim{animation:d20dim 1s ease both}@keyframes d20dim{0%{opacity:0}22%{opacity:1}68%{opacity:1}100%{opacity:0}}'+
-  '#d20 .d20-stage{position:relative;width:150px;height:172px;perspective:760px;display:grid;place-items:center}'+
-  '#d20 .d20-svg{width:124px;height:124px;transform-style:preserve-3d;filter:drop-shadow(0 14px 22px rgba(0,0,0,.55))}'+
-  '#d20.go .d20-svg{animation:d20tumble .68s cubic-bezier(.18,.7,.28,1.25) both}'+
-  '@keyframes d20tumble{0%{transform:scale(.25) rotateX(-240deg) rotateY(170deg) rotateZ(-120deg);opacity:0}18%{opacity:1}58%{transform:scale(1.24) rotateX(10deg) rotateY(-12deg) rotateZ(7deg)}80%{transform:scale(.93) rotateX(-4deg) rotateY(4deg) rotateZ(-2deg)}100%{transform:scale(1) rotate(0)}}'+
+  '#d20 .d20-stage{position:relative;width:240px;height:248px;display:grid;place-items:center}'+
+  '#d20 .d20-shadow{position:absolute;top:65%;width:108px;height:22px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,0,0,.45),transparent 72%);opacity:0}'+
+  '#d20.go .d20-shadow{animation:d20sh 1.15s ease both}@keyframes d20sh{0%,64%{opacity:0;transform:scale(.4)}80%{opacity:.5;transform:scale(1.22)}90%{opacity:.55;transform:scale(.84)}100%{opacity:.4;transform:scale(1)}}'+
+  '#d20 .d20-ring{position:absolute;width:84px;height:84px;border-radius:50%;border:2.5px solid rgba(var(--accentRGB),.7);opacity:0}'+
+  '#d20.go .d20-ring{animation:d20ring 1.2s ease both}@keyframes d20ring{0%,80%{opacity:0;transform:scale(.3)}88%{opacity:.85;transform:scale(.85)}100%{opacity:0;transform:scale(2.3)}}'+
+  '#d20 .d20-roll{will-change:transform;display:grid;place-items:center}'+
+  '#d20.go .d20-roll{animation:d20roll 1.15s cubic-bezier(.33,.55,.42,1) both}'+
+  '@keyframes d20roll{0%{transform:translate(-64vw,-15vh) rotate(-50deg) scale(.58);opacity:0;filter:blur(3px)}7%{opacity:1}30%{transform:translate(-25vw,8vh) rotate(560deg) scale(1);filter:blur(2.4px)}40%{transform:translate(-13vw,-8vh) rotate(800deg) scale(1.03);filter:blur(1.9px)}55%{transform:translate(3vw,9vh) rotate(1080deg) scale(1);filter:blur(1.3px)}65%{transform:translate(9vw,-4vh) rotate(1260deg) scale(1.02);filter:blur(.8px)}78%{transform:translate(3vw,7vh) rotate(1400deg) scale(1);filter:blur(.3px)}88%{transform:translate(0,6px) rotate(1440deg) scale(1.14);filter:blur(0)}94%{transform:translate(0,0) rotate(1440deg) scale(.94)}100%{transform:translate(0,0) rotate(1440deg) scale(1)}}'+
+  '#d20 .d20-svg{width:138px;height:138px;display:block;filter:drop-shadow(0 10px 16px rgba(0,0,0,.5))}'+
   '#d20 .d20-body{fill:url(#d20grad);stroke:rgba(184,160,255,.9);stroke-width:2;stroke-linejoin:round}'+
   '#d20 .d20-facet{stroke:rgba(184,160,255,.32);stroke-width:.8}'+
-  '#d20 .d20-fl{fill:rgba(255,255,255,.07)}#d20 .d20-fd{fill:rgba(0,0,0,.16)}'+
-  '#d20 .d20-face{fill:rgba(255,255,255,.12);stroke:rgba(206,190,255,.7);stroke-width:1.3}'+
+  '#d20 .d20-fl{fill:rgba(255,255,255,.08)}#d20 .d20-fd{fill:rgba(0,0,0,.18)}'+
+  '#d20 .d20-face{fill:rgba(255,255,255,.13);stroke:rgba(206,190,255,.7);stroke-width:1.3}'+
   '#d20 .d20-num{fill:#f3ecff;font-family:"Cormorant Garamond",serif;font-weight:700;font-size:30px;text-anchor:middle;dominant-baseline:central}'+
-  '#d20 .d20-glow{position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accentRGB),.4),transparent 65%);opacity:0}'+
-  '#d20.go .d20-glow{animation:d20glow 1s ease both}@keyframes d20glow{0%{opacity:0;transform:scale(.4)}55%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.25)}}'+
-  '#d20 .d20-label{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);font-family:"Cormorant Garamond",serif;font-size:16px;letter-spacing:2.5px;color:#cdbcff;white-space:nowrap;opacity:0}'+
-  '#d20.go .d20-label{animation:d20lab 1s ease .46s both}@keyframes d20lab{0%{opacity:0;transform:translate(-50%,10px)}28%{opacity:1;transform:translate(-50%,0)}82%{opacity:1}100%{opacity:0}}'+
+  '#d20 .d20-glow{position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accentRGB),.4),transparent 64%);opacity:0}'+
+  '#d20.go .d20-glow{animation:d20glow 1.2s ease both}@keyframes d20glow{0%,72%{opacity:0;transform:scale(.5)}88%{opacity:.95;transform:scale(1)}100%{opacity:0;transform:scale(1.32)}}'+
+  '#d20 .d20-label{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-family:"Cormorant Garamond",serif;font-size:17px;letter-spacing:2.5px;color:#cdbcff;white-space:nowrap;opacity:0}'+
+  '#d20.go .d20-label{animation:d20lab 1.2s ease .86s both}@keyframes d20lab{0%{opacity:0;transform:translate(-50%,10px)}40%{opacity:1;transform:translate(-50%,0)}82%{opacity:1}100%{opacity:0}}'+
   '#d20.crit .d20-body{fill:url(#d20gold);stroke:#ffe7a0}#d20.crit .d20-num{fill:#fff6d6}#d20.crit .d20-face{stroke:rgba(255,225,150,.85)}'+
   '#d20.crit .d20-svg{filter:drop-shadow(0 0 30px rgba(255,200,80,.9)) drop-shadow(0 12px 18px rgba(0,0,0,.5))}'+
   '#d20.crit .d20-glow{background:radial-gradient(circle,rgba(255,205,90,.6),transparent 62%)}'+
   '#d20.crit .d20-label{color:#ffdf7a;font-size:22px;letter-spacing:3px;text-shadow:0 0 18px rgba(255,200,80,.8)}'+
   '#d20 .d20-spark{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:#ffe79a;box-shadow:0 0 10px #ffd76a;opacity:0}'+
-  '#d20.crit.go .d20-spark{animation:d20spark .85s cubic-bezier(.2,.7,.3,1) .4s both}'+
+  '#d20.crit .d20-ring{border-color:rgba(255,210,110,.85)}'+
+  '#d20.crit.go .d20-spark{animation:d20spark .95s cubic-bezier(.2,.7,.3,1) .86s both}'+
   '@keyframes d20spark{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}25%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--sx)),calc(-50% + var(--sy))) scale(.5)}}'+
   '#d20.fumble .d20-body{fill:url(#d20red);stroke:#ff85a0}#d20.fumble .d20-num{fill:#ffd2dc}#d20.fumble .d20-label{color:#ff8aa3}#d20.fumble .d20-glow{background:radial-gradient(circle,rgba(255,70,110,.35),transparent 62%)}';
   document.head.appendChild(st);
   var sparks='';for(var i=0;i<12;i++){var a=i/12*6.283,dist=64+(i%3)*16;sparks+='<span class="d20-spark" style="--sx:'+Math.round(Math.cos(a)*dist)+'px;--sy:'+Math.round(Math.sin(a)*dist)+'px"></span>';}
   var d=document.createElement('div');d.id='d20';
-  d.innerHTML='<div class="d20-dim"></div><div class="d20-stage"><div class="d20-glow"></div>'+
-   '<svg class="d20-svg" viewBox="0 0 100 100">'+
+  d.innerHTML='<div class="d20-dim"></div><div class="d20-stage"><div class="d20-shadow"></div><div class="d20-glow"></div><div class="d20-ring"></div>'+
+   '<div class="d20-roll"><svg class="d20-svg" viewBox="0 0 100 100">'+
      '<defs><linearGradient id="d20grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6450ad"/><stop offset="1" stop-color="#1b1334"/></linearGradient>'+
      '<linearGradient id="d20gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="1" stop-color="#b07d1c"/></linearGradient>'+
      '<linearGradient id="d20red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a3050"/><stop offset="1" stop-color="#3a1426"/></linearGradient></defs>'+
@@ -1843,16 +1849,16 @@ function bossIntro(t,f){var el=document.getElementById('bossintro');if(!el||!t)r
      '<polygon class="d20-facet d20-fl" points="50,98 93,74 50,62"/><polygon class="d20-facet d20-fd" points="50,98 7,74 50,62"/>'+
      '<polygon class="d20-face" points="50,38 68,50 50,62 32,50"/>'+
      '<text class="d20-num" id="dieFace" x="50" y="51">20</text>'+
-   '</svg><div class="d20-label" id="dieLabel"></div>'+sparks+'</div>';
+   '</svg></div><div class="d20-label" id="dieLabel"></div>'+sparks+'</div>';
   document.body.appendChild(d);})();
 function showDie(n,crit){var el=document.getElementById('d20');if(!el)return;var f=document.getElementById('dieFace'),lab=document.getElementById('dieLabel');
   var fumble=(n===1)&&!crit;
   el.classList.toggle('crit',!!crit);el.classList.toggle('fumble',fumble);
   el.classList.remove('go');void el.offsetWidth;el.classList.add('go');
   if(lab)lab.textContent='';
-  var ticks=0;clearInterval(el._iv);el._iv=setInterval(function(){f.textContent=1+Math.floor(Math.random()*20);
-    if(++ticks>9){clearInterval(el._iv);f.textContent=n;var _k=(typeof TH_ID!=='undefined'&&TH_ID==='helpers');if(lab)lab.textContent=crit?(_k?'SUPER HIT! ⭐':'NAT 20 · CRIT!'):(fumble?(_k?'oopsie!':'oof — a 1'):'rolled '+n);}},46);
-  clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('go');},crit?1600:1200);}
+  var ticks=0;clearInterval(el._iv);el._iv=setInterval(function(){f.textContent=1+Math.floor(Math.random()*20);  // keep flickering through the roll, lock as it lands (~0.95s)
+    if(++ticks>21){clearInterval(el._iv);f.textContent=n;var _k=(typeof TH_ID!=='undefined'&&TH_ID==='helpers');if(lab)lab.textContent=crit?(_k?'SUPER HIT! ⭐':'NAT 20 · CRIT!'):(fumble?(_k?'oopsie!':'oof — a 1'):'rolled '+n);}},44);
+  clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('go');},crit?2050:1650);}
 
 function newGame(){
   G={t:0,night:140,ledger:0,started:true,over:false,lantern:{x:W*.5,y:H*.5},mx:W*.5,my:H*.5,
@@ -3848,7 +3854,7 @@ function begin(){startIntro();} // legacy entry point
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.5.6','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.5.7','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
