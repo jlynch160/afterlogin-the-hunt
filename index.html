@@ -2940,7 +2940,7 @@ const IMG={};
 // deploy manifest — the art that actually ships. Probing only listed files keeps the console clean and skips dead requests.
 // (regenerate when art changes: ls assets/*.png)
 const ASSET_OK=new Set(["boss1.png","boss2.png","boss3.png","floor_marble.png","floor_stone.png","floor_tile.png","floor_wood.png","ghost_billing.png","ghost_breakglass.png","ghost_legacy.png","ghost_okafor.png","ghost_santos.png","ghost_spooler.png","house.png","prop_exec_desk.png","prop_filing_cabinets.png","prop_glass_orrery.png","prop_ledger_desk.png","prop_stairs.png","room_billing.png","room_breakglass.png","room_contractor.png","room_etl.png","room_gatehouse.png","room_guestwifi.png","room_intern.png","room_kiosk.png","room_legacy.png","room_okafor.png","room_santos.png","room_spooler.png","room_vendor.png","threat_possession.png"]);
-const HELPER_OK=new Set([]); // Student-theme art lives in assets/helpers/ — add filenames here as art is created (empty ⇒ procedural fallback, no 404s)
+const HELPER_OK=new Set(["house.png","threat_possession.png","ghost_billing.png","ghost_legacy.png","ghost_okafor.png","ghost_spooler.png","ghost_breakglass.png","ghost_santos.png","boss1.png","boss2.png","boss3.png"]); // Student-theme art in assets/helpers/
 function loadImg(key,src){if(typeof Image==='undefined')return;const file=src.split('/').pop();
   if(TH_ID==='helpers'){if(!HELPER_OK.has(file)){IMG[key]={ok:false};return;}src='assets/helpers/'+file;} // student art → assets/helpers/<same-name>.png
   else if(!ASSET_OK.has(file)){IMG[key]={ok:false};return;} // skip art we know isn't there
@@ -2985,7 +2985,7 @@ function drawArt(key,x,y,w,h,alpha,glow){const a=IMG[key];if(!a||!a.ok)return fa
   // soft aura behind
   ctx.globalCompositeOperation='lighter';const g=ctx.createRadialGradient(x,y,0,x,y,w*.55);g.addColorStop(0,hexA(glow,.26*alpha));g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,w*.55,0,6.28);ctx.fill();
   // ghosts: screen-blend (dark bg drops out, spectral glow). the demon: solid, feathered.
-  ctx.globalCompositeOperation=(key.indexOf('threat')<0&&key.indexOf('boss')<0)?'screen':'source-over';
+  ctx.globalCompositeOperation=(TH_ID!=='helpers'&&key.indexOf('threat')<0&&key.indexOf('boss')<0)?'screen':'source-over'; // student art has light bgs → feathered portrait, not screen-blend
   ctx.globalAlpha=Math.max(0,Math.min(1,alpha));ctx.drawImage(c,x-w/2,y-h/2,w,h);ctx.restore();return true;}
 function mix(h1,h2,t){const a=parseInt(h1.slice(1),16),b=parseInt(h2.slice(1),16);
   const r=Math.round(((a>>16)&255)+(((b>>16)&255)-((a>>16)&255))*t),g=Math.round(((a>>8)&255)+(((b>>8)&255)-((a>>8)&255))*t),bl=Math.round((a&255)+((b&255)-(a&255))*t);
