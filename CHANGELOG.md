@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.3] - 2026-06-02 — Ask GitHub Copilot (live second opinion)
+
+- **"Ask GitHub Copilot" button** in the Reasoning tab — sends the case signals to `/api/reason` and renders Copilot's verdict as a colour-coded second-opinion card that either **✓ concurs** with the agent council or **⚠ dissents** (recommending a different rite), with confidence + model + latency. Falls back to an on-device skeptic when no model is configured, so the beat always lands in a demo.
+
 ## [0.4.2] - 2026-06-02 — showcase moments + reasoning gets its own tab
 
 - **Boss intro cards** — a dimmed, slam-in reveal card (art + name + HP/AC + stinger) when a floor guardian spawns; the final guardian gets the "⚜ The Final Guardian" treatment.
