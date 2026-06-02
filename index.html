@@ -2863,7 +2863,8 @@ function mix(h1,h2,t){const a=parseInt(h1.slice(1),16),b=parseInt(h2.slice(1),16
   const r=Math.round(((a>>16)&255)+(((b>>16)&255)-((a>>16)&255))*t),g=Math.round(((a>>8)&255)+(((b>>8)&255)-((a>>8)&255))*t),bl=Math.round((a&255)+((b&255)-(a&255))*t);
   return 'rgb('+r+','+g+','+bl+')';}
 function scry(html,cls){G.feed.unshift({html,cls});G.feed=G.feed.slice(0,6);document.getElementById('feedlist').innerHTML=G.feed.map(f=>`<div class="feed-line ${f.cls}">${f.html}</div>`).join('');}
-function narrate(m,s){document.getElementById('narr').innerHTML=`${m}<span class="sub">${s||''}</span>`;}
+function narrate(m,s){const n=document.getElementById('narr');n.innerHTML=`${m}<span class="sub">${s||''}</span>`;
+  n.style.transition='opacity .7s ease';n.style.opacity='1';clearTimeout(n._fade);n._fade=setTimeout(()=>{n.style.opacity='0';},7000);} // auto-fade so it doesn't linger and crowd the map
 function showAct(t,s){const el=document.getElementById('actcard');el.querySelector('.ac-title').textContent='❖ '+t;el.querySelector('.ac-sub').textContent=s;
   el.classList.remove('show');void el.offsetWidth;el.classList.add('show');}
 // ── smooth count-ups + global micro-interaction polish (additive, no layout change) ──
@@ -2910,7 +2911,14 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const cur=parseI
   '.hp-title{animation:titlereveal 1.5s cubic-bezier(.2,.8,.2,1) both}'+
   '@keyframes titlereveal{0%{opacity:0;letter-spacing:.42em;filter:blur(9px)}55%{opacity:1;filter:blur(0)}100%{opacity:1;letter-spacing:normal}}'+
   '.hp-kicker{animation:cfadeup 1s ease .15s both}.hp-sub{animation:cfadeup 1s ease .55s both}#beginBtn{animation:cfadeup 1s ease .85s both}.hp-rule{animation:crulegrow 1.2s ease .45s both;transform-origin:left}'+
-  '@keyframes cfadeup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@keyframes crulegrow{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}';
+  '@keyframes cfadeup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@keyframes crulegrow{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}'+
+  /* ── calm the HUD: soften panels so they recede and the map is the focus ── */
+  '#feed,#status,#party,#legend{box-shadow:0 12px 30px rgba(0,0,0,.5)!important;border-color:rgba(124,58,237,.19)!important;background:rgba(10,8,20,.8)!important}'+
+  '.floor-chip{border-color:rgba(124,58,237,.16)!important;box-shadow:0 6px 16px rgba(0,0,0,.3)!important;background:linear-gradient(180deg,rgba(15,11,28,.82),rgba(10,7,20,.8))!important}'+
+  '.floor-chip.cur{border-color:rgba(167,139,250,.5)!important;box-shadow:0 0 18px rgba(124,58,237,.28)!important}'+
+  '#omenbar .om{background:rgba(15,11,26,.78)!important;border-color:rgba(255,180,84,.24)!important;color:#c4bba8!important;box-shadow:none!important}'+
+  '#narr{border-color:rgba(124,58,237,.2)!important;box-shadow:0 16px 38px rgba(0,0,0,.45)!important}'+
+  '.feed-h,#party .party-h{opacity:.85}';
   document.head.appendChild(s);})();
 function updLedger(){const el=document.getElementById('ledger');tweenNum(el,G.ledger);el.style.color=G.ledger<0?'#ff3b5c':'#20F593';el.style.textShadow='0 0 22px '+(G.ledger<0?'rgba(255,59,92,.5)':'rgba(32,245,147,.45)');}
 
