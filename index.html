@@ -2969,9 +2969,17 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const cur=parseI
   '.ctab:hover{color:#cfc9e6;background:rgba(124,58,237,.12)}'+
   '.ctab.on{color:#eafff4;background:rgba(124,58,237,.2);border-color:rgba(167,139,250,.55);box-shadow:0 0 16px rgba(124,58,237,.25)}'+
   '.ctab-dot{position:absolute;top:7px;right:9px;width:6px;height:6px;border-radius:50%;background:#20F593;box-shadow:0 0 8px #20F593}'+
-  '.case-cols.tab-decision,.case-cols.tab-dossier{grid-template-columns:1fr!important;gap:0!important}'+
-  '.case-cols.tab-decision .col-right{display:none!important}.case-cols.tab-dossier .col-left{display:none!important}'+
-  '.case-cols.tab-dossier .col-right{border-left:none!important;padding-left:0!important}';
+  '.case-cols{grid-template-columns:1fr!important;gap:0!important}'+
+  '.case-cols .col-left,.case-cols .col-reason,.case-cols .col-right{display:none!important;border-left:none!important;padding-left:0!important}'+
+  '.case-cols.tab-decision .col-left{display:block!important}'+
+  '.case-cols.tab-reason .col-reason{display:block!important}'+
+  '.case-cols.tab-dossier .col-right{display:block!important}'+
+  '.case-cols.intro .col-reason{animation:colin .42s cubic-bezier(.2,.8,.2,1) both}'+
+  '.ctab-dot.live{background:#ffd76a!important;box-shadow:0 0 8px #ffd76a!important;animation:dotpulse 1.1s infinite}'+
+  '@keyframes dotpulse{0%,100%{opacity:1}50%{opacity:.3}}'+
+  '.reco-line{font-size:13px;color:#cabff2;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.22);border-radius:10px;padding:10px 13px;margin:0 0 14px;line-height:1.5;overflow:hidden}'+
+  '.reco-line .reco-go{color:#a78bfa;cursor:pointer;float:right;font-size:12px;letter-spacing:.3px}'+
+  '.reco-line .reco-go:hover{text-decoration:underline}';
   document.head.appendChild(s);})();
 function updLedger(){const el=document.getElementById('ledger');tweenNum(el,G.ledger);el.style.color=G.ledger<0?'#ff3b5c':'#20F593';el.style.textShadow='0 0 22px '+(G.ledger<0?'rgba(255,59,92,.5)':'rgba(32,245,147,.45)');}
 
@@ -3288,15 +3296,22 @@ function renderCase(){if(!G.sel){hideCase();return;}var _ob=document.getElementB
     <div class="case-meta">${d.upn||s.label}<br><span style="color:#6b6790">objectId ${d.oid||'—'}</span></div>
     ${riskGauge(d.risk)}</div><div class="case-body">`;
   h+=flowBar(s);
-  const _tab=G._caseTab||'decision';
-  h+=`<div class="case-tabs"><button class="ctab${_tab==='decision'?' on':''}" onclick="caseTab('decision')">⚖ Decision</button><button class="ctab${_tab==='dossier'?' on':''}" onclick="caseTab('dossier')">📜 Dossier${s.divined||s.summoned?'<span class="ctab-dot"></span>':''}</button></div>`;
+  const _hasReason=!!s.trace&&!s.possessed, _live=s.reasoning||s._llmPending;
+  if(intro)G._caseTab=_hasReason?'reason':'decision';            // open on the séance by default
+  let _tab=G._caseTab||'decision';if(_tab==='reason'&&!_hasReason)_tab='decision';
+  h+=`<div class="case-tabs">`+
+     `<button class="ctab${_tab==='decision'?' on':''}" onclick="caseTab('decision')">⚖ Decision${reco&&!judged?'<span class="ctab-dot"></span>':''}</button>`+
+     (_hasReason?`<button class="ctab${_tab==='reason'?' on':''}" onclick="caseTab('reason')">◈ Reasoning${_live?'<span class="ctab-dot live"></span>':''}</button>`:'')+
+     `<button class="ctab${_tab==='dossier'?' on':''}" onclick="caseTab('dossier')">📜 Dossier${s.divined||s.summoned?'<span class="ctab-dot"></span>':''}</button>`+
+     `</div>`;
   h+=`<div class="case-cols tab-${_tab}${intro?' intro':''}"><div class="col-left">`;
-  // ── LEFT: agent reasoning (collapsible) + the judgment actions ──
+  // ── DECISION: the council's recommendation + the judgment actions ──
   if(!s.possessed&&!judged){
-    const recoBadge=s.analysis?(RITE_LABEL[s.analysis.rite].replace('&amp;','&')+' · '+s.analysis.conf+'%'):'reasoning…';
-    h+=acc('reason','◈','Agent reasoning',recoBadge,renderTrace(s));
+    if(s.analysis){const _rl=RITE_LABEL[s.analysis.rite].replace('&amp;','&');
+      h+=`<div class="reco-line">◈ The council recommends <b>${_rl}</b> · ${s.analysis.conf}% confidence${_hasReason?`<span class="reco-go" onclick="caseTab('reason')">see reasoning ›</span>`:''}</div>`;}
+    else if(_live)h+=`<div class="reco-line">◈ The hunters are still reasoning…${_hasReason?`<span class="reco-go" onclick="caseTab('reason')">watch the séance ›</span>`:''}</div>`;
   }
-  h+=`<div class="sec-h" style="margin-top:13px">⚖ Pass judgment</div><div class="btns">`;
+  h+=`<div class="sec-h">⚖ Pass judgment</div><div class="btns">`;
   if(s.possessed)h+=`<div class="muted" style="color:#f9c">This spirit is <b>POSSESSED</b>. Click the red creature on the map to <b>banish</b> the Hungry holding it.</div>`;
   else if(judged)h+=`<div class="muted" style="color:#bfe">Judgment passed: <b>${s.judged}</b>.</div>`;
   else{
@@ -3308,8 +3323,11 @@ function renderCase(){if(!G.sel){hideCase();return;}var _ob=document.getElementB
     if(!s.divined)h+=btn('scry','✦','Divine the bindings','reveal Fabric IQ threads (see Dossier tab)','divine()');
     if(!s.summoned)h+=btn('scry','📜','Summon the grimoire','pull cited Foundry IQ evidence (see Dossier tab)','summon()');
   }
-  h+=`</div></div><div class="col-right">`;
-  // ── RIGHT: dossier as collapsible accordions ──
+  h+=`</div>`;
+  // ── REASONING: the agent council, séance dial, and streaming trace get their own tab ──
+  if(_hasReason)h+=`<div class="col-reason"><div class="sec-h" style="margin-bottom:11px">◈ Agent reasoning</div>${renderTrace(s)}</div>`;
+  h+=`<div class="col-right">`;
+  // ── DOSSIER: collapsible accordions ──
   if(WHISPERS[G.sel.room.account])h+=`<div class="whisper">${WHISPERS[G.sel.room.account]}</div>`;
   const _A=ACTS[_act];
   const tele=`<div class="tele">`+_A.rows.map(r=>`<div class="row"><span class="tk">${r[0]}</span><b>${d[r[1]]||(r[1]==='signins'?s.last:'—')}</b></div>`).join('')+
