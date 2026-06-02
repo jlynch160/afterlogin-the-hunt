@@ -2358,12 +2358,23 @@ function renderRoomView(){const r=ROOMS[G.enteredRoom];if(!r){exitRoom();return;
   if(r.zone){ctx.fillStyle='rgba(167,139,250,.78)';ctx.font='13px Segoe UI';ctx.fillText('— '+r.zone+' —',cx,cy-ch/2-12);}
   if(s&&!s.possessed){
     const size=Math.min(ch*.62,330);
+    // ── atmosphere: a soft aura + rising spirit-motes around the apparition ──
+    {const cg=cx,cyg=cy-6,col0=judged?'#20F593':(GRADE_COL[s.grade]||'#a78bfa');ctx.save();ctx.globalCompositeOperation='lighter';
+     const aur=ctx.createRadialGradient(cg,cyg,0,cg,cyg,size*.95);aur.addColorStop(0,hexA(col0,.16));aur.addColorStop(.55,hexA(col0,.05));aur.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=aur;ctx.beginPath();ctx.arc(cg,cyg,size*.95,0,6.28);ctx.fill();
+     for(let i=0;i<14;i++){const tt=(G.t*.22+i*.21)%1,ang=i*1.7+G.t*.1,mr=size*(.18+((i*5)%9)/9*.4),mx=cg+Math.cos(ang)*mr,my=cyg+size*.42-tt*size*.95,a=(1-tt)*.45;ctx.fillStyle=hexA(judged?'#bff0d8':'#d6c9ff',a);ctx.beginPath();ctx.arc(mx,my,1.4,0,6.28);ctx.fill();}
+     ctx.restore();}
     drawManifestation(r,cx,cy-6,size);                          // ← one or many ghosts, per attack
     // clickable-target ring so it’s obvious what to click, brighter on hover
     const hov=r._rv&&Math.hypot(G.mx-r._rv.x,G.my-r._rv.y)<r._rv.r, pr=.5+Math.abs(Math.sin(G.t*3))*.5;
-    if(r._rv){ctx.save();ctx.globalCompositeOperation='lighter';ctx.strokeStyle=hexA(judged?'#20F593':'#ff5a6e',(hov?.85:.32)*(.6+pr*.4));ctx.lineWidth=hov?3:1.5;
-      ctx.setLineDash([7,9]);ctx.lineDashOffset=-G.t*22;ctx.beginPath();ctx.arc(r._rv.x,r._rv.y,r._rv.r*.84,0,6.28);ctx.stroke();ctx.setLineDash([]);ctx.restore();
-      if(hov&&!judged){ctx.fillStyle='rgba(255,240,205,.96)';ctx.font='bold 13px Segoe UI';ctx.textAlign='center';ctx.fillText('▼ click to examine & judge',r._rv.x,r._rv.y-r._rv.r*.84-12);}}
+    if(r._rv){const rx=r._rv.x,ry=r._rv.y,rr=r._rv.r*.84,ringCol=judged?'#20F593':'#ff5a6e';ctx.save();ctx.globalCompositeOperation='lighter';
+      // soft glow ring
+      ctx.strokeStyle=hexA(ringCol,(hov?.5:.16)*(.7+pr*.3));ctx.lineWidth=hov?2.5:1.2;ctx.beginPath();ctx.arc(rx,ry,rr,0,6.28);ctx.stroke();
+      // rotating dashed ring — the clickable affordance
+      ctx.strokeStyle=hexA(ringCol,(hov?.9:.42)*(.7+pr*.3));ctx.lineWidth=hov?3:1.6;ctx.setLineDash([6,12]);ctx.lineDashOffset=-G.t*26;ctx.beginPath();ctx.arc(rx,ry,rr*1.07,0,6.28);ctx.stroke();ctx.setLineDash([]);
+      // arcane tick-ring, counter-rotating
+      ctx.strokeStyle=hexA(ringCol,.2);ctx.lineWidth=1;for(let i=0;i<24;i++){const a=i/24*6.28-G.t*.08;ctx.beginPath();ctx.moveTo(rx+Math.cos(a)*rr*.9,ry+Math.sin(a)*rr*.9);ctx.lineTo(rx+Math.cos(a)*rr*.96,ry+Math.sin(a)*rr*.96);ctx.stroke();}
+      ctx.restore();
+      if(hov&&!judged){ctx.fillStyle='rgba(255,240,205,.96)';ctx.font='bold 13px Segoe UI';ctx.textAlign='center';ctx.fillText('▼ click to examine & judge',rx,ry-rr-14);}}
     const aTxt=ATTACK[r.account]||'',m=MANIFEST[r.account]||{n:1};
     const head=judged?('Judged — '+s.judged):(m.n>1?('⚠ '+m.n+' manifestations · '+s.kind):('⚠ '+s.kind));
     ctx.fillStyle=judged?'rgba(32,245,147,.92)':'rgba(255,120,140,.96)';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
