@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.5] - 2026-06-02 — Kid-friendly factory room view + image-leak guard + dice on bosses
+
+- **Room view de-haunted for Student:** entering a room is now a bright daytime factory inspection bay (light backdrop, factory-floor grid, hazard stripe) instead of the dark haunted chamber; a **gold inspection ring** replaces the red "summoning circle"; the labels read as kid text ("🧹 N little helpers in here!", "click to take a look!", kid-worded clue + possessed lines); the duplicate in-room cursor is dropped (the real OS cursor shows).
+- **Image-leak fix:** added a generation token (`_artGen`) bumped on every theme switch — a stale async image load from the *previous* theme is now ignored, so adult art can't bleed into Student (or vice-versa) after switching.
+- **Dice on bosses:** the tumbling d20 now also animates on the Sentinel's strike and party attacks, so boss/threat combat rolls show the die.
+- Kid-ified the omen/HUD pill names (Witching Hour→Bonus Time, Bound Lantern→Power-Up, Blood Moon→Big Mess Day, etc.).
+
 ## [0.5.4] - 2026-06-02 — Kid-friendly dossier/reasoning + boss-art image leak fix
 
 - **Dossier & reasoning now read for kids** in the Student theme: the tabs become **What to do · Thinking · Clues**, and the technical vocabulary maps to friendly words — account→helper, service account→helper-bot, admin→boss helper, dormant→sleeping, privileged→special, orphaned→lost, sign-ins→visits, MFA→the extra lock, evidence→clues, Fabric/Foundry IQ→the helper-map/the proof, Entra/Purview/Defender→the office/the file room/the guard-room, etc. (Tags, `onclick`, and classes are still left untouched.)
