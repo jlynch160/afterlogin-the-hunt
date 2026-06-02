@@ -1186,11 +1186,33 @@ const THEMES={
       foot:'Just for practice · no real names or info · powered by helpful AI',
       brief:`<div class="b"><span class="bn">1</span><div><b>Lost Helpers</b> <span class="lyr" style="color:#ffe27a">· who’s who</span> — find the little helpers nobody looks after anymore. Some that look “asleep” are secretly still doing an important job, so check before you tidy them away!</div></div>
       <div class="b"><span class="bn">2</span><div><b>The Messy Files</b> <span class="lyr" style="color:#7fe6c8">· tidy up</span> — now the mess is in the files: too many copies shared with too many friends. Clean up the junk and protect the important stuff.</div></div>
-      <div class="b"><span class="bn">3</span><div><b>The Big Mix-Up</b> <span class="lyr" style="color:#ff9bb3">· team up</span> — lost helpers and messy files crash into one big problem. Sort it out before the <b>Gremlin</b> makes it worse!</div></div>`}
+      <div class="b"><span class="bn">3</span><div><b>The Big Mix-Up</b> <span class="lyr" style="color:#ff9bb3">· team up</span> — lost helpers and messy files crash into one big problem. Sort it out before the <b>Gremlin</b> makes it worse!</div></div>`},
+    map:{estate:'SUNNYSIDE FACTORY', icon:'🏭', status:'NEEDS TIDYING', vault:'THE CONTROL ROOM',
+      floors:{1:'The Factory Floor',2:'The Mezzanine',3:'The Top Floor'},
+      rooms:{0:'The Front Desk',1:'The Control Room',2:'Records Bay',3:'Visitor Bay',4:'Seasonal Crew',5:'The Lobby',6:'Machine Room',7:'Loading Dock',9:'Conveyor Control',13:'The Supply Cage',14:'The Old Office',15:'The Catwalk',16:'Upper Catwalk'}},
+    crawl:`<div class="ov">Sunnyside Factory · before the morning shift</div>
+      <h2>The Helper Patrol</h2>
+      <p>Last night the big machines switched off and everyone went home — but a whole crew of <b>little helpers</b> stayed behind, still holding their keys to every door and cupboard.</p>
+      <p>Some wandered off and got <b>lost</b> — sleepy ones, forgotten ones, ones nobody looks after anymore. And a sneaky <b>Gremlin</b> is creeping through the factory, hoping to grab a forgotten helper and make a big mess. Round them all up before the morning bell! You have two friends with you:</p>
+      <div class="hunters">
+        <div class="hunter warden"><div class="av">🔎</div>
+          <div><h3>The Checker<span>· LOOKS CLOSELY</span></h3>
+            <p>Your clever friend — looks at each helper and tells you <em>what they really do</em> and <em>the safe thing to do with them</em>, so you decide with your head, not a guess.</p></div></div>
+        <div class="hunter sentinel"><div class="av">🧹</div>
+          <div><h3>The Chaser<span>· CATCHES TROUBLE</span></h3>
+            <p>Your speedy friend — when the Gremlin pops up, the Chaser <em>runs it down</em> and <em>helps you bonk it</em> until it scurries away.</p></div></div>
+      </div>
+      <p>One flashlight between you, and only until the <b>morning bell</b> — the first of three days.</p>
+      <div class="dawn">Grab your flashlight. Start the patrol!</div>`
   }
 };
 let TH_ID='spectral';
 function activeTheme(){return THEMES[TH_ID]||THEMES.spectral;}
+// themed in-game text (Student "factory" relabels; falls back to the Pro/default wording)
+function TM(){return activeTheme().map||null;}
+function txRoom(r){const m=TM();return (m&&r&&m.rooms&&m.rooms[r.id])?m.rooms[r.id]:(r?r.name:'');}
+function txStatus(){const m=TM();return (m&&m.status)?m.status:'HAUNTED';}
+function txVault(){const m=TM();return (m&&m.vault)?m.vault:'THE VAULT';}
 function setTheme(id){TH_ID=THEMES[id]?id:'spectral';const th=THEMES[TH_ID];
   const r=document.documentElement.style;for(const k in th.vars)r.setProperty(k,th.vars[k]);
   ACR=th.acr;if(document.body)document.body.setAttribute('data-theme',TH_ID);
@@ -1203,7 +1225,9 @@ function applyThemeCopy(th){const H=th.home;if(!H)return;const set=(sel,html,isH
   const sb=document.querySelector('#beginBtn span');if(sb)sb.textContent=H.start;
   const ig=document.getElementById('enterHouse');if(ig)ig.textContent=H.introCTA;
   set('.hp-tease',H.tease);set('.hp-foot',H.foot);
-  const br=document.querySelector('.hp-brief');if(br)br.innerHTML=H.brief;}
+  const br=document.querySelector('.hp-brief');if(br)br.innerHTML=H.brief;
+  // swap the intro crawl to the theme's story (capture the default Pro crawl once)
+  const cr=document.getElementById('crawl');if(cr){if(window._crawl0==null)window._crawl0=cr.innerHTML;cr.innerHTML=th.crawl||window._crawl0;}}
 function syncThemePicker(){document.querySelectorAll('.theme-pick .tp').forEach(b=>b.classList.toggle('on',b.getAttribute('data-theme')===TH_ID));}
 function initTheme(){let saved='spectral';try{saved=localStorage.getItem('al_theme')||'spectral';}catch(e){}setTheme(saved);}
 // the profile screen picks a mode → set the theme, then dissolve to the home screen
@@ -2460,7 +2484,7 @@ function renderRoomView(){const r=ROOMS[G.enteredRoom];if(!r){exitRoom();return;
   ctx.restore();
   ctx.lineWidth=3;ctx.strokeStyle=fl>.1?'rgba(222,212,255,'+(.4+fl*.6)+')':'rgba(167,139,250,.5)';roundRect(cx-cw/2,cy-ch/2,cw,ch,24);ctx.stroke();ctx.restore();
   // title + zone
-  ctx.fillStyle='#ece6f6';ctx.font='bold 30px Cormorant Garamond, serif';ctx.textAlign='center';ctx.fillText(r.name,cx,cy-ch/2-30);
+  ctx.fillStyle='#ece6f6';ctx.font='bold 30px Cormorant Garamond, serif';ctx.textAlign='center';ctx.fillText(txRoom(r),cx,cy-ch/2-30);
   if(r.zone){ctx.fillStyle='rgba(167,139,250,.78)';ctx.font='13px Segoe UI';ctx.fillText('— '+r.zone+' —',cx,cy-ch/2-12);}
   if(s&&!s.possessed){
     const size=Math.min(ch*.62,330);
@@ -2630,7 +2654,8 @@ function drawManorFrame(){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
   ctx.fillStyle='rgba(10,7,20,.74)';roundRect(cx2-152,y1-26,304,26,9);ctx.fill();
   ctx.strokeStyle='rgba('+ACR+',.34)';ctx.lineWidth=1;roundRect(cx2-152,y1-26,304,26,9);ctx.stroke();
   const fname=(FLOORS[G.floor-1]||{}).name||'';
-  ctx.fillStyle='rgba(216,207,242,.92)';ctx.font='600 13px Cormorant Garamond, serif';ctx.textAlign='center';ctx.fillText('⌂  MERIDIAN ESTATE · '+fname+'  ⌂',cx2,y1-9);
+  const _bm=TM(),_est=_bm?_bm.estate:'MERIDIAN ESTATE',_eic=_bm?_bm.icon:'⌂',_fn2=(_bm&&_bm.floors&&_bm.floors[G.floor])?_bm.floors[G.floor]:fname;
+  ctx.fillStyle='rgba(216,207,242,.92)';ctx.font='600 13px Cormorant Garamond, serif';ctx.textAlign='center';ctx.fillText(_eic+'  '+_est+' · '+_fn2+'  '+_eic,cx2,y1-9);
   ctx.restore();}
 function drawCorridors(){ctx.lineCap='round';EDGES.forEach(([a,b])=>{const ra=ROOMS[a],rb=ROOMS[b];
   if(ra.floor!==G.floor||rb.floor!==G.floor)return;          // only intra-floor halls
@@ -2702,16 +2727,16 @@ function drawRoom(r){if(r.vault)return;
   if(hover){ctx.save();ctx.globalCompositeOperation='lighter';const hc=haunted?'#ff7a9a':cleared?'#20F593':'#c9b6ff';ctx.strokeStyle=hexA(hc,.6);ctx.lineWidth=2.4;ctx.shadowColor=hc;ctx.shadowBlur=18;roundRect(x-hw-1.5,y-hh-1.5,rw+3,rh+3,rad+1.5);ctx.stroke();ctx.restore();} // glow when your lantern is over it
   ctx.strokeStyle='rgba(255,255,255,.13)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x-hw+rad,y-hh+1.2);ctx.lineTo(x+hw-rad,y-hh+1.2);ctx.stroke();
   // door plate (name + zone)
-  ctx.font='bold 11px Segoe UI';const nw=Math.min(rw,ctx.measureText(r.name).width+22);
+  ctx.font='bold 11px Segoe UI';const _rn=txRoom(r),nw=Math.min(rw,ctx.measureText(_rn).width+22);
   ctx.fillStyle='rgba(7,5,16,.88)';roundRect(x-rw/2,y-rh/2-17,nw,17,5);ctx.fill();
-  ctx.fillStyle='rgba(220,214,242,.97)';ctx.textAlign='left';ctx.fillText(r.name,x-rw/2+8,y-rh/2-5);
+  ctx.fillStyle='rgba(220,214,242,.97)';ctx.textAlign='left';ctx.fillText(_rn,x-rw/2+8,y-rh/2-5);
   // status / haunted marker
   if(cleared){ctx.fillStyle='rgba(32,245,147,.9)';ctx.font='bold 13px Segoe UI';ctx.textAlign='right';ctx.fillText('✓',x+rw/2-7,y-rh/2-5);
     ctx.fillStyle='rgba(150,160,178,.5)';ctx.font='8px Segoe UI';ctx.textAlign='center';if(r.zone)ctx.fillText(r.zone,x,y+rh/2-6);}
   else if(haunted){const p=.5+Math.abs(Math.sin(G.t*2.6+r.id))*.5;
     drawDread(x,y-1,r.id,p,fl);
     ctx.fillStyle='rgba(228,38,52,'+(.6+fl*.4)+')';ctx.font='bold 9px Segoe UI';ctx.textAlign='center';
-    ctx.shadowColor='rgba(190,10,30,.9)';ctx.shadowBlur=6+fl*10;ctx.fillText('HAUNTED',x,y+rh/2-6);ctx.shadowBlur=0;}
+    ctx.shadowColor='rgba(190,10,30,.9)';ctx.shadowBlur=6+fl*10;ctx.fillText(txStatus(),x,y+rh/2-6);ctx.shadowBlur=0;}
   else if(r.zone){ctx.fillStyle='rgba(150,140,190,.5)';ctx.font='8px Segoe UI';ctx.textAlign='center';ctx.fillText(r.zone,x,y+rh/2-6);}
   ctx.restore();
 }
@@ -2909,8 +2934,8 @@ function drawVault(){const r=ROOMS[1],T=G.t;const danger=G.threats.some(t=>!t.ba
   for(let i=0;i<8;i++){const a=i/8*6.28;ctx.beginPath();ctx.moveTo(Math.cos(a)*9,Math.sin(a)*9);ctx.lineTo(Math.cos(a)*13,Math.sin(a)*13);ctx.stroke();}
   ctx.fillStyle=acc;ctx.beginPath();ctx.arc(0,-11,2.2,0,6.28);ctx.fill();ctx.restore();
   // label
-  ctx.fillStyle=danger?'#ffb4c2':'#bff0d8';ctx.font='bold 10px Segoe UI';ctx.textAlign='center';ctx.fillText('THE VAULT',0,48);
-  ctx.fillStyle=aA+'.85)';ctx.font='8px Segoe UI';ctx.fillText('· TIER-0 ·',0,58);
+  ctx.fillStyle=danger?'#ffb4c2':'#bff0d8';ctx.font='bold 10px Segoe UI';ctx.textAlign='center';ctx.fillText(txVault(),0,48);
+  ctx.fillStyle=aA+'.85)';ctx.font='8px Segoe UI';ctx.fillText(TM()?'· THE CORE ·':'· TIER-0 ·',0,58);
   ctx.restore();}
 
 function drawLanternFlame(x,y){const T=G.t;ctx.save();ctx.globalCompositeOperation='lighter';
@@ -3082,11 +3107,23 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const cur=parseI
   '.theme-pick .tp.on{border-color:var(--purpleL);background:rgba(var(--accentRGB),.2);box-shadow:0 0 18px rgba(var(--accentRGB),.3);color:var(--bone)}'+
   '.theme-pick .tp b{font-family:var(--serif);font-size:15px;letter-spacing:.4px}'+
   '.theme-pick .tp small{font-size:10px;letter-spacing:.6px;text-transform:uppercase;opacity:.75}'+
-  /* student theme: soften the spookier homepage flourishes */
-  'body[data-theme="helpers"] .emberFx,body[data-theme="helpers"] .hp-vign{display:none}'+
-  'body[data-theme="helpers"] .hp-fog{opacity:.18!important}'+
-  'body[data-theme="helpers"] .hp-ghost{opacity:.5;filter:hue-rotate(40deg) saturate(.6)}'+
-  "body[data-theme=\"helpers\"] #start .hp-sky{background-image:url('assets/helpers/house.png')}"+
+  /* student theme: soften the spookier homepage flourishes + make the copy readable on the bright art */
+  'body[data-theme="helpers"] .emberFx{display:none}'+
+  'body[data-theme="helpers"] .hp-fog{opacity:.1!important}'+
+  'body[data-theme="helpers"] .hp-ghost{opacity:.45;filter:hue-rotate(40deg) saturate(.6)}'+
+  "body[data-theme=\"helpers\"] #start .hp-sky{background-image:url('assets/helpers/house.png');background-position:center 24%;filter:brightness(.58) saturate(1.03)}"+
+  'body[data-theme="helpers"] #start .hp-vign{display:block;background:radial-gradient(ellipse 82% 78% at 50% 42%,transparent 24%,rgba(4,12,28,.5) 68%,rgba(2,8,20,.95) 100%)}'+
+  'body[data-theme="helpers"] #start .startcard{background:rgba(8,18,38,.76);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,206,43,.42);border-radius:24px;padding:26px 36px 22px;max-width:640px;box-shadow:0 30px 90px rgba(0,0,0,.55)}'+
+  'body[data-theme="helpers"] #start .hp-title{font-size:clamp(40px,6.4vw,72px);letter-spacing:3px}'+
+  'body[data-theme="helpers"] #start .hp-kicker{color:#ffd76a}'+
+  'body[data-theme="helpers"] #start .hp-rule{background:linear-gradient(90deg,transparent,#ffce2b,transparent)}'+
+  'body[data-theme="helpers"] #start .hp-sub{color:#eaf3ff}'+
+  'body[data-theme="helpers"] #start .hp-brief .b{color:#e2eaf6;border-top-color:rgba(255,255,255,.13)}'+
+  'body[data-theme="helpers"] #start .hp-brief .b:last-child{border-bottom-color:rgba(255,255,255,.13)}'+
+  'body[data-theme="helpers"] #start .hp-brief b{color:#fff}'+
+  'body[data-theme="helpers"] #start .hp-brief .bn{color:#ffce2b}'+
+  'body[data-theme="helpers"] #start .hp-tease{color:#cfd8e8}'+
+  'body[data-theme="helpers"] #start .hp-foot{color:#a6b6cd}'+
   /* ── profile / mode-select entry screen ── */
   '#profile{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:26px;cursor:default;background:radial-gradient(ellipse at 50% 28%,#170f30,#070512 72%);transition:opacity .45s ease}'+
   '#profile.gone{opacity:0;pointer-events:none}'+
