@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.6.1] - 2026-06-02 — Achievements + best-rank board
+
+- **Achievements** — medals pop mid-run as a sliding toast and persist across runs (`localStorage al_ach`): First Verdict, Natural 20, Flawless Floor, Guardian Slain, Steady Hand (no poltergeists), Perfect Read (100% agreement, 5+ calls), Hold Until Dawn, The Hollow Ends. Each plays a chime.
+- **Best-rank board** — the end screen shows your best rank across runs (`al_best`) and calls out a new record ("🏆 New best rank — A").
+
 ## [0.6.0] - 2026-06-02 — Showpiece pass: finale, AI scoreboard, hit-stop, sound design
 
 Four "wow" beats for the demo:

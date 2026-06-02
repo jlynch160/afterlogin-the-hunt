@@ -746,7 +746,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.0</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.1</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -990,6 +990,7 @@
 <!-- end -->
 <div class="screen hide" id="end" style="display:none"><div class="end-wrap">
   <div class="end-rank" id="endRank"></div>
+  <div id="endBest" style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#b9a8e0;margin:-2px 0 8px"></div>
   <div class="title" id="endTitle">Dawn</div>
   <div class="verdict" id="endVerdict"></div>
   <div id="endStats"></div>
@@ -1623,6 +1624,31 @@ function buildEnv(){
 /* ════════ ROGUELITE META — persistent Soul Essence + the Sanctum (Hades-style: govern, die, return) ════════ */
 function metaGet(){try{return JSON.parse(localStorage.getItem('al_meta')||'null')||{essence:0,upgrades:{},runs:0,best:1};}catch(e){return {essence:0,upgrades:{},runs:0,best:1};}}
 function metaSet(m){try{localStorage.setItem('al_meta',JSON.stringify(m));}catch(e){}}
+/* ════════ Achievements — medals that pop mid-run + persist across runs ════════ */
+const ACH_ALL=[
+  {id:'firstjudge',ic:'⚖️',name:'First Verdict',desc:'Pass your first judgment.'},
+  {id:'nat20',ic:'🎲',name:'Natural 20',desc:'Land a critical hit.'},
+  {id:'flawfloor',ic:'✨',name:'Flawless Floor',desc:'Clear a floor with zero poltergeists.'},
+  {id:'bossslayer',ic:'⚔️',name:'Guardian Slain',desc:'Banish a floor guardian.'},
+  {id:'nopolter',ic:'🛡️',name:'Steady Hand',desc:'Win a run with zero poltergeists.'},
+  {id:'perfect',ic:'🎯',name:'Perfect Read',desc:'Win agreeing with every recommendation (5+ calls).'},
+  {id:'dawn',ic:'🌅',name:'Hold Until Dawn',desc:'Win a run.'},
+  {id:'hollow',ic:'👑',name:'The Hollow Ends',desc:'Destroy the Hollow Ascendant in Act III.'}
+];
+function achState(){try{return JSON.parse(localStorage.getItem('al_ach')||'{}')||{};}catch(e){return {};}}
+function unlock(id){if(!G)return;G.achieved=G.achieved||{};if(G.achieved[id])return;const a=ACH_ALL.find(x=>x.id===id);if(!a)return;
+  G.achieved[id]=1;const all=achState();const isNew=!all[id];all[id]=1;try{localStorage.setItem('al_ach',JSON.stringify(all));}catch(e){}
+  achToast(a,isNew);try{sfx('crit');}catch(e){}}
+function achToast(a,isNew){var w=document.getElementById('achwrap');if(!w)return;
+  var d=document.createElement('div');d.className='ach-toast';d.innerHTML='<span class="ach-ic">'+a.ic+'</span><div><div class="ach-n">🏅 '+a.name+(isNew?'':' · again')+'</div><div class="ach-d">'+a.desc+'</div></div>';
+  w.appendChild(d);void d.offsetWidth;d.classList.add('show');
+  setTimeout(function(){d.classList.remove('show');setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},420);},3300);}
+(function(){if(typeof document==='undefined')return;var s=document.createElement('style');
+  s.textContent='#achwrap{position:fixed;top:64px;right:16px;z-index:90;display:flex;flex-direction:column;gap:8px;pointer-events:none}'+
+  '.ach-toast{display:flex;align-items:center;gap:11px;background:linear-gradient(180deg,rgba(28,20,52,.97),rgba(16,11,30,.97));border:1px solid rgba(255,215,106,.55);border-radius:13px;padding:10px 15px 10px 12px;box-shadow:0 14px 36px rgba(0,0,0,.55),0 0 22px rgba(255,200,90,.22);transform:translateX(125%);opacity:0;transition:transform .44s cubic-bezier(.2,.9,.3,1),opacity .44s;max-width:310px}'+
+  '.ach-toast.show{transform:translateX(0);opacity:1}.ach-ic{font-size:26px;line-height:1}.ach-n{font-family:"Cormorant Garamond",serif;font-size:15.5px;color:#ffe7a0;letter-spacing:.3px}.ach-d{font-size:11px;color:#b9b2d6;margin-top:1px}'+
+  'body[data-theme="helpers"] .ach-toast{border-color:rgba(255,206,43,.6)}';
+  document.head.appendChild(s);var w=document.createElement('div');w.id='achwrap';document.body.appendChild(w);})();
 const SANCTUM=[
   {id:'skeptic',  ic:'🔍', name:'Recruit the Skeptic', cost:60, desc:'A third party agent joins every hunt — the adversarial Skeptic who contests the Warden.'},
   {id:'ledger',   ic:'📜', name:'Ancestral Ledger',    cost:40, desc:'Begin every run with +25 to the Ledger of the Dead.'},
@@ -1859,12 +1885,12 @@ function showDie(n,crit){var el=document.getElementById('d20');if(!el)return;var
   if(lab)lab.textContent='';try{sfx('clatter');}catch(e){}
   var ticks=0;clearInterval(el._iv);el._iv=setInterval(function(){f.textContent=1+Math.floor(Math.random()*20);  // keep flickering through the roll, lock as it lands (~0.95s)
     if(++ticks>21){clearInterval(el._iv);f.textContent=n;var _k=(typeof TH_ID!=='undefined'&&TH_ID==='helpers');if(lab)lab.textContent=crit?(_k?'SUPER HIT! ⭐':'NAT 20 · CRIT!'):(fumble?(_k?'oopsie!':'oof — a 1'):'rolled '+n);
-      if(crit){try{sfx('crit');}catch(e){}if(typeof hitStop==='function')hitStop(180,false);if(G&&G.stats)G.stats.crits++;}}},44);
+      if(crit){try{sfx('crit');}catch(e){}if(typeof hitStop==='function')hitStop(180,false);if(G&&G.stats)G.stats.crits++;if(typeof unlock==='function')unlock('nat20');}}},44);
   clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('go');},crit?2050:1650);}
 
 function newGame(){
   G={t:0,night:140,ledger:0,started:true,over:false,lantern:{x:W*.5,y:H*.5},mx:W*.5,my:H*.5,
-     stats:{reasoned:0,calls:0,correct:0,polters:0,confSum:0,confN:0,crits:0},
+     stats:{reasoned:0,calls:0,correct:0,polters:0,confSum:0,confN:0,crits:0},achieved:{},
      sel:null,threats:[],particles:[],shake:0,feed:[],judged:0,breach:false,lastHop:0,tut:true,lastWhisper:7,investigate:null,turn:0,huntStarted:false,focusSoul:null,
      view:'map',enteredRoom:null,cam:{zoom:1,x:0,y:0},storyFired:{},floats:[],remed:null,_fxUntil:0,
      essence:0,owned:{},buffs:{dmg:0,hit:0,freeze:0,vaultBuffer:0,essBonus:0},
@@ -1920,6 +1946,7 @@ function attack(mod,ac,dn,ds,dmod){const r=1+Math.floor(Math.random()*20);const 
   return{r,tot,hit,crit,dmg:hit?rollDice(crit?dn*2:dn,ds)+dmod:0};}
 function onBanished(t){if(t._dead)return;t._dead=true;t.banished=true;sfx('triumph');flash(.55);shake(20);shock();
   if(typeof hitStop==='function')hitStop(t.boss?360:240,true); // cinematic slow-mo on a banish (bigger for a boss)
+  if(typeof unlock==='function'){unlock('bossslayer');if((t.boss||t.tier>=3)&&(_act||1)>=3)unlock('hollow');}
   // free any spirits this guardian had possessed so the floor can be cleared
   ROOMS.filter(rm=>rm.floor===t.floor&&rm.soul&&rm.soul.possessed).forEach(rm=>{rm.soul.possessed=false;rm.soul.judged=null;scry('↩ <b>'+rm.soul.label+'</b> is released from possession — judge it anew.','');});
   const tr=ROOMS[t.room];
@@ -2120,6 +2147,7 @@ function judge(rite){const r=G.sel.room,s=r.soul;if(s.judged&&s.judged!=='posses
   }else{if(s.dead&&(s.grade==='F'||s.grade==='D')){G.ledger-=20;sfx('bad');
       scry('You called a <b>confirmed threat</b> benign. A breach remains — and it will draw the enemy.','bad');narrate('A costly mercy.','That confirmed-malicious target is exactly the bait a predator hunts.');s.judged=null;}
     else{G.ledger+=12;G.judged++;sfx('select');scry(JW.ack+': <b>'+s.label+'</b>. Documented.','good');s.judged='ack';gainEssence(3+G.buffs.essBonus,'documented');}}
+  if(['rest','bind','ack'].indexOf(s.judged)>=0&&typeof unlock==='function')unlock('firstjudge');
   updLedger();G.sel=null;hideCase();playerTurn();checkDawn();advanceStory();checkFloorClear(G.floor);if(G.view==='room')exitRoom();updateCoach();}
 function poltergeist(r,s){G.ledger-=60;if(G.stats)G.stats.polters++;sfx('crash');shake(30);flash(.9);shock();s.judged='broken';
   s.bind.filter(b=>b.live).forEach((b,i)=>{schedule(G.t+.1+i*.15,()=>{const target=(b.to==='LIVE')?ROOMS[1]:(ROOMS.find(x=>x.account===b.to)||ROOMS[1]);
@@ -2138,6 +2166,7 @@ function checkDawn(){const allJ=ROOMS.every(r=>!r.soul||(r.soul.judged&&r.soul.j
     schedule(G.t+1.6,()=>endGame(true,'dawn'));}}
 /* ── floor progression: clear a floor (spirits judged + guardian banished) to ascend ── */
 function checkFloorClear(f){if(!G||G.over)return;if(!floorCleared(f))return;
+  if(typeof unlock==='function'&&G.stats&&G.stats.polters===0)unlock('flawfloor');
   if(G.maxFloor<=f&&f<3){G.maxFloor=f+1;sfx('triumph');flash(.25);banner('Floor Cleared',FLOORS[f-1].name+' is clean','#20F593');
     scry('✅ <b>'+FLOORS[f-1].name+' cleared.</b> The stair to <b>'+FLOORS[f].name+'</b> is open.','good');
     narrate(FLOORS[f-1].name+' is clean.','Take the stairs up — '+FLOORS[f].name+' awaits.');}
@@ -2214,6 +2243,13 @@ function endGame(won,why){if(G.over)return;stopAuto();G.over=true;G.started=fals
     '<div class="aib"><b id="aibX">0</b><span>critical hits</span></div></div>';
     setTimeout(function(){var T=function(id,v,d,suf){var e=document.getElementById(id);if(!e)return;e._suf=suf||'';tweenNum(e,v,d);};
       T('aibR',_st.reasoned,900);T('aibC',_st.correct,900);T('aibA',_acc,1000,'%');T('aibF',_conf,1000,'%');T('aibP',_st.polters,700);T('aibX',_st.crits,800);},640);}
+  // ── achievements on the result + best-rank across runs ──
+  if(typeof unlock==='function'&&won){unlock('dawn');if((_st.polters||0)===0)unlock('nopolter');if(_st.calls>=5&&_acc>=100)unlock('perfect');if(_final)unlock('hollow');}
+  try{const RV={S:5,A:4,B:3,C:2,D:1},prev=JSON.parse(localStorage.getItem('al_best')||'null');
+    const isBest=!prev||(RV[rank]||0)>(RV[prev.rank]||0)||((RV[rank]||0)===(RV[prev.rank]||0)&&score>(prev.score||0));
+    if(isBest)localStorage.setItem('al_best',JSON.stringify({rank:rank,score:score}));
+    const best=isBest?{rank:rank}:prev,bel=document.getElementById('endBest');
+    if(bel&&best)bel.innerHTML=isBest?'🏆 <b style="color:'+rankCol+'">New best rank — '+rank+'</b>':'Best rank so far · <b>'+best.rank+'</b>';}catch(e){}
   flash(won?.3:.6);sfx(won?'victory':'crash');}
 const stat=(n,l)=>`<div class="stat"><span class="n">${n}</span><span class="l">${l}</span></div>`;
 const aar=(l,v)=>`<div class="aar-row"><span class="aar-l">${l}</span><span class="aar-v">${v}</span></div>`;
@@ -3901,7 +3937,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.6.0','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.6.1','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
