@@ -54,7 +54,7 @@
   #coach b{color:var(--flame)}  #coach .danger{color:var(--danger)}
 
   /* feed */
-  #feed{left:16px;top:78px;width:238px;background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:11px 13px 6px;backdrop-filter:blur(11px);box-shadow:0 16px 46px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.05);max-height:300px;overflow:hidden;z-index:5}
+  #feed{left:16px;top:78px;width:238px;background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:11px 13px 6px;backdrop-filter:blur(11px);box-shadow:0 16px 46px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.05);max-height:188px;overflow:hidden;z-index:5}
   .feed-h{font-family:var(--serif);font-size:16px;color:var(--purpleL);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;font-weight:600}
   .feed-line{font-size:11.5px;line-height:1.5;color:#bcc0d8;border-left:2px solid var(--border);padding:5px 0 5px 9px;margin-bottom:5px;
     background:linear-gradient(90deg,rgba(124,58,237,.09),transparent);border-radius:0 5px 5px 0;animation:slidein .45s ease both}
@@ -379,7 +379,7 @@
   @keyframes storeping{0%,100%{transform:scale(1)}30%{transform:scale(1.16);box-shadow:0 0 26px rgba(255,200,90,.7)}}
   #party .ag-extra{font-size:10.5px;line-height:1.5;color:#bfa6ef;border-top:1px solid rgba(124,58,237,.12);margin-top:6px;padding-top:6px}
   /* floor selector (left edge) — a vertical stack of the manor's levels */
-  #floors{position:fixed;left:14px;top:50%;transform:translateY(-50%);z-index:9;display:flex;flex-direction:column;gap:9px;pointer-events:auto}
+  #floors{position:fixed;left:14px;top:280px;z-index:9;display:flex;flex-direction:column;gap:9px;pointer-events:auto}
   .floor-chip{width:128px;cursor:pointer;border-radius:12px;padding:9px 12px;transition:.18s;background:linear-gradient(180deg,rgba(18,13,35,.92),rgba(11,8,22,.9));border:1px solid rgba(124,58,237,.28);box-shadow:0 8px 24px rgba(0,0,0,.4)}
   .floor-chip .fc-n{font-family:var(--serif);font-size:15px;color:#d6cff0;display:flex;justify-content:space-between;align-items:center;letter-spacing:.3px}
   .floor-chip .fc-s{font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:#7a779a;margin-top:1px}
@@ -919,6 +919,7 @@
     <div class="dawn">Light it. Begin the hunt.</div>
   </div>
   <button class="introgo" id="enterHouse">🕯️ Stop the Haunting</button>
+  <button id="trainBtn" style="position:fixed;left:26px;bottom:28px;z-index:6;cursor:pointer;font-size:12px;letter-spacing:1px;background:rgba(10,8,24,.6);border:1px solid rgba(124,58,237,.45);color:#cfd2e8;border-radius:22px;padding:9px 16px;backdrop-filter:blur(4px)">📖 Training Room</button>
   <div class="hint">read the tale, then stop the haunting →</div>
 </div>
 
@@ -1539,7 +1540,7 @@ function applyOmens(){if(!G)return;
   schedule(G.t+1.2,()=>picks.forEach((o,i)=>schedule(G.t+i*.5,()=>scry('🜂 <b>Omen — '+o.name+'</b>: '+o.desc,''))));
 }
 (function(){if(typeof document==='undefined')return;var s=document.createElement('style');
-  s.textContent='#omenbar{position:fixed;left:50%;transform:translateX(-50%);top:8px;display:flex;gap:7px;z-index:18;pointer-events:none}#omenbar .om{display:flex;align-items:center;gap:5px;background:rgba(20,14,40,.85);border:1px solid rgba(255,180,84,.45);border-radius:18px;padding:4px 11px 4px 9px;font-size:11.5px;color:#e9dcc2;pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.45)}#omenbar .om .oi{font-size:13px}';
+  s.textContent='#omenbar{position:fixed;left:50%;transform:translateX(-50%);top:48px;display:flex;gap:7px;z-index:18;pointer-events:none}#omenbar .om{display:flex;align-items:center;gap:5px;background:rgba(20,14,40,.85);border:1px solid rgba(255,180,84,.45);border-radius:18px;padding:4px 11px 4px 9px;font-size:11.5px;color:#e9dcc2;pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.45)}#omenbar .om .oi{font-size:13px}';
   document.head.appendChild(s);var d=document.createElement('div');d.id='omenbar';document.body.appendChild(d);})();
 function renderOmens(){var d=document.getElementById('omenbar');if(!d)return;if(!G||!G.omens||G.over){d.innerHTML='';return;}
   d.innerHTML=G.omens.map(o=>'<div class="om" title="'+o.name+' — '+o.desc.replace(/<[^>]+>/g,'')+'"><span class="oi">'+o.ic+'</span>'+o.name+'</div>').join('');}
@@ -1562,6 +1563,41 @@ function renderJournal(){const mx=(metaGet().journalMax)||1;document.getElementB
 /* living world — the freed souls persist as a constellation across the whole saga */
 function sagaStars(){try{return +localStorage.getItem('al_stars')||0;}catch(e){return 0;}}
 function addSagaStar(){try{localStorage.setItem('al_stars',String(Math.min(90,sagaStars()+1)));}catch(e){}}
+
+/* ════════ THE TRAINING ROOM — step-by-step, click-through onboarding ════════ */
+const TRAIN_STEPS=[
+  {ic:'🕯️',t:'Welcome to the Hunt',b:'Every organisation is haunted by <b>forgotten identities</b> — dormant admins, orphaned service accounts, stale access. Here they are <b>ghosts</b>, and you are the auditor who must judge each one <b>before dawn</b>.'},
+  {ic:'🗺️',t:'The Manor',b:'The map is the estate, floor by floor. Each <b>room</b> holds one spirit. Your <b>lantern</b> follows your cursor and wakes the spirits nearby. The <b>Vault</b> (Tier-0) is what you must protect.'},
+  {ic:'🚪',t:'Inspect a Spirit',b:'<b>Click a room</b> to open its <b>dossier</b> — the account, its grade (A–F), and live signals. Your goal: choose the <b>safe, least-destructive</b> action.'},
+  {ic:'✦',t:'Divine &amp; Summon',b:'<b>Divine</b> reveals the spirit’s <b>threads</b> (Fabric IQ) — a <span style="color:#20F593">green</span> thread still feeds a <b>living</b> process. <b>Summon</b> pulls <b>cited evidence</b> (Foundry IQ). The truth is in the threads.'},
+  {ic:'🛡',t:'Your Agents Reason',b:'Your party of <b>AI agents</b> investigates with you: the <b>Warden</b> recommends a rite, the <b>Skeptic</b> contests it, and the <b>council</b> reaches consensus. Watch the reasoning stream live in the dossier.'},
+  {ic:'⚖️',t:'Pass Judgment',b:'Three rites: <b>Lay to Rest</b> (deprovision a truly-dead account), <b>Bind &amp; Watch</b> (disable &amp; monitor), or <b>Acknowledge</b> (it is alive — leave it). <b>The trap:</b> some “dead” accounts are <b>load-bearing</b> — exorcise one and you unleash a <b>poltergeist</b> (you broke production).'},
+  {ic:'👹',t:'The Hungry Hunts',b:'A <b>monster</b> — an account takeover — stalks toward the Vault. <b>Click it</b> to fight: identify it, then strike with <b>dice-based</b> Microsoft Graph remediations. Your <b>Sentinel</b> rolls beside you each round.'},
+  {ic:'🌅',t:'Hold Until Dawn',b:'Clear every spirit and slay the floor’s guardian to take the <b>stairs up</b>. Survive all three floors with the Vault intact — and <b>dawn breaks</b>.'},
+  {ic:'⚰️',t:'Govern. Die. Return.',b:'Every run banks <b>Soul Essence</b> — win or lose. Spend it in the <b>Sanctum</b> on permanent boons (new agents, stronger strikes, wards) that carry into your next run. Death makes you stronger.'},
+  {ic:'🎭',t:'The Three Acts',b:'The saga spans three acts, each harder: <b>I · Identity</b> (Entra), <b>II · Data</b> (Purview), <b>III · The Convergence</b> (Defender XDR). The <b>Hollow</b> escapes each act — until you end him in the last.'},
+  {ic:'🜂',t:'Omens',b:'Each night rolls random <b>Omens</b> — boons and trade-offs that reshape the run (Blood Moon, Witching Hour, Iron Discipline…). No two hunts are the same.'},
+  {ic:'🕯️',t:'Begin the Hunt',b:'That is all you need. Trust the threads, mind the load-bearing, and never let the Hungry reach the Vault. <b>Good luck, auditor.</b>'},
+];
+(function(){if(typeof document==='undefined')return;var st=document.createElement('style');
+  st.textContent='#training{position:fixed;inset:0;z-index:140;display:none;place-items:center;background:radial-gradient(ellipse at top,rgba(20,14,48,.93),rgba(4,3,12,.97))}#training.show{display:grid}#training .tr-wrap{width:min(560px,93vw);background:linear-gradient(180deg,#160f30,#0b0820);border:1px solid rgba(124,58,237,.4);border-radius:18px;padding:20px 26px 22px;box-shadow:0 30px 90px rgba(0,0,0,.65);position:relative}#training .tr-head{font-family:"Cormorant Garamond",serif;font-size:22px;color:#e9dcc2;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}#training .tr-step{font-size:12px;color:#9a93b8;font-family:Consolas,monospace}#training .tr-card{min-height:196px;text-align:center;padding:10px 6px;animation:trin .28s ease both}@keyframes trin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}#training .tr-ic{font-size:46px;margin-bottom:8px}#training .tr-t{font-family:"Cormorant Garamond",serif;font-size:25px;color:#fff;margin-bottom:9px}#training .tr-b{font-size:14px;line-height:1.7;color:#cfc9e6;max-width:450px;margin:0 auto}#training .tr-b b{color:#bff0d8}#training .tr-dots{display:flex;gap:6px;justify-content:center;margin:14px 0 16px}#training .tr-dot{width:7px;height:7px;border-radius:50%;background:rgba(124,58,237,.3);transition:.2s}#training .tr-dot.on{background:#20F593;box-shadow:0 0 8px rgba(32,245,147,.6);transform:scale(1.25)}#training .tr-foot{display:flex;justify-content:space-between;gap:12px}#training .tr-skip{position:absolute;top:14px;right:16px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#8a83a8;cursor:pointer;background:none;border:none}#training .tr-skip:hover{color:#cfc9e6}';
+  document.head.appendChild(st);var d=document.createElement('div');d.id='training';
+  d.innerHTML='<div class="tr-wrap"><button class="tr-skip" id="trSkip">skip ✕</button><div class="tr-head">🏛 The Training Room <span id="trStepN" class="tr-step"></span></div><div class="tr-card" id="trCard"></div><div class="tr-dots" id="trDots"></div><div class="tr-foot"><button class="start ghost" id="trBack">◂ Back</button><button class="start" id="trNext">Next ▸</button></div></div>';
+  document.body.appendChild(d);
+  document.getElementById('trBack').onclick=function(){trNav(-1);};
+  document.getElementById('trNext').onclick=trNext;
+  document.getElementById('trSkip').onclick=function(){closeTraining();};})();
+let _trStep=0;
+function openTraining(){_trStep=0;renderTraining();document.getElementById('training').classList.add('show');try{sfx('page');}catch(e){}}
+function closeTraining(){document.getElementById('training').classList.remove('show');}
+function trNav(d){_trStep=Math.max(0,Math.min(TRAIN_STEPS.length-1,_trStep+d));renderTraining();try{sfx('select');}catch(e){}}
+function trNext(){if(_trStep===TRAIN_STEPS.length-1){closeTraining();if(!G||!G.started){var b=document.getElementById('enterHouse');if(b)b.click();}}else trNav(1);}
+function renderTraining(){const s=TRAIN_STEPS[_trStep],last=_trStep===TRAIN_STEPS.length-1,card=document.getElementById('trCard');
+  card.innerHTML='<div class="tr-ic">'+s.ic+'</div><div class="tr-t">'+s.t+'</div><div class="tr-b">'+s.b+'</div>';card.style.animation='none';void card.offsetWidth;card.style.animation='';
+  document.getElementById('trDots').innerHTML=TRAIN_STEPS.map((_,i)=>'<span class="tr-dot'+(i===_trStep?' on':'')+'"></span>').join('');
+  document.getElementById('trBack').style.visibility=_trStep?'visible':'hidden';
+  document.getElementById('trNext').textContent=last?'Begin the Hunt ▸':'Next ▸';
+  document.getElementById('trStepN').textContent=(_trStep+1)+' / '+TRAIN_STEPS.length;}
 
 function newGame(){
   G={t:0,night:140,ledger:0,started:true,over:false,lantern:{x:W*.5,y:H*.5},mx:W*.5,my:H*.5,
@@ -2781,12 +2817,24 @@ function scry(html,cls){G.feed.unshift({html,cls});G.feed=G.feed.slice(0,6);docu
 function narrate(m,s){document.getElementById('narr').innerHTML=`${m}<span class="sub">${s||''}</span>`;}
 function showAct(t,s){const el=document.getElementById('actcard');el.querySelector('.ac-title').textContent='❖ '+t;el.querySelector('.ac-sub').textContent=s;
   el.classList.remove('show');void el.offsetWidth;el.classList.add('show');}
-function updLedger(){const el=document.getElementById('ledger');el.textContent=G.ledger;el.style.color=G.ledger<0?'#ff3b5c':'#20F593';el.style.textShadow='0 0 22px '+(G.ledger<0?'rgba(255,59,92,.5)':'rgba(32,245,147,.45)');}
+// ── smooth count-ups + global micro-interaction polish (additive, no layout change) ──
+function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const cur=parseInt(el._tv!=null?el._tv:el.textContent,10);const f=isNaN(cur)?to:cur;if(f===to){el.textContent=to;el._tv=to;return;}
+  if(el._tw)cancelAnimationFrame(el._tw);const t0=performance.now(),d=dur||450;
+  const step=now=>{const k=Math.min(1,(now-t0)/d),e=1-Math.pow(1-k,3),v=Math.round(f+(to-f)*e);el.textContent=v;el._tv=v;if(k<1)el._tw=requestAnimationFrame(step);else el._tw=0;};el._tw=requestAnimationFrame(step);}
+(function(){if(typeof document==='undefined')return;var s=document.createElement('style');
+  s.textContent='.start,.btn,.sn-buy,.copy,.btn2,.floor-chip,.sc-buy,.sn-act,#omenbar .om{transition:transform .12s ease,filter .15s ease,box-shadow .18s ease,background .18s ease}'+
+  '.start:hover,.btn:hover,.sn-buy:hover:not(:disabled),.sc-buy:hover:not([disabled]),.floor-chip:hover,.btn2:hover{filter:brightness(1.13)}'+
+  '.start:active,.btn:active,.sn-buy:active,.sc-buy:active,.btn2:active{transform:translateY(1px) scale(.992)}'+
+  '#omenbar .om:hover{transform:translateY(1px) scale(1.04)}'+
+  '#sanctum.show .sn-wrap,#journal.show .jn-wrap{animation:modalin .34s cubic-bezier(.2,.85,.25,1) both}'+
+  '@keyframes modalin{from{opacity:0;transform:translateY(16px) scale(.965)}to{opacity:1;transform:none}}';
+  document.head.appendChild(s);})();
+function updLedger(){const el=document.getElementById('ledger');tweenNum(el,G.ledger);el.style.color=G.ledger<0?'#ff3b5c':'#20F593';el.style.textShadow='0 0 22px '+(G.ledger<0?'rgba(255,59,92,.5)':'rgba(32,245,147,.45)');}
 
 /* ── essence + the Spectral Store ────────────────────────────── */
 const ESS_PTS={F:9,D:7,C:5,B:4,A:3};
-function updEss(){if(!G)return;const e=document.getElementById('kpiEss');if(e)e.textContent=G.essence;
-  const sb=document.getElementById('storeEssN');if(sb)sb.textContent=G.essence;const se=document.getElementById('storeEss');if(se)se.textContent=G.essence;}
+function updEss(){if(!G)return;const e=document.getElementById('kpiEss');if(e)tweenNum(e,G.essence);
+  const sb=document.getElementById('storeEssN');if(sb)tweenNum(sb,G.essence);const se=document.getElementById('storeEss');if(se)tweenNum(se,G.essence);}
 function gainEssence(n,why){if(!G||n<=0)return;n=Math.round(n*((G.omenFx&&G.omenFx.essMult)||1));G.essence+=n;updEss();
   scry('✦ <b>+'+n+' essence</b>'+(why?' · '+why:'')+'  <span style="color:#cdb8ff">('+G.essence+' total — spend it in the Store)</span>','');
   const sb=document.getElementById('storeBtn');if(sb){sb.classList.add('ping');setTimeout(()=>sb.classList.remove('ping'),700);}}
@@ -3266,6 +3314,7 @@ function enterManor(){if(_entered)return;_entered=true;if(_introTimer){clearTime
 function begin(){startIntro();} // legacy entry point
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
+(function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;})(); // Training Room from the start screen + the ? button
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
 document.getElementById('helpBtn').onclick=()=>{const h=document.getElementById('help');h.style.display='grid';requestAnimationFrame(()=>h.classList.remove('hide'));};
