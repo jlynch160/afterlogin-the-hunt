@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.6] - 2026-06-02 — Juicier d20 roll
+
+- Replaced the flat hexagon die with a **faceted SVG d20** (triangle facets + a centre face for the number) that **tumbles in 3D** (multi-axis rotation), lands with an **overshoot/settle bounce**, and pulses a radial **glow**. Adds a result label ("rolled N"), a **gold critical** treatment with a 12-point **sparkle burst** on a natural 20, and a red **fumble** look on a natural 1. The label is kid-worded in Student mode ("SUPER HIT! ⭐" / "oopsie!").
+
 ## [0.5.5] - 2026-06-02 — Kid-friendly factory room view + image-leak guard + dice on bosses
 
 - **Room view de-haunted for Student:** entering a room is now a bright daytime factory inspection bay (light backdrop, factory-floor grid, hazard stripe) instead of the dark haunted chamber; a **gold inspection ring** replaces the red "summoning circle"; the labels read as kid text ("🧹 N little helpers in here!", "click to take a look!", kid-worded clue + possessed lines); the duplicate in-room cursor is dropped (the real OS cursor shows).
