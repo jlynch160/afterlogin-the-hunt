@@ -746,7 +746,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.4</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.5</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -1160,6 +1160,7 @@ const SOULS={
 };
 const GRADE_COL={F:'#ff3b5c',D:'#ff7a45',C:'#ffb454',B:'#7cc6ff',A:'#20F593'};
 let ACR='124,58,237'; // accent rgb triplet — the active theme swaps this so canvas accents shift (canvas can't read CSS vars)
+let _artGen=0; // bumped on every theme switch; a stale async image load from the previous theme is ignored if the generation no longer matches
 /* ════════════════ THEMES — one engine, two audiences ════════════════
    spectral = the adult, Ghostbusters-energy build (default).
    helpers  = the student, Minions-energy build: brighter, gentler, simpler. */
@@ -1230,6 +1231,11 @@ const KIDMAP=[['Lay to Rest','Tidy Away'],['Bind &amp; Watch','Keep &amp; Watch'
   ['Dawn','The morning bell'],['dawn','the morning bell'],
   ['the manor','the factory'],['The manor','The factory'],['manor','factory'],['Manor','Factory'],
   ['the estate','the factory'],['estate','factory'],['Estate','Factory'],['haunted','messy'],['Haunted','Messy'],
+  // ── omen / HUD names ──
+  ['Blood Moon','Big Mess Day'],['Witching Hour','Bonus Time'],['Bound Lantern','Power-Up'],['Spectral Surplus','Extra Stars'],
+  ['The Hollow Rages','The Gremlin is Grumpy'],['Hungering Dark','Hungry Gremlin'],['Thin Veil','Easy Spotting'],
+  ['Hallowed Wards','Safety Shields'],['Second Sight','Sneak Peek'],['Iron Discipline','Strong Arms'],
+  ['Soul Essence','Stars'],['Essence','stars'],['the Vault','the Control Room'],['Vault','Control Room'],['wards','shields'],['ward','shield'],
   // ── dossier / reasoning vocabulary ──
   ['Decision','What to do'],['Reasoning','Thinking'],['Judgment','Decision'],
   ['Fabric IQ · spirit-threads','Who this helper helps'],['Foundry IQ · grimoire','The proof'],
@@ -1252,7 +1258,7 @@ function setTheme(id){TH_ID=THEMES[id]?id:'spectral';const th=THEMES[TH_ID];
   // cursor: Student uses the real OS pointer (no lantern flame); Pro hides it for the flame
   try{const _cur=TH_ID==='helpers'?'default':'none';document.documentElement.style.cursor=_cur;if(document.body)document.body.style.cursor=_cur;const _cv=document.getElementById('cv');if(_cv)_cv.style.cursor=_cur;}catch(e){}
   try{localStorage.setItem('al_theme',TH_ID);}catch(e){}
-  if(typeof loadAllArt==='function'){try{for(const k in IMG)delete IMG[k];}catch(e){}loadAllArt();try{for(const k in _patCache)delete _patCache[k];for(const k in _artCache)delete _artCache[k];}catch(e){}} // wipe loaded art so adult/student images never bleed across, then reload this theme's art + drop recolor caches
+  if(typeof loadAllArt==='function'){_artGen++;try{for(const k in IMG)delete IMG[k];}catch(e){}loadAllArt();try{for(const k in _patCache)delete _patCache[k];for(const k in _artCache)delete _artCache[k];}catch(e){}} // wipe loaded art so adult/student images never bleed across, then reload this theme's art + drop recolor caches
   applyThemeCopy(th);syncThemePicker();}
 function applyThemeCopy(th){const H=th.home;if(!H)return;const set=(sel,html,isHtml)=>{const e=document.querySelector(sel);if(!e)return;if(isHtml)e.innerHTML=html;else e.textContent=html;};
   const k=document.querySelector('.hp-kicker');if(k)k.innerHTML=H.kicker;
@@ -1687,7 +1693,7 @@ function applyOmens(){if(!G)return;
   s.textContent='#omenbar{position:fixed;left:50%;transform:translateX(-50%);top:48px;display:flex;gap:7px;z-index:7;pointer-events:none;transition:opacity .25s}#omenbar .om{display:flex;align-items:center;gap:5px;background:rgba(20,14,40,.85);border:1px solid rgba(255,180,84,.45);border-radius:18px;padding:4px 11px 4px 9px;font-size:11.5px;color:#e9dcc2;pointer-events:auto;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45)}#omenbar .om:hover{border-color:rgba(255,205,130,.75)}#omenbar .om .oi{font-size:13px}';
   document.head.appendChild(s);var d=document.createElement('div');d.id='omenbar';d.title='Open your Loadout';d.onclick=function(){if(typeof openLoadout==='function')openLoadout();};document.body.appendChild(d);})();
 function renderOmens(){var d=document.getElementById('omenbar');if(!d)return;if(!G||!G.omens||G.over){d.innerHTML='';return;}
-  d.innerHTML=G.omens.map(o=>'<div class="om" title="'+o.name+' — '+o.desc.replace(/<[^>]+>/g,'')+'"><span class="oi">'+o.ic+'</span>'+o.name+'</div>').join('');
+  d.innerHTML=kidify(G.omens.map(o=>'<div class="om" title="'+o.name+' — '+o.desc.replace(/<[^>]+>/g,'')+'"><span class="oi">'+o.ic+'</span>'+o.name+'</div>').join(''));
   d.style.transition='opacity .6s ease';d.style.opacity='1';d.style.pointerEvents='auto'; // toast then fade — open 🎒 Loadout to see them again
   clearTimeout(d._fade);d._fade=setTimeout(()=>{d.style.opacity='0';d.style.pointerEvents='none';},6500);}
 
@@ -1877,7 +1883,7 @@ function onBanished(t){if(t._dead)return;t._dead=true;t.banished=true;sfx('trium
     startRemediation({title:'Microsoft Graph · incident response',who:t.name+' — contained',col:'#20F593',stamp:'CONTAINED',dim:.5,calls:threatPlan(t)});
     schedule(G.t+.4,()=>checkFloorClear(t.floor));}
   updLedger();updateCoach();}
-function partyAttack(t,agent){if(t.banished)return;const a=attack(5,t.ac,1,6,3);
+function partyAttack(t,agent){if(t.banished)return;const a=attack(5,t.ac,1,6,3);try{showDie(a.r,a.crit);}catch(e){}
   if(agent)agent.status='🎲 d20('+a.r+')+5 → '+(a.hit?((a.crit?'CRIT ':'hit ')+a.dmg+' dmg'):'miss');
   if(a.hit){t.hp-=a.dmg;scry('🎲 <b>Sentinel</b> (L3): d20('+a.r+')+5='+a.tot+' vs AC '+t.ac+' — <b>'+(a.crit?'CRIT':'hit')+'</b> '+a.dmg+' dmg ('+Math.max(0,t.hp)+'/'+t.maxhp+')','good');}
   else scry('🎲 <b>Sentinel</b> (L3): d20('+a.r+')+5='+a.tot+' vs AC '+t.ac+' — <b>miss</b>','');
@@ -2535,35 +2541,40 @@ function wrapText(text,maxw){ctx.font='12.5px Segoe UI';const words=String(text)
   for(const w of words){const test=line?line+' '+w:w;if(ctx.measureText(test).width>maxw&&line){lines.push(line);line=w;}else line=test;}
   if(line)lines.push(line);return lines;}
 function renderRoomView(){const r=ROOMS[G.enteredRoom];if(!r){exitRoom();return;}const dec=DECOR[r.id]||{tint:'#201733',f:''};
+  const _kid=TH_ID==='helpers'; // bright, friendly factory inspection room instead of a haunted chamber
   // full-bleed chamber background so the room dominates the screen
   const vg=ctx.createRadialGradient(W*.5,H*.5,0,W*.5,H*.5,Math.max(W,H)*.7);
-  vg.addColorStop(0,mix(dec.tint,'#000000',.45));vg.addColorStop(1,'#060410');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+  if(_kid){vg.addColorStop(0,'#d6eaff');vg.addColorStop(1,'#9fc3ec');}else{vg.addColorStop(0,mix(dec.tint,'#000000',.45));vg.addColorStop(1,'#060410');}ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
   // chamber fills most of the viewport (leave room for title above + caption below)
   const cw=Math.min(W*.82,1040),ch=Math.min(cw*.58,H-196),cx=W*.5,cy=72+ch/2,s=r.soul;
   const judged=s&&s.judged&&s.judged!=='possessed';const fl=(s&&!judged&&!s.possessed)?hauntFlash(r):0;
   // backdrop chamber (zone tint, lit by lightning)
-  ctx.save();roundRect(cx-cw/2,cy-ch/2,cw,ch,24);const fg=ctx.createLinearGradient(0,cy-ch/2,0,cy+ch/2);fg.addColorStop(0,mix(dec.tint,'#ffffff',fl*.55));fg.addColorStop(1,'#0d0818');ctx.fillStyle=fg;ctx.fill();
+  ctx.save();roundRect(cx-cw/2,cy-ch/2,cw,ch,24);const fg=ctx.createLinearGradient(0,cy-ch/2,0,cy+ch/2);
+  if(_kid){fg.addColorStop(0,'#eef6ff');fg.addColorStop(1,'#c6dcf2');}else{fg.addColorStop(0,mix(dec.tint,'#ffffff',fl*.55));fg.addColorStop(1,'#0d0818');}
+  ctx.fillStyle=fg;ctx.fill();
   ctx.save();roundRect(cx-cw/2,cy-ch/2,cw,ch,24);ctx.clip();
-  ctx.strokeStyle='rgba(0,0,0,.2)';ctx.lineWidth=1.5;for(let i=1;i<8;i++){ctx.beginPath();ctx.moveTo(cx-cw/2,cy-ch/2+i*ch/8);ctx.lineTo(cx+cw/2,cy-ch/2+i*ch/8);ctx.stroke();}
-  drawScene(r.id,cx,cy,cw,ch);                                  // ← unique per-room design
-  if(s&&!judged&&!s.possessed){ctx.globalCompositeOperation='lighter';const hg=ctx.createRadialGradient(cx,cy,0,cx,cy,cw*.45);hg.addColorStop(0,'rgba(176,26,44,'+(.12+fl*.5)+')');hg.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=hg;ctx.fillRect(cx-cw/2,cy-ch/2,cw,ch);ctx.globalCompositeOperation='source-over';}
+  ctx.strokeStyle=_kid?'rgba(90,120,160,.13)':'rgba(0,0,0,.2)';ctx.lineWidth=1.5;for(let i=1;i<8;i++){ctx.beginPath();ctx.moveTo(cx-cw/2,cy-ch/2+i*ch/8);ctx.lineTo(cx+cw/2,cy-ch/2+i*ch/8);ctx.stroke();}
+  if(_kid){for(let i=1;i<11;i++){ctx.beginPath();ctx.moveTo(cx-cw/2+i*cw/11,cy-ch/2);ctx.lineTo(cx-cw/2+i*cw/11,cy+ch/2);ctx.stroke();} // factory floor grid
+    ctx.fillStyle='rgba(245,197,24,.6)';ctx.fillRect(cx-cw/2,cy+ch/2-9,cw,9);ctx.fillStyle='#2a3a4d';for(let sx=cx-cw/2;sx<cx+cw/2;sx+=26){ctx.beginPath();ctx.moveTo(sx,cy+ch/2-9);ctx.lineTo(sx+13,cy+ch/2-9);ctx.lineTo(sx+26,cy+ch/2);ctx.lineTo(sx+13,cy+ch/2);ctx.closePath();ctx.fill();}} // hazard stripe
+  else drawScene(r.id,cx,cy,cw,ch);                             // ← unique per-room haunted design
+  if(!_kid&&s&&!judged&&!s.possessed){ctx.globalCompositeOperation='lighter';const hg=ctx.createRadialGradient(cx,cy,0,cx,cy,cw*.45);hg.addColorStop(0,'rgba(176,26,44,'+(.12+fl*.5)+')');hg.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=hg;ctx.fillRect(cx-cw/2,cy-ch/2,cw,ch);ctx.globalCompositeOperation='source-over';}
   ctx.restore();
-  ctx.lineWidth=3;ctx.strokeStyle=fl>.1?'rgba(222,212,255,'+(.4+fl*.6)+')':'rgba(167,139,250,.5)';roundRect(cx-cw/2,cy-ch/2,cw,ch,24);ctx.stroke();ctx.restore();
+  ctx.lineWidth=3;ctx.strokeStyle=_kid?'rgba(255,206,43,.7)':(fl>.1?'rgba(222,212,255,'+(.4+fl*.6)+')':'rgba(167,139,250,.5)');roundRect(cx-cw/2,cy-ch/2,cw,ch,24);ctx.stroke();ctx.restore();
   // title + zone
-  ctx.fillStyle='#ece6f6';ctx.font='bold 30px Cormorant Garamond, serif';ctx.textAlign='center';ctx.fillText(txRoom(r),cx,cy-ch/2-30);
-  if(r.zone){ctx.fillStyle='rgba(167,139,250,.78)';ctx.font='13px Segoe UI';ctx.fillText('— '+r.zone+' —',cx,cy-ch/2-12);}
+  ctx.fillStyle=_kid?'#21384f':'#ece6f6';ctx.font='bold 30px Cormorant Garamond, serif';ctx.textAlign='center';ctx.fillText(txRoom(r),cx,cy-ch/2-30);
+  if(r.zone&&!_kid){ctx.fillStyle='rgba(167,139,250,.78)';ctx.font='13px Segoe UI';ctx.fillText('— '+r.zone+' —',cx,cy-ch/2-12);}
   if(s&&!s.possessed){
     const size=Math.min(ch*.62,330);
     // ── atmosphere: a soft aura + rising spirit-motes around the apparition ──
     const _er=Math.min(1,(G.t-(G.roomEnterT||0))/.55); // room-entry reveal progress
-    {const cg=cx,cyg=cy-6,col0=judged?'#20F593':(GRADE_COL[s.grade]||'#a78bfa');ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=_er;
+    {const cg=cx,cyg=cy-6,col0=judged?'#20F593':(_kid?'#ffce2b':(GRADE_COL[s.grade]||'#a78bfa'));ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=_er;
      const aur=ctx.createRadialGradient(cg,cyg,0,cg,cyg,size*.95);aur.addColorStop(0,hexA(col0,.16));aur.addColorStop(.55,hexA(col0,.05));aur.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=aur;ctx.beginPath();ctx.arc(cg,cyg,size*.95,0,6.28);ctx.fill();
      for(let i=0;i<14;i++){const tt=(G.t*.22+i*.21)%1,ang=i*1.7+G.t*.1,mr=size*(.18+((i*5)%9)/9*.4),mx=cg+Math.cos(ang)*mr,my=cyg+size*.42-tt*size*.95,a=(1-tt)*.45;ctx.fillStyle=hexA(judged?'#bff0d8':'#d6c9ff',a);ctx.beginPath();ctx.arc(mx,my,1.4,0,6.28);ctx.fill();}
      ctx.restore();}
     drawManifestation(r,cx,cy-6,size);                          // ← one or many ghosts, per attack
     // clickable-target ring so it’s obvious what to click, brighter on hover
     const hov=r._rv&&Math.hypot(G.mx-r._rv.x,G.my-r._rv.y)<r._rv.r, pr=.5+Math.abs(Math.sin(G.t*3))*.5;
-    if(r._rv){const rx=r._rv.x,ry=r._rv.y,rr=r._rv.r*.84,ringCol=judged?'#20F593':'#ff5a6e';ctx.save();ctx.globalCompositeOperation='lighter';if(_er<1){ctx.translate(rx,ry);ctx.scale(.4+_er*.6,.4+_er*.6);ctx.translate(-rx,-ry);ctx.globalAlpha=_er;} // draws itself on entry
+    if(r._rv){const rx=r._rv.x,ry=r._rv.y,rr=r._rv.r*.84,ringCol=judged?'#20F593':(_kid?'#ffc83a':'#ff5a6e');ctx.save();ctx.globalCompositeOperation='lighter';if(_er<1){ctx.translate(rx,ry);ctx.scale(.4+_er*.6,.4+_er*.6);ctx.translate(-rx,-ry);ctx.globalAlpha=_er;} // draws itself on entry
       // soft glow ring
       ctx.strokeStyle=hexA(ringCol,(hov?.5:.16)*(.7+pr*.3));ctx.lineWidth=hov?2.5:1.2;ctx.beginPath();ctx.arc(rx,ry,rr,0,6.28);ctx.stroke();
       // rotating dashed ring — the clickable affordance
@@ -2571,17 +2582,18 @@ function renderRoomView(){const r=ROOMS[G.enteredRoom];if(!r){exitRoom();return;
       // arcane tick-ring, counter-rotating
       ctx.strokeStyle=hexA(ringCol,.2);ctx.lineWidth=1;for(let i=0;i<24;i++){const a=i/24*6.28-G.t*.08;ctx.beginPath();ctx.moveTo(rx+Math.cos(a)*rr*.9,ry+Math.sin(a)*rr*.9);ctx.lineTo(rx+Math.cos(a)*rr*.96,ry+Math.sin(a)*rr*.96);ctx.stroke();}
       ctx.restore();
-      if(hov&&!judged){ctx.fillStyle='rgba(255,240,205,.96)';ctx.font='bold 13px Segoe UI';ctx.textAlign='center';ctx.fillText('▼ click to examine & judge',rx,ry-rr-14);}}
+      if(hov&&!judged){ctx.fillStyle=_kid?'rgba(40,60,90,.96)':'rgba(255,240,205,.96)';ctx.font='bold 13px Segoe UI';ctx.textAlign='center';ctx.fillText(_kid?'▼ click to take a look!':'▼ click to examine & judge',rx,ry-rr-14);}}
     const aTxt=ATTACK[r.account]||'',m=MANIFEST[r.account]||{n:1};
-    const head=judged?('Judged — '+s.judged):(m.n>1?('⚠ '+m.n+' manifestations · '+s.kind):('⚠ '+s.kind));
-    ctx.fillStyle=judged?'rgba(32,245,147,.92)':'rgba(255,120,140,.96)';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
-    ctx.fillText(head,cx,cy+ch/2+24);
-    ctx.fillStyle='rgba(206,200,228,.88)';ctx.font='12.5px Segoe UI';
-    const lines=wrapText(aTxt,cw-60);lines.forEach((ln,i)=>ctx.fillText(ln,cx,cy+ch/2+44+i*17));
-    if(!judged){ctx.fillStyle='rgba(167,139,250,.82)';ctx.font='12px Segoe UI';ctx.fillText('Click the spirit to examine the evidence and pass judgment.',cx,cy+ch/2+48+lines.length*17);}
-    drawCursor(G.mx,G.my,hov);                                  // ← visible mouse cursor in the room
-  } else if(s){ctx.fillStyle='rgba(255,140,160,.9)';ctx.font='15px Segoe UI';ctx.textAlign='center';ctx.fillText('Possessed — return to the map and banish the Hungry.',cx,cy);
-    drawCursor(G.mx,G.my,false);}
+    let head=judged?('Judged — '+s.judged):(m.n>1?('⚠ '+m.n+' manifestations · '+s.kind):('⚠ '+s.kind));
+    if(_kid)head=judged?('✓ All tidy — '+s.judged):(m.n>1?('🧹 '+m.n+' little helpers in here!'):'🧹 a little helper');
+    ctx.fillStyle=judged?'rgba(32,245,147,.95)':(_kid?'rgba(46,72,108,.96)':'rgba(255,120,140,.96)');ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+    ctx.fillText(_kid?kidWords(head):head,cx,cy+ch/2+24);
+    ctx.fillStyle=_kid?'rgba(40,62,92,.9)':'rgba(206,200,228,.88)';ctx.font='12.5px Segoe UI';
+    const lines=wrapText(_kid?kidWords(aTxt):aTxt,cw-60);lines.forEach((ln,i)=>ctx.fillText(ln,cx,cy+ch/2+44+i*17));
+    if(!judged){ctx.fillStyle=_kid?'rgba(70,100,140,.92)':'rgba(167,139,250,.82)';ctx.font='12px Segoe UI';ctx.fillText(_kid?'Click the little helper to see its clues and decide what to do!':'Click the spirit to examine the evidence and pass judgment.',cx,cy+ch/2+48+lines.length*17);}
+    if(!_kid)drawCursor(G.mx,G.my,hov);                         // Student uses the real OS cursor
+  } else if(s){ctx.fillStyle=_kid?'rgba(70,100,140,.95)':'rgba(255,140,160,.9)';ctx.font='15px Segoe UI';ctx.textAlign='center';ctx.fillText(_kid?'Oh no — the Gremlin grabbed this helper! Go back and shoo it away.':'Possessed — return to the map and banish the Hungry.',cx,cy);
+    if(!_kid)drawCursor(G.mx,G.my,false);}
 }
 // a clear cursor reticle (the page hides the OS cursor; the map uses the flame, the room uses this)
 function drawCursor(x,y,active){const col=active?'#20F593':'#cdbcff';ctx.save();
@@ -3090,7 +3102,7 @@ const HELPER_OK=new Set(["house.png","threat_possession.png","ghost_billing.png"
 function loadImg(key,src){if(typeof Image==='undefined')return;const file=src.split('/').pop();
   if(TH_ID==='helpers'){if(!HELPER_OK.has(file)){IMG[key]={ok:false};return;}src='assets/helpers/'+file;} // student art → assets/helpers/<same-name>.png
   else if(!ASSET_OK.has(file)){IMG[key]={ok:false};return;} // skip art we know isn't there
-  const im=new Image();im.onload=()=>{if(im.width)IMG[key]={img:im,ok:true};};im.onerror=()=>{IMG[key]={ok:false};};im.src=src;}
+  const gen=_artGen,im=new Image();im.onload=()=>{if(gen===_artGen&&im.width)IMG[key]={img:im,ok:true};};im.onerror=()=>{if(gen===_artGen)IMG[key]={ok:false};};im.src=src;}
 // per-room hero props — each chamber gets its own centerpiece (room-specific art → generic furniture → procedural)
 const ROOM_PROPS={
   billing:'ledger_desk',santos:'filing_cabinets',okafor:'exec_desk',vendor:'glass_orrery',
@@ -3726,7 +3738,7 @@ let autoTimer=null;
 function camTo(wx,wy,zoom,dur){if(!G)return;G.cam.intro={from:G.cam.zoom,to:zoom,cx:wx,cy:wy,dur:dur||1.1,p:0};} // cinematic camera move
 function autoSmite(t){const tr=ROOMS[t.room];camTo(tr.x,tr.y,1.35,.7);
   const pen=G._atkPenalty||0;G._atkPenalty=0;
-  const a=attack(6+(G.buffs.hit||0)-pen,t.ac,2,6,3+(G.buffs.dmg||0));
+  const a=attack(6+(G.buffs.hit||0)-pen,t.ac,2,6,3+(G.buffs.dmg||0));try{showDie(a.r,a.crit);}catch(e){}
   narrate('⚔ Sentinel (L3) engages the Hungry.','Autonomous incident response — rolling to strike, then revoking access.');
   if(a.hit){t.hp-=a.dmg;floatText(tr.x,tr.y-44,'-'+a.dmg,a.crit?'#ffd54a':'#ff6a8a',a.crit?30:24);scry('⚔🎲 <b>Sentinel</b> strikes: d20('+a.r+')+'+(6+(G.buffs.hit||0))+' — <b>'+(a.crit?'CRIT':'hit')+'</b> '+a.dmg+' ('+Math.max(0,t.hp)+'/'+t.maxhp+')','good');flash(.28);shake(9);sfx('rite');}
   else scry('⚔🎲 <b>Sentinel</b> strikes: d20('+a.r+')+'+(6+(G.buffs.hit||0))+' — <b>miss</b>.','bad');
@@ -3793,7 +3805,7 @@ function begin(){startIntro();} // legacy entry point
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.5.4','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.5.5','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
