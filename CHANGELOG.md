@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.2] - 2026-06-02 — Factory look for the Student map + robustness + image isolation
+
+- **The Student map now reads as a factory** — the building behind the plan is a sawtooth (north-light) roofed factory with corrugated walls, a hazard-striped floor, a roll-up door, and a smoking smokestack; corridors are **animated conveyor belts** (moving chevrons + side rails); each room's centrepiece is a little **machine station** (blinking control panel, dial, meshing rotating gears) instead of manor furniture; faint factory **gears turn in the background**.
+- **Theme art isolation** — switching themes now wipes the loaded image cache first, so the adult (Spectral) build only ever shows adult art and the Student build only ever shows Student art (`assets/helpers/`), with no bleed-through.
+- **Reasoning/Dossier tabs hardened** — the tabbed case panel now uses plain block panes (not a CSS grid) so the active pane always fills and shows; verified via the headless smoke test that the Reasoning and Dossier panes are populated in **both** themes. (If they ever appear blank, you're on a cached older build — hard-refresh; the new **build 0.5.2** stamp on the mode-select screen + console confirms you're current.)
+
 ## [0.5.1] - 2026-06-02 — Fix HiDPI click/cursor offset (the real "can't click" cause)
 
 - **Root cause found:** a `<canvas>` is a replaced element; `resize()` set only the bitmap size (`cv.width = W*DPR`) and never the CSS display size, and the canvas CSS had no width/height. On scaled/HiDPI displays (Windows 125%/150% → DPR > 1) the canvas rendered at bitmap size instead of the viewport, so the visible map was zoomed and **clicks landed offset from the cursor** — you couldn't hit rooms, and therefore couldn't open the reasoning/dossier. Pro masked it (the WebGL canvas was what displayed); Student shows the raw 2D canvas, exposing it. Fix: `width/height:100%` in the canvas CSS + set `cv`/`#gl` style size in `resize()`.
