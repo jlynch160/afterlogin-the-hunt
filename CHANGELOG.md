@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.9] - 2026-06-02 — Student theme: bright, clean, not scary
+
+A full de-spook pass so the factory reads as a friendly kids' game, not a dimmed horror game with bright cells:
+- **Daytime backdrop** — replaced the night sky / moon / stars / gothic moonlit windows with a bright blue-to-warm sky and soft puffy clouds.
+- **No fog of war** — the dark lantern darkness overlay is skipped entirely; the whole factory is lit. The lantern glow is a soft warm pool instead of spectral green, and the cursor is a normal pointer.
+- **Removed the creepy layers** — drifting spirit wisps, the floating "tells" whispers, the film grain, the dark edge vignette, and the dread overlay are all off in the Student theme; the WebGL dark cinematic grade is disabled (plain bright 2D).
+- **Gentle audio** — drops the wind/whisper bed, the haunting music-box melody and the heartbeat, and lowers the overall volume; only a faint soft pad remains.
+- **Cheerful ambience** — the random scrying-feed lines are now friendly factory moments (humming helpers, beeping forklifts) instead of cold-breath whispers.
+
 ## [0.4.8] - 2026-06-02 — Student dossier vocabulary + bright factory map cells
 
 - **Kid vocabulary in the dossier/combat** — a tag-safe substitution (rewrites only text *between* tags, never `onclick`/`class`/attributes) maps the case + combat panels to kid wording under the Student theme: ghost→helper, Lay to Rest→Tidy Away, the Hollow/Hungry→the Gremlin, Warden→Checker, Sentinel→Chaser, banish→shoo away, judgment→decision, etc. The boss-intro card name/tier are kid-ified too.

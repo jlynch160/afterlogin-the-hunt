@@ -1575,6 +1575,7 @@ const ATTACK={
   guestwifi:'A key to a door that was torn out long ago. Harmless clutter… or is something still listening?',
 };
 const AMBIENT=['<i>…a floorboard settles where no one stands…</i>','<i>…something exhales in the next room…</i>','<i>…the chandelier sways, though the air is still…</i>','<i>…a name is whispered that no one has spoken in years…</i>','<i>…the cold follows your lantern down the hall…</i>','<i>…a door you did not open is open now…</i>'];
+const AMBIENT_KID=['<i>…a little helper giggles somewhere down the hall…</i>','<i>…a conveyor belt hums quietly to itself…</i>','<i>…someone left a stack of papers in a tidy pile…</i>','<i>…a forklift beeps twice and goes back to sleep…</i>','<i>…a helper is humming a happy little tune…</i>','<i>…a door swings open and a helper waves hello…</i>'];
 
 let G=null,A=null;
 const adj={};EDGES.forEach(([a,b])=>{(adj[a]=adj[a]||[]).push(b);(adj[b]=adj[b]||[]).push(a);});
@@ -1895,7 +1896,7 @@ function playerTurn(){
   agentsTurn();
   const live=G.threats.find(t=>!t.banished);
   if(live&&!justSpawned)advanceThreats();
-  if(Math.random()<.4)scry(AMBIENT[Math.floor(Math.random()*AMBIENT.length)],'');
+  if(Math.random()<.4){const _amb=(TH_ID==='helpers')?AMBIENT_KID:AMBIENT;scry(_amb[Math.floor(Math.random()*_amb.length)],'');}
 }
 // ── interactive combat: each strike is a real Graph remediation call ──
 const ATKS={
@@ -2158,7 +2159,7 @@ function cleanseFX(r,col){col=col||'#bff0d8';ring(r.x,r.y,col,8,132,1.0);ring(r.
 function drawRings(){if(!G||!G.rings)return;ctx.save();ctx.globalCompositeOperation='lighter';
   G.rings.forEach(g=>{const k=g.life/g.max,a=Math.max(0,1-k),rad=g.r0+(g.r1-g.r0)*(1-Math.pow(1-k,2));
     ctx.strokeStyle=hexA(g.col,a*.8);ctx.lineWidth=2.6*a+.4;ctx.beginPath();ctx.arc(g.x,g.y,rad,0,6.29);ctx.stroke();});ctx.restore();}
-function drawWisps(){if(!G)return;ctx.save();ctx.globalCompositeOperation='lighter';
+function drawWisps(){if(!G||TH_ID==='helpers')return;ctx.save();ctx.globalCompositeOperation='lighter';
   ROOMS.forEach(r=>{if(r.floor!==G.floor||!r.soul)return;const s=r.soul;if(s.judged&&s.judged!=='possessed')return; // cleansed rooms stop smoking
     const col=s.possessed?'255,70,92':'156,124,214';
     for(let i=0;i<2;i++){const ph=r.id*1.7+i*2.6,tt=(G.t*.38+i*.5+r.id*.13)%1,wx=r.x+Math.sin(G.t*.8+ph)*15,wy=r.y-4-tt*44,a=(1-tt)*(s.possessed?.20:.12);
@@ -2192,7 +2193,7 @@ function drawVaultPulse(){if(!G)return;const v=ROOMS[1];if(!v||v.floor!==G.floor
   ctx.save();ctx.globalCompositeOperation='lighter';ctx.strokeStyle='rgba('+col+','+a+')';ctx.lineWidth=2;
   ctx.beginPath();ctx.arc(v.x,v.y,rad,0,6.29);ctx.stroke();ctx.restore();}
 /* ── the horror IS the data: governance "tells" whisper up from un-cleansed rooms ── */
-function drawWhispers(){if(!G)return;ctx.save();ctx.textAlign='center';ctx.font='italic 10.5px "Cormorant Garamond", serif';
+function drawWhispers(){if(!G||TH_ID==='helpers')return;ctx.save();ctx.textAlign='center';ctx.font='italic 10.5px "Cormorant Garamond", serif';
   ROOMS.forEach(r=>{if(r.floor!==G.floor||!r.soul||!r.soul.discovered)return;const s=r.soul;if(s.judged&&s.judged!=='possessed')return;
     const tells=s._tells||(s._tells=[s.last?(s.last+(/\d/.test(s.last)?' dormant':'')):null,(s.owner&&/depart|no owner|sponsor|governed/i.test(s.owner))?s.owner.replace(/[()]/g,''):null,s.kind,'risk grade '+s.grade].filter(Boolean));
     const period=5.5,idx=Math.floor((G.t+r.id*1.7)/period)%tells.length,ph=((G.t+r.id*1.7)%period)/period;
@@ -2203,7 +2204,7 @@ const wipeEl=document.getElementById('wipe');function roomWipe(){if(!wipeEl)retu
 const dreadEl=document.getElementById('dread');
 
 /* ---- audio -------------------------------------------------------------- */
-function initAudio(){const C=new(window.AudioContext||window.webkitAudioContext)();const master=C.createGain();master.gain.value=.6;master.connect(C.destination);
+function initAudio(){const C=new(window.AudioContext||window.webkitAudioContext)();const master=C.createGain();master.gain.value=TH_ID==='helpers'?.3:.6;master.connect(C.destination);
   // long cathedral reverb
   const conv=C.createConvolver();const len=C.sampleRate*2.6;const ib=C.createBuffer(2,len,C.sampleRate);
   for(let ch=0;ch<2;ch++){const d=ib.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.1);}
@@ -2215,11 +2216,13 @@ function initAudio(){const C=new(window.AudioContext||window.webkitAudioContext)
     const g=C.createGain();g.gain.value=i?.10:.18;o.connect(g);g.connect(padFilter);o.start();
     const lfo=C.createOscillator();lfo.frequency.value=.05+i*.017;const lg=C.createGain();lg.gain.value=3;lfo.connect(lg);lg.connect(o.frequency);lfo.start();});
   const flfo=C.createOscillator();flfo.frequency.value=.025;const flg=C.createGain();flg.gain.value=300;flfo.connect(flg);flg.connect(padFilter.frequency);flfo.start();
-  // ── wind / whisper bed (looping band-passed noise) ──
+  // ── wind / whisper bed (looping band-passed noise) — skipped in the kid theme ──
+  if(TH_ID!=='helpers'){
   const wb=C.createBuffer(1,C.sampleRate*4,C.sampleRate);const wd=wb.getChannelData(0);for(let i=0;i<wd.length;i++)wd[i]=Math.random()*2-1;
   const wind=C.createBufferSource();wind.buffer=wb;wind.loop=true;const wf=C.createBiquadFilter();wf.type='bandpass';wf.frequency.value=440;wf.Q.value=.6;
   const wg=C.createGain();wg.gain.value=.05;wind.connect(wf);wf.connect(wg);wg.connect(master);wind.start();
   const wlfo=C.createOscillator();wlfo.frequency.value=.07;const wlg=C.createGain();wlg.gain.value=220;wlfo.connect(wlg);wlg.connect(wf.frequency);wlfo.start();
+  }
   // ── tension drone (tritone, rises with dread) ──
   const tension=C.createGain();tension.gain.value=0;tension.connect(master);tension.connect(conv);
   const t1=C.createOscillator();t1.type='sawtooth';t1.frequency.value=58.27;const t2=C.createOscillator();t2.type='sawtooth';t2.frequency.value=82.41;
@@ -2227,9 +2230,8 @@ function initAudio(){const C=new(window.AudioContext||window.webkitAudioContext)
   // ── music bus (melody + heartbeat) ──
   const musicGain=C.createGain();musicGain.gain.value=0;musicGain.connect(master);musicGain.connect(conv);
   A={C,master,conv,revGain:rg,padGain,musicGain,tension,dread:0,beat:0,next:C.currentTime+.4};
-  padGain.gain.linearRampToValueAtTime(.20,C.currentTime+5);
-  musicGain.gain.linearRampToValueAtTime(.17,C.currentTime+7);
-  startMusic();
+  padGain.gain.linearRampToValueAtTime(TH_ID==='helpers'?.07:.20,C.currentTime+5);
+  if(TH_ID!=='helpers'){musicGain.gain.linearRampToValueAtTime(.17,C.currentTime+7);startMusic();} // no haunting melody / heartbeat in the kid theme
 }
 function startMusic(){const C=A.C;
   const S=[220,246.94,261.63,293.66,329.63,349.23,415.30,440]; // A harmonic minor
@@ -2553,7 +2555,8 @@ function render(){
   ctx.clearRect(0,0,W,H);
   const dawn=G?Math.min(1,(G.judged/Math.max(1,ROOMS.filter(r=>r.soul).length)))*0.7:0; // sky lightens as you clear spirits
   const bg=ctx.createLinearGradient(0,0,0,H);
-  bg.addColorStop(0,mix('#140e34','#2c4565',dawn*.6));bg.addColorStop(.55,'#0c0a24');bg.addColorStop(1,mix('#08061a','#211833',dawn*.4));
+  if(TH_ID==='helpers'){bg.addColorStop(0,'#bfe6ff');bg.addColorStop(.55,'#dceeff');bg.addColorStop(1,'#fff3d6');} // bright factory daytime
+  else{bg.addColorStop(0,mix('#140e34','#2c4565',dawn*.6));bg.addColorStop(.55,'#0c0a24');bg.addColorStop(1,mix('#08061a','#211833',dawn*.4));}
   ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
   if(!G)return;
   if(G.view==='room'){renderRoomView();drawRemediation();return;}
@@ -2568,15 +2571,18 @@ function render(){
   drawMotes();
   drawWisps();   // un-cleansed rooms emit spirit wisps; they stop once judged
   drawWhispers();// governance "tells" drift up from the haunted (the data is the horror)
-  // darkness (fog of war) — soft so the manor still reads
+  // darkness (fog of war) — soft so the manor still reads (skipped entirely for the bright factory)
   const lx=G.lantern.x,ly=G.lantern.y,R=520+Math.sin(G.t*7)*16;
-  const dark=ctx.createRadialGradient(lx,ly,R*.3,lx,ly,R*1.35);
-  dark.addColorStop(0,'rgba(8,6,20,0)');dark.addColorStop(.7,'rgba(7,5,18,.04)');dark.addColorStop(1,'rgba(4,3,12,.26)');
-  ctx.fillStyle=dark;ctx.fillRect(-W*.5,-H*.5,W*2,H*2); // covers the viewport; ~half the overdraw of the old 3x fill
-  // lantern flame + glow
+  if(TH_ID!=='helpers'){
+    const dark=ctx.createRadialGradient(lx,ly,R*.3,lx,ly,R*1.35);
+    dark.addColorStop(0,'rgba(8,6,20,0)');dark.addColorStop(.7,'rgba(7,5,18,.04)');dark.addColorStop(1,'rgba(4,3,12,.26)');
+    ctx.fillStyle=dark;ctx.fillRect(-W*.5,-H*.5,W*2,H*2); // covers the viewport; ~half the overdraw of the old 3x fill
+  }
+  // lantern flame + glow (a soft warm pool for the factory; spectral green otherwise)
   ctx.globalCompositeOperation='lighter';
   const lg=ctx.createRadialGradient(lx,ly,0,lx,ly,R);
-  lg.addColorStop(0,'rgba(32,245,147,.12)');lg.addColorStop(.5,'rgba(32,245,147,.04)');lg.addColorStop(1,'rgba(0,0,0,0)');
+  if(TH_ID==='helpers'){lg.addColorStop(0,'rgba(255,226,120,.09)');lg.addColorStop(.5,'rgba(255,226,120,.03)');lg.addColorStop(1,'rgba(0,0,0,0)');}
+  else{lg.addColorStop(0,'rgba(32,245,147,.12)');lg.addColorStop(.5,'rgba(32,245,147,.04)');lg.addColorStop(1,'rgba(0,0,0,0)');}
   ctx.fillStyle=lg;ctx.beginPath();ctx.arc(lx,ly,R,0,6.29);ctx.fill();
   G.threats.forEach(t=>{if(!t.banished&&ROOMS[t.room].floor===G.floor)drawThreatPath(t);});
   G.threats.forEach(t=>{if(!t.banished&&ROOMS[t.room].floor===G.floor)drawCreature(t);});
@@ -2593,6 +2599,14 @@ function render(){
 }
 
 function drawEnvBack(dawn){
+  if(TH_ID==='helpers'){ // bright daytime: soft puffy clouds, no moon / stars / gothic windows
+    ctx.save();ctx.globalAlpha=.6;ctx.fillStyle='#ffffff';
+    ENV.stars.forEach((s,i)=>{if(i%2)return;const cx=s.x,cy=(s.y*0.5)%(H*0.55),r=14+(i%6)*6;
+      ctx.beginPath();ctx.ellipse(cx,cy,r*1.9,r,0,0,6.28);ctx.fill();
+      ctx.beginPath();ctx.ellipse(cx+r*1.3,cy+r*.35,r*1.3,r*.78,0,0,6.28);ctx.fill();
+      ctx.beginPath();ctx.ellipse(cx-r*1.1,cy+r*.3,r*1.1,r*.7,0,0,6.28);ctx.fill();});
+    ctx.restore();return;
+  }
   // stars
   ctx.save();ENV.stars.forEach(s=>{const tw=.4+Math.abs(Math.sin((G?G.t:0)*1.5+s.tw))*.6;ctx.fillStyle=`rgba(200,210,255,${tw*(1-dawn)*.7})`;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.29);ctx.fill();});
   drawFreedSky();   // the souls you've laid to rest, risen as stars + their constellation
@@ -3146,6 +3160,10 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const cur=parseI
   'body[data-theme="helpers"] #start .hp-brief .bn{color:#ffce2b}'+
   'body[data-theme="helpers"] #start .hp-tease{color:#cfd8e8}'+
   'body[data-theme="helpers"] #start .hp-foot{color:#a6b6cd}'+
+  'body[data-theme="helpers"] #grain{display:none}'+               // drop the film grain
+  'body[data-theme="helpers"] #vignette{display:none}'+            // drop the dark edge vignette in-game
+  'body[data-theme="helpers"] #dread{display:none}'+               // no creeping dread overlay
+  'body[data-theme="helpers"] #cv{cursor:auto}'+                   // friendly normal cursor, not the lantern flame
   /* ── profile / mode-select entry screen ── */
   '#profile{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:26px;cursor:default;background:radial-gradient(ellipse at 50% 28%,#170f30,#070512 72%);transition:opacity .45s ease}'+
   '#profile.gone{opacity:0;pointer-events:none}'+
@@ -3657,7 +3675,8 @@ function introCamera(){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;ROOMS.filter(r=>r.floor
   const cx=(x0+x1)/2,cy=(y0+y1)/2;G.cam.zoom=.55;G.cam.x=W/2-cx*.55;G.cam.y=H/2-cy*.55;
   G.cam.intro={from:.55,to:.9,cx,cy,dur:3.4,p:0};}
 let _entered=false,_introTimer=null;
-function startIntro(){try{initAudio();}catch(e){}try{GL=initGL();}catch(e){GL=null;}
+function startIntro(){try{initAudio();}catch(e){}
+  if(TH_ID!=='helpers'){try{GL=initGL();}catch(e){GL=null;}}else GL=null; // skip the dark cinematic WebGL grade in the bright factory
   if(GL)document.getElementById('gl').style.display='block';
   _entered=false;
   document.getElementById('start').classList.add('hide');
