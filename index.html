@@ -2326,8 +2326,11 @@ function safeGL(){ // WebGL reads the 2D canvas as a texture; local (file://) im
 }
 function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;
   const paused=!!(G&&G.started&&!G.over&&G.sel&&!G.remed&&!(G._fxUntil&&now<G._fxUntil)); // freeze while inspecting — but animate during a strike or a remediation
-  if(!paused){if(G&&G.started&&!G.over)update(dt);if(G)G._pr=false;render();safeGL();}
-  else if(!G._pr){render();safeGL();G._pr=true;} // render once, then freeze (cheap, no per-frame compositing under the modal)
+  try{
+    if(!paused){if(G&&G.started&&!G.over)update(dt);if(G)G._pr=false;render();safeGL();}
+    else if(!G._pr){render();safeGL();G._pr=true;} // render once, then freeze (cheap, no per-frame compositing under the modal)
+  }catch(e){if(!frame._warned){frame._warned=1;console.error('[afterlogin] frame error:',e);
+    try{var _d=document.createElement('div');_d.style.cssText='position:fixed;left:8px;bottom:8px;z-index:99999;background:#a01024;color:#fff;font:11px monospace;padding:6px 10px;border-radius:6px;max-width:92vw;pointer-events:none';_d.textContent='render error: '+((e&&e.message)||e);document.body.appendChild(_d);}catch(_){}}} // keep the loop alive + surface the cause
   if(A&&A.C&&paused!==A._muted){A._muted=paused;try{if(A.padGain)A.padGain.gain.setTargetAtTime(paused?0:.20,A.C.currentTime,.2);if(A.musicGain)A.musicGain.gain.setTargetAtTime(paused?0:.17,A.C.currentTime,.2);}catch(e){}}
   const pt=document.getElementById('pausetag');if(pt)pt.classList.toggle('on',paused);
   if(G)updateRoster();
