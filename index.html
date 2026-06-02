@@ -746,7 +746,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.5</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.6</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -1802,14 +1802,57 @@ function bossIntro(t,f){var el=document.getElementById('bossintro');if(!el||!t)r
   el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
   try{sfx(f>=3?'crash':'alarm');}catch(e){}if(typeof shake==='function')shake(16);if(typeof flash==='function')flash(.22);
   clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show');},2700);}
-/* ════════ ANIMATED d20 — a tumbling die on every strike ════════ */
+/* ════════ ANIMATED d20 — a faceted die that tumbles in 3D, lands with a bounce, and bursts gold on a crit ════════ */
 (function(){if(typeof document==='undefined')return;var st=document.createElement('style');
-  st.textContent='#d20{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);z-index:64;pointer-events:none;display:none}#d20.go{display:block}#d20 .die{width:78px;height:78px;display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-size:36px;font-weight:700;color:#eafff4;background:linear-gradient(145deg,#2c2156,#140e2a);border:2px solid rgba(167,139,250,.65);box-shadow:0 0 34px rgba(var(--accentRGB),.55),inset 0 0 18px rgba(167,139,250,.25);clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%)}#d20.go .die{animation:dieRoll .72s cubic-bezier(.2,.85,.25,1) both}#d20.crit .die{color:#ffe08a;border-color:#ffd76a;box-shadow:0 0 46px rgba(255,200,80,.75),inset 0 0 18px rgba(255,200,80,.3)}@keyframes dieRoll{0%{transform:scale(.4) rotate(-260deg);opacity:0}28%{opacity:1}62%{transform:scale(1.18) rotate(10deg)}100%{transform:scale(1) rotate(0)}}';
-  document.head.appendChild(st);var d=document.createElement('div');d.id='d20';d.innerHTML='<div class="die" id="dieFace">20</div>';document.body.appendChild(d);})();
-function showDie(n,crit){var el=document.getElementById('d20');if(!el)return;var f=document.getElementById('dieFace');
-  el.classList.toggle('crit',!!crit);el.classList.remove('go');void el.offsetWidth;el.classList.add('go');
-  var ticks=0;clearInterval(el._iv);el._iv=setInterval(function(){f.textContent=1+Math.floor(Math.random()*20);if(++ticks>7){clearInterval(el._iv);f.textContent=n;}},52);
-  clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('go');},1150);}
+  st.textContent=
+  '#d20{position:fixed;inset:0;z-index:64;pointer-events:none;display:none;place-items:center}#d20.go{display:grid}'+
+  '#d20 .d20-dim{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(8,6,20,.5),transparent 56%);opacity:0}'+
+  '#d20.go .d20-dim{animation:d20dim 1s ease both}@keyframes d20dim{0%{opacity:0}22%{opacity:1}68%{opacity:1}100%{opacity:0}}'+
+  '#d20 .d20-stage{position:relative;width:150px;height:172px;perspective:760px;display:grid;place-items:center}'+
+  '#d20 .d20-svg{width:124px;height:124px;transform-style:preserve-3d;filter:drop-shadow(0 14px 22px rgba(0,0,0,.55))}'+
+  '#d20.go .d20-svg{animation:d20tumble .68s cubic-bezier(.18,.7,.28,1.25) both}'+
+  '@keyframes d20tumble{0%{transform:scale(.25) rotateX(-240deg) rotateY(170deg) rotateZ(-120deg);opacity:0}18%{opacity:1}58%{transform:scale(1.24) rotateX(10deg) rotateY(-12deg) rotateZ(7deg)}80%{transform:scale(.93) rotateX(-4deg) rotateY(4deg) rotateZ(-2deg)}100%{transform:scale(1) rotate(0)}}'+
+  '#d20 .d20-body{fill:url(#d20grad);stroke:rgba(184,160,255,.9);stroke-width:2;stroke-linejoin:round}'+
+  '#d20 .d20-facet{stroke:rgba(184,160,255,.32);stroke-width:.8}'+
+  '#d20 .d20-fl{fill:rgba(255,255,255,.07)}#d20 .d20-fd{fill:rgba(0,0,0,.16)}'+
+  '#d20 .d20-face{fill:rgba(255,255,255,.12);stroke:rgba(206,190,255,.7);stroke-width:1.3}'+
+  '#d20 .d20-num{fill:#f3ecff;font-family:"Cormorant Garamond",serif;font-weight:700;font-size:30px;text-anchor:middle;dominant-baseline:central}'+
+  '#d20 .d20-glow{position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accentRGB),.4),transparent 65%);opacity:0}'+
+  '#d20.go .d20-glow{animation:d20glow 1s ease both}@keyframes d20glow{0%{opacity:0;transform:scale(.4)}55%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.25)}}'+
+  '#d20 .d20-label{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);font-family:"Cormorant Garamond",serif;font-size:16px;letter-spacing:2.5px;color:#cdbcff;white-space:nowrap;opacity:0}'+
+  '#d20.go .d20-label{animation:d20lab 1s ease .46s both}@keyframes d20lab{0%{opacity:0;transform:translate(-50%,10px)}28%{opacity:1;transform:translate(-50%,0)}82%{opacity:1}100%{opacity:0}}'+
+  '#d20.crit .d20-body{fill:url(#d20gold);stroke:#ffe7a0}#d20.crit .d20-num{fill:#fff6d6}#d20.crit .d20-face{stroke:rgba(255,225,150,.85)}'+
+  '#d20.crit .d20-svg{filter:drop-shadow(0 0 30px rgba(255,200,80,.9)) drop-shadow(0 12px 18px rgba(0,0,0,.5))}'+
+  '#d20.crit .d20-glow{background:radial-gradient(circle,rgba(255,205,90,.6),transparent 62%)}'+
+  '#d20.crit .d20-label{color:#ffdf7a;font-size:22px;letter-spacing:3px;text-shadow:0 0 18px rgba(255,200,80,.8)}'+
+  '#d20 .d20-spark{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:#ffe79a;box-shadow:0 0 10px #ffd76a;opacity:0}'+
+  '#d20.crit.go .d20-spark{animation:d20spark .85s cubic-bezier(.2,.7,.3,1) .4s both}'+
+  '@keyframes d20spark{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}25%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--sx)),calc(-50% + var(--sy))) scale(.5)}}'+
+  '#d20.fumble .d20-body{fill:url(#d20red);stroke:#ff85a0}#d20.fumble .d20-num{fill:#ffd2dc}#d20.fumble .d20-label{color:#ff8aa3}#d20.fumble .d20-glow{background:radial-gradient(circle,rgba(255,70,110,.35),transparent 62%)}';
+  document.head.appendChild(st);
+  var sparks='';for(var i=0;i<12;i++){var a=i/12*6.283,dist=64+(i%3)*16;sparks+='<span class="d20-spark" style="--sx:'+Math.round(Math.cos(a)*dist)+'px;--sy:'+Math.round(Math.sin(a)*dist)+'px"></span>';}
+  var d=document.createElement('div');d.id='d20';
+  d.innerHTML='<div class="d20-dim"></div><div class="d20-stage"><div class="d20-glow"></div>'+
+   '<svg class="d20-svg" viewBox="0 0 100 100">'+
+     '<defs><linearGradient id="d20grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6450ad"/><stop offset="1" stop-color="#1b1334"/></linearGradient>'+
+     '<linearGradient id="d20gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="1" stop-color="#b07d1c"/></linearGradient>'+
+     '<linearGradient id="d20red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a3050"/><stop offset="1" stop-color="#3a1426"/></linearGradient></defs>'+
+     '<polygon class="d20-body" points="50,2 93,26 93,74 50,98 7,74 7,26"/>'+
+     '<polygon class="d20-facet d20-fl" points="50,2 93,26 50,38"/><polygon class="d20-facet d20-fd" points="50,2 7,26 50,38"/>'+
+     '<polygon class="d20-facet d20-fd" points="93,26 93,74 68,50"/><polygon class="d20-facet d20-fl" points="7,26 7,74 32,50"/>'+
+     '<polygon class="d20-facet d20-fl" points="50,98 93,74 50,62"/><polygon class="d20-facet d20-fd" points="50,98 7,74 50,62"/>'+
+     '<polygon class="d20-face" points="50,38 68,50 50,62 32,50"/>'+
+     '<text class="d20-num" id="dieFace" x="50" y="51">20</text>'+
+   '</svg><div class="d20-label" id="dieLabel"></div>'+sparks+'</div>';
+  document.body.appendChild(d);})();
+function showDie(n,crit){var el=document.getElementById('d20');if(!el)return;var f=document.getElementById('dieFace'),lab=document.getElementById('dieLabel');
+  var fumble=(n===1)&&!crit;
+  el.classList.toggle('crit',!!crit);el.classList.toggle('fumble',fumble);
+  el.classList.remove('go');void el.offsetWidth;el.classList.add('go');
+  if(lab)lab.textContent='';
+  var ticks=0;clearInterval(el._iv);el._iv=setInterval(function(){f.textContent=1+Math.floor(Math.random()*20);
+    if(++ticks>9){clearInterval(el._iv);f.textContent=n;var _k=(typeof TH_ID!=='undefined'&&TH_ID==='helpers');if(lab)lab.textContent=crit?(_k?'SUPER HIT! ⭐':'NAT 20 · CRIT!'):(fumble?(_k?'oopsie!':'oof — a 1'):'rolled '+n);}},46);
+  clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('go');},crit?1600:1200);}
 
 function newGame(){
   G={t:0,night:140,ledger:0,started:true,over:false,lantern:{x:W*.5,y:H*.5},mx:W*.5,my:H*.5,
@@ -3805,7 +3848,7 @@ function begin(){startIntro();} // legacy entry point
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.5.5','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.5.6','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
