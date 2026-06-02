@@ -746,7 +746,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.8</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.0</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -993,6 +993,7 @@
   <div class="title" id="endTitle">Dawn</div>
   <div class="verdict" id="endVerdict"></div>
   <div id="endStats"></div>
+  <div class="aiboard" id="endScore"></div>
   <div class="aar" id="endReport"></div>
   <div style="margin-top:26px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
     <button class="start" id="sanctumBtn">⚰️ Enter the Sanctum</button>
@@ -1800,7 +1801,7 @@ function bossIntro(t,f){var el=document.getElementById('bossintro');if(!el||!t)r
   document.getElementById('biHp').textContent='♥ '+t.maxhp+' HP · AC '+t.ac;
   var art=document.getElementById('biArt');art.style.display='';art.onerror=function(){art.style.display='none';};art.src=(TH_ID==='helpers'?'assets/helpers/boss':'assets/boss')+(t.tier||1)+'.png';
   el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
-  try{sfx(f>=3?'crash':'alarm');}catch(e){}if(typeof shake==='function')shake(16);if(typeof flash==='function')flash(.22);
+  try{sfx('roar');}catch(e){}try{sfx(f>=3?'crash':'alarm');}catch(e){}if(typeof shake==='function')shake(16);if(typeof flash==='function')flash(.22);
   clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show');},2700);}
 /* ════════ ANIMATED d20 — a faceted die that tumbles in 3D, lands with a bounce, and bursts gold on a crit ════════ */
 (function(){if(typeof document==='undefined')return;var st=document.createElement('style');
@@ -1855,13 +1856,15 @@ function showDie(n,crit){var el=document.getElementById('d20');if(!el)return;var
   var fumble=(n===1)&&!crit;
   el.classList.toggle('crit',!!crit);el.classList.toggle('fumble',fumble);
   el.classList.remove('go');void el.offsetWidth;el.classList.add('go');
-  if(lab)lab.textContent='';
+  if(lab)lab.textContent='';try{sfx('clatter');}catch(e){}
   var ticks=0;clearInterval(el._iv);el._iv=setInterval(function(){f.textContent=1+Math.floor(Math.random()*20);  // keep flickering through the roll, lock as it lands (~0.95s)
-    if(++ticks>21){clearInterval(el._iv);f.textContent=n;var _k=(typeof TH_ID!=='undefined'&&TH_ID==='helpers');if(lab)lab.textContent=crit?(_k?'SUPER HIT! ⭐':'NAT 20 · CRIT!'):(fumble?(_k?'oopsie!':'oof — a 1'):'rolled '+n);}},44);
+    if(++ticks>21){clearInterval(el._iv);f.textContent=n;var _k=(typeof TH_ID!=='undefined'&&TH_ID==='helpers');if(lab)lab.textContent=crit?(_k?'SUPER HIT! ⭐':'NAT 20 · CRIT!'):(fumble?(_k?'oopsie!':'oof — a 1'):'rolled '+n);
+      if(crit){try{sfx('crit');}catch(e){}if(typeof hitStop==='function')hitStop(180,false);if(G&&G.stats)G.stats.crits++;}}},44);
   clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('go');},crit?2050:1650);}
 
 function newGame(){
   G={t:0,night:140,ledger:0,started:true,over:false,lantern:{x:W*.5,y:H*.5},mx:W*.5,my:H*.5,
+     stats:{reasoned:0,calls:0,correct:0,polters:0,confSum:0,confN:0,crits:0},
      sel:null,threats:[],particles:[],shake:0,feed:[],judged:0,breach:false,lastHop:0,tut:true,lastWhisper:7,investigate:null,turn:0,huntStarted:false,focusSoul:null,
      view:'map',enteredRoom:null,cam:{zoom:1,x:0,y:0},storyFired:{},floats:[],remed:null,_fxUntil:0,
      essence:0,owned:{},buffs:{dmg:0,hit:0,freeze:0,vaultBuffer:0,essBonus:0},
@@ -1916,6 +1919,7 @@ function rollDice(n,s){let sum=0;for(let i=0;i<n;i++)sum+=1+Math.floor(Math.rand
 function attack(mod,ac,dn,ds,dmod){const r=1+Math.floor(Math.random()*20);const crit=r===20;const tot=r+mod;const hit=crit||(r!==1&&tot>=ac);
   return{r,tot,hit,crit,dmg:hit?rollDice(crit?dn*2:dn,ds)+dmod:0};}
 function onBanished(t){if(t._dead)return;t._dead=true;t.banished=true;sfx('triumph');flash(.55);shake(20);shock();
+  if(typeof hitStop==='function')hitStop(t.boss?360:240,true); // cinematic slow-mo on a banish (bigger for a boss)
   // free any spirits this guardian had possessed so the floor can be cleared
   ROOMS.filter(rm=>rm.floor===t.floor&&rm.soul&&rm.soul.possessed).forEach(rm=>{rm.soul.possessed=false;rm.soul.judged=null;scry('↩ <b>'+rm.soul.label+'</b> is released from possession — judge it anew.','');});
   const tr=ROOMS[t.room];
@@ -2101,6 +2105,7 @@ const JUDGE_WORDS={
   2:{rest:['Purged','delete','PURGED'],bind:['Quarantined &amp; encrypted','protect','PROTECTED'],ack:'Classified &amp; kept',pg:'deleted live business data'},
   3:{rest:['Severed','disrupt','SEVERED'],bind:['Contained','isolate','CONTAINED'],ack:'Confirmed benign',pg:'took down a live asset mid-incident'}};
 function judge(rite){const r=G.sel.room,s=r.soul;if(s.judged&&s.judged!=='possessed')return;
+  if(G.stats&&s.analysis){G.stats.calls++;if(rite===s.analysis.rite)G.stats.correct++;if(s.analysis.conf){G.stats.confSum+=s.analysis.conf;G.stats.confN++;}} // scoreboard
   const JW=JUDGE_WORDS[_act||1];
   if(rite==='rest'){
     if(s.dead){const p=GRADE_PTS[s.grade];G.ledger+=p;G.judged++;sfx('rest');cleanseFX(r,'#bff0d8');
@@ -2116,7 +2121,7 @@ function judge(rite){const r=G.sel.room,s=r.soul;if(s.judged&&s.judged!=='posses
       scry('You called a <b>confirmed threat</b> benign. A breach remains — and it will draw the enemy.','bad');narrate('A costly mercy.','That confirmed-malicious target is exactly the bait a predator hunts.');s.judged=null;}
     else{G.ledger+=12;G.judged++;sfx('select');scry(JW.ack+': <b>'+s.label+'</b>. Documented.','good');s.judged='ack';gainEssence(3+G.buffs.essBonus,'documented');}}
   updLedger();G.sel=null;hideCase();playerTurn();checkDawn();advanceStory();checkFloorClear(G.floor);if(G.view==='room')exitRoom();updateCoach();}
-function poltergeist(r,s){G.ledger-=60;sfx('crash');shake(30);flash(.9);shock();s.judged='broken';
+function poltergeist(r,s){G.ledger-=60;if(G.stats)G.stats.polters++;sfx('crash');shake(30);flash(.9);shock();s.judged='broken';
   s.bind.filter(b=>b.live).forEach((b,i)=>{schedule(G.t+.1+i*.15,()=>{const target=(b.to==='LIVE')?ROOMS[1]:(ROOMS.find(x=>x.account===b.to)||ROOMS[1]);
     crack(r.x,r.y,target.x,target.y);burst(target.x,target.y,24,'#ff3b5c','ember');});});
   burst(r.x,r.y,60,'#ff3b5c','ember');
@@ -2129,6 +2134,7 @@ function checkDawn(){const allJ=ROOMS.every(r=>!r.soul||(r.soul.judged&&r.soul.j
   if(allJ&&noT&&!G.over){const _f=(_act||1)>=3;banner(_f?'Dawn Breaks':'He Escapes…',_f?'First light spares the estate':'The Hollow slips away into the next domain','#ffd76a');
     // cinematic pull-back over the cleansed manor as dawn breaks
     {const rs=ROOMS.filter(r=>r.floor===G.floor);let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;rs.forEach(r=>{x0=Math.min(x0,r.x);y0=Math.min(y0,r.y);x1=Math.max(x1,r.x);y1=Math.max(y1,r.y);});if(rs.length)camTo((x0+x1)/2,(y0+y1)/2,.6,1.5);}
+    if(typeof dawnFinale==='function')dawnFinale();
     schedule(G.t+1.6,()=>endGame(true,'dawn'));}}
 /* ── floor progression: clear a floor (spirits judged + guardian banished) to ascend ── */
 function checkFloorClear(f){if(!G||G.over)return;if(!floorCleared(f))return;
@@ -2195,7 +2201,20 @@ function endGame(won,why){if(G.over)return;stopAuto();G.over=true;G.started=fals
     'Spirits judged: '+cleared+'/'+total+' · Hungry banished: '+banished+' · Possessions allowed: '+poss+'\\n'+
     'Ledger of the Dead: '+G.ledger+' · Essence: '+(G.essence||0)+' · Agents: '+agents+' · Defenses: '+tricks+'\\n'+
     'Tenant: meridian-estate.onmicrosoft.com (synthetic) · #Afterlogin #AgentsLeague';
-  flash(won?.3:.6);sfx(won?'triumph':'crash');}
+  // ── AI scoreboard: animated proof the agents actually played ──
+  const _st=G.stats||{reasoned:0,calls:0,correct:0,polters:0,confSum:0,confN:0,crits:0};
+  const _acc=_st.calls?Math.round(_st.correct/_st.calls*100):0,_conf=_st.confN?Math.round(_st.confSum/_st.confN):0;
+  const _esc=document.getElementById('endScore');
+  if(_esc){_esc.innerHTML='<div class="aib-h">◈ Agent Performance</div><div class="aib-grid">'+
+    '<div class="aib"><b id="aibR">0</b><span>souls reasoned</span></div>'+
+    '<div class="aib good"><b id="aibC">0</b><span>correct calls</span></div>'+
+    '<div class="aib '+(_acc>=80?'good':_acc>=50?'':'warn')+'"><b id="aibA">0%</b><span>accuracy</span></div>'+
+    '<div class="aib"><b id="aibF">0%</b><span>avg confidence</span></div>'+
+    '<div class="aib '+(_st.polters?'warn':'good')+'"><b id="aibP">0</b><span>poltergeists</span></div>'+
+    '<div class="aib"><b id="aibX">0</b><span>critical hits</span></div></div>';
+    setTimeout(function(){var T=function(id,v,d,suf){var e=document.getElementById(id);if(!e)return;e._suf=suf||'';tweenNum(e,v,d);};
+      T('aibR',_st.reasoned,900);T('aibC',_st.correct,900);T('aibA',_acc,1000,'%');T('aibF',_conf,1000,'%');T('aibP',_st.polters,700);T('aibX',_st.crits,800);},640);}
+  flash(won?.3:.6);sfx(won?'victory':'crash');}
 const stat=(n,l)=>`<div class="stat"><span class="n">${n}</span><span class="l">${l}</span></div>`;
 const aar=(l,v)=>`<div class="aar-row"><span class="aar-l">${l}</span><span class="aar-v">${v}</span></div>`;
 
@@ -2226,6 +2245,25 @@ function crack(x1,y1,x2,y2){G.particles.push({crack:true,x1,y1,x2,y2,life:0,max:
 function shake(v){G.shake=Math.max(G.shake,v);}
 const flashEl=document.getElementById('flash');function flash(a){flashEl.style.opacity=a;setTimeout(()=>flashEl.style.opacity=0,120);}
 const shockEl=document.getElementById('shock');function shock(){if(!shockEl)return;shockEl.classList.remove('go');void shockEl.offsetWidth;shockEl.classList.add('go');}
+// ── hit-stop: brief slow-mo + a zoom-punch + flash on big moments (crits, boss banishes) ──
+(function(){if(typeof document==='undefined')return;var s=document.createElement('style');s.textContent='#cv.punch{animation:cvpunch .26s cubic-bezier(.3,.8,.3,1)}#cv.punchBig{animation:cvpunch .42s cubic-bezier(.25,.85,.3,1)}@keyframes cvpunch{0%{transform:scale(1)}38%{transform:scale(1.05)}100%{transform:scale(1)}}';document.head.appendChild(s);})();
+function hitStop(ms,big){if(typeof G==='undefined'||!G)return;G._hitUntil=(typeof performance!=='undefined'?performance.now():0)+(ms||160);G._hitScale=big?.18:.34;
+  var c=document.getElementById('cv');if(c){c.classList.remove('punch','punchBig');void c.offsetWidth;c.classList.add(big?'punchBig':'punch');}
+  flash(big?.42:.2);shake(big?20:11);try{sfx(big?'boom':'pop');}catch(e){}}
+// ── cinematic dawn finale: a sunrise sweep + every judged soul streaks into the sky ──
+(function(){if(typeof document==='undefined')return;var s=document.createElement('style');
+  s.textContent='#dawnFx{position:fixed;inset:0;z-index:8;pointer-events:none;opacity:0;background:radial-gradient(ellipse 130% 90% at 50% 122%,rgba(255,214,120,.6),rgba(255,168,92,.22) 42%,transparent 72%)}#dawnFx.go{animation:dawnrise 2.6s ease both}@keyframes dawnrise{0%{opacity:0;transform:translateY(22%)}28%{opacity:1}68%{opacity:.92}100%{opacity:0;transform:translateY(-6%)}}'+
+  '.aiboard{margin:18px auto 4px;max-width:548px;border:1px solid rgba(167,139,250,.32);border-radius:15px;padding:14px 18px 16px;background:linear-gradient(180deg,rgba(124,58,237,.12),rgba(124,58,237,.05))}'+
+  '.aib-h{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#c2b2f5;margin-bottom:13px;font-weight:700}'+
+  '.aib-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 12px}'+
+  '.aib{text-align:center}.aib b{display:block;font-family:"Cormorant Garamond",serif;font-size:32px;font-weight:700;color:#eafff4;line-height:1;text-shadow:0 0 18px rgba(167,139,250,.4)}'+
+  '.aib span{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:#9a93b8}'+
+  '.aib.good b{color:#20F593;text-shadow:0 0 18px rgba(32,245,147,.5)}.aib.warn b{color:#ffb454}'+
+  '@media(max-width:560px){.aib-grid{grid-template-columns:repeat(2,1fr)}}';
+  document.head.appendChild(s);var d=document.createElement('div');d.id='dawnFx';document.body.appendChild(d);})();
+function dawnFinale(){var el=document.getElementById('dawnFx');if(el){el.classList.remove('go');void el.offsetWidth;el.classList.add('go');}
+  try{sfx('victory');}catch(e){}
+  try{ROOMS.forEach(function(r){if(r.soul&&['rest','bind','ack'].indexOf(r.soul.judged)>=0&&typeof schedule==='function'&&typeof burst==='function'){schedule(G.t+Math.random()*.7,function(){burst(r.x,r.y,16,Math.random()<.5?'#ffe08a':'#bff0d8','ash');});}});}catch(e){}}
 /* ── added FX: cleanse shockwaves, haunted-room spirit wisps, cinematic banner, agent council ── */
 function ring(x,y,col,r0,r1,life){(G.rings||(G.rings=[])).push({x,y,col,r0:r0||6,r1:r1||90,life:0,max:life||.9});}
 function cleanseFX(r,col){col=col||'#bff0d8';ring(r.x,r.y,col,8,132,1.0);ring(r.x,r.y,'#eafff4',4,82,.55);burst(r.x,r.y,52,col,'ash');shock();releaseSoul(r,'#e6f3ff');}
@@ -2335,7 +2373,13 @@ function sfx(type){if(!A)return;const C=A.C,t=C.currentTime;
     case'creep':tone(70,.3,'sawtooth',.14,.7,false);break;case'possess':tone(110,.8,'sawtooth',.26,.4);noise(.5,.2);break;
     case'crash':noise(.9,.4);tone(60,1.2,'sawtooth',.3,.3);break;case'rite':tone(146,.9,'square',.12,1.9);break;
     case'triumph':[392,494,587,784].forEach((f,i)=>setTimeout(()=>tone(f,.5,'sine',.16,1.3),i*90));break;case'bad':tone(140,.4,'sawtooth',.2,.6);break;
-    case'pop':tone(680,.12,'sine',.16,1.6);tone(1020,.14,'sine',.09,1.6);break;}}
+    case'pop':tone(680,.12,'sine',.16,1.6);tone(1020,.14,'sine',.09,1.6);break;
+    case'clatter':for(let i=0;i<5;i++)setTimeout(()=>{noise(.035,.14);tone(380+Math.random()*420,.05,'square',.05,1.4,false);},i*80+Math.random()*30);break; // dice tumbling on a table
+    case'crit':[784,988,1318,1760].forEach((f,i)=>setTimeout(()=>tone(f,.4,'sine',.16,1.5),i*70));tone(220,.5,'triangle',.1,1.4);break; // bright rising chime
+    case'victory':[392,494,587,784,988,1175].forEach((f,i)=>setTimeout(()=>tone(f,1.4,i%2?'sine':'triangle',.15,1.1),i*120));tone(196,1.8,'sine',.12,1.05);break; // triumphant major swell
+    case'click':tone(880,.045,'sine',.05,1.2,false);break;
+    case'roar':{const o=A.C.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(48,t+.9);const g=A.C.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.34,t+.06);g.gain.exponentialRampToValueAtTime(.0001,t+1.1);o.connect(g);g.connect(A.master);g.connect(A.conv);o.start(t);o.stop(t+1.2);noise(.7,.18);}break;
+    case'boom':tone(54,.7,'sine',.42,.45);tone(80,.5,'triangle',.2,.5);noise(.5,.26);break;}}
 
 /* ---- WebGL post-processing (bloom · god-rays · grade) ------------------- */
 let GL=null;
@@ -2395,7 +2439,8 @@ function safeGL(){ // WebGL reads the 2D canvas as a texture; local (file://) im
   try{ GL.render(); }
   catch(e){ GL=null; const g=document.getElementById('gl'); if(g)g.style.display='none'; /* fall back to the plain 2D canvas (still shows the art, just no bloom) */ }
 }
-function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;
+function frame(now){let dt=Math.min(.05,(now-last)/1000);last=now;
+  if(G&&G._hitUntil&&now<G._hitUntil)dt*=(G._hitScale||.3); // hit-stop slow-mo
   const paused=!!(G&&G.started&&!G.over&&G.sel&&!G.remed&&!(G._fxUntil&&now<G._fxUntil)); // freeze while inspecting — but animate during a strike or a remediation
   try{
     if(!paused){if(G&&G.started&&!G.over)update(dt);if(G)G._pr=false;render();safeGL();}
@@ -3204,9 +3249,9 @@ function narrate(m,s){const n=document.getElementById('narr');n.innerHTML=kidify
 function showAct(t,s){const el=document.getElementById('actcard');el.querySelector('.ac-title').textContent=kidify('❖ '+t);el.querySelector('.ac-sub').textContent=kidify(s);
   el.classList.remove('show');void el.offsetWidth;el.classList.add('show');}
 // ── smooth count-ups + global micro-interaction polish (additive, no layout change) ──
-function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const cur=parseInt(el._tv!=null?el._tv:el.textContent,10);const f=isNaN(cur)?to:cur;if(f===to){el.textContent=to;el._tv=to;return;}
+function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const sf=el._suf||'';const cur=parseInt(el._tv!=null?el._tv:el.textContent,10);const f=isNaN(cur)?to:cur;if(f===to){el.textContent=to+sf;el._tv=to;return;}
   if(el._tw)cancelAnimationFrame(el._tw);const t0=performance.now(),d=dur||450;
-  const step=now=>{const k=Math.min(1,(now-t0)/d),e=1-Math.pow(1-k,3),v=Math.round(f+(to-f)*e);el.textContent=v;el._tv=v;if(k<1)el._tw=requestAnimationFrame(step);else el._tw=0;};el._tw=requestAnimationFrame(step);}
+  const step=now=>{const k=Math.min(1,(now-t0)/d),e=1-Math.pow(1-k,3),v=Math.round(f+(to-f)*e);el.textContent=v+sf;el._tv=v;if(k<1)el._tw=requestAnimationFrame(step);else el._tw=0;};el._tw=requestAnimationFrame(step);}
 (function(){if(typeof document==='undefined')return;var s=document.createElement('style');
   s.textContent='.start,.btn,.sn-buy,.copy,.btn2,.floor-chip,.sc-buy,.sn-act,#omenbar .om{transition:transform .12s ease,filter .15s ease,box-shadow .18s ease,background .18s ease}'+
   '.start:hover,.btn:hover,.sn-buy:hover:not(:disabled),.sc-buy:hover:not([disabled]),.floor-chip:hover,.btn2:hover{filter:brightness(1.13)}'+
@@ -3475,6 +3520,7 @@ async function llmReason(s){const cfg=alLLM();if(!cfg)return null;const d=DETAIL
       _io:{source:cfg.provider,model,prompt:JSON.stringify({messages},null,2),raw:txt,latency:lat,tokens:tok}};
   }catch(e){return null;}}
 function startReasoning(s,room){if(s.trace||s.reasoning)return;s.reasoning=true;s.trace=buildTrace(s);
+  if(G&&G.stats&&!s._counted){s._counted=true;G.stats.reasoned++;}
   // precompute plain-text lengths so the console can type itself out like a stream
   const GAP=8;let cum=0;s.trace.forEach(st=>{st._plain=(st.text||'').replace(/<[^>]+>/g,'');st._start=cum;cum+=st._plain.length+GAP;});
   s._revTotal=cum;s.reveal=0;s._showIO=s._showIO||false;
@@ -3851,10 +3897,11 @@ function enterManor(){if(_entered)return;_entered=true;if(_introTimer){clearTime
   }
   document.getElementById('coach').style.opacity=1;}
 function begin(){startIntro();} // legacy entry point
+addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&&e.target.closest&&e.target.closest('button,.btn,.ctab,.start,.tp,.sn-buy,.sc-buy,.pf-card,#omenbar .om'))sfx('click');}catch(_){}},true); // soft UI click
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.5.8','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.6.0','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing

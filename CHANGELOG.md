@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.0] - 2026-06-02 — Showpiece pass: finale, AI scoreboard, hit-stop, sound design
+
+Four "wow" beats for the demo:
+- **Cinematic victory finale** — reaching dawn triggers a warm **sunrise sweep** rising over the manor, every judged soul streaks up in a burst, the camera pulls back, the **rank stamp** slams in, and a **triumphant audio swell** plays.
+- **AI scoreboard** — the end screen now shows an **Agent Performance** panel with animated count-ups: souls reasoned, correct calls, accuracy %, avg confidence %, poltergeists, critical hits (tracked live during the run). Proof the agents actually played.
+- **Hit-stop** — natural-20 crits and boss banishes trigger a brief **slow-mo + zoom-punch + flash** (and a boom on a banish) for cinematic weight.
+- **Sound design pass** — procedural **die clatter** on every roll, a bright **chime on a crit**, a layered **victory swell**, a **boss roar** on the intro card, an impact **boom**, and a soft **click** on every button.
+
 ## [0.5.8] - 2026-06-02 — Calmer roll (less dancing)
 
 - Replaced the multi-bounce trajectory with a single clean **roll-in from the side that spins fast and decelerates (ease-out) to a stop**, landing upright at four turns — no vertical bouncing. Softened the impact ring to a gentle settle.
