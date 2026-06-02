@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0] - 2026-06-02 — Student theme: full cleanup, kid-friendly throughout, smoke-tested
+
+- **Kid vocabulary everywhere** — the substitution now also rewrites the **narration, the scrying feed, the act/banner cards** (not just the dossier), and uses a more robust matcher that rewrites every visible text run while leaving tags/attributes/`onclick` untouched (verified). So ghost→helper, the Hollow/Hungry→the Gremlin, dawn→morning bell, etc. apply across the whole UI in Student mode.
+- **Themed story beats** — entering a room and the opening narration now read as the factory ("Sunnyside Factory — before the morning shift", "A little helper is in here — click it to take a look!"), using the factory room names.
+- **Hardened start/flow** — the profile screen is dismissed *before* the theme is applied so it can never strand on top and block clicks; the render loop is crash-proof (one bad frame can't freeze the game).
+- **Smoke-tested headless** — a Node harness mocks the canvas/DOM and runs `setTheme → newGame → render → update → enterRoom → selectRoom → renderCase` in **both** themes; all green, confirming the Student path has no runtime errors. (If clicking ever seems dead, it's a cached older build — hard-refresh; responses are served `no-store`.)
+- Removed the temporary on-screen debug/error overlays.
+
 ## [0.4.9] - 2026-06-02 — Student theme: bright, clean, not scary
 
 A full de-spook pass so the factory reads as a friendly kids' game, not a dimmed horror game with bright cells:
