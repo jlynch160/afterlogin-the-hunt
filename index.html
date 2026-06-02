@@ -1213,6 +1213,26 @@ function TM(){return activeTheme().map||null;}
 function txRoom(r){const m=TM();return (m&&r&&m.rooms&&m.rooms[r.id])?m.rooms[r.id]:(r?r.name:'');}
 function txStatus(){const m=TM();return (m&&m.status)?m.status:'HAUNTED';}
 function txVault(){const m=TM();return (m&&m.vault)?m.vault:'THE VAULT';}
+// Student vocabulary — rewrites only the visible TEXT between tags (never attributes/onclick/classes)
+const KIDMAP=[['Lay to Rest','Tidy Away'],['Bind &amp; Watch','Keep &amp; Watch'],['Bind & Watch','Keep & Watch'],
+  ['Acknowledge the Living','Leave It Be'],['Pass judgment','Make your choice'],['Pass Judgment','Make Your Choice'],
+  ['Agent reasoning','What the Checker thinks'],['agent reasoning','what the Checker thinks'],['Agent Reasoning','What The Checker Thinks'],
+  ['The council','Your friends'],['the council','your friends'],['Council','Team'],
+  ['Divine the bindings','See who it helps'],['Summon the grimoire','Find the proof'],
+  ['the Hungry','the Gremlin'],['The Hungry','The Gremlin'],['the Hollow','the Gremlin'],['The Hollow','The Gremlin'],['Hollow Ascendant','Mega Gremlin'],
+  ['POSSESSED','GRABBED'],['Possessed','Grabbed'],['possessed','grabbed by the Gremlin'],
+  ['ghosts','helpers'],['Ghosts','Helpers'],['ghost','helper'],['Ghost','Helper'],
+  ['spirits','helpers'],['Spirits','Helpers'],['spirit','helper'],['Spirit','Helper'],
+  ['wraiths','helpers'],['wraith','helper'],['souls','helpers'],['Souls','Helpers'],['soul','helper'],['Soul','Helper'],
+  ['Warden','Checker'],['Skeptic','Doubter'],['Retriever','Finder'],['Sentinel','Chaser'],
+  ['banished','shooed away'],['banish','shoo away'],['Banish','Shoo away'],['exorcise','tidy away'],
+  ['judgments','decisions'],['judgment','decision'],['Judgment','Decision'],['rites','choices'],['rite','choice'],['Rite','Choice'],
+  ['Dawn','The morning bell'],['dawn','the morning bell'],
+  ['the manor','the factory'],['The manor','The factory'],['manor','factory'],['Manor','Factory'],
+  ['the estate','the factory'],['estate','factory'],['Estate','Factory'],['haunted','messy'],['Haunted','Messy']
+].map(p=>[new RegExp('\\b'+p[0].replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','g'),p[1]]);
+function kidWords(t){for(let i=0;i<KIDMAP.length;i++)t=t.replace(KIDMAP[i][0],KIDMAP[i][1]);return t;}
+function kidify(html){return TH_ID!=='helpers'?html:html.replace(/>([^<]*)</g,(m,t)=>'>'+kidWords(t)+'<');}
 function setTheme(id){TH_ID=THEMES[id]?id:'spectral';const th=THEMES[TH_ID];
   const r=document.documentElement.style;for(const k in th.vars)r.setProperty(k,th.vars[k]);
   ACR=th.acr;if(document.body)document.body.setAttribute('data-theme',TH_ID);
@@ -1749,8 +1769,9 @@ function toggleCine(on){const b=document.body,want=(on==null)?!b.classList.conta
   d.innerHTML='<div class="bi-wrap"><div class="bi-art"><img id="biArt" alt=""></div><div class="bi-tier" id="biTier"></div><div class="bi-name" id="biName"></div><div class="bi-hp" id="biHp"></div></div>';
   document.body.appendChild(d);})();
 function bossIntro(t,f){var el=document.getElementById('bossintro');if(!el||!t)return;
-  document.getElementById('biTier').textContent=f>=3?'⚜ The Final Guardian':'Floor '+f+' · Guardian';
-  document.getElementById('biName').textContent=t.name;
+  const _kid=TH_ID==='helpers';
+  document.getElementById('biTier').textContent=_kid?(f>=3?'⭐ The Big Boss':'Floor '+f+' · Boss Helper'):(f>=3?'⚜ The Final Guardian':'Floor '+f+' · Guardian');
+  document.getElementById('biName').textContent=_kid?kidWords(t.name):t.name;
   document.getElementById('biHp').textContent='♥ '+t.maxhp+' HP · AC '+t.ac;
   var art=document.getElementById('biArt');art.style.display='';art.onerror=function(){art.style.display='none';};art.src='assets/boss'+(t.tier||1)+'.png';
   el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
@@ -2688,6 +2709,7 @@ function drawRoom(r){if(r.vault)return;
   const cleared=s&&(s.judged==='rest'||s.judged==='bind'||s.judged==='ack');
   const haunted=s&&!cleared&&!s.possessed;
   const fl=haunted?hauntFlash(r):0; // periodic lightning
+  const _kidMap=TH_ID==='helpers'; // Student/factory: bright cells, no scary cues
   ctx.save();
   const hw=rw/2,hh=rh/2,rad=10;
   const _lwx=(G.lantern.x-G.cam.x)/G.cam.zoom,_lwy=(G.lantern.y-G.cam.y)/G.cam.zoom,hover=!sel&&Math.abs(_lwx-x)<hw+6&&Math.abs(_lwy-y)<hh+6; // lantern-over-room
@@ -2695,9 +2717,9 @@ function drawRoom(r){if(r.vault)return;
   ctx.save();ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=16;ctx.shadowOffsetY=9;
   roundRect(x-hw,y-hh+3,rw,rh,rad);ctx.fillStyle='#0b0716';ctx.fill();ctx.restore();
   // floor — warm raised gradient (lighter at top → darker at bottom)
-  const baseTint=sel?'#352a5e':dec.tint;
+  const baseTint=sel?(_kidMap?'#3f6699':'#352a5e'):(_kidMap?'#2c4f7d':dec.tint);
   const fg=ctx.createLinearGradient(0,y-hh,0,y+hh);
-  fg.addColorStop(0,mix(baseTint,'#ffffff',.2));fg.addColorStop(.5,baseTint);fg.addColorStop(1,'#0d0817');
+  fg.addColorStop(0,mix(baseTint,'#ffffff',_kidMap?.36:.2));fg.addColorStop(.5,baseTint);fg.addColorStop(1,_kidMap?'#173356':'#0d0817');
   roundRect(x-hw,y-hh,rw,rh,rad);ctx.fillStyle=fg;ctx.fill();
   // clip → full painted room scene (if present), else AI floor texture / procedural planks + furniture
   ctx.save();roundRect(x-hw,y-hh,rw,rh,rad);ctx.clip();
@@ -2717,12 +2739,12 @@ function drawRoom(r){if(r.vault)return;
   ctx.restore();
   // warm interior light pool — the room glows as if lit (red if haunted, green if cleared)
   ctx.save();ctx.globalCompositeOperation='lighter';
-  const lit=cleared?'rgba(60,220,150,':haunted?'rgba(205,70,92,':'rgba(255,184,112,';
+  const lit=cleared?'rgba(60,220,150,':haunted?(_kidMap?'rgba(255,206,90,':'rgba(205,70,92,'):'rgba(255,184,112,';
   const lk=.5+Math.abs(Math.sin(G.t*1.5+r.id*1.7))*.14;
   const pg=ctx.createRadialGradient(x,y-hh*.18,0,x,y-hh*.18,rw*.52);pg.addColorStop(0,lit+(.16*lk)+')');pg.addColorStop(.6,lit+(.05*lk)+')');pg.addColorStop(1,'rgba(0,0,0,0)');
   ctx.fillStyle=pg;ctx.beginPath();ctx.ellipse(x,y-hh*.18,rw*.52,rh*.58,0,0,6.28);ctx.fill();ctx.restore();
   // walls — beveled with a bright rim on top
-  const wallCol=sel?'rgba(184,154,255,.95)':haunted?'rgba(206,112,150,.72)':cleared?'rgba(44,245,162,.55)':'rgba(150,122,212,.52)';
+  const wallCol=sel?(_kidMap?'rgba(255,214,90,.95)':'rgba(184,154,255,.95)'):haunted?(_kidMap?'rgba(255,198,98,.82)':'rgba(206,112,150,.72)'):cleared?'rgba(44,245,162,.55)':(_kidMap?'rgba(255,210,120,.6)':'rgba(150,122,212,.52)');
   ctx.lineWidth=sel?3:2.3;ctx.strokeStyle=wallCol;roundRect(x-hw,y-hh,rw,rh,rad);ctx.stroke();
   if(hover){ctx.save();ctx.globalCompositeOperation='lighter';const hc=haunted?'#ff7a9a':cleared?'#20F593':'#c9b6ff';ctx.strokeStyle=hexA(hc,.6);ctx.lineWidth=2.4;ctx.shadowColor=hc;ctx.shadowBlur=18;roundRect(x-hw-1.5,y-hh-1.5,rw+3,rh+3,rad+1.5);ctx.stroke();ctx.restore();} // glow when your lantern is over it
   ctx.strokeStyle='rgba(255,255,255,.13)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x-hw+rad,y-hh+1.2);ctx.lineTo(x+hw-rad,y-hh+1.2);ctx.stroke();
@@ -2734,9 +2756,9 @@ function drawRoom(r){if(r.vault)return;
   if(cleared){ctx.fillStyle='rgba(32,245,147,.9)';ctx.font='bold 13px Segoe UI';ctx.textAlign='right';ctx.fillText('✓',x+rw/2-7,y-rh/2-5);
     ctx.fillStyle='rgba(150,160,178,.5)';ctx.font='8px Segoe UI';ctx.textAlign='center';if(r.zone)ctx.fillText(r.zone,x,y+rh/2-6);}
   else if(haunted){const p=.5+Math.abs(Math.sin(G.t*2.6+r.id))*.5;
-    drawDread(x,y-1,r.id,p,fl);
-    ctx.fillStyle='rgba(228,38,52,'+(.6+fl*.4)+')';ctx.font='bold 9px Segoe UI';ctx.textAlign='center';
-    ctx.shadowColor='rgba(190,10,30,.9)';ctx.shadowBlur=6+fl*10;ctx.fillText(txStatus(),x,y+rh/2-6);ctx.shadowBlur=0;}
+    if(!_kidMap)drawDread(x,y-1,r.id,p,fl);
+    ctx.fillStyle=(_kidMap?'rgba(255,176,40,':'rgba(228,38,52,')+(.6+fl*.4)+')';ctx.font='bold 9px Segoe UI';ctx.textAlign='center';
+    ctx.shadowColor=_kidMap?'rgba(150,95,0,.5)':'rgba(190,10,30,.9)';ctx.shadowBlur=6+fl*10;ctx.fillText(txStatus(),x,y+rh/2-6);ctx.shadowBlur=0;}
   else if(r.zone){ctx.fillStyle='rgba(150,140,190,.5)';ctx.font='8px Segoe UI';ctx.textAlign='center';ctx.fillText(r.zone,x,y+rh/2-6);}
   ctx.restore();
 }
@@ -3523,7 +3545,7 @@ function renderCase(){if(!G.sel){hideCase();return;}var _ob=document.getElementB
   const cites=s.summoned?s.ev.map(e=>`<div class="cite">${e}</div>`).join('')
     :`<div class="muted">Use <b>Summon</b> to pull cited evidence.</div>`;
   h+=acc('foundry','📜','Foundry IQ · grimoire',s.summoned?(s.ev.length+' cited'):'sealed',cites);
-  h+=`</div></div></div>`;caseEl.innerHTML=h;caseEl.classList.add('show');caseEl.style.display='block';caseEl.style.opacity='1';caseEl.style.transform='translate(-50%,-50%) scale(1)';caseEl.scrollTop=intro?0:_sc;if(G)G._pr=false;const _cb=document.getElementById('caseback');if(_cb)_cb.classList.add('show');}
+  h+=`</div></div></div>`;caseEl.innerHTML=kidify(h);caseEl.classList.add('show');caseEl.style.display='block';caseEl.style.opacity='1';caseEl.style.transform='translate(-50%,-50%) scale(1)';caseEl.scrollTop=intro?0:_sc;if(G)G._pr=false;const _cb=document.getElementById('caseback');if(_cb)_cb.classList.add('show');}
 function renderThreatCase(t){
   const pct=Math.max(0,Math.round(t.hp/t.maxhp*100));
   let h=`<div class="case-top" style="border-color:rgba(255,59,92,.3)"><div class="case-grade" style="background:rgba(255,59,92,.16);color:#ff3b5c;border-color:rgba(255,59,92,.4)">!</div>
@@ -3540,7 +3562,7 @@ function renderThreatCase(t){
        btn('banish','🛑','Block sign-in',ATKS.block.sub,"castAttack('block')")+
        btn('banish','⚠️','Confirm compromised',ATKS.confirm.sub,"castAttack('confirm')")+`</div>`;
     h+=`<div class="muted" style="margin-top:7px">Each strike fires a real <b>Microsoft Graph</b> call and is one <b>round</b>: you roll, your <b>Sentinel</b> strikes, then the Hungry advances. Drop it to <b>0 HP</b> to banish it.</div>`;}
-  h+=`</div>`;caseEl.innerHTML=h;caseEl.classList.add('show');caseEl.style.display='block';caseEl.style.opacity='1';caseEl.style.transform='translate(-50%,-50%) scale(1)';caseEl.scrollTop=0;if(G)G._pr=false;const _cb=document.getElementById('caseback');if(_cb)_cb.classList.add('show');}
+  h+=`</div>`;caseEl.innerHTML=kidify(h);caseEl.classList.add('show');caseEl.style.display='block';caseEl.style.opacity='1';caseEl.style.transform='translate(-50%,-50%) scale(1)';caseEl.scrollTop=0;if(G)G._pr=false;const _cb=document.getElementById('caseback');if(_cb)_cb.classList.add('show');}
 function showThreatEv(){if(G.sel&&G.sel.th){G.sel.th._evShown=true;sfx('page');renderCase();updateCoach();}}
 function updRiteBar(t){const f=document.getElementById('ritefill');if(f)f.style.width=(t.prog*100)+'%';}
 
