@@ -1622,6 +1622,21 @@ function renderLoadout(){
   h+=sect('👥 Party · your agents',agents.length?agents.map(a=>card(_ldAgentIc(a),a.name,a.status||a.role)).join(''):empty('No agents fielded.'));
   document.getElementById('ldBody').innerHTML=h;}
 
+/* ════════ CINEMATIC MODE — clean, filmic capture for the demo video (press C, or 🎬) ════════ */
+(function(){if(typeof document==='undefined')return;var st=document.createElement('style');
+  st.textContent='body.cine #coach,body.cine #omenbar,body.cine #feed,body.cine #status,body.cine #legend,body.cine #party,body.cine #floors,body.cine #helpBtn,body.cine #autoBtn,body.cine #loadoutBtn,body.cine #storeBtn,body.cine #topbar,body.cine #pausetag,body.cine #narr,body.cine #stepKpi{opacity:0!important;pointer-events:none!important;transition:opacity .5s ease}'+
+  'body.cine::before,body.cine::after{content:"";position:fixed;left:0;right:0;height:8vh;background:#000;z-index:61;pointer-events:none;animation:lbfade .7s ease both}'+
+  'body.cine::before{top:0;box-shadow:0 16px 34px rgba(0,0,0,.55)}body.cine::after{bottom:0;box-shadow:0 -16px 34px rgba(0,0,0,.55)}'+
+  '@keyframes lbfade{from{opacity:0}to{opacity:1}}'+
+  'body.cine #vignette{background:radial-gradient(ellipse at center,transparent 18%,rgba(0,0,0,.62) 76%,rgba(2,1,6,.98) 100%)!important}'+
+  '#cineBtn{position:fixed;top:5px;right:52px;z-index:70;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:13px;background:rgba(11,8,24,.8);border:1px solid rgba(124,58,237,.45);color:#cfd2e8;backdrop-filter:blur(6px);transition:.18s;pointer-events:auto;display:grid;place-items:center}#cineBtn:hover{background:rgba(124,58,237,.3)}#cineBtn.on{background:rgba(32,245,147,.2);border-color:rgba(32,245,147,.55);color:#bff0d8;box-shadow:0 0 16px rgba(32,245,147,.3)}'+
+  '#cineHint{position:fixed;left:50%;transform:translateX(-50%);bottom:9.5vh;z-index:62;font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(207,210,232,.55);pointer-events:none;opacity:0}body.cine #cineHint{animation:cinehint 4s ease both}@keyframes cinehint{0%{opacity:0}18%{opacity:1}78%{opacity:1}100%{opacity:0}}';
+  document.head.appendChild(st);
+  var btn=document.createElement('button');btn.id='cineBtn';btn.title='Cinematic Mode (press C) — hide HUD + letterbox for recording';btn.textContent='🎬';btn.onclick=function(){toggleCine();};document.body.appendChild(btn);
+  var hint=document.createElement('div');hint.id='cineHint';hint.textContent='Cinematic Mode · press C to exit';document.body.appendChild(hint);
+  document.addEventListener('keydown',function(e){var tag=(e.target&&e.target.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea')return;if((e.key||'').toLowerCase()==='c')toggleCine();});})();
+function toggleCine(on){const b=document.body,want=(on==null)?!b.classList.contains('cine'):!!on;b.classList.toggle('cine',want);var btn=document.getElementById('cineBtn');if(btn)btn.classList.toggle('on',want);try{sfx('page');}catch(e){}}
+
 function newGame(){
   G={t:0,night:140,ledger:0,started:true,over:false,lantern:{x:W*.5,y:H*.5},mx:W*.5,my:H*.5,
      sel:null,threats:[],particles:[],shake:0,feed:[],judged:0,breach:false,lastHop:0,tut:true,lastWhisper:7,investigate:null,turn:0,huntStarted:false,focusSoul:null,
@@ -2883,7 +2898,17 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const cur=parseI
   '.bind.live{box-shadow:0 0 16px rgba(32,245,147,.16),inset 0 0 0 1px rgba(32,245,147,.12)!important}.bind.live .tag{box-shadow:0 0 10px rgba(32,245,147,.35)}'+
   '.sec-h{color:#9fa8e0!important}.whisper{box-shadow:inset 0 0 34px rgba(124,58,237,.12),0 8px 24px rgba(0,0,0,.3)}'+
   '.rverdict.final,.rv-rite{text-shadow:0 0 12px rgba(32,245,147,.25)}'+
-  '#loadoutBtn{cursor:pointer;pointer-events:auto;font-size:11px;letter-spacing:.6px;color:#d8d2f0;background:rgba(124,58,237,.16);border:1px solid rgba(124,58,237,.45);border-radius:20px;padding:6px 14px;transition:.18s}#loadoutBtn:hover{background:rgba(124,58,237,.3);box-shadow:0 0 18px rgba(124,58,237,.3)}';
+  '#loadoutBtn{cursor:pointer;pointer-events:auto;font-size:11px;letter-spacing:.6px;color:#d8d2f0;background:rgba(124,58,237,.16);border:1px solid rgba(124,58,237,.45);border-radius:20px;padding:6px 14px;transition:.18s}#loadoutBtn:hover{background:rgba(124,58,237,.3);box-shadow:0 0 18px rgba(124,58,237,.3)}'+
+  /* ── grander finale: Dawn Breaks rises into sunrise ── */
+  '#end.won{background:linear-gradient(180deg,#16243a 0%,#3a2742 32%,#6a3a44 58%,#9a5a3a 78%,#2a1622 100%)!important;animation:dawnrise 3.2s ease both}'+
+  '@keyframes dawnrise{0%{filter:brightness(.35) saturate(.55)}100%{filter:brightness(1) saturate(1)}}'+
+  '#end.won .title{background:linear-gradient(180deg,#fff,#ffe6b0 55%,#ffb454);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent!important;text-shadow:none!important;filter:drop-shadow(0 0 40px rgba(255,200,120,.5))}'+
+  '#end.won .end-rank{text-shadow:0 0 70px currentColor,0 0 24px currentColor}#end.won .verdict{color:#ffe9d0!important}'+
+  /* ── stronger title open: cinematic staggered reveal ── */
+  '.hp-title{animation:titlereveal 1.5s cubic-bezier(.2,.8,.2,1) both}'+
+  '@keyframes titlereveal{0%{opacity:0;letter-spacing:.42em;filter:blur(9px)}55%{opacity:1;filter:blur(0)}100%{opacity:1;letter-spacing:normal}}'+
+  '.hp-kicker{animation:cfadeup 1s ease .15s both}.hp-sub{animation:cfadeup 1s ease .55s both}#beginBtn{animation:cfadeup 1s ease .85s both}.hp-rule{animation:crulegrow 1.2s ease .45s both;transform-origin:left}'+
+  '@keyframes cfadeup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@keyframes crulegrow{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}';
   document.head.appendChild(s);})();
 function updLedger(){const el=document.getElementById('ledger');tweenNum(el,G.ledger);el.style.color=G.ledger<0?'#ff3b5c':'#20F593';el.style.textShadow='0 0 22px '+(G.ledger<0?'rgba(255,59,92,.5)':'rgba(32,245,147,.45)');}
 
