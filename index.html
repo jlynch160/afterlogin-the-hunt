@@ -2934,7 +2934,16 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const cur=parseI
   '.floor-chip.cur{border-color:rgba(167,139,250,.5)!important;box-shadow:0 0 18px rgba(124,58,237,.28)!important}'+
   '#omenbar .om{background:rgba(15,11,26,.78)!important;border-color:rgba(255,180,84,.24)!important;color:#c4bba8!important;box-shadow:none!important}'+
   '#narr{border-color:rgba(124,58,237,.2)!important;box-shadow:0 16px 38px rgba(0,0,0,.45)!important}'+
-  '.feed-h,#party .party-h{opacity:.85}';
+  '.feed-h,#party .party-h{opacity:.85}'+
+  /* ── dossier tabs: full-width panes so each section breathes ── */
+  '.case-tabs{display:flex;gap:8px;margin:0 0 15px}'+
+  '.ctab{flex:1;cursor:pointer;font-family:"Cormorant Garamond",serif;font-size:14px;letter-spacing:1px;color:#9a93b8;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.22);border-radius:11px;padding:9px 8px;transition:.16s;position:relative}'+
+  '.ctab:hover{color:#cfc9e6;background:rgba(124,58,237,.12)}'+
+  '.ctab.on{color:#eafff4;background:rgba(124,58,237,.2);border-color:rgba(167,139,250,.55);box-shadow:0 0 16px rgba(124,58,237,.25)}'+
+  '.ctab-dot{position:absolute;top:7px;right:9px;width:6px;height:6px;border-radius:50%;background:#20F593;box-shadow:0 0 8px #20F593}'+
+  '.case-cols.tab-decision,.case-cols.tab-dossier{grid-template-columns:1fr!important;gap:0!important}'+
+  '.case-cols.tab-decision .col-right{display:none!important}.case-cols.tab-dossier .col-left{display:none!important}'+
+  '.case-cols.tab-dossier .col-right{border-left:none!important;padding-left:0!important}';
   document.head.appendChild(s);})();
 function updLedger(){const el=document.getElementById('ledger');tweenNum(el,G.ledger);el.style.color=G.ledger<0?'#ff3b5c':'#20F593';el.style.textShadow='0 0 22px '+(G.ledger<0?'rgba(255,59,92,.5)':'rgba(32,245,147,.45)');}
 
@@ -3239,6 +3248,7 @@ function acc(id,ic,title,badge,body){const open=accOpen(id);
 function riskGauge(risk){const L=['None','Low','Medium','High'],col=['#7fd0a0','#9fd06a','#ffb454','#ff3b5c'];
   let idx=L.findIndex(l=>l.toLowerCase()===String(risk||'none').toLowerCase());if(idx<0)idx=0;
   return '<div class="risk-g">'+L.map((l,i)=>'<span class="rg" style="'+(i<=idx?'background:'+col[i]+';box-shadow:0 0 6px '+col[i]:'')+'"></span>').join('')+'<b style="color:'+col[idx]+'">risk · '+(risk||'None')+'</b></div>';}
+function caseTab(t){if(G)G._caseTab=t;renderCase();}
 function renderCase(){if(!G.sel){hideCase();return;}var _ob=document.getElementById('omenbar');if(_ob)_ob.style.opacity='0';if(G.sel.type==='threat')return renderThreatCase(G.sel.th);
   const _sc=caseEl.scrollTop||0;
   const s=G.sel.room.soul,d=DETAILS[G.sel.room.account]||{},judged=s.judged&&s.judged!=='possessed'&&s.judged!==null;
@@ -3250,7 +3260,9 @@ function renderCase(){if(!G.sel){hideCase();return;}var _ob=document.getElementB
     <div class="case-meta">${d.upn||s.label}<br><span style="color:#6b6790">objectId ${d.oid||'—'}</span></div>
     ${riskGauge(d.risk)}</div><div class="case-body">`;
   h+=flowBar(s);
-  h+=`<div class="case-cols${intro?' intro':''}"><div class="col-left"><div class="col-chip">⚖ Decision</div>`;
+  const _tab=G._caseTab||'decision';
+  h+=`<div class="case-tabs"><button class="ctab${_tab==='decision'?' on':''}" onclick="caseTab('decision')">⚖ Decision</button><button class="ctab${_tab==='dossier'?' on':''}" onclick="caseTab('dossier')">📜 Dossier${s.divined||s.summoned?'<span class="ctab-dot"></span>':''}</button></div>`;
+  h+=`<div class="case-cols tab-${_tab}${intro?' intro':''}"><div class="col-left">`;
   // ── LEFT: agent reasoning (collapsible) + the judgment actions ──
   if(!s.possessed&&!judged){
     const recoBadge=s.analysis?(RITE_LABEL[s.analysis.rite].replace('&amp;','&')+' · '+s.analysis.conf+'%'):'reasoning…';
@@ -3265,10 +3277,10 @@ function renderCase(){if(!G.sel){hideCase();return;}var _ob=document.getElementB
     h+=btn('bind2',_R.bind[0],_R.bind[1],_R.bind[2],"judge('bind')",reco==='bind');
     h+=btn('ack',_R.ack[0],_R.ack[1],_R.ack[2],"judge('ack')",reco==='ack');
     h+=`<div style="height:4px"></div>`;
-    if(!s.divined)h+=btn('scry','✦','Divine the bindings','reveal Fabric IQ threads (right →)','divine()');
-    if(!s.summoned)h+=btn('scry','📜','Summon the grimoire','pull cited Foundry IQ evidence (right →)','summon()');
+    if(!s.divined)h+=btn('scry','✦','Divine the bindings','reveal Fabric IQ threads (see Dossier tab)','divine()');
+    if(!s.summoned)h+=btn('scry','📜','Summon the grimoire','pull cited Foundry IQ evidence (see Dossier tab)','summon()');
   }
-  h+=`</div></div><div class="col-right"><div class="col-chip alt">📜 Dossier</div>`;
+  h+=`</div></div><div class="col-right">`;
   // ── RIGHT: dossier as collapsible accordions ──
   if(WHISPERS[G.sel.room.account])h+=`<div class="whisper">${WHISPERS[G.sel.room.account]}</div>`;
   const _A=ACTS[_act];
