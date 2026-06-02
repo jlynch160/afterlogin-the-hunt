@@ -746,7 +746,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.7</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.8</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -1812,10 +1812,10 @@ function bossIntro(t,f){var el=document.getElementById('bossintro');if(!el||!t)r
   '#d20 .d20-shadow{position:absolute;top:65%;width:108px;height:22px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,0,0,.45),transparent 72%);opacity:0}'+
   '#d20.go .d20-shadow{animation:d20sh 1.15s ease both}@keyframes d20sh{0%,64%{opacity:0;transform:scale(.4)}80%{opacity:.5;transform:scale(1.22)}90%{opacity:.55;transform:scale(.84)}100%{opacity:.4;transform:scale(1)}}'+
   '#d20 .d20-ring{position:absolute;width:84px;height:84px;border-radius:50%;border:2.5px solid rgba(var(--accentRGB),.7);opacity:0}'+
-  '#d20.go .d20-ring{animation:d20ring 1.2s ease both}@keyframes d20ring{0%,80%{opacity:0;transform:scale(.3)}88%{opacity:.85;transform:scale(.85)}100%{opacity:0;transform:scale(2.3)}}'+
+  '#d20.go .d20-ring{animation:d20ring 1.2s ease both}@keyframes d20ring{0%,82%{opacity:0;transform:scale(.4)}90%{opacity:.6;transform:scale(.95)}100%{opacity:0;transform:scale(1.7)}}'+
   '#d20 .d20-roll{will-change:transform;display:grid;place-items:center}'+
-  '#d20.go .d20-roll{animation:d20roll 1.15s cubic-bezier(.33,.55,.42,1) both}'+
-  '@keyframes d20roll{0%{transform:translate(-64vw,-15vh) rotate(-50deg) scale(.58);opacity:0;filter:blur(3px)}7%{opacity:1}30%{transform:translate(-25vw,8vh) rotate(560deg) scale(1);filter:blur(2.4px)}40%{transform:translate(-13vw,-8vh) rotate(800deg) scale(1.03);filter:blur(1.9px)}55%{transform:translate(3vw,9vh) rotate(1080deg) scale(1);filter:blur(1.3px)}65%{transform:translate(9vw,-4vh) rotate(1260deg) scale(1.02);filter:blur(.8px)}78%{transform:translate(3vw,7vh) rotate(1400deg) scale(1);filter:blur(.3px)}88%{transform:translate(0,6px) rotate(1440deg) scale(1.14);filter:blur(0)}94%{transform:translate(0,0) rotate(1440deg) scale(.94)}100%{transform:translate(0,0) rotate(1440deg) scale(1)}}'+
+  '#d20.go .d20-roll{animation:d20roll 1.05s cubic-bezier(.1,.72,.22,1) both}'+ /* ease-out: spins fast then decelerates and rolls to a stop — no bouncing */
+  '@keyframes d20roll{0%{transform:translate(-58vw,-1vh) rotate(0deg) scale(.74);opacity:0;filter:blur(3px)}9%{opacity:1}48%{filter:blur(1.3px)}86%{transform:translate(0,0) rotate(1412deg) scale(1.04);filter:blur(0)}93%{transform:translate(0,0) rotate(1432deg) scale(.98)}100%{transform:translate(0,0) rotate(1440deg) scale(1)}}'+
   '#d20 .d20-svg{width:138px;height:138px;display:block;filter:drop-shadow(0 10px 16px rgba(0,0,0,.5))}'+
   '#d20 .d20-body{fill:url(#d20grad);stroke:rgba(184,160,255,.9);stroke-width:2;stroke-linejoin:round}'+
   '#d20 .d20-facet{stroke:rgba(184,160,255,.32);stroke-width:.8}'+
@@ -3854,7 +3854,7 @@ function begin(){startIntro();} // legacy entry point
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.5.7','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.5.8','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
