@@ -1236,6 +1236,8 @@ function kidify(html){return TH_ID!=='helpers'?html:html.replace(/>([^<]*)</g,(m
 function setTheme(id){TH_ID=THEMES[id]?id:'spectral';const th=THEMES[TH_ID];
   const r=document.documentElement.style;for(const k in th.vars)r.setProperty(k,th.vars[k]);
   ACR=th.acr;if(document.body)document.body.setAttribute('data-theme',TH_ID);
+  // cursor: Student uses the real OS pointer (no lantern flame); Pro hides it for the flame
+  try{const _cur=TH_ID==='helpers'?'default':'none';document.documentElement.style.cursor=_cur;if(document.body)document.body.style.cursor=_cur;const _cv=document.getElementById('cv');if(_cv)_cv.style.cursor=_cur;}catch(e){}
   try{localStorage.setItem('al_theme',TH_ID);}catch(e){}
   if(typeof loadAllArt==='function'){loadAllArt();try{for(const k in _patCache)delete _patCache[k];for(const k in _artCache)delete _artCache[k];}catch(e){}} // reload theme art + drop recolor caches
   applyThemeCopy(th);syncThemePicker();}
