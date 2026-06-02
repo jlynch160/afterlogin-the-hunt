@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.1] - 2026-06-02 — Fix HiDPI click/cursor offset (the real "can't click" cause)
+
+- **Root cause found:** a `<canvas>` is a replaced element; `resize()` set only the bitmap size (`cv.width = W*DPR`) and never the CSS display size, and the canvas CSS had no width/height. On scaled/HiDPI displays (Windows 125%/150% → DPR > 1) the canvas rendered at bitmap size instead of the viewport, so the visible map was zoomed and **clicks landed offset from the cursor** — you couldn't hit rooms, and therefore couldn't open the reasoning/dossier. Pro masked it (the WebGL canvas was what displayed); Student shows the raw 2D canvas, exposing it. Fix: `width/height:100%` in the canvas CSS + set `cv`/`#gl` style size in `resize()`.
+
 ## [0.5.0] - 2026-06-02 — Student theme: full cleanup, kid-friendly throughout, smoke-tested
 
 - **Kid vocabulary everywhere** — the substitution now also rewrites the **narration, the scrying feed, the act/banner cards** (not just the dossier), and uses a more robust matcher that rewrites every visible text run while leaving tags/attributes/`onclick` untouched (verified). So ghost→helper, the Hollow/Hungry→the Gremlin, dawn→morning bell, etc. apply across the whole UI in Student mode.
