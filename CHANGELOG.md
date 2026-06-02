@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.3] - 2026-06-02 — Training Mode (game-based training)
+
+- A **Training Mode** toggle on the homepage (persisted in `localStorage`). When on, a green **🎓 TRAINING** badge shows during play, and after **every judgment** a coached card explains: ✓ Correct / ✗ Reconsider, what you chose vs. what the agents recommended, the **real-world lesson** (dormant triage · the load-bearing trap · leave the living), and the **Microsoft Entra mapping**. Fires on the normal path and the poltergeist (wrong-call) path. Kid-worded under the Student theme. Combined with the Skills Practiced report, the game now works as a guided training tool.
+
 ## [0.6.2] - 2026-06-02 — "Skills Practiced" competency report on the result screen
 
 - The end screen now includes a **🎓 Skills Practiced** panel that maps the run to real identity-governance competencies, each with an animated progress bar and a **Mastered / Practiced / Keep-practicing** pill:
