@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.5] - 2026-06-02 — "Choose your mode" entry screen + theme-aware art
+
+- **Profile / mode-select screen** — a new first screen (after the password gate) with two cards, **🎓 Student · The Little Helpers** and **👻 Adult · Spectral Response Unit**. Picking one sets the theme and dissolves to the home screen. Choice persists; you can still switch from the homepage picker.
+- **Theme-aware art loading** — `loadAllArt()` now reloads from `assets/helpers/` when the Student theme is active (gated by a `HELPER_OK` manifest so there are no 404s before art exists) and clears the recolor/pattern caches on every theme switch, so Student art drops in automatically once added. Student homepage hero swaps to `assets/helpers/house.png` when present.
+
 ## [0.4.4] - 2026-06-02 — two audiences: a theme engine (Student + Pro)
 
 - **Theme engine** — one codebase, two skins, chosen on the homepage:
