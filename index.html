@@ -746,7 +746,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.1</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.2</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -995,6 +995,7 @@
   <div class="verdict" id="endVerdict"></div>
   <div id="endStats"></div>
   <div class="aiboard" id="endScore"></div>
+  <div class="aiboard" id="endSkills"></div>
   <div class="aar" id="endReport"></div>
   <div style="margin-top:26px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
     <button class="start" id="sanctumBtn">⚰️ Enter the Sanctum</button>
@@ -2243,6 +2244,18 @@ function endGame(won,why){if(G.over)return;stopAuto();G.over=true;G.started=fals
     '<div class="aib"><b id="aibX">0</b><span>critical hits</span></div></div>';
     setTimeout(function(){var T=function(id,v,d,suf){var e=document.getElementById(id);if(!e)return;e._suf=suf||'';tweenNum(e,v,d);};
       T('aibR',_st.reasoned,900);T('aibC',_st.correct,900);T('aibA',_acc,1000,'%');T('aibF',_conf,1000,'%');T('aibP',_st.polters,700);T('aibX',_st.crits,800);},640);}
+  // ── Skills practiced: map the run to real identity-governance competencies ──
+  const _div=ROOMS.filter(r=>r.soul&&r.soul.divined).length,_sum=ROOMS.filter(r=>r.soul&&r.soul.summoned).length,_ev=cleared?Math.min(1,(_div+_sum)/(cleared*2)):0;
+  const SKILLS=[
+    {n:'Dormant & orphaned account triage',m:total?cleared/total:0,note:'Judged '+cleared+' of '+total+' identities'},
+    {n:'Load-bearing vs. truly-dead (the trap)',m:(_st.polters===0?1:.18),note:_st.polters?('Exorcised '+_st.polters+' live process'+(_st.polters>1?'es':'')):'No production broken'},
+    {n:'Evidence-based decisioning (Fabric &amp; Foundry IQ)',m:_ev,note:'Pulled threads/evidence on '+Math.round(_ev*100)+'% of cases'},
+    {n:'Agent-assisted adjudication',m:_acc/100,note:_acc+'% agreement with the agent council'},
+    {n:'Account-takeover response (ITDR)',m:(banished>0?1:0),note:banished?(banished+' takeover'+(banished>1?'s':'')+' contained'):'No live threat engaged'}];
+  const _sk=document.getElementById('endSkills');
+  if(_sk){const pill=v=>v>=.9?['Mastered','m']:v>=.5?['Practiced','p']:['Keep practicing','n'];
+    _sk.innerHTML=(typeof kidify==='function'?kidify:(x=>x))('<div class="aib-h">🎓 Skills practiced this run</div>'+SKILLS.map(sk=>{const v=Math.max(0,Math.min(1,sk.m)),pr=pill(v);return '<div class="skl"><div class="skl-top"><span class="skl-n">'+sk.n+'</span><span class="skl-p '+pr[1]+'">'+pr[0]+'</span></div><div class="skl-bar"><i class="skl-fill '+pr[1]+'" data-w="'+Math.round(Math.max(.04,v)*100)+'%"></i></div><div class="skl-note">'+sk.note+'</div></div>';}).join(''));
+    setTimeout(function(){_sk.querySelectorAll('.skl-fill').forEach(function(f){f.style.width=f.getAttribute('data-w');});},760);}
   // ── achievements on the result + best-rank across runs ──
   if(typeof unlock==='function'&&won){unlock('dawn');if((_st.polters||0)===0)unlock('nopolter');if(_st.calls>=5&&_acc>=100)unlock('perfect');if(_final)unlock('hollow');}
   try{const RV={S:5,A:4,B:3,C:2,D:1},prev=JSON.parse(localStorage.getItem('al_best')||'null');
@@ -2295,7 +2308,14 @@ function hitStop(ms,big){if(typeof G==='undefined'||!G)return;G._hitUntil=(typeo
   '.aib{text-align:center}.aib b{display:block;font-family:"Cormorant Garamond",serif;font-size:32px;font-weight:700;color:#eafff4;line-height:1;text-shadow:0 0 18px rgba(167,139,250,.4)}'+
   '.aib span{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:#9a93b8}'+
   '.aib.good b{color:#20F593;text-shadow:0 0 18px rgba(32,245,147,.5)}.aib.warn b{color:#ffb454}'+
-  '@media(max-width:560px){.aib-grid{grid-template-columns:repeat(2,1fr)}}';
+  '@media(max-width:560px){.aib-grid{grid-template-columns:repeat(2,1fr)}}'+
+  '#endSkills{text-align:left}.skl{margin-bottom:11px}.skl:last-child{margin-bottom:0}'+
+  '.skl-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}'+
+  '.skl-n{font-size:13px;color:#e7e0fb}.skl-p{font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:700;padding:2px 9px;border-radius:20px;white-space:nowrap}'+
+  '.skl-p.m{color:#20F593;background:rgba(32,245,147,.14)}.skl-p.p{color:#ffb454;background:rgba(255,180,84,.15)}.skl-p.n{color:#ff7a8a;background:rgba(255,90,110,.15)}'+
+  '.skl-bar{height:6px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden}.skl-fill{display:block;height:100%;width:0;border-radius:4px;transition:width 1s cubic-bezier(.2,.8,.2,1)}'+
+  '.skl-fill.m{background:linear-gradient(90deg,#159f6a,#20F593)}.skl-fill.p{background:linear-gradient(90deg,#cf8a2a,#ffb454)}.skl-fill.n{background:linear-gradient(90deg,#a23a4a,#ff5a6e)}'+
+  '.skl-note{font-size:10.5px;color:#9a93b8;margin-top:3px}';
   document.head.appendChild(s);var d=document.createElement('div');d.id='dawnFx';document.body.appendChild(d);})();
 function dawnFinale(){var el=document.getElementById('dawnFx');if(el){el.classList.remove('go');void el.offsetWidth;el.classList.add('go');}
   try{sfx('victory');}catch(e){}
@@ -3937,7 +3957,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.6.1','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.6.2','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
