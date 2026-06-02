@@ -1639,6 +1639,28 @@ function renderLoadout(){
   var hint=document.createElement('div');hint.id='cineHint';hint.textContent='Cinematic Mode · press C to exit';document.body.appendChild(hint);
   document.addEventListener('keydown',function(e){var tag=(e.target&&e.target.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea')return;if((e.key||'').toLowerCase()==='c')toggleCine();});})();
 function toggleCine(on){const b=document.body,want=(on==null)?!b.classList.contains('cine'):!!on;b.classList.toggle('cine',want);var btn=document.getElementById('cineBtn');if(btn)btn.classList.toggle('on',want);try{sfx('page');}catch(e){}}
+/* ════════ BOSS INTRO — a fighting-game-style reveal when a guardian rises ════════ */
+(function(){if(typeof document==='undefined')return;var st=document.createElement('style');
+  st.textContent='#bossintro{position:fixed;inset:0;z-index:115;display:none;place-items:center;background:radial-gradient(ellipse at center,rgba(46,4,14,.5),rgba(3,1,6,.9));pointer-events:none}#bossintro.show{display:grid;animation:biShow 2.7s ease both}@keyframes biShow{0%{opacity:0}7%{opacity:1}84%{opacity:1}100%{opacity:0}}#bossintro .bi-wrap{text-align:center}#bossintro .bi-art{height:200px;display:flex;align-items:center;justify-content:center}#bossintro .bi-art img{max-width:210px;max-height:200px;object-fit:contain;filter:drop-shadow(0 0 44px rgba(255,40,60,.6));animation:biArt 2.7s ease both}@keyframes biArt{0%{opacity:0;transform:scale(1.45)}18%{opacity:1;transform:scale(1)}}#bossintro .bi-tier{font-size:13px;letter-spacing:5px;text-transform:uppercase;color:#ff8a9a;margin-top:10px;animation:biFade 2.7s ease both}#bossintro .bi-name{font-family:"Cormorant Garamond",serif;font-size:clamp(40px,7vw,66px);color:#fff;line-height:1;text-shadow:0 0 55px rgba(255,40,60,.7);animation:biName 2.7s cubic-bezier(.2,.9,.2,1) both}@keyframes biName{0%{opacity:0;letter-spacing:.45em;transform:scale(1.3);filter:blur(11px)}17%{opacity:1;filter:blur(0);letter-spacing:2px;transform:none}}#bossintro .bi-hp{font-size:15px;color:#ff8aa3;margin-top:8px;letter-spacing:1.5px;animation:biFade 2.7s ease both}@keyframes biFade{0%,12%{opacity:0}24%{opacity:1}}';
+  document.head.appendChild(st);var d=document.createElement('div');d.id='bossintro';
+  d.innerHTML='<div class="bi-wrap"><div class="bi-art"><img id="biArt" alt=""></div><div class="bi-tier" id="biTier"></div><div class="bi-name" id="biName"></div><div class="bi-hp" id="biHp"></div></div>';
+  document.body.appendChild(d);})();
+function bossIntro(t,f){var el=document.getElementById('bossintro');if(!el||!t)return;
+  document.getElementById('biTier').textContent=f>=3?'⚜ The Final Guardian':'Floor '+f+' · Guardian';
+  document.getElementById('biName').textContent=t.name;
+  document.getElementById('biHp').textContent='♥ '+t.maxhp+' HP · AC '+t.ac;
+  var art=document.getElementById('biArt');art.style.display='';art.onerror=function(){art.style.display='none';};art.src='assets/boss'+(t.tier||1)+'.png';
+  el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
+  try{sfx(f>=3?'crash':'alarm');}catch(e){}if(typeof shake==='function')shake(16);if(typeof flash==='function')flash(.22);
+  clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show');},2700);}
+/* ════════ ANIMATED d20 — a tumbling die on every strike ════════ */
+(function(){if(typeof document==='undefined')return;var st=document.createElement('style');
+  st.textContent='#d20{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);z-index:64;pointer-events:none;display:none}#d20.go{display:block}#d20 .die{width:78px;height:78px;display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-size:36px;font-weight:700;color:#eafff4;background:linear-gradient(145deg,#2c2156,#140e2a);border:2px solid rgba(167,139,250,.65);box-shadow:0 0 34px rgba(124,58,237,.55),inset 0 0 18px rgba(167,139,250,.25);clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%)}#d20.go .die{animation:dieRoll .72s cubic-bezier(.2,.85,.25,1) both}#d20.crit .die{color:#ffe08a;border-color:#ffd76a;box-shadow:0 0 46px rgba(255,200,80,.75),inset 0 0 18px rgba(255,200,80,.3)}@keyframes dieRoll{0%{transform:scale(.4) rotate(-260deg);opacity:0}28%{opacity:1}62%{transform:scale(1.18) rotate(10deg)}100%{transform:scale(1) rotate(0)}}';
+  document.head.appendChild(st);var d=document.createElement('div');d.id='d20';d.innerHTML='<div class="die" id="dieFace">20</div>';document.body.appendChild(d);})();
+function showDie(n,crit){var el=document.getElementById('d20');if(!el)return;var f=document.getElementById('dieFace');
+  el.classList.toggle('crit',!!crit);el.classList.remove('go');void el.offsetWidth;el.classList.add('go');
+  var ticks=0;clearInterval(el._iv);el._iv=setInterval(function(){f.textContent=1+Math.floor(Math.random()*20);if(++ticks>7){clearInterval(el._iv);f.textContent=n;}},52);
+  clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('go');},1150);}
 
 function newGame(){
   G={t:0,night:140,ledger:0,started:true,over:false,lantern:{x:W*.5,y:H*.5},mx:W*.5,my:H*.5,
@@ -1671,6 +1693,7 @@ function tickTimers(){for(const tm of timers)if(!tm.done&&G.t>=tm.at){tm.done=tr
 /* ---- floor guardians + the attic boss ----------------------------------- */
 function spawnFloorBoss(f){if(!BOSSES[f]||(G.floorBoss&&G.floorBoss[f]))return;G.floorBoss[f]=true;const b=BOSSES[f],fin=f===3,_d=actDiff(),_o=G.omenFx||{},_hp=Math.round(b.hp*_d.hp*(_o.bossHp||1));
   G.threats.push({id:'boss'+f,room:b.spawnRoom,prev:-1,name:b.name,hp:_hp,maxhp:_hp,ac:b.ac+_d.ac+(_o.bossAc||0),tier:b.tier,boss:!!b.boss,floor:f,banished:false,_evShown:false,seed:Math.random()*6,evidence:b.evidence.slice(),_next:pick(BOSS_ABILITIES[f]||[])});
+  bossIntro(G.threats[G.threats.length-1],f); // cinematic reveal
   shake(16);flash(.55);sfx('alarm');shock();
   showAct(fin?'The Attic · Act III':'Floor '+f+' · Guardian',b.name);
   scry('⚠ <b>'+b.name+'</b> '+(fin?'rises in the Attic — the source of it all':'guards this floor')+'. ♥'+b.hp+' HP · AC '+b.ac+'. '+(fin?'Banish it to end the night.':'Banish it to open the stairs.'),'bad');
@@ -1761,6 +1784,7 @@ function floatText(x,y,text,col,size){if(G)G.floats.push({x,y,vy:-0.95,life:0,ma
 function castAttack(kind){const t=G.sel&&G.sel.th;if(!t||t.banished||!t._evShown)return;const A=ATKS[kind]||ATKS.revoke;
   const pen=G._atkPenalty||0;G._atkPenalty=0; // the boss's 'Hollowing' weakens this one strike
   const a=attack(A.mod+(G.buffs.hit||0)-pen,t.ac,A.dn,A.ds,A.dmod+(G.buffs.dmg||0)),tr=ROOMS[t.room];
+  showDie(a.r,a.crit); // tumbling d20
   floatText(tr.x,tr.y-72,'🎲 '+a.tot+(pen?' (−'+pen+')':''),a.crit?'#ffd54a':'#cdbcff',18);
   if(a.hit){t.hp-=a.dmg;
     scry('🛡 <span class="api '+A.m+'">'+A.m+'</span> <code>'+A.p+'</code> → <b>'+A.code+'</b>  ·  🎲 d20('+a.r+')+'+A.mod+' '+(a.crit?'<b>CRIT</b> ':'hit ')+'<b>'+a.dmg+'</b> dmg ('+Math.max(0,t.hp)+'/'+t.maxhp+')','good');
@@ -1904,7 +1928,10 @@ function poltergeist(r,s){G.ledger-=60;sfx('crash');shake(30);flash(.9);shock();
 /* banish is now the dice-based smite() defined in the turn engine */
 
 function checkDawn(){const allJ=ROOMS.every(r=>!r.soul||(r.soul.judged&&r.soul.judged!=='possessed'));const noT=G.threats.every(t=>t.banished);
-  if(allJ&&noT&&!G.over){const _f=(_act||1)>=3;banner(_f?'Dawn Breaks':'He Escapes…',_f?'First light spares the estate':'The Hollow slips away into the next domain','#ffd76a');schedule(G.t+.6,()=>endGame(true,'dawn'));}}
+  if(allJ&&noT&&!G.over){const _f=(_act||1)>=3;banner(_f?'Dawn Breaks':'He Escapes…',_f?'First light spares the estate':'The Hollow slips away into the next domain','#ffd76a');
+    // cinematic pull-back over the cleansed manor as dawn breaks
+    {const rs=ROOMS.filter(r=>r.floor===G.floor);let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;rs.forEach(r=>{x0=Math.min(x0,r.x);y0=Math.min(y0,r.y);x1=Math.max(x1,r.x);y1=Math.max(y1,r.y);});if(rs.length)camTo((x0+x1)/2,(y0+y1)/2,.6,1.5);}
+    schedule(G.t+1.6,()=>endGame(true,'dawn'));}}
 /* ── floor progression: clear a floor (spirits judged + guardian banished) to ascend ── */
 function checkFloorClear(f){if(!G||G.over)return;if(!floorCleared(f))return;
   if(G.maxFloor<=f&&f<3){G.maxFloor=f+1;sfx('triumph');flash(.25);banner('Floor Cleared',FLOORS[f-1].name+' is clean','#20F593');
@@ -2359,14 +2386,15 @@ function renderRoomView(){const r=ROOMS[G.enteredRoom];if(!r){exitRoom();return;
   if(s&&!s.possessed){
     const size=Math.min(ch*.62,330);
     // ── atmosphere: a soft aura + rising spirit-motes around the apparition ──
-    {const cg=cx,cyg=cy-6,col0=judged?'#20F593':(GRADE_COL[s.grade]||'#a78bfa');ctx.save();ctx.globalCompositeOperation='lighter';
+    const _er=Math.min(1,(G.t-(G.roomEnterT||0))/.55); // room-entry reveal progress
+    {const cg=cx,cyg=cy-6,col0=judged?'#20F593':(GRADE_COL[s.grade]||'#a78bfa');ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=_er;
      const aur=ctx.createRadialGradient(cg,cyg,0,cg,cyg,size*.95);aur.addColorStop(0,hexA(col0,.16));aur.addColorStop(.55,hexA(col0,.05));aur.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=aur;ctx.beginPath();ctx.arc(cg,cyg,size*.95,0,6.28);ctx.fill();
      for(let i=0;i<14;i++){const tt=(G.t*.22+i*.21)%1,ang=i*1.7+G.t*.1,mr=size*(.18+((i*5)%9)/9*.4),mx=cg+Math.cos(ang)*mr,my=cyg+size*.42-tt*size*.95,a=(1-tt)*.45;ctx.fillStyle=hexA(judged?'#bff0d8':'#d6c9ff',a);ctx.beginPath();ctx.arc(mx,my,1.4,0,6.28);ctx.fill();}
      ctx.restore();}
     drawManifestation(r,cx,cy-6,size);                          // ← one or many ghosts, per attack
     // clickable-target ring so it’s obvious what to click, brighter on hover
     const hov=r._rv&&Math.hypot(G.mx-r._rv.x,G.my-r._rv.y)<r._rv.r, pr=.5+Math.abs(Math.sin(G.t*3))*.5;
-    if(r._rv){const rx=r._rv.x,ry=r._rv.y,rr=r._rv.r*.84,ringCol=judged?'#20F593':'#ff5a6e';ctx.save();ctx.globalCompositeOperation='lighter';
+    if(r._rv){const rx=r._rv.x,ry=r._rv.y,rr=r._rv.r*.84,ringCol=judged?'#20F593':'#ff5a6e';ctx.save();ctx.globalCompositeOperation='lighter';if(_er<1){ctx.translate(rx,ry);ctx.scale(.4+_er*.6,.4+_er*.6);ctx.translate(-rx,-ry);ctx.globalAlpha=_er;} // draws itself on entry
       // soft glow ring
       ctx.strokeStyle=hexA(ringCol,(hov?.5:.16)*(.7+pr*.3));ctx.lineWidth=hov?2.5:1.2;ctx.beginPath();ctx.arc(rx,ry,rr,0,6.28);ctx.stroke();
       // rotating dashed ring — the clickable affordance
