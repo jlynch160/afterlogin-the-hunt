@@ -2578,12 +2578,13 @@ function render(){
     dark.addColorStop(0,'rgba(8,6,20,0)');dark.addColorStop(.7,'rgba(7,5,18,.04)');dark.addColorStop(1,'rgba(4,3,12,.26)');
     ctx.fillStyle=dark;ctx.fillRect(-W*.5,-H*.5,W*2,H*2); // covers the viewport; ~half the overdraw of the old 3x fill
   }
-  // lantern flame + glow (a soft warm pool for the factory; spectral green otherwise)
+  // lantern flame + glow — spectral green pool that tracks the lantern (skipped for the bright factory, which uses the real cursor)
   ctx.globalCompositeOperation='lighter';
-  const lg=ctx.createRadialGradient(lx,ly,0,lx,ly,R);
-  if(TH_ID==='helpers'){lg.addColorStop(0,'rgba(255,226,120,.09)');lg.addColorStop(.5,'rgba(255,226,120,.03)');lg.addColorStop(1,'rgba(0,0,0,0)');}
-  else{lg.addColorStop(0,'rgba(32,245,147,.12)');lg.addColorStop(.5,'rgba(32,245,147,.04)');lg.addColorStop(1,'rgba(0,0,0,0)');}
-  ctx.fillStyle=lg;ctx.beginPath();ctx.arc(lx,ly,R,0,6.29);ctx.fill();
+  if(TH_ID!=='helpers'){
+    const lg=ctx.createRadialGradient(lx,ly,0,lx,ly,R);
+    lg.addColorStop(0,'rgba(32,245,147,.12)');lg.addColorStop(.5,'rgba(32,245,147,.04)');lg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=lg;ctx.beginPath();ctx.arc(lx,ly,R,0,6.29);ctx.fill();
+  }
   G.threats.forEach(t=>{if(!t.banished&&ROOMS[t.room].floor===G.floor)drawThreatPath(t);});
   G.threats.forEach(t=>{if(!t.banished&&ROOMS[t.room].floor===G.floor)drawCreature(t);});
   if(G.agents)G.agents.forEach(a=>{if(ROOMS[a.room]&&ROOMS[a.room].floor===G.floor)drawAgent(a);});
@@ -2594,7 +2595,7 @@ function render(){
   drawVaultPulse();   // Tier-0 heartbeat across the estate
   drawVault();
   ctx.restore();
-  drawLanternFlame(G.lantern.x,G.lantern.y); // screen space — tracks the real cursor under zoom/pan
+  if(TH_ID!=='helpers')drawLanternFlame(G.lantern.x,G.lantern.y); // screen space; Student uses the real OS cursor instead
   drawRemediation();                         // animated Graph-API remediation overlay (screen space)
 }
 
@@ -3163,7 +3164,7 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const cur=parseI
   'body[data-theme="helpers"] #grain{display:none}'+               // drop the film grain
   'body[data-theme="helpers"] #vignette{display:none}'+            // drop the dark edge vignette in-game
   'body[data-theme="helpers"] #dread{display:none}'+               // no creeping dread overlay
-  'body[data-theme="helpers"] #cv{cursor:auto}'+                   // friendly normal cursor, not the lantern flame
+  'body[data-theme="helpers"],body[data-theme="helpers"] #cv,body[data-theme="helpers"] canvas{cursor:auto!important}'+ // friendly real cursor everywhere, no lantern flame
   /* ── profile / mode-select entry screen ── */
   '#profile{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:26px;cursor:default;background:radial-gradient(ellipse at 50% 28%,#170f30,#070512 72%);transition:opacity .45s ease}'+
   '#profile.gone{opacity:0;pointer-events:none}'+
