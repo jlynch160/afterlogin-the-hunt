@@ -352,11 +352,11 @@
   .aar-v{font-family:var(--serif);font-size:17px;color:#e8e4f2;font-weight:600}
   .start.ghost{background:transparent;border:1px solid rgba(220,220,235,.3);color:#d6d2e2;box-shadow:none;font-size:12px;letter-spacing:1.5px}
   .start.ghost:hover{background:rgba(230,230,245,.06);border-color:#a78bfa;box-shadow:0 0 24px rgba(124,58,237,.3);transform:none}
-  #topbar{position:fixed;top:0;left:0;right:0;height:40px;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:0 56px 0 16px;
+  #topbar{position:fixed;top:0;left:0;right:0;height:40px;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:0 96px 0 16px;
     background:linear-gradient(180deg,rgba(9,7,20,.94),rgba(9,7,20,.35));border-bottom:1px solid var(--border);backdrop-filter:blur(10px);pointer-events:none}
   #topbar .tb-l{font-family:var(--serif);font-size:15px;letter-spacing:.6px;color:#cfc8ea} #topbar .tb-l b{color:var(--flame);font-weight:600}
   #topbar .ten{font-family:var(--sans);font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:#6b6790;margin-left:10px}
-  #topbar .tb-r{display:flex;align-items:center;gap:18px} #topbar .kpi{font-size:11px;letter-spacing:.4px;color:#8a90b0}
+  #topbar .tb-r{display:flex;align-items:center;gap:12px;flex-wrap:nowrap} #topbar .kpi{font-size:11px;letter-spacing:.4px;color:#8a90b0;white-space:nowrap}
   #topbar .kpi i{font-style:normal;font-family:var(--serif);font-size:17px;color:#dde;margin-right:3px;font-weight:600}
   #topbar .tl{display:flex;align-items:center;gap:8px;font-size:9.5px;letter-spacing:1.6px;color:#8a90b0}
   #topbar .tlbar{width:96px;height:7px;border-radius:5px;background:rgba(255,255,255,.07);overflow:hidden;border:1px solid var(--border)}
@@ -908,11 +908,11 @@
     <div class="ov">Meridian Estate · the night after</div>
     <h2>The Hunters</h2>
     <p>One night — <b>the Severance</b> — emptied the house: its people let go, its systems moved to the cloud, and a hundred accounts left behind, still holding their keys.</p>
-    <p>They linger as <b>ghosts</b> — dormant admins, orphaned service principals, forgotten guests — and something has slipped through an open door to <b>hunt them</b>, wearing the faces of the dead. But you do not walk alone:</p>
+    <p>They linger as <b>ghosts</b> — dormant admins, orphaned apps, forgotten guests — and something slipped through an open door to <b>hunt them</b>: <b>the Hollow</b>, wearing the faces of the dead. Lay each soul to rest before dawn — for what it cannot seize in your <b>identities</b>, it will hunt in your <b>data</b>, and then in the <b>breach</b> itself. But you do not walk alone:</p>
     <div class="hunters">
       <div class="hunter warden"><div class="av">🛡️</div>
         <div><h3>The Warden<span>· L2 — REASONS</span></h3>
-          <p>Your eyes in the dark — reads each account's <em>grade and dormancy</em> and <em>recommends the right rite</em>, so you judge on reason, not fear.</p></div></div>
+          <p>Your eyes in the dark — weighs the <em>evidence on every soul</em> and <em>recommends the right rite</em>, so you judge on reason, not fear.</p></div></div>
       <div class="hunter sentinel"><div class="av">⚔️</div>
         <div><h3>The Sentinel<span>· L3 — FIGHTS</span></h3>
           <p>Your blade in the dark — when the Hungry rises, the Sentinel <em>chases it across the graph</em> and <em>strikes beside your dice</em> until the takeover is banished.</p></div></div>
@@ -1568,7 +1568,7 @@ function addSagaStar(){try{localStorage.setItem('al_stars',String(Math.min(90,sa
 
 /* ════════ THE TRAINING ROOM — step-by-step, click-through onboarding ════════ */
 const TRAIN_STEPS=[
-  {ic:'🕯️',t:'Welcome to the Hunt',b:'Every organisation is haunted by <b>forgotten identities</b> — dormant admins, orphaned service accounts, stale access. Here they are <b>ghosts</b>, and you are the auditor who must judge each one <b>before dawn</b>.'},
+  {ic:'🕯️',t:'Welcome to the Hunt',b:'Every organisation is haunted by what it stops watching — <b>forgotten identities, over-shared data, and the breaches they invite</b>. Here they are <b>ghosts</b>, and you are the auditor who must judge each one <b>before dawn</b>.'},
   {ic:'🗺️',t:'The Manor',b:'The map is the estate, floor by floor. Each <b>room</b> holds one spirit. Your <b>lantern</b> follows your cursor and wakes the spirits nearby. The <b>Vault</b> (Tier-0) is what you must protect.'},
   {ic:'🚪',t:'Inspect a Spirit',b:'<b>Click a room</b> to open its <b>dossier</b> — the account, its grade (A–F), and live signals. Your goal: choose the <b>safe, least-destructive</b> action.'},
   {ic:'✦',t:'Divine &amp; Summon',b:'<b>Divine</b> reveals the spirit’s <b>threads</b> (Fabric IQ) — a <span style="color:#20F593">green</span> thread still feeds a <b>living</b> process. <b>Summon</b> pulls <b>cited evidence</b> (Foundry IQ). The truth is in the threads.'},
@@ -2899,7 +2899,8 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const cur=parseI
   '.bind.live{box-shadow:0 0 16px rgba(32,245,147,.16),inset 0 0 0 1px rgba(32,245,147,.12)!important}.bind.live .tag{box-shadow:0 0 10px rgba(32,245,147,.35)}'+
   '.sec-h{color:#9fa8e0!important}.whisper{box-shadow:inset 0 0 34px rgba(124,58,237,.12),0 8px 24px rgba(0,0,0,.3)}'+
   '.rverdict.final,.rv-rite{text-shadow:0 0 12px rgba(32,245,147,.25)}'+
-  '#loadoutBtn{cursor:pointer;pointer-events:auto;font-size:11px;letter-spacing:.6px;color:#d8d2f0;background:rgba(124,58,237,.16);border:1px solid rgba(124,58,237,.45);border-radius:20px;padding:6px 14px;transition:.18s}#loadoutBtn:hover{background:rgba(124,58,237,.3);box-shadow:0 0 18px rgba(124,58,237,.3)}'+
+  '#loadoutBtn{cursor:pointer;pointer-events:auto;font-size:11px;letter-spacing:.5px;color:#d8d2f0;background:rgba(124,58,237,.16);border:1px solid rgba(124,58,237,.45);border-radius:20px;padding:6px 13px;transition:.18s;white-space:nowrap}#loadoutBtn:hover{background:rgba(124,58,237,.3);box-shadow:0 0 18px rgba(124,58,237,.3)}'+
+  '#storeBtn,#aiPill{white-space:nowrap}#topbar .tb-r>*{flex:0 0 auto}'+
   /* ── grander finale: Dawn Breaks rises into sunrise ── */
   '#end.won{background:linear-gradient(180deg,#16243a 0%,#3a2742 32%,#6a3a44 58%,#9a5a3a 78%,#2a1622 100%)!important;animation:dawnrise 3.2s ease both}'+
   '@keyframes dawnrise{0%{filter:brightness(.35) saturate(.55)}100%{filter:brightness(1) saturate(1)}}'+
