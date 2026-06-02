@@ -746,7 +746,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.3</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.4</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -1229,7 +1229,19 @@ const KIDMAP=[['Lay to Rest','Tidy Away'],['Bind &amp; Watch','Keep &amp; Watch'
   ['judgments','decisions'],['judgment','decision'],['Judgment','Decision'],['rites','choices'],['rite','choice'],['Rite','Choice'],
   ['Dawn','The morning bell'],['dawn','the morning bell'],
   ['the manor','the factory'],['The manor','The factory'],['manor','factory'],['Manor','Factory'],
-  ['the estate','the factory'],['estate','factory'],['Estate','Factory'],['haunted','messy'],['Haunted','Messy']
+  ['the estate','the factory'],['estate','factory'],['Estate','Factory'],['haunted','messy'],['Haunted','Messy'],
+  // ── dossier / reasoning vocabulary ──
+  ['Decision','What to do'],['Reasoning','Thinking'],['Judgment','Decision'],
+  ['Fabric IQ · spirit-threads','Who this helper helps'],['Foundry IQ · grimoire','The proof'],
+  ['service accounts','helper-bots'],['service account','helper-bot'],['over-privileged','too-bossy'],['load-bearing','still-needed'],
+  ['spirit-threads','helper-strings'],['grimoire','proof book'],['Fabric IQ','the helper-map'],['Foundry IQ','the proof'],['Work IQ','the worklist'],
+  ['administrators','boss helpers'],['administrator','boss helper'],['admins','boss helpers'],['admin','boss helper'],['Admin','Boss helper'],
+  ['deprovision','tidy away'],['orphaned','lost'],['Orphaned','Lost'],['dormant','sleeping'],['Dormant','Sleeping'],['attested','checked'],['attestation','check'],
+  ['privileged','special'],['Privileged','Special'],['privilege','special key'],['evidence','clues'],['Evidence','Clues'],
+  ['bindings','helper-strings'],['binding','helper-string'],['sign-ins','visits'],['sign-in','visit'],['MFA','the extra lock'],
+  ['Entra ID','the office'],['Entra','the office'],['Purview','the file room'],['Defender','the guard-room'],
+  ['accounts','helpers'],['Accounts','Helpers'],['account','helper'],['Account','Helper'],['tenant','office'],
+  ['remediation','fix'],['remediations','fixes'],['dossier','clues'],['Dossier','Clues'],['kill-chain','trouble trail']
 ].map(p=>[new RegExp('\\b'+p[0].replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','g'),p[1]]);
 function kidWords(t){for(let i=0;i<KIDMAP.length;i++)t=t.replace(KIDMAP[i][0],KIDMAP[i][1]);return t;}
 // rewrite visible text only — tags (and their attributes/onclick) are matched whole and left untouched; works on plain strings + HTML
@@ -1780,7 +1792,7 @@ function bossIntro(t,f){var el=document.getElementById('bossintro');if(!el||!t)r
   document.getElementById('biTier').textContent=_kid?(f>=3?'⭐ The Big Boss':'Floor '+f+' · Boss Helper'):(f>=3?'⚜ The Final Guardian':'Floor '+f+' · Guardian');
   document.getElementById('biName').textContent=_kid?kidWords(t.name):t.name;
   document.getElementById('biHp').textContent='♥ '+t.maxhp+' HP · AC '+t.ac;
-  var art=document.getElementById('biArt');art.style.display='';art.onerror=function(){art.style.display='none';};art.src='assets/boss'+(t.tier||1)+'.png';
+  var art=document.getElementById('biArt');art.style.display='';art.onerror=function(){art.style.display='none';};art.src=(TH_ID==='helpers'?'assets/helpers/boss':'assets/boss')+(t.tier||1)+'.png';
   el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
   try{sfx(f>=3?'crash':'alarm');}catch(e){}if(typeof shake==='function')shake(16);if(typeof flash==='function')flash(.22);
   clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show');},2700);}
@@ -3781,7 +3793,7 @@ function begin(){startIntro();} // legacy entry point
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.5.3','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.5.4','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
