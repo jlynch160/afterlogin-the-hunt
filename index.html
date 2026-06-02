@@ -746,7 +746,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.2</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.5.3</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -3619,7 +3619,7 @@ function renderCase(){if(!G.sel){hideCase();return;}var _ob=document.getElementB
     if(!s.divined)h+=btn('scry','✦','Divine the bindings','reveal Fabric IQ threads (see Dossier tab)','divine()');
     if(!s.summoned)h+=btn('scry','📜','Summon the grimoire','pull cited Foundry IQ evidence (see Dossier tab)','summon()');
   }
-  h+=`</div>`;
+  h+=`</div></div>`; // close .btns AND .col-left so the panes below are real siblings (direct children of .case-cols)
   // ── REASONING: the agent council, séance dial, and streaming trace get their own tab ──
   if(_hasReason)h+=`<div class="col-reason"><div class="sec-h" style="margin-bottom:11px">◈ Agent reasoning</div>${renderTrace(s)}${copilotPane(s)}</div>`;
   h+=`<div class="col-right">`;
@@ -3781,7 +3781,7 @@ function begin(){startIntro();} // legacy entry point
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.5.2','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.5.3','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
