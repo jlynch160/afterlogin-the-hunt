@@ -746,7 +746,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.2</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.3</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -921,6 +921,7 @@
     <div class="hp-rule"></div>
     <div class="hp-sub">Every door you stop watching becomes the way in.</div>
     <button class="start" id="beginBtn"><span>Enter the Manor</span></button>
+    <label class="train-toggle" id="trainToggle"><input type="checkbox" id="trainChk"><span class="tt-box"></span><span class="tt-lbl">🎓 <b>Training Mode</b> — guided, with a coached explanation after every call</span></label>
     <div class="hp-brief">
       <div class="b"><span class="bn">I</span><div><b>Identity</b> <span class="lyr" style="color:#a78bfa">· Entra</span> — hunt the dormant, orphaned and over-privileged, and judge which “dead” accounts still secretly feed a live process.</div></div>
       <div class="b"><span class="bn">II</span><div><b>The Bleeding Archive</b> <span class="lyr" style="color:#34cdb4">· Purview</span> — now the threat is your <b>data</b>: over-shared files, mislabeled secrets, silent exfiltration. Purge what is dead; protect what still lives.</div></div>
@@ -1650,6 +1651,43 @@ function achToast(a,isNew){var w=document.getElementById('achwrap');if(!w)return
   '.ach-toast.show{transform:translateX(0);opacity:1}.ach-ic{font-size:26px;line-height:1}.ach-n{font-family:"Cormorant Garamond",serif;font-size:15.5px;color:#ffe7a0;letter-spacing:.3px}.ach-d{font-size:11px;color:#b9b2d6;margin-top:1px}'+
   'body[data-theme="helpers"] .ach-toast{border-color:rgba(255,206,43,.6)}';
   document.head.appendChild(s);var w=document.createElement('div');w.id='achwrap';document.body.appendChild(w);})();
+/* ════════ Training Mode — guided play with a coached explanation after every call ════════ */
+let _trainingMode=false;
+(function(){if(typeof document==='undefined')return;try{_trainingMode=localStorage.getItem('al_training')==='1';}catch(e){}
+  var st=document.createElement('style');st.textContent=
+  '.train-toggle{display:flex;align-items:center;gap:11px;justify-content:center;margin:15px auto 0;max-width:460px;cursor:pointer;font-size:12.5px;color:#a9a2c8;user-select:none;line-height:1.4}'+
+  '.train-toggle input{position:absolute;opacity:0;pointer-events:none}.train-toggle .tt-box{flex:0 0 auto;width:38px;height:21px;border-radius:20px;background:rgba(var(--accentRGB),.18);border:1px solid rgba(var(--accentRGB),.4);position:relative;transition:.18s}'+
+  '.train-toggle .tt-box::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#cfc9e6;transition:.18s}'+
+  '.train-toggle input:checked + .tt-box{background:rgba(32,245,147,.35);border-color:rgba(32,245,147,.7)}.train-toggle input:checked + .tt-box::after{left:19px;background:#20F593}'+
+  '.train-toggle .tt-lbl b{color:#cfc9e6}.train-toggle:hover{color:#cfc9e6}'+
+  '#trainBadge{position:fixed;top:9px;left:50%;transform:translateX(-50%);z-index:60;display:none;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:#0a0a14;background:linear-gradient(180deg,#2bd47a,#16a55c);border-radius:20px;padding:5px 14px;box-shadow:0 6px 18px rgba(0,0,0,.4)}body.training #trainBadge{display:block}'+
+  '#trainfb{position:fixed;inset:0;z-index:135;display:none;place-items:center;background:rgba(4,3,12,.55);backdrop-filter:blur(3px)}#trainfb.show{display:grid}'+
+  '#trainfb .tfb{width:min(520px,92vw);background:linear-gradient(180deg,#160f30,#0b0820);border:1px solid rgba(var(--accentRGB),.4);border-radius:18px;padding:22px 24px;box-shadow:0 30px 90px rgba(0,0,0,.65);animation:tfbin .3s cubic-bezier(.2,.9,.3,1) both}@keyframes tfbin{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}'+
+  '#trainfb .tfb-v{font-family:"Cormorant Garamond",serif;font-size:27px;margin-bottom:4px}#trainfb .tfb-v.ok{color:#20F593}#trainfb .tfb-v.no{color:#ff8aa3}'+
+  '#trainfb .tfb-rec{font-size:12.5px;color:#c8bdd8;margin-bottom:14px}#trainfb .tfb-rec b{color:#ffd76a}'+
+  '#trainfb .tfb-l{font-size:14px;line-height:1.65;color:#dcd6f0}#trainfb .tfb-map{margin-top:12px;font-size:12px;color:#9fb0e0;border-left:2px solid rgba(var(--accentRGB),.5);padding-left:12px;line-height:1.55}'+
+  '#trainfb .tfb-go{margin-top:19px;width:100%}';
+  document.head.appendChild(st);
+  var b=document.createElement('div');b.id='trainBadge';b.textContent='🎓 Training Mode';document.body.appendChild(b);
+  var d=document.createElement('div');d.id='trainfb';d.innerHTML='<div class="tfb"><div class="tfb-v" id="tfbV"></div><div class="tfb-rec" id="tfbRec"></div><div class="tfb-l" id="tfbL"></div><div class="tfb-map" id="tfbMap"></div><button class="start tfb-go" id="tfbGo">Got it — continue</button></div>';
+  document.body.appendChild(d);d.querySelector('#tfbGo').onclick=function(){d.classList.remove('show');};
+  var hook=function(){var c=document.getElementById('trainChk');if(c){c.checked=_trainingMode;c.onchange=function(){_trainingMode=c.checked;try{localStorage.setItem('al_training',_trainingMode?'1':'0');}catch(e){}};}};
+  if(document.readyState!=='loading')hook();else document.addEventListener('DOMContentLoaded',hook);})();
+function trainFeedback(s,chosen){if(!G||!G.training||!s)return;
+  const rec=s.analysis?s.analysis.rite:(typeof recommendRite==='function'?recommendRite(s).rite:'rest'),correct=chosen===rec;
+  const RL=(typeof RITE_LABEL!=='undefined'?RITE_LABEL:{rest:'Lay to Rest',bind:'Bind & Watch',ack:'Acknowledge'});
+  const nm=k=>((RL[k]||k)+'').replace('&amp;','&');
+  let lesson,map;
+  if(rec==='rest'){lesson='This was a truly dormant account — no live dependencies, privilege unused. Deprovisioning it is safe and shrinks the attack surface.';map='Entra: a stale account no live process calls is an unused door. Removing it deletes the lure before an attacker logs in.';}
+  else if(rec==='bind'){lesson='It looked dead — but a live process still depends on it. The safe move is disable & monitor, not delete; deprovisioning would break production.';map='Entra: the load-bearing trap. Never judge on dormancy alone — check the Fabric IQ bindings for a live caller first.';}
+  else{lesson='This is an active, attested, least-privilege identity. Keep it and document the owner — not every old-looking account is a risk.';map='Entra: a recently-signed-in, least-privilege resident is healthy. Over-deleting good accounts is its own risk.';}
+  const _k=x=>(TH_ID==='helpers'&&typeof kidWords==='function')?kidWords(x):x;
+  var el=document.getElementById('trainfb');if(!el)return;
+  var V=document.getElementById('tfbV'),R=document.getElementById('tfbRec'),L=document.getElementById('tfbL'),M=document.getElementById('tfbMap');
+  V.className='tfb-v '+(correct?'ok':'no');V.textContent=correct?'✓ Correct':'✗ Reconsider';
+  R.innerHTML=_k('You chose')+' <b>'+_k(nm(chosen))+'</b> · '+_k('the agents recommended')+' <b>'+_k(nm(rec))+'</b>';
+  L.textContent=_k(lesson);M.textContent=_k(map);
+  el.classList.add('show');try{sfx(correct?'rest':'bad');}catch(e){}}
 const SANCTUM=[
   {id:'skeptic',  ic:'🔍', name:'Recruit the Skeptic', cost:60, desc:'A third party agent joins every hunt — the adversarial Skeptic who contests the Warden.'},
   {id:'ledger',   ic:'📜', name:'Ancestral Ledger',    cost:40, desc:'Begin every run with +25 to the Ledger of the Dead.'},
@@ -1891,7 +1929,7 @@ function showDie(n,crit){var el=document.getElementById('d20');if(!el)return;var
 
 function newGame(){
   G={t:0,night:140,ledger:0,started:true,over:false,lantern:{x:W*.5,y:H*.5},mx:W*.5,my:H*.5,
-     stats:{reasoned:0,calls:0,correct:0,polters:0,confSum:0,confN:0,crits:0},achieved:{},
+     stats:{reasoned:0,calls:0,correct:0,polters:0,confSum:0,confN:0,crits:0},achieved:{},training:(typeof _trainingMode!=='undefined'&&_trainingMode),
      sel:null,threats:[],particles:[],shake:0,feed:[],judged:0,breach:false,lastHop:0,tut:true,lastWhisper:7,investigate:null,turn:0,huntStarted:false,focusSoul:null,
      view:'map',enteredRoom:null,cam:{zoom:1,x:0,y:0},storyFired:{},floats:[],remed:null,_fxUntil:0,
      essence:0,owned:{},buffs:{dmg:0,hit:0,freeze:0,vaultBuffer:0,essBonus:0},
@@ -1903,6 +1941,7 @@ function newGame(){
     {role:'L3',name:'Sentinel',room:0,x:ROOMS[0].x,y:ROOMS[0].y,tx:ROOMS[0].x,ty:ROOMS[0].y,spin:0,cd:0,s2:Math.random()*6,status:'guarding the halls'},
     {role:'L2',name:'Warden',room:2,x:ROOMS[2].x,y:ROOMS[2].y,tx:ROOMS[2].x,ty:ROOMS[2].y,spin:1,cd:5,s2:Math.random()*6,status:'guarding the halls'}];
   applyMeta(); // carry over the Sanctum boons earned in past runs
+  if(typeof document!=='undefined')document.body.classList.toggle('training',!!G.training); // Training Mode badge + coached feedback
   applyOmens(); // roll this night's random modifiers (Hades-style)
   G.freedStars=Array.from({length:Math.min(60,sagaStars())},()=>({x:W*(.1+Math.random()*.8),y:H*(.05+Math.random()*.32),r:1.1+Math.random()*1.3,tw:Math.random()*6,col:'#dff0ff'})); // the souls you've freed across the saga still shine
   const ka=document.getElementById('kpiAccts');if(ka)ka.textContent=ROOMS.filter(r=>r.soul).length;
@@ -2140,7 +2179,7 @@ function judge(rite){const r=G.sel.room,s=r.soul;if(s.judged&&s.judged!=='posses
       scry(JW.rest[0]+': <b>'+s.label+'</b>. +'+p+' to the Ledger.','good');narrate(JW.rest[0]+'.','A confirmed-dead target, cleared clean — one less lure for the threat.');s.judged='rest';
       gainEssence((ESS_PTS[s.grade]||4)+G.buffs.essBonus,JW.rest[0].toLowerCase());
       startRemediation({title:'Microsoft Graph · '+JW.rest[1],who:s.label+' — '+JW.rest[0].toLowerCase(),col:'#20F593',stamp:JW.rest[2],dim:.34,calls:remediationPlan(r.account,'rest')});}
-    else{poltergeist(r,s);return;}
+    else{poltergeist(r,s);if(G.training&&typeof trainFeedback==='function')trainFeedback(s,'rest');return;}
   }else if(rite==='bind'){const p=s.dead?12:18;G.ledger+=p;G.judged++;sfx('bind');cleanseFX(r,'#ffd89a');
     scry(JW.bind[0]+': <b>'+s.label+'</b>. +'+p+'.','good');narrate(JW.bind[0]+'.','The cautious rite — contained and watched.');s.judged='bind';
     gainEssence((s.grade==='F'||s.grade==='D'?6:4)+G.buffs.essBonus,'contained');
@@ -2149,6 +2188,7 @@ function judge(rite){const r=G.sel.room,s=r.soul;if(s.judged&&s.judged!=='posses
       scry('You called a <b>confirmed threat</b> benign. A breach remains — and it will draw the enemy.','bad');narrate('A costly mercy.','That confirmed-malicious target is exactly the bait a predator hunts.');s.judged=null;}
     else{G.ledger+=12;G.judged++;sfx('select');scry(JW.ack+': <b>'+s.label+'</b>. Documented.','good');s.judged='ack';gainEssence(3+G.buffs.essBonus,'documented');}}
   if(['rest','bind','ack'].indexOf(s.judged)>=0&&typeof unlock==='function')unlock('firstjudge');
+  if(G.training&&typeof trainFeedback==='function')trainFeedback(s,rite); // coached explanation in Training Mode
   updLedger();G.sel=null;hideCase();playerTurn();checkDawn();advanceStory();checkFloorClear(G.floor);if(G.view==='room')exitRoom();updateCoach();}
 function poltergeist(r,s){G.ledger-=60;if(G.stats)G.stats.polters++;sfx('crash');shake(30);flash(.9);shock();s.judged='broken';
   s.bind.filter(b=>b.live).forEach((b,i)=>{schedule(G.t+.1+i*.15,()=>{const target=(b.to==='LIVE')?ROOMS[1]:(ROOMS.find(x=>x.account===b.to)||ROOMS[1]);
@@ -3957,7 +3997,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.6.2','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.6.3','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
