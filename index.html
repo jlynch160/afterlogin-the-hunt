@@ -2558,6 +2558,7 @@ function drawRoom(r){if(r.vault)return;
   const fl=haunted?hauntFlash(r):0; // periodic lightning
   ctx.save();
   const hw=rw/2,hh=rh/2,rad=10;
+  const _lwx=(G.lantern.x-G.cam.x)/G.cam.zoom,_lwy=(G.lantern.y-G.cam.y)/G.cam.zoom,hover=!sel&&Math.abs(_lwx-x)<hw+6&&Math.abs(_lwy-y)<hh+6; // lantern-over-room
   // drop shadow — the room sits raised above the floor
   ctx.save();ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=16;ctx.shadowOffsetY=9;
   roundRect(x-hw,y-hh+3,rw,rh,rad);ctx.fillStyle='#0b0716';ctx.fill();ctx.restore();
@@ -2591,6 +2592,7 @@ function drawRoom(r){if(r.vault)return;
   // walls — beveled with a bright rim on top
   const wallCol=sel?'rgba(184,154,255,.95)':haunted?'rgba(206,112,150,.72)':cleared?'rgba(44,245,162,.55)':'rgba(150,122,212,.52)';
   ctx.lineWidth=sel?3:2.3;ctx.strokeStyle=wallCol;roundRect(x-hw,y-hh,rw,rh,rad);ctx.stroke();
+  if(hover){ctx.save();ctx.globalCompositeOperation='lighter';const hc=haunted?'#ff7a9a':cleared?'#20F593':'#c9b6ff';ctx.strokeStyle=hexA(hc,.6);ctx.lineWidth=2.4;ctx.shadowColor=hc;ctx.shadowBlur=18;roundRect(x-hw-1.5,y-hh-1.5,rw+3,rh+3,rad+1.5);ctx.stroke();ctx.restore();} // glow when your lantern is over it
   ctx.strokeStyle='rgba(255,255,255,.13)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x-hw+rad,y-hh+1.2);ctx.lineTo(x+hw-rad,y-hh+1.2);ctx.stroke();
   // door plate (name + zone)
   ctx.font='bold 11px Segoe UI';const nw=Math.min(rw,ctx.measureText(r.name).width+22);
@@ -3351,8 +3353,9 @@ function updateRoster(){if(!G||!G.agents)return;
     const b=G.buffs,tricks=[];if(b.dmg)tricks.push('⚡ CAE +'+b.dmg);if(b.hit)tricks.push('🎯 CA +'+b.hit);if(b.vaultBuffer)tricks.push('👑 PIM ward×'+b.vaultBuffer);if(b.freeze)tricks.push('🚫 CA block×'+b.freeze);if(b.essBonus)tricks.push('📋 reviews +'+b.essBonus);if(G.owned.oracle)tricks.push('🔮 Copilot');
     const line=[reinf,tricks.join('  ')].filter(Boolean).join('<br>');
     ex.innerHTML=line;ex.style.display=line?'block':'none';}
-  const af=document.getElementById('agFlow'),fo=document.getElementById('agFocus');
-  if(af){const fs=G.focusSoul;af.innerHTML=flowMini(fs||{});if(fo)fo.textContent=fs?('· '+fs.label):'';}}
+  const af=document.getElementById('agFlow'),fo=document.getElementById('agFocus'),fw=document.querySelector('#party .ag-flow');
+  const fs=G.focusSoul;if(fw)fw.style.display=fs?'block':'none'; // IQ Pipeline only shows while investigating — keeps the idle panel clean
+  if(af&&fs){af.innerHTML=flowMini(fs);if(fo)fo.textContent='· '+fs.label;}}
 let autoTimer=null;
 function camTo(wx,wy,zoom,dur){if(!G)return;G.cam.intro={from:G.cam.zoom,to:zoom,cx:wx,cy:wy,dur:dur||1.1,p:0};} // cinematic camera move
 function autoSmite(t){const tr=ROOMS[t.room];camTo(tr.x,tr.y,1.35,.7);
