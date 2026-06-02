@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.4] - 2026-06-02 — Kid-friendly dossier/reasoning + boss-art image leak fix
+
+- **Dossier & reasoning now read for kids** in the Student theme: the tabs become **What to do · Thinking · Clues**, and the technical vocabulary maps to friendly words — account→helper, service account→helper-bot, admin→boss helper, dormant→sleeping, privileged→special, orphaned→lost, sign-ins→visits, MFA→the extra lock, evidence→clues, Fabric/Foundry IQ→the helper-map/the proof, Entra/Purview/Defender→the office/the file room/the guard-room, etc. (Tags, `onclick`, and classes are still left untouched.)
+- **Fixed an adult-art leak:** the boss-intro card hard-coded `assets/boss<tier>.png`, so it showed the dark adult boss even in Student mode. It's now theme-aware (`assets/helpers/boss<tier>.png`).
+
 ## [0.5.3] - 2026-06-02 — Fix the dossier tabs (unclosed col-left)
 
 - **Root cause of "all data shows, not separated by tabs":** the 3-tab refactor left `.col-left` unclosed — only `.btns` was closed before `.col-reason`/`.col-right` — so the Reasoning and Dossier panes were nested *inside* `.col-left` instead of being siblings of it. The tab CSS (which targets direct children) then couldn't show/hide them independently. Closed `.col-left` properly; the case panel's div tree is now balanced (verified 62/62 in the smoke test) and the **Decision · Reasoning · Dossier** tabs switch correctly.
