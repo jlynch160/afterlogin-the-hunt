@@ -756,7 +756,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.2</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.3</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -2134,14 +2134,14 @@ function threatPlan(t){const id=_gid('okafor');return [
 let _remTok=0;
 function startRemediation(o){if(!G)return;const tok=++_remTok;
   G.remed={tok,startT:G.t,title:o.title||'Microsoft Graph · remediation',who:o.who||'',col:o.col||'#7c3aed',stamp:o.stamp||'REMEDIATED',dim:o.dim==null?.42:o.dim,calls:o.calls.map(c=>({...c}))};
-  o.calls.forEach((c,i)=>schedule(G.t+.45+i*.5,()=>{if(G.remed&&G.remed.tok===tok)sfx('page');}));
-  const total=.45+o.calls.length*.5+.55;
+  o.calls.forEach((c,i)=>schedule(G.t+.6+i*.85,()=>{if(G.remed&&G.remed.tok===tok)sfx('page');}));
+  const total=.6+o.calls.length*.85+.8;
   schedule(G.t+total,()=>{if(G.remed&&G.remed.tok===tok){sfx('rite');}});
-  schedule(G.t+total+2.2,()=>{if(G.remed&&G.remed.tok===tok)G.remed=null;});
-  triggerFx((total+2.4)*1000);
+  schedule(G.t+total+3.6,()=>{if(G.remed&&G.remed.tok===tok)G.remed=null;}); // hold the completed path longer so it reads
+  triggerFx((total+3.8)*1000);
 }
 function drawRemediation(){if(!G||!G.remed)return;const Rm=G.remed,el=G.t-Rm.startT,calls=Rm.calls,n=calls.length;
-  const w=Math.min(640,W*.72),lh=30,padTop=80,padBot=58,h=padTop+n*lh+padBot,x=W*.5,y=Math.min(H*.52,70+h/2+24),L=x-w/2,T=y-h/2;
+  const w=Math.min(688,W*.74),lh=37,padTop=84,padBot=58,h=padTop+n*lh+padBot,x=W*.5,y=Math.min(H*.52,70+h/2+24),L=x-w/2,T=y-h/2;
   ctx.save();
   ctx.fillStyle='rgba(4,3,12,'+Math.min(Rm.dim,el*1.6)+')';ctx.fillRect(0,0,W,H);
   const appear=Math.min(1,el*4),sc=.95+appear*.05;ctx.translate(x,y);ctx.scale(sc,sc);ctx.translate(-x,-y);ctx.globalAlpha=appear;
@@ -2149,25 +2149,30 @@ function drawRemediation(){if(!G||!G.remed)return;const Rm=G.remed,el=G.t-Rm.sta
   ctx.lineWidth=1.5;ctx.strokeStyle=hexA(Rm.col,.55);roundRect(L,T,w,h,16);ctx.stroke();
   ctx.textAlign='left';ctx.fillStyle='#cdbcff';ctx.font='bold 15px Segoe UI';ctx.fillText('⛓ '+Rm.title,L+20,T+30);
   ctx.fillStyle='rgba(155,145,195,.9)';ctx.font='12px Segoe UI';ctx.fillText(Rm.who,L+20,T+50);
+  ctx.textAlign='right';ctx.fillStyle=hexA(Rm.col,.9);ctx.font='bold 9.5px Segoe UI';ctx.fillText('● REMEDIATION PATH · LIVE',L+w-20,T+26);ctx.fillStyle='rgba(150,140,185,.7)';ctx.font='10px Consolas,monospace';ctx.fillText('graph.microsoft.com/v1.0',L+w-20,T+42);ctx.textAlign='left';
   let done=0;
-  calls.forEach((c,i)=>{const ct=.45+i*.5,shown=el>=ct,fin=el>=ct+.42;if(fin)done++;const a=shown?Math.min(1,(el-ct)*5):0;if(a<=0)return;
+  calls.forEach((c,i)=>{const ct=.6+i*.85,shown=el>=ct,fin=el>=ct+.6;if(fin)done++;const a=shown?Math.min(1,(el-ct)*4):0;if(a<=0)return;
     const ly=T+padTop+i*lh;ctx.globalAlpha=a*appear;
+    // ── the remediation path: a connector spine + numbered step that fills green as each call returns 2xx ──
+    if(i>0){const pf=el>=(.6+(i-1)*.85)+.6;ctx.strokeStyle=pf?hexA('#20F593',.6):hexA(Rm.col,.3);ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(L+38,ly-lh+8);ctx.lineTo(L+38,ly-10);ctx.stroke();}
+    ctx.fillStyle=fin?'#20F593':hexA(Rm.col,.95);ctx.beginPath();ctx.arc(L+38,ly-2,9,0,6.28);ctx.fill();
+    ctx.fillStyle='#0b0818';ctx.font='bold 11px Segoe UI';ctx.textAlign='center';ctx.fillText(fin?'✓':String(i+1),L+38,ly+1.5);
     const mb={GET:'#5bc6ff',POST:'#20F593',PATCH:'#ffb454',DELETE:'#ff6a8a'}[c.m]||'#a78bfa';
-    ctx.fillStyle=hexA(mb,.18);roundRect(L+20,ly-13,54,20,5);ctx.fill();ctx.fillStyle=mb;ctx.font='bold 11px Consolas,monospace';ctx.textAlign='center';ctx.fillText(c.m,L+47,ly+1);
-    ctx.textAlign='left';ctx.fillStyle='#d8d3ee';ctx.font='12.5px Consolas,monospace';
-    let pth=c.p;const maxp=w-210;if(ctx.measureText(pth).width>maxp){while(ctx.measureText(pth+'…').width>maxp&&pth.length>10)pth=pth.slice(0,-1);pth+='…';}
-    ctx.fillText(pth,L+84,ly+1);
-    if(c.b){ctx.fillStyle='rgba(150,140,185,.7)';ctx.font='10.5px Consolas,monospace';ctx.fillText('{ '+c.b+' }',L+84,ly+13);}
+    ctx.fillStyle=hexA(mb,.2);roundRect(L+56,ly-13,56,20,5);ctx.fill();ctx.fillStyle=mb;ctx.font='bold 11px Consolas,monospace';ctx.textAlign='center';ctx.fillText(c.m,L+84,ly+1);
+    ctx.textAlign='left';ctx.fillStyle='#dcd7f0';ctx.font='12.5px Consolas,monospace';
+    let pth=c.p;const maxp=w-262;if(ctx.measureText(pth).width>maxp){while(ctx.measureText(pth+'…').width>maxp&&pth.length>10)pth=pth.slice(0,-1);pth+='…';}
+    ctx.fillText(pth,L+122,ly+1);
+    if(c.b){ctx.fillStyle='rgba(155,145,190,.78)';ctx.font='10.5px Consolas,monospace';ctx.fillText('{ '+c.b+' }',L+122,ly+13);}
     ctx.textAlign='right';
-    if(!fin){const ang=el*9+i;ctx.save();ctx.translate(L+w-32,ly-2);ctx.rotate(ang);ctx.strokeStyle=hexA(Rm.col,.95);ctx.lineWidth=2.2;ctx.beginPath();ctx.arc(0,0,6,0,4.7);ctx.stroke();ctx.restore();}
-    else{ctx.fillStyle='#20F593';ctx.font='bold 12px Consolas,monospace';ctx.fillText(c.s+' ✓',L+w-20,ly+1);if(!c._fx){c._fx=true;burst(L+w-34,ly-2,6,'#20F593','spark');}}
+    if(!fin){const ang=el*9+i;ctx.save();ctx.translate(L+w-30,ly-2);ctx.rotate(ang);ctx.strokeStyle=hexA(Rm.col,.95);ctx.lineWidth=2.4;ctx.beginPath();ctx.arc(0,0,6.5,0,4.7);ctx.stroke();ctx.restore();}
+    else{ctx.fillStyle='#20F593';ctx.font='bold 12px Consolas,monospace';ctx.fillText(c.s+' ✓',L+w-18,ly+1);if(!c._fx){c._fx=true;burst(L+w-34,ly-2,8,'#20F593','spark');}}
   });
   ctx.globalAlpha=appear;
   const pr=done/n,by=T+h-34;ctx.fillStyle='rgba(255,255,255,.08)';roundRect(L+20,by,w-40,8,4);ctx.fill();
   ctx.fillStyle=done<n?hexA(Rm.col,.95):'#20F593';roundRect(L+20,by,(w-40)*pr,8,4);ctx.fill();
-  ctx.fillStyle='rgba(195,187,222,.92)';ctx.font='11px Segoe UI';ctx.textAlign='left';ctx.fillText(done+'/'+n+' Graph calls · '+(done<n?'remediating…':'complete'),L+20,by+24);
-  if(done>=n){const st=Math.min(1,(el-(.45+n*.5+.2))*3);if(st>0){ctx.save();ctx.globalAlpha=st*appear;ctx.translate(L+w-104,T+36);ctx.rotate(-.16);
-    ctx.strokeStyle='#20F593';ctx.lineWidth=2;roundRect(-8,-17,104,28,7);ctx.stroke();ctx.fillStyle='#20F593';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';ctx.fillText('✓ '+Rm.stamp,44,2);ctx.restore();}}
+  ctx.fillStyle='rgba(195,187,222,.92)';ctx.font='11px Segoe UI';ctx.textAlign='left';ctx.fillText(done+'/'+n+' Microsoft Graph calls · '+(done<n?'remediating…':'all 2xx · complete'),L+20,by+24);
+  if(done>=n){const st=Math.min(1,(el-(.6+n*.85+.2))*3);if(st>0){ctx.save();ctx.globalAlpha=st*appear;ctx.translate(L+w-88,by+18);ctx.rotate(-.05);
+    ctx.fillStyle=hexA('#20F593',.16);ctx.strokeStyle='#20F593';ctx.lineWidth=2;roundRect(-8,-17,100,28,7);ctx.fill();ctx.stroke();ctx.fillStyle='#20F593';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';ctx.fillText('✓ '+Rm.stamp,42,2);ctx.restore();}}
   ctx.restore();}
 function drawFloats(){if(!G.floats)return;G.floats.forEach(f=>{const a=Math.max(0,1-f.life/f.max);ctx.save();ctx.globalAlpha=a;ctx.fillStyle=f.col;ctx.font='bold '+f.size+'px Segoe UI';ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,.65)';ctx.shadowBlur=5;ctx.fillText(f.text,f.x,f.y);ctx.restore();});}
 function isBait(roomId){const r=ROOMS[roomId];if(!r||!r.soul)return false;const s=r.soul;if(s.possessed)return false;
@@ -4061,7 +4066,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.7.2','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.7.3','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
