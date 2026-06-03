@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.2] - 2026-06-02 — Microsoft IQ made unmistakable on screen
+
+- The dossier now shows an explicit **"🔎 Foundry IQ · grounded · cited · permission-aware"** badge above the cited evidence and a **"✦ Fabric IQ · semantic graph · live dependency mapping"** badge above the threads, with sharper prompts ("pull Foundry IQ grounded, cited evidence" / "map the Fabric IQ dependency graph"). Makes the required Microsoft IQ integration obvious to judges in a short demo.
+
 ## [0.7.0–0.7.1] - 2026-06-02 — Cinematic showcase, on-screen alignment credits, completion certificate
 
 - **Cinematic showcase auto-play** — starting **Hunt Night** now auto-enters Cinematic Mode (HUD hides + letterbox) and exits when stopped: a polished hands-free loop for the demo video / booth.
