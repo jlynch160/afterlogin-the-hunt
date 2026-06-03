@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.4–0.6.9] - 2026-06-02 — Threat-training reframe, MS-skill alignment, redesigned result screen, Student art fixes
+
+- **Reframed as threat + remediation training** — the homepage now leads with "learn the identity threats that matter and exactly how to remediate each," and nudges Training Mode.
+- **Threat learning moments** — every contained threat shows a remediation lesson card in Training Mode (account-takeover / exfiltration / breach by act), mapped to Microsoft Graph + Entra ID Protection / Defender / Purview.
+- **Skills aligned to Microsoft** — the Skills Practiced report now uses Microsoft skill areas with **SC-300 / SC-200** tags: Identity lifecycle & access reviews (Entra ID Governance), Impact analysis before deprovisioning, Risk-based investigation (Entra ID Protection), AI-assisted SecOps (Security Copilot), ITDR (Defender for Identity). Tags hidden under the kid theme.
+- **Redesigned result screen** — a circular glowing **rank seal**, stat **cards**, a two-column **dashboard** (Agent Performance + After-Action Report), unified card chrome, responsive + scrollable.
+- **Fixed Student art not loading** — the theme-switch race guard was discarding Student art (rooms fell back to the procedural ghost). Art now loads once, themed; added a per-room **helper fallback** so every room shows a helper; brightened the Student homepage hero + vignette so the office background is visible again.
+
 ## [0.6.3] - 2026-06-02 — Training Mode (game-based training)
 
 - A **Training Mode** toggle on the homepage (persisted in `localStorage`). When on, a green **🎓 TRAINING** badge shows during play, and after **every judgment** a coached card explains: ✓ Correct / ✗ Reconsider, what you chose vs. what the agents recommended, the **real-world lesson** (dormant triage · the load-bearing trap · leave the living), and the **Microsoft Entra mapping**. Fires on the normal path and the poltergeist (wrong-call) path. Kid-worded under the Student theme. Combined with the Skills Practiced report, the game now works as a guided training tool.
