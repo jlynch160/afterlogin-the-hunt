@@ -756,7 +756,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.3</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.4</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -2023,12 +2023,13 @@ function onBanished(t){if(t._dead)return;t._dead=true;t.banished=true;sfx('trium
   if(t.boss){G.ledger+=120;gainEssence(40,'severed the source');crack(tr.x,tr.y,ROOMS[1].x,ROOMS[1].y);
     scry('💥 <b>THE HOLLOW IS BANISHED</b> — the source is severed. The manor is clean. +120.','good');
     narrate('The source is gone.','Every forgotten key, every open door — sealed. Dawn breaks over Meridian Estate.');
-    startRemediation({title:'Microsoft Graph · domain-wide containment',who:t.name+' — the source, severed',col:'#20F593',stamp:'CONTAINED',dim:.6,calls:threatPlan(t)});
-    schedule(G.t+1.0,()=>endGame(true,'dawn'));
+    startRemediation({title:'Microsoft Graph · domain-wide containment',who:t.name+' — the source, severed',col:'#20F593',stamp:'CONTAINED',dim:.6,calls:threatPlan(t),done:function(){banner('⚔ Kill-chain Severed','Domain contained · tokens revoked · account evicted · MFA forced','#20F593');try{sfx('victory');}catch(e){}flash(.3);}});
+    schedule(G.t+6.6,()=>{if(typeof dawnFinale==='function')dawnFinale();}); // let the containment path + Kill-chain Severed banner play, then the sunrise
+    schedule(G.t+7.8,()=>endGame(true,'dawn'));
   }else{G.ledger+=50;gainEssence(20,'banished '+t.name);
     scry('⚔️ <b>'+t.name+' is BANISHED</b> — the floor guardian falls. +50.','good');
     narrate(t.name+' is contained.','The floor steadies. Judge any spirits that linger, then take the stairs up.');
-    startRemediation({title:'Microsoft Graph · incident response',who:t.name+' — contained',col:'#20F593',stamp:'CONTAINED',dim:.5,calls:threatPlan(t)});
+    startRemediation({title:'Microsoft Graph · incident response',who:t.name+' — contained',col:'#20F593',stamp:'CONTAINED',dim:.5,calls:threatPlan(t),done:function(){banner('⚔ Kill-chain Severed','Sessions revoked · refresh tokens invalidated · account disabled','#20F593');try{sfx('crit');}catch(e){}}});
     schedule(G.t+.4,()=>checkFloorClear(t.floor));}
   updLedger();updateCoach();}
 function partyAttack(t,agent){if(t.banished)return;const a=attack(5,t.ac,1,6,3);try{showDie(a.r,a.crit);}catch(e){}
@@ -2136,7 +2137,7 @@ function startRemediation(o){if(!G)return;const tok=++_remTok;
   G.remed={tok,startT:G.t,title:o.title||'Microsoft Graph · remediation',who:o.who||'',col:o.col||'#7c3aed',stamp:o.stamp||'REMEDIATED',dim:o.dim==null?.42:o.dim,calls:o.calls.map(c=>({...c}))};
   o.calls.forEach((c,i)=>schedule(G.t+.6+i*.85,()=>{if(G.remed&&G.remed.tok===tok)sfx('page');}));
   const total=.6+o.calls.length*.85+.8;
-  schedule(G.t+total,()=>{if(G.remed&&G.remed.tok===tok){sfx('rite');}});
+  schedule(G.t+total,()=>{if(G.remed&&G.remed.tok===tok){sfx('rite');if(typeof o.done==='function')o.done();}});
   schedule(G.t+total+3.6,()=>{if(G.remed&&G.remed.tok===tok)G.remed=null;}); // hold the completed path longer so it reads
   triggerFx((total+3.8)*1000);
 }
@@ -4066,7 +4067,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.7.3','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.7.4','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
