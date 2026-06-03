@@ -756,7 +756,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.1</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.2</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -3484,6 +3484,8 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const sf=el._suf
   '.cop-verdict{font-size:13px;color:#e7e0fb;margin-bottom:5px;line-height:1.5}'+
   '.copilot-op.agree .cop-verdict b{color:#20F593}.copilot-op.dissent .cop-verdict b{color:#ffc15a}'+
   '.cop-why{font-size:12.5px;color:#b9b2d6;font-style:italic;line-height:1.55}'+
+  '.iq-badge{display:inline-flex;align-items:center;gap:6px;font-size:9.5px;letter-spacing:.6px;font-weight:700;color:#9fd0ff;background:rgba(60,120,210,.16);border:1px solid rgba(80,140,220,.42);border-radius:7px;padding:3px 9px;margin:0 0 9px;text-transform:uppercase}'+
+  '.iq-badge.fab{color:#bfa6ff;background:rgba(124,58,237,.18);border-color:rgba(150,100,240,.42)}'+
   /* ── theme picker on the homepage ── */
   '.theme-pick{display:flex;gap:10px;justify-content:center;margin:0 0 16px}'+
   '.theme-pick .tp{flex:0 1 190px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 14px;border-radius:13px;background:rgba(var(--accentRGB),.06);border:1px solid rgba(var(--accentRGB),.28);color:#cfc9e6;transition:.16s}'+
@@ -3906,11 +3908,11 @@ function renderCase(){if(!G.sel){hideCase();return;}var _ob=document.getElementB
     `<div class="row"><span class="tk">🏷️ Owner</span><b>${s.owner}</b></div></div>`;
   h+=acc('entra','📡',_A.panel,'',tele);
   const liveCt=s.bind.filter(b=>b.live).length;
-  const threads=s.divined?s.bind.map(b=>`<div class="bind ${b.live?'live':'dead'}">${b.label}<span class="tag">${b.live?'LIVE':'dead'}</span></div>`).join('')
-    :`<div class="muted">Veiled — use <b>Divine</b> to reveal which threads lead to the living.</div>`;
+  const threads=s.divined?`<div class="iq-badge fab">✦ Fabric IQ · semantic graph · live dependency mapping</div>`+s.bind.map(b=>`<div class="bind ${b.live?'live':'dead'}">${b.label}<span class="tag">${b.live?'LIVE':'dead'}</span></div>`).join('')
+    :`<div class="muted">Veiled — use <b>Divine</b> to map the <b>Fabric IQ</b> dependency graph.</div>`;
   h+=acc('fabric','✦','Fabric IQ · spirit-threads',s.divined?(liveCt+' live · '+s.bind.length):'veiled',threads);
-  const cites=s.summoned?s.ev.map(e=>`<div class="cite">${e}</div>`).join('')
-    :`<div class="muted">Use <b>Summon</b> to pull cited evidence.</div>`;
+  const cites=s.summoned?`<div class="iq-badge">🔎 Foundry IQ · grounded · cited · permission-aware</div>`+s.ev.map(e=>`<div class="cite">${e}</div>`).join('')
+    :`<div class="muted">Use <b>Summon</b> to pull <b>Foundry IQ</b> grounded, cited evidence.</div>`;
   h+=acc('foundry','📜','Foundry IQ · grimoire',s.summoned?(s.ev.length+' cited'):'sealed',cites);
   h+=`</div></div></div>`;caseEl.innerHTML=kidify(h);caseEl.classList.add('show');caseEl.style.display='block';caseEl.style.opacity='1';caseEl.style.transform='translate(-50%,-50%) scale(1)';caseEl.scrollTop=intro?0:_sc;if(G)G._pr=false;const _cb=document.getElementById('caseback');if(_cb)_cb.classList.add('show');}
 function renderThreatCase(t){
@@ -4059,7 +4061,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.7.1','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.7.2','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
