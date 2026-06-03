@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.6] - 2026-06-02 — Continue button on the Graph-API panel (freezes the turn)
+
+- The judgment remediation panel now **gates the turn**: it plays the full Microsoft Graph path (~3–5s), then a green **"Continue ▶"** button appears beneath it; the Sentinel's turn (dice/attacks) and the threat advance are **held until you click it** (with an auto-resume fallback if you never do). Map clicks are ignored while the panel is up. In Training Mode the coached card stays the gate (the remediation panel is un-gated there to avoid a double prompt).
+
 ## [0.7.5] - 2026-06-02 — Training Mode holds the turn for the coached card
 
 - When the **coached feedback card** appears after a judgment in Training Mode, the game now **pauses the Sentinel's turn** — `playerTurn` / `checkDawn` / story / floor-clear are deferred behind a continuation that only runs when you click **"Got it — continue."** No more dice rolls or attacks firing underneath the popup. (Card backdrop also added to the click-ignore selector so it can't fall through to the map.)
