@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.4] - 2026-06-02 — "Kill-chain Severed" payoff on threat containment
+
+- When the **ITDR remediation path** completes on a threat banish (confirm-compromised → revoke sessions → invalidate refresh tokens → disable → force MFA), it now ends with a big **"⚔ Kill-chain Severed"** banner + sting/flash. `startRemediation` gained a `done()` callback to drive it. For the final boss, the end screen is delayed so the full containment path *and* the banner play, then the sunrise finale.
+
 ## [0.7.3] - 2026-06-02 — The Microsoft Graph remediation reads as a *path*
 
 - The Graph-API remediation overlay now shows **longer and clearer**: the call cadence is slowed (0.5s → 0.85s apart) and the completed panel holds ~3.6s longer so it reads on camera. Reframed as a sequenced **"REMEDIATION PATH · LIVE · graph.microsoft.com/v1.0"** with a **numbered step connector spine** that fills green as each call returns `2xx`, taller rows, and an **"N/N Microsoft Graph calls · all 2xx · complete"** progress line + stamp. One of the strongest "this is real remediation" beats for the demo.
