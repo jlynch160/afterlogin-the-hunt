@@ -756,7 +756,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.7</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.9</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -2703,7 +2703,8 @@ function manifestPositions(m,size,cx,cy,t){const n=m.n||1,P=[],bob=i=>Math.sin(t
   return P;}
 // draw the whole manifestation (one identity, possibly many bodies) + name/grade plate
 function drawManifestation(r,cx,cy,size){const s=r.soul,col=GRADE_COL[s.grade],t=G.t;
-  const m=MANIFEST[r.account]||{n:1,mode:'single'};const artKey='ghost_'+r.account,hasArt=IMG[artKey]&&IMG[artKey].ok;
+  const m=MANIFEST[r.account]||{n:1,mode:'single'};let artKey='ghost_'+r.account,hasArt=IMG[artKey]&&IMG[artKey].ok;
+  if(!hasArt&&TH_ID==='helpers'){const _fbk='ghost_'+(HELPER_FALLBACK[r.account]||'okafor');if(IMG[_fbk]&&IMG[_fbk].ok){artKey=_fbk;hasArt=true;}} // every Student room shows a helper, not the procedural ghost
   const P=manifestPositions(m,size,cx,cy,t);
   P.forEach(p=>{if(p.beam){ctx.save();ctx.globalCompositeOperation='lighter';
     const g=ctx.createLinearGradient(p.x,p.y,cx,cy);g.addColorStop(0,hexA(p.beamCol||col,0));g.addColorStop(1,hexA(p.beamCol||col,.42));
@@ -3316,10 +3317,11 @@ const IMG={};
 // (regenerate when art changes: ls assets/*.png)
 const ASSET_OK=new Set(["boss1.png","boss2.png","boss3.png","floor_marble.png","floor_stone.png","floor_tile.png","floor_wood.png","ghost_billing.png","ghost_breakglass.png","ghost_legacy.png","ghost_okafor.png","ghost_santos.png","ghost_spooler.png","house.png","prop_exec_desk.png","prop_filing_cabinets.png","prop_glass_orrery.png","prop_ledger_desk.png","prop_stairs.png","room_billing.png","room_breakglass.png","room_contractor.png","room_etl.png","room_gatehouse.png","room_guestwifi.png","room_intern.png","room_kiosk.png","room_legacy.png","room_okafor.png","room_santos.png","room_spooler.png","room_vendor.png","threat_possession.png"]);
 const HELPER_OK=new Set(["house.png","threat_possession.png","ghost_billing.png","ghost_legacy.png","ghost_okafor.png","ghost_spooler.png","ghost_breakglass.png","ghost_santos.png","boss1.png","boss2.png","boss3.png"]); // Student-theme art in assets/helpers/
+const HELPER_FALLBACK={contractor:'okafor',intern:'okafor',kiosk:'spooler',guestwifi:'spooler',etl:'billing',vendor:'breakglass',steward:'legacy'}; // rooms without their own helper art borrow a fitting one so no room shows the procedural ghost
 function loadImg(key,src){if(typeof Image==='undefined')return;const file=src.split('/').pop();
   if(TH_ID==='helpers'){if(!HELPER_OK.has(file)){IMG[key]={ok:false};return;}src='assets/helpers/'+file;} // student art → assets/helpers/<same-name>.png
   else if(!ASSET_OK.has(file)){IMG[key]={ok:false};return;} // skip art we know isn't there
-  const gen=_artGen,im=new Image();im.onload=()=>{if(gen===_artGen&&im.width)IMG[key]={img:im,ok:true};};im.onerror=()=>{if(gen===_artGen)IMG[key]={ok:false};};im.src=src;}
+  const im=new Image();im.onload=()=>{if(im.width)IMG[key]={img:im,ok:true};};im.onerror=()=>{IMG[key]={ok:false};};im.src=src;}
 // per-room hero props — each chamber gets its own centerpiece (room-specific art → generic furniture → procedural)
 const ROOM_PROPS={
   billing:'ledger_desk',santos:'filing_cabinets',okafor:'exec_desk',vendor:'glass_orrery',
@@ -3339,7 +3341,7 @@ function loadAllArt(){
   Object.values(ROOM_PROPS).concat(['iron_gate']).forEach(p=>loadImg('prop_'+p,'assets/prop_'+p+'.png'));
   ROOM_SCENES.forEach(k=>loadImg('room_'+k,'assets/room_'+k+'.png'));
 }
-loadAllArt();
+// art is loaded once, themed, by initTheme()->setTheme()->loadAllArt() — no competing startup load (which raced adult vs. helper art)
 const _patCache={};
 function texPattern(key){if(_patCache[key])return _patCache[key];const a=IMG[key];if(!a||!a.ok)return null;try{_patCache[key]=ctx.createPattern(a.img,'repeat');}catch(e){return null;}return _patCache[key];}
 function floorTexCat(r){const z=((r.zone||'')+' '+(r.name||'')).toLowerCase();
@@ -3461,8 +3463,8 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const sf=el._suf
   'body[data-theme="helpers"] .emberFx{display:none}'+
   'body[data-theme="helpers"] .hp-fog{opacity:.1!important}'+
   'body[data-theme="helpers"] .hp-ghost{opacity:.45;filter:hue-rotate(40deg) saturate(.6)}'+
-  "body[data-theme=\"helpers\"] #start .hp-sky{background-image:url('assets/helpers/house.png');background-position:center 24%;filter:brightness(.58) saturate(1.03)}"+
-  'body[data-theme="helpers"] #start .hp-vign{display:block;background:radial-gradient(ellipse 82% 78% at 50% 42%,transparent 24%,rgba(4,12,28,.5) 68%,rgba(2,8,20,.95) 100%)}'+
+  "body[data-theme=\"helpers\"] #start .hp-sky{background-image:url('assets/helpers/house.png');background-position:center 24%;filter:brightness(.92) saturate(1.05)}"+
+  'body[data-theme="helpers"] #start .hp-vign{display:block;background:radial-gradient(ellipse 88% 84% at 50% 40%,transparent 34%,rgba(8,20,40,.28) 74%,rgba(6,16,32,.72) 100%)}'+
   'body[data-theme="helpers"] #start .startcard{background:rgba(8,18,38,.76);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,206,43,.42);border-radius:24px;padding:26px 36px 22px;max-width:640px;box-shadow:0 30px 90px rgba(0,0,0,.55)}'+
   'body[data-theme="helpers"] #start .hp-title{font-size:clamp(40px,6.4vw,72px);letter-spacing:3px}'+
   'body[data-theme="helpers"] #start .hp-kicker{color:#ffd76a}'+
@@ -4024,7 +4026,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.6.7','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.6.9','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
