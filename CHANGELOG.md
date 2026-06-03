@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.3] - 2026-06-02 — The Microsoft Graph remediation reads as a *path*
+
+- The Graph-API remediation overlay now shows **longer and clearer**: the call cadence is slowed (0.5s → 0.85s apart) and the completed panel holds ~3.6s longer so it reads on camera. Reframed as a sequenced **"REMEDIATION PATH · LIVE · graph.microsoft.com/v1.0"** with a **numbered step connector spine** that fills green as each call returns `2xx`, taller rows, and an **"N/N Microsoft Graph calls · all 2xx · complete"** progress line + stamp. One of the strongest "this is real remediation" beats for the demo.
+
 ## [0.7.2] - 2026-06-02 — Microsoft IQ made unmistakable on screen
 
 - The dossier now shows an explicit **"🔎 Foundry IQ · grounded · cited · permission-aware"** badge above the cited evidence and a **"✦ Fabric IQ · semantic graph · live dependency mapping"** badge above the threads, with sharper prompts ("pull Foundry IQ grounded, cited evidence" / "map the Fabric IQ dependency graph"). Makes the required Microsoft IQ integration obvious to judges in a short demo.
