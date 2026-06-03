@@ -938,7 +938,7 @@
       <div class="b"><span class="bn">III</span><div><b>The Convergence</b> <span class="lyr" style="color:#ff6a8a">· Defender</span> — identity and data collide into a live breach. Sever the kill-chain before the <b>Hollow</b> reaches Tier-0.</div></div>
     </div>
     <div class="hp-tease">A governance saga in three acts across the Microsoft security stack — and the hunt is only beginning. More floors rise with the estate: devices, endpoints, the SOC itself.</div>
-    <div class="hp-foot">Synthetic data only · Entra · Purview · Defender · Foundry IQ · built for GitHub Copilot</div>
+    <div class="hp-foot">Built with GitHub Copilot · powered by Foundry IQ + Fabric IQ · synthetic data only</div>
   </div>
 </div>
 
@@ -1015,6 +1015,7 @@
   <div class="end-actions">
     <button class="start" id="sanctumBtn">⚰️ Enter the Sanctum</button>
     <button class="start" id="againBtn">Walk the halls again</button>
+    <button class="start ghost" id="certBtn">📜 Save certificate</button>
     <button class="start ghost" id="copyReport">📋 Copy after-action report</button>
   </div>
 </div></div>
@@ -1190,7 +1191,7 @@ const THEMES={
     home:{kicker:'Identity threats &nbsp;·&nbsp; spot · reason · remediate', title:'Afterlogin',
       tagline:'Every door you stop watching becomes the way in.', start:'Enter the Manor', introCTA:'🕯️ Stop the Haunting',
       tease:'A hands-on way to learn the identity threats that matter — dormant admins, orphaned apps, over-shared data, account takeover — and exactly how to remediate each, with AI agents reasoning beside you. Flip on Training Mode below for a coached explanation after every call.',
-      foot:'Synthetic data only · Entra · Purview · Defender · Foundry IQ · built for GitHub Copilot',
+      foot:'Built with GitHub Copilot · powered by Foundry IQ + Fabric IQ · synthetic data only',
       brief:`<div class="b"><span class="bn">I</span><div><b>Identity</b> <span class="lyr" style="color:#a78bfa">· Entra</span> — hunt the dormant, orphaned and over-privileged, and judge which “dead” accounts still secretly feed a live process.</div></div>
       <div class="b"><span class="bn">II</span><div><b>The Bleeding Archive</b> <span class="lyr" style="color:#34cdb4">· Purview</span> — now the threat is your <b>data</b>: over-shared files, mislabeled secrets, silent exfiltration. Purge what is dead; protect what still lives.</div></div>
       <div class="b"><span class="bn">III</span><div><b>The Convergence</b> <span class="lyr" style="color:#ff6a8a">· Defender</span> — identity and data collide into a live breach. Sever the kill-chain before the <b>Hollow</b> reaches Tier-0.</div></div>`}
@@ -2323,6 +2324,13 @@ function endGame(won,why){if(G.over)return;stopAuto();G.over=true;G.started=fals
   if(_sk){const pill=v=>v>=.9?['Mastered','m']:v>=.5?['Practiced','p']:['Keep practicing','n'],showMs=(typeof TH_ID==='undefined'||TH_ID!=='helpers');
     _sk.innerHTML=(typeof kidify==='function'?kidify:(x=>x))('<div class="aib-h">🎓 Skills practiced this run</div>'+SKILLS.map(sk=>{const v=Math.max(0,Math.min(1,sk.m)),pr=pill(v);return '<div class="skl"><div class="skl-top"><span class="skl-n">'+sk.n+'</span><span class="skl-p '+pr[1]+'">'+pr[0]+'</span></div><div class="skl-bar"><i class="skl-fill '+pr[1]+'" data-w="'+Math.round(Math.max(.04,v)*100)+'%"></i></div><div class="skl-note">'+(showMs?'<span class="sk-ms">'+sk.ms+'</span> ':'')+sk.note+'</div></div>';}).join(''));
     setTimeout(function(){_sk.querySelectorAll('.skl-fill').forEach(function(f){f.style.width=f.getAttribute('data-w');});},760);}
+  // capture this run for the downloadable certificate
+  try{const _kc=(typeof TH_ID!=='undefined'&&TH_ID==='helpers'),_kw=x=>(_kc&&typeof kidWords==='function')?kidWords(x):x;
+    _certData={rank:rank,rankCol:rankCol,won:won,kid:_kc,
+      outcome:_kw(won?(_final?'Held until dawn — the estate is clean':'Drove the threat back'):'The Vault fell — but lessons were learned'),
+      reasoned:_st.reasoned,acc:_acc,banished:banished,polters:_st.polters,
+      skills:SKILLS.map(function(sk){const v=Math.max(.04,Math.min(1,sk.m)),col=v>=.9?'#20F593':v>=.5?'#ffb454':'#ff6a8a';return {n:_kw(sk.n.replace('&amp;','&')),v:v,lbl:v>=.9?'Mastered':v>=.5?'Practiced':'Keep practicing',col:col};}),
+      date:(new Date()).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})};}catch(e){}
   // ── achievements on the result + best-rank across runs ──
   if(typeof unlock==='function'&&won){unlock('dawn');if((_st.polters||0)===0)unlock('nopolter');if(_st.calls>=5&&_acc>=100)unlock('perfect');if(_final)unlock('hollow');}
   try{const RV={S:5,A:4,B:3,C:2,D:1},prev=JSON.parse(localStorage.getItem('al_best')||'null');
@@ -2333,6 +2341,30 @@ function endGame(won,why){if(G.over)return;stopAuto();G.over=true;G.started=fals
   flash(won?.3:.6);sfx(won?'victory':'crash');}
 const stat=(n,l)=>`<div class="stat"><span class="n">${n}</span><span class="l">${l}</span></div>`;
 const aar=(l,v)=>`<div class="aar-row"><span class="aar-l">${l}</span><span class="aar-v">${v}</span></div>`;
+let _certData=null;
+// downloadable completion certificate — a shareable PNG of the run (rank + skills + stats)
+function genCertificate(){const d=_certData;if(!d){return;}
+  const W=1240,H=920,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#181133');g.addColorStop(1,'#0a0818');x.fillStyle=g;x.fillRect(0,0,W,H);
+  const rg=x.createRadialGradient(W/2,250,40,W/2,250,520);rg.addColorStop(0,d.rankCol+'22');rg.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=rg;x.fillRect(0,0,W,H);
+  x.strokeStyle=d.rankCol+'88';x.lineWidth=3;x.strokeRect(30,30,W-60,H-60);x.strokeStyle='rgba(167,139,250,.25)';x.lineWidth=1;x.strokeRect(44,44,W-88,H-88);
+  x.textAlign='center';
+  x.fillStyle='#a78bfa';x.font='600 19px Segoe UI';x.fillText('A F T E R L O G I N',W/2,96);
+  x.fillStyle='#eceaf4';x.font='700 42px Georgia,serif';x.fillText(d.kid?'Helper Patrol — Certificate':'Identity Threat & Remediation Training',W/2,150);
+  x.fillStyle='#9a93b8';x.font='15px Segoe UI';x.fillText(d.won?'Certificate of Completion':'Field Report',W/2,180);
+  x.save();x.translate(W/2,272);x.shadowColor=d.rankCol;x.shadowBlur=34;x.strokeStyle=d.rankCol;x.lineWidth=4;x.beginPath();x.arc(0,0,68,0,6.28);x.stroke();
+  x.fillStyle=d.rankCol;x.font='700 76px Georgia,serif';x.textBaseline='middle';x.fillText(d.rank,0,6);x.restore();x.textBaseline='alphabetic';
+  x.fillStyle='#cdc8dc';x.font='italic 21px Georgia,serif';x.fillText(d.outcome,W/2,388);
+  const stats=[[d.reasoned,'reasoned'],[d.acc+'%','accuracy'],[d.banished,'threats contained'],[d.polters,'poltergeists']];
+  stats.forEach((s,i)=>{const sx=W/2+(i-1.5)*210;x.fillStyle='#20F593';x.font='700 42px Georgia,serif';x.fillText(''+s[0],sx,452);x.fillStyle='#8a90a8';x.font='12px Segoe UI';x.fillText(s[1].toUpperCase(),sx,476);});
+  x.textAlign='left';x.fillStyle='#c2b2f5';x.font='600 13px Segoe UI';x.fillText('SKILLS PRACTICED',160,540);
+  d.skills.forEach((sk,i)=>{const yy=576+i*54;x.fillStyle='#e7e0fb';x.font='18px Georgia,serif';x.fillText(sk.n,160,yy);
+    x.fillStyle='rgba(255,255,255,.08)';x.fillRect(160,yy+10,920,8);x.fillStyle=sk.col;x.fillRect(160,yy+10,920*sk.v,8);
+    x.textAlign='right';x.fillStyle=sk.col;x.font='600 11px Segoe UI';x.fillText(sk.lbl.toUpperCase(),1080,yy);x.textAlign='left';});
+  x.textAlign='center';x.fillStyle='#7a76a0';x.font='13px Segoe UI';x.fillText('Built with GitHub Copilot · powered by Foundry IQ + Fabric IQ · synthetic data only',W/2,H-72);
+  x.fillStyle='#9a93b8';x.font='14px Segoe UI';x.fillText(d.date,W/2,H-48);
+  try{const a=document.createElement('a');a.download='afterlogin-certificate.png';a.href=c.toDataURL('image/png');document.body.appendChild(a);a.click();a.remove();}catch(e){}
+  try{sfx('victory');}catch(e){}}
 
 /* ---- coach -------------------------------------------------------------- */
 function setCoach(html,danger){const c=document.getElementById('coachtxt');c.innerHTML=html;
@@ -4034,6 +4066,7 @@ document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart th
 document.getElementById('helpBtn').onclick=()=>{const h=document.getElementById('help');h.style.display='grid';requestAnimationFrame(()=>h.classList.remove('hide'));};
 document.getElementById('autoBtn').onclick=toggleAuto;
 document.getElementById('storeBtn').onclick=openStore;
+(function(){var cb=document.getElementById('certBtn');if(cb)cb.onclick=function(){try{genCertificate();}catch(e){}};})();
 document.getElementById('copyReport').onclick=()=>{const b=document.getElementById('copyReport');
   try{navigator.clipboard.writeText(_lastReport);}catch(e){}b.textContent='✓ Copied to clipboard';setTimeout(()=>b.textContent='📋 Copy after-action report',1600);};
 window.buyItem=buyItem;window.closeStore=closeStore;window.configureLLM=configureLLM;
