@@ -756,7 +756,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.5</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.6</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -2133,15 +2133,22 @@ function threatPlan(t){const id=_gid('okafor');return [
   {m:'PATCH',p:'/users/'+id,b:'accountEnabled: false',s:204},
   {m:'POST',p:'/users/'+id+'/authentication/methods',b:'force re-registration',s:202}];}
 let _remTok=0;
+// ── Continue button on the Graph-API panel: the path freezes the turn until clicked (or an auto-resume fallback) ──
+function resumeRem(){var b=document.getElementById('remGo');if(b)b.style.display='none';if(G)G.remed=null;try{sfx('select');}catch(e){}
+  if(G&&G._afterFeedback){var f=G._afterFeedback;G._afterFeedback=null;try{f();}catch(e){}}}
+(function(){if(typeof document==='undefined')return;var s=document.createElement('style');
+  s.textContent='#remGo{position:fixed;display:none;transform:translateX(-50%);z-index:62;cursor:pointer;pointer-events:auto;font-family:"Cormorant Garamond",serif;font-size:15px;letter-spacing:1px;font-weight:600;color:#06120c;background:linear-gradient(180deg,#2bd47a,#16a55c);border:none;border-radius:24px;padding:11px 28px;box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 24px rgba(32,245,147,.32);animation:remgoIn .3s ease both}@keyframes remgoIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translateX(-50%)}}#remGo:hover{filter:brightness(1.08)}';
+  document.head.appendChild(s);var b=document.createElement('button');b.id='remGo';b.textContent='Continue ▶';b.onclick=resumeRem;document.body.appendChild(b);})();
 function startRemediation(o){if(!G)return;const tok=++_remTok;
-  G.remed={tok,startT:G.t,title:o.title||'Microsoft Graph · remediation',who:o.who||'',col:o.col||'#7c3aed',stamp:o.stamp||'REMEDIATED',dim:o.dim==null?.42:o.dim,calls:o.calls.map(c=>({...c}))};
+  G.remed={tok,startT:G.t,title:o.title||'Microsoft Graph · remediation',who:o.who||'',col:o.col||'#7c3aed',stamp:o.stamp||'REMEDIATED',dim:o.dim==null?.42:o.dim,calls:o.calls.map(c=>({...c})),gate:!!o.gate};
   o.calls.forEach((c,i)=>schedule(G.t+.6+i*.85,()=>{if(G.remed&&G.remed.tok===tok)sfx('page');}));
   const total=.6+o.calls.length*.85+.8;
   schedule(G.t+total,()=>{if(G.remed&&G.remed.tok===tok){sfx('rite');if(typeof o.done==='function')o.done();}});
-  schedule(G.t+total+3.6,()=>{if(G.remed&&G.remed.tok===tok)G.remed=null;}); // hold the completed path longer so it reads
-  triggerFx((total+3.8)*1000);
+  if(o.gate)schedule(G.t+total+9,()=>{if(G.remed&&G.remed.tok===tok&&G.remed.gate)resumeRem();}); // fallback auto-resume if the player never clicks Continue
+  else schedule(G.t+total+3.6,()=>{if(G.remed&&G.remed.tok===tok)G.remed=null;}); // non-gated panels (threats) auto-dismiss
+  triggerFx((total+(o.gate?9.2:3.8))*1000);
 }
-function drawRemediation(){if(!G||!G.remed)return;const Rm=G.remed,el=G.t-Rm.startT,calls=Rm.calls,n=calls.length;
+function drawRemediation(){if(!G||!G.remed){var _rb0=document.getElementById('remGo');if(_rb0&&_rb0.style.display!=='none')_rb0.style.display='none';return;}const Rm=G.remed,el=G.t-Rm.startT,calls=Rm.calls,n=calls.length;
   const w=Math.min(688,W*.74),lh=37,padTop=84,padBot=58,h=padTop+n*lh+padBot,x=W*.5,y=Math.min(H*.52,70+h/2+24),L=x-w/2,T=y-h/2;
   ctx.save();
   ctx.fillStyle='rgba(4,3,12,'+Math.min(Rm.dim,el*1.6)+')';ctx.fillRect(0,0,W,H);
@@ -2174,6 +2181,8 @@ function drawRemediation(){if(!G||!G.remed)return;const Rm=G.remed,el=G.t-Rm.sta
   ctx.fillStyle='rgba(195,187,222,.92)';ctx.font='11px Segoe UI';ctx.textAlign='left';ctx.fillText(done+'/'+n+' Microsoft Graph calls · '+(done<n?'remediating…':'all 2xx · complete'),L+20,by+24);
   if(done>=n){const st=Math.min(1,(el-(.6+n*.85+.2))*3);if(st>0){ctx.save();ctx.globalAlpha=st*appear;ctx.translate(L+w-88,by+18);ctx.rotate(-.05);
     ctx.fillStyle=hexA('#20F593',.16);ctx.strokeStyle='#20F593';ctx.lineWidth=2;roundRect(-8,-17,100,28,7);ctx.fill();ctx.stroke();ctx.fillStyle='#20F593';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';ctx.fillText('✓ '+Rm.stamp,42,2);ctx.restore();}}
+  // the Graph-API panel's Continue button (DOM) — appears once the path is complete, positioned under the panel
+  var rb=document.getElementById('remGo');if(rb){if(Rm.gate&&done>=n){rb.style.display='block';rb.style.left=x+'px';rb.style.top=(T+h+16)+'px';}else if(!Rm.gate){rb.style.display='none';}}
   ctx.restore();}
 function drawFloats(){if(!G.floats)return;G.floats.forEach(f=>{const a=Math.max(0,1-f.life/f.max);ctx.save();ctx.globalAlpha=a;ctx.fillStyle=f.col;ctx.font='bold '+f.size+'px Segoe UI';ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,.65)';ctx.shadowBlur=5;ctx.fillText(f.text,f.x,f.y);ctx.restore();});}
 function isBait(roomId){const r=ROOMS[roomId];if(!r||!r.soul)return false;const s=r.soul;if(s.possessed)return false;
@@ -2212,20 +2221,22 @@ function judge(rite){const r=G.sel.room,s=r.soul;if(s.judged&&s.judged!=='posses
     if(s.dead){const p=GRADE_PTS[s.grade];G.ledger+=p;G.judged++;sfx('rest');cleanseFX(r,'#bff0d8');
       scry(JW.rest[0]+': <b>'+s.label+'</b>. +'+p+' to the Ledger.','good');narrate(JW.rest[0]+'.','A confirmed-dead target, cleared clean — one less lure for the threat.');s.judged='rest';
       gainEssence((ESS_PTS[s.grade]||4)+G.buffs.essBonus,JW.rest[0].toLowerCase());
-      startRemediation({title:'Microsoft Graph · '+JW.rest[1],who:s.label+' — '+JW.rest[0].toLowerCase(),col:'#20F593',stamp:JW.rest[2],dim:.34,calls:remediationPlan(r.account,'rest')});}
+      startRemediation({title:'Microsoft Graph · '+JW.rest[1],who:s.label+' — '+JW.rest[0].toLowerCase(),col:'#20F593',stamp:JW.rest[2],dim:.34,gate:!G.training,calls:remediationPlan(r.account,'rest')});}
     else{poltergeist(r,s);if(G.training&&typeof trainFeedback==='function')trainFeedback(s,'rest');return;}
   }else if(rite==='bind'){const p=s.dead?12:18;G.ledger+=p;G.judged++;sfx('bind');cleanseFX(r,'#ffd89a');
     scry(JW.bind[0]+': <b>'+s.label+'</b>. +'+p+'.','good');narrate(JW.bind[0]+'.','The cautious rite — contained and watched.');s.judged='bind';
     gainEssence((s.grade==='F'||s.grade==='D'?6:4)+G.buffs.essBonus,'contained');
-    startRemediation({title:'Microsoft Graph · '+JW.bind[1],who:s.label+' — '+JW.bind[0].toLowerCase(),col:'#ffb454',stamp:JW.bind[2],dim:.34,calls:remediationPlan(r.account,'bind')});
+    startRemediation({title:'Microsoft Graph · '+JW.bind[1],who:s.label+' — '+JW.bind[0].toLowerCase(),col:'#ffb454',stamp:JW.bind[2],dim:.34,gate:!G.training,calls:remediationPlan(r.account,'bind')});
   }else{if(s.dead&&(s.grade==='F'||s.grade==='D')){G.ledger-=20;sfx('bad');
       scry('You called a <b>confirmed threat</b> benign. A breach remains — and it will draw the enemy.','bad');narrate('A costly mercy.','That confirmed-malicious target is exactly the bait a predator hunts.');s.judged=null;}
     else{G.ledger+=12;G.judged++;sfx('select');scry(JW.ack+': <b>'+s.label+'</b>. Documented.','good');s.judged='ack';gainEssence(3+G.buffs.essBonus,'documented');}}
   if(['rest','bind','ack'].indexOf(s.judged)>=0&&typeof unlock==='function')unlock('firstjudge');
   updLedger();G.sel=null;hideCase();
   const _advance=function(){playerTurn();checkDawn();advanceStory();checkFloorClear(G.floor);if(G.view==='room')exitRoom();updateCoach();};
-  // Training Mode: show the coached card and HOLD the Sentinel's turn (dice/attacks) until the player hits Continue
-  if(G.training&&typeof trainFeedback==='function'){trainFeedback(s,rite);G._afterFeedback=_advance;}else{_advance();}}
+  // HOLD the Sentinel's turn (dice/attacks) until the player continues — behind the Training card, or behind the Graph-API panel's Continue button
+  if(G.training&&typeof trainFeedback==='function'){trainFeedback(s,rite);G._afterFeedback=_advance;}
+  else if(G.remed&&G.remed.gate){G._afterFeedback=_advance;}
+  else{_advance();}}
 function poltergeist(r,s){G.ledger-=60;if(G.stats)G.stats.polters++;sfx('crash');shake(30);flash(.9);shock();s.judged='broken';
   s.bind.filter(b=>b.live).forEach((b,i)=>{schedule(G.t+.1+i*.15,()=>{const target=(b.to==='LIVE')?ROOMS[1]:(ROOMS.find(x=>x.account===b.to)||ROOMS[1]);
     crack(r.x,r.y,target.x,target.y);burst(target.x,target.y,24,'#ff3b5c','ember');});});
@@ -3962,7 +3973,7 @@ addEventListener('wheel',e=>{if(!G||G.view!=='map')return;
   e.preventDefault();G.cam.intro=null;const wpt=toWorld(e.clientX,e.clientY);
   const nz=Math.max(.5,Math.min(2.6,G.cam.zoom*(e.deltaY<0?1.12:1/1.12)));
   G.cam.zoom=nz;G.cam.x=e.clientX-wpt.x*nz;G.cam.y=e.clientY-wpt.y*nz;},{passive:false});
-addEventListener('click',e=>{if(!G||G.over)return;
+addEventListener('click',e=>{if(!G||G.over)return;if(G.remed&&G.remed.gate)return; // frozen behind the Graph-API panel — only its Continue button responds
   // ignore clicks on the UI panels (so buttons still work)
   if(e.target&&e.target.closest&&e.target.closest(UI_SEL))return;
   if(e.target&&e.target.id==='caseback'){G.sel=null;G.investigate=null;hideCase();updateCoach();return;}
@@ -4069,7 +4080,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.7.5','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.7.6','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
