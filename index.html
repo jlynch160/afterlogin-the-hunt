@@ -756,7 +756,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.4</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.5</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -1685,7 +1685,7 @@ let _trainingMode=false;
   document.head.appendChild(st);
   var b=document.createElement('div');b.id='trainBadge';b.textContent='🎓 Training Mode';document.body.appendChild(b);
   var d=document.createElement('div');d.id='trainfb';d.innerHTML='<div class="tfb"><div class="tfb-v" id="tfbV"></div><div class="tfb-rec" id="tfbRec"></div><div class="tfb-l" id="tfbL"></div><div class="tfb-map" id="tfbMap"></div><button class="start tfb-go" id="tfbGo">Got it — continue</button></div>';
-  document.body.appendChild(d);d.querySelector('#tfbGo').onclick=function(){d.classList.remove('show');};
+  document.body.appendChild(d);d.querySelector('#tfbGo').onclick=function(){d.classList.remove('show');if(G&&G._afterFeedback){var f=G._afterFeedback;G._afterFeedback=null;try{f();}catch(e){}}}; // resume the turn the card was holding
   var hook=function(){var c=document.getElementById('trainChk');if(c){c.checked=_trainingMode;c.onchange=function(){_trainingMode=c.checked;try{localStorage.setItem('al_training',_trainingMode?'1':'0');}catch(e){}};}};
   if(document.readyState!=='loading')hook();else document.addEventListener('DOMContentLoaded',hook);})();
 function trainFeedback(s,chosen){if(!G||!G.training||!s)return;
@@ -2222,8 +2222,10 @@ function judge(rite){const r=G.sel.room,s=r.soul;if(s.judged&&s.judged!=='posses
       scry('You called a <b>confirmed threat</b> benign. A breach remains — and it will draw the enemy.','bad');narrate('A costly mercy.','That confirmed-malicious target is exactly the bait a predator hunts.');s.judged=null;}
     else{G.ledger+=12;G.judged++;sfx('select');scry(JW.ack+': <b>'+s.label+'</b>. Documented.','good');s.judged='ack';gainEssence(3+G.buffs.essBonus,'documented');}}
   if(['rest','bind','ack'].indexOf(s.judged)>=0&&typeof unlock==='function')unlock('firstjudge');
-  if(G.training&&typeof trainFeedback==='function')trainFeedback(s,rite); // coached explanation in Training Mode
-  updLedger();G.sel=null;hideCase();playerTurn();checkDawn();advanceStory();checkFloorClear(G.floor);if(G.view==='room')exitRoom();updateCoach();}
+  updLedger();G.sel=null;hideCase();
+  const _advance=function(){playerTurn();checkDawn();advanceStory();checkFloorClear(G.floor);if(G.view==='room')exitRoom();updateCoach();};
+  // Training Mode: show the coached card and HOLD the Sentinel's turn (dice/attacks) until the player hits Continue
+  if(G.training&&typeof trainFeedback==='function'){trainFeedback(s,rite);G._afterFeedback=_advance;}else{_advance();}}
 function poltergeist(r,s){G.ledger-=60;if(G.stats)G.stats.polters++;sfx('crash');shake(30);flash(.9);shock();s.judged='broken';
   s.bind.filter(b=>b.live).forEach((b,i)=>{schedule(G.t+.1+i*.15,()=>{const target=(b.to==='LIVE')?ROOMS[1]:(ROOMS.find(x=>x.account===b.to)||ROOMS[1]);
     crack(r.x,r.y,target.x,target.y);burst(target.x,target.y,24,'#ff3b5c','ember');});});
@@ -3942,7 +3944,7 @@ function showThreatEv(){if(G.sel&&G.sel.th){G.sel.th._evShown=true;sfx('page');r
 function updRiteBar(t){const f=document.getElementById('ritefill');if(f)f.style.width=(t.prog*100)+'%';}
 
 /* ---- input -------------------------------------------------------------- */
-const UI_SEL='#case,#topbar,#legend,#coach,#feed,#status,#helpBtn,#backBtn,#store,#storeBtn,#mdl,#floors,.screen';
+const UI_SEL='#case,#topbar,#legend,#coach,#feed,#status,#helpBtn,#backBtn,#store,#storeBtn,#mdl,#floors,#trainfb,.screen';
 function toWorld(cx,cy){return {x:(cx-G.cam.x)/G.cam.zoom,y:(cy-G.cam.y)/G.cam.zoom};}
 let _drag=null,_dragMoved=0;
 addEventListener('mousemove',e=>{if(!G)return;G.mx=e.clientX;G.my=e.clientY;
@@ -4067,7 +4069,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.7.4','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.7.5','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
