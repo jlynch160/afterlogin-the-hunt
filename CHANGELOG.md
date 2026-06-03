@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.0–0.7.1] - 2026-06-02 — Cinematic showcase, on-screen alignment credits, completion certificate
+
+- **Cinematic showcase auto-play** — starting **Hunt Night** now auto-enters Cinematic Mode (HUD hides + letterbox) and exits when stopped: a polished hands-free loop for the demo video / booth.
+- **On-screen hackathon-alignment credits** — the homepage foot now reads **"Built with GitHub Copilot · powered by Foundry IQ + Fabric IQ · synthetic data only."**
+- **Downloadable completion certificate** — a **📜 Save certificate** button on the result screen renders a shareable PNG (rank seal, outcome, key stats, the Skills Practiced bars, date, and the Copilot/IQ credit). Theme-aware (kid-worded under Student). Reinforces the training-completion angle.
+
 ## [0.6.4–0.6.9] - 2026-06-02 — Threat-training reframe, MS-skill alignment, redesigned result screen, Student art fixes
 
 - **Reframed as threat + remediation training** — the homepage now leads with "learn the identity threats that matter and exactly how to remediate each," and nudges Training Mode.
