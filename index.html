@@ -336,20 +336,30 @@
     border:1px solid var(--border);background:rgba(var(--accentRGB),.16);border-radius:22px;padding:9px 18px;cursor:pointer;transition:.18s}
   #intro .skip:hover{background:rgba(var(--accentRGB),.3);color:#e8e6f4}
   #intro .hint{position:fixed;bottom:26px;left:0;right:0;z-index:4;text-align:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(160,150,190,.5);animation:apulse 2.4s ease-in-out infinite}
-  #end .title{font-size:62px}  #end .verdict{font-family:var(--serif);font-size:23px;margin:8px 0 4px;color:#cdc8dc}
-  #end.won{background:radial-gradient(ellipse at 50% 30%,rgba(20,40,40,.6),rgba(3,2,10,.97))}
-  #end.lost{background:radial-gradient(ellipse at 50% 30%,rgba(45,8,16,.6),rgba(3,2,10,.97))}
-  .end-wrap{animation:cardrise .9s cubic-bezier(.2,.7,.2,1) both}
-  .end-rank{font-family:var(--serif);font-weight:700;font-size:96px;line-height:.8;margin-bottom:6px;animation:rankpop .8s cubic-bezier(.2,1.3,.4,1) both}
-  @keyframes rankpop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
-  .stat{display:inline-block;margin:18px 14px 0;font-family:var(--serif)}
-  .stat .n{font-size:40px;font-weight:700;display:block;color:var(--flame)} .stat .l{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#889}
-  .aar{max-width:520px;margin:26px auto 0;background:rgba(10,8,24,.55);border:1px solid rgba(var(--accentRGB),.26);border-radius:14px;padding:16px 20px;text-align:left;backdrop-filter:blur(4px)}
-  .aar-h{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c9b8ff;margin-bottom:12px;text-align:center}
-  .aar-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 22px}
-  .aar-row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dashed rgba(255,255,255,.08);padding-bottom:6px}
-  .aar-l{font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:#8a90a8}
-  .aar-v{font-family:var(--serif);font-size:17px;color:#e8e4f2;font-weight:600}
+  #end .title{font-size:clamp(38px,6vw,58px);margin-top:2px}
+  #end .verdict{font-family:var(--serif);font-size:clamp(15px,2.3vw,20px);margin:9px auto 0;color:#cdc8dc;max-width:600px;line-height:1.45}
+  #end.won{background:radial-gradient(ellipse at 50% 24%,rgba(22,46,42,.62),rgba(3,2,10,.98))}
+  #end.lost{background:radial-gradient(ellipse at 50% 24%,rgba(48,9,18,.6),rgba(3,2,10,.98))}
+  .end-wrap{width:min(880px,95vw);max-height:95vh;overflow-y:auto;padding:6px 4px;animation:cardrise .9s cubic-bezier(.2,.7,.2,1) both;scrollbar-width:thin}
+  .end-head{text-align:center;margin-bottom:18px}
+  .end-rank{width:clamp(94px,13vw,122px);height:clamp(94px,13vw,122px);margin:0 auto 9px;display:grid;place-items:center;border-radius:50%;font-family:var(--serif);font-weight:700;font-size:clamp(54px,8vw,72px);line-height:1;border:2px solid currentColor;background:radial-gradient(circle at 38% 30%,rgba(255,255,255,.12),rgba(255,255,255,.02) 58%,transparent);animation:rankpop .85s cubic-bezier(.2,1.4,.4,1) both}
+  @keyframes rankpop{0%{opacity:0;transform:scale(.35) rotate(-10deg)}60%{transform:scale(1.08) rotate(3deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+  .end-best{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#b9a8e0;margin-bottom:4px}
+  .end-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:560px;margin:0 auto}
+  .stat{display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--serif);background:rgba(255,255,255,.035);border:1px solid rgba(var(--accentRGB),.18);border-radius:13px;padding:13px 8px}
+  .stat .n{font-size:clamp(25px,3.6vw,33px);font-weight:700;color:var(--flame);line-height:1}
+  .stat .l{font-family:var(--sans);font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:#8a90a8;text-align:center;line-height:1.3}
+  .end-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:14px}
+  @media(max-width:760px){.end-cols{grid-template-columns:1fr}.end-stats{grid-template-columns:repeat(2,1fr)}}
+  .end-cols>.aiboard,#endSkills,.end-cols>.aar{margin:0!important;max-width:none!important}
+  #endSkills{margin-top:14px!important}
+  .aar{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(var(--accentRGB),.05));border:1px solid rgba(var(--accentRGB),.26);border-radius:15px;padding:15px 18px;text-align:left;backdrop-filter:blur(4px)}
+  .aar-h{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c9b8ff;margin-bottom:12px;text-align:left;font-weight:700}
+  .aar-grid{display:grid;grid-template-columns:1fr;gap:9px}
+  .aar-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-bottom:1px dashed rgba(255,255,255,.09);padding-bottom:7px}
+  .aar-l{font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:#8a90a8}
+  .aar-v{font-family:var(--serif);font-size:16px;color:#e8e4f2;font-weight:600;text-align:right}
+  .end-actions{margin-top:22px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   .start.ghost{background:transparent;border:1px solid rgba(220,220,235,.3);color:#d6d2e2;box-shadow:none;font-size:12px;letter-spacing:1.5px}
   .start.ghost:hover{background:rgba(230,230,245,.06);border-color:#a78bfa;box-shadow:0 0 24px rgba(var(--accentRGB),.3);transform:none}
   #topbar{position:fixed;top:0;left:0;right:0;height:40px;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:0 96px 0 16px;
@@ -746,7 +756,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.3</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.6.7</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -990,15 +1000,19 @@
 
 <!-- end -->
 <div class="screen hide" id="end" style="display:none"><div class="end-wrap">
-  <div class="end-rank" id="endRank"></div>
-  <div id="endBest" style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#b9a8e0;margin:-2px 0 8px"></div>
-  <div class="title" id="endTitle">Dawn</div>
-  <div class="verdict" id="endVerdict"></div>
-  <div id="endStats"></div>
-  <div class="aiboard" id="endScore"></div>
+  <div class="end-head">
+    <div class="end-rank" id="endRank"></div>
+    <div class="end-best" id="endBest"></div>
+    <div class="title" id="endTitle">Dawn</div>
+    <div class="verdict" id="endVerdict"></div>
+  </div>
+  <div id="endStats" class="end-stats"></div>
+  <div class="end-cols">
+    <div class="aiboard" id="endScore"></div>
+    <div class="aar" id="endReport"></div>
+  </div>
   <div class="aiboard" id="endSkills"></div>
-  <div class="aar" id="endReport"></div>
-  <div style="margin-top:26px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+  <div class="end-actions">
     <button class="start" id="sanctumBtn">⚰️ Enter the Sanctum</button>
     <button class="start" id="againBtn">Walk the halls again</button>
     <button class="start ghost" id="copyReport">📋 Copy after-action report</button>
@@ -1173,9 +1187,9 @@ const THEMES={
     label:'Spectral Response Unit', tier:'Pro',
     vars:{'--bg':'#070614','--bg2':'#0b0920','--purple':'#7c3aed','--purpleL':'#a78bfa','--accentRGB':'124,58,237','--bone':'#eceaf4','--border':'rgba(124,58,237,.34)','--panel':'rgba(11,8,24,.97)'},
     acr:'124,58,237',
-    home:{kicker:'Meridian Estate &nbsp;·&nbsp; Identity Governance', title:'Afterlogin',
+    home:{kicker:'Identity threats &nbsp;·&nbsp; spot · reason · remediate', title:'Afterlogin',
       tagline:'Every door you stop watching becomes the way in.', start:'Enter the Manor', introCTA:'🕯️ Stop the Haunting',
-      tease:'A governance saga in three acts across the Microsoft security stack — and the hunt is only beginning. More floors rise with the estate: devices, endpoints, the SOC itself.',
+      tease:'A hands-on way to learn the identity threats that matter — dormant admins, orphaned apps, over-shared data, account takeover — and exactly how to remediate each, with AI agents reasoning beside you. Flip on Training Mode below for a coached explanation after every call.',
       foot:'Synthetic data only · Entra · Purview · Defender · Foundry IQ · built for GitHub Copilot',
       brief:`<div class="b"><span class="bn">I</span><div><b>Identity</b> <span class="lyr" style="color:#a78bfa">· Entra</span> — hunt the dormant, orphaned and over-privileged, and judge which “dead” accounts still secretly feed a live process.</div></div>
       <div class="b"><span class="bn">II</span><div><b>The Bleeding Archive</b> <span class="lyr" style="color:#34cdb4">· Purview</span> — now the threat is your <b>data</b>: over-shared files, mislabeled secrets, silent exfiltration. Purge what is dead; protect what still lives.</div></div>
@@ -1688,6 +1702,18 @@ function trainFeedback(s,chosen){if(!G||!G.training||!s)return;
   R.innerHTML=_k('You chose')+' <b>'+_k(nm(chosen))+'</b> · '+_k('the agents recommended')+' <b>'+_k(nm(rec))+'</b>';
   L.textContent=_k(lesson);M.textContent=_k(map);
   el.classList.add('show');try{sfx(correct?'rest':'bad');}catch(e){}}
+// every contained threat gets a remediation lesson (Training Mode)
+function threatLesson(t){if(!G||!G.training||!t)return;const act=(typeof _act!=='undefined'?_act:1)||1;
+  const rec='Revoke sessions → Block sign-in → Confirm compromised';let lesson,map;
+  if(act>=3){lesson='This was a live breach in progress — a compromised identity pivoting toward Tier-0. You cut the kill-chain: revoked tokens, blocked the account, and confirmed compromise so the attacker is evicted everywhere at once.';map='Defender XDR + Entra ID Protection: contain the user, isolate the session, force a credential reset. Every step the intruder takes toward Tier-0 widens the blast radius — speed is the remediation.';}
+  else if(act>=2){lesson='An exfiltration channel was moving your data out. Remediation: cut the share, revoke the token, and quarantine the file — stop the bleed before the data leaves.';map='Purview + Entra: disable the oversharing principal, revoke its grant, and apply a protective label so the data cannot be read once it is out.';}
+  else{lesson='An account takeover was active — an attacker signed in as a real user (impossible travel / risky sign-in). You contained it with Microsoft Graph: revoked sessions, blocked sign-in, and confirmed compromise to force a secure reset + MFA.';map='Entra ID Protection: a confirmed-compromised user triggers risk-based Conditional Access — revoke refresh tokens, require MFA, reset credentials. Contain fast; every hop toward Tier-0 costs you.';}
+  const _k=x=>(TH_ID==='helpers'&&typeof kidWords==='function')?kidWords(x):x;
+  var el=document.getElementById('trainfb');if(!el)return;
+  var V=document.getElementById('tfbV'),R=document.getElementById('tfbRec'),L2=document.getElementById('tfbL'),M2=document.getElementById('tfbMap');
+  V.className='tfb-v ok';V.textContent=_k('✓ Threat contained')+' — '+_k(t.name||'the takeover');
+  R.innerHTML=_k('You remediated with')+' <b>'+_k(rec)+'</b>';L2.textContent=_k(lesson);M2.textContent=_k(map);
+  el.classList.add('show');try{sfx('triumph');}catch(e){}}
 const SANCTUM=[
   {id:'skeptic',  ic:'🔍', name:'Recruit the Skeptic', cost:60, desc:'A third party agent joins every hunt — the adversarial Skeptic who contests the Warden.'},
   {id:'ledger',   ic:'📜', name:'Ancestral Ledger',    cost:40, desc:'Begin every run with +25 to the Ledger of the Dead.'},
@@ -1987,6 +2013,7 @@ function attack(mod,ac,dn,ds,dmod){const r=1+Math.floor(Math.random()*20);const 
 function onBanished(t){if(t._dead)return;t._dead=true;t.banished=true;sfx('triumph');flash(.55);shake(20);shock();
   if(typeof hitStop==='function')hitStop(t.boss?360:240,true); // cinematic slow-mo on a banish (bigger for a boss)
   if(typeof unlock==='function'){unlock('bossslayer');if((t.boss||t.tier>=3)&&(_act||1)>=3)unlock('hollow');}
+  if(G.training&&typeof threatLesson==='function')setTimeout(function(){threatLesson(t);},800); // remediation learning moment on every contained threat
   // free any spirits this guardian had possessed so the floor can be cleared
   ROOMS.filter(rm=>rm.floor===t.floor&&rm.soul&&rm.soul.possessed).forEach(rm=>{rm.soul.possessed=false;rm.soul.judged=null;scry('↩ <b>'+rm.soul.label+'</b> is released from possession — judge it anew.','');});
   const tr=ROOMS[t.room];
@@ -2245,7 +2272,7 @@ function endGame(won,why){if(G.over)return;stopAuto();G.over=true;G.started=fals
   renderOmens(); // clear the omen bar at run end
   const rank=!won?(score>40?'C':'D'):score>=180?'S':score>=130?'A':score>=80?'B':'C';
   const rankCol={S:'#ffd76a',A:'#20F593',B:'#7cc6ff',C:'#c0a0ff',D:'#ff7a8a'}[rank];
-  const er=document.getElementById('endRank');er.textContent=rank;er.style.color=rankCol;er.style.textShadow='0 0 40px '+rankCol;
+  const er=document.getElementById('endRank');er.textContent=rank;er.style.color=rankCol;er.style.textShadow='0 0 34px '+rankCol;er.style.boxShadow='0 0 46px '+rankCol+'59, inset 0 0 28px '+rankCol+'24';er.style.borderColor=rankCol;
   const _wAct=_act||1,_final=won&&_wAct>=3;
   document.getElementById('endTitle').textContent=!won?'The Vault Falls':_final?'Dawn Breaks':(_wAct===2?'He Escapes Again':'He Escapes');
   document.getElementById('endTitle').style.color=won?'':'#ff3b5c';
@@ -2287,14 +2314,14 @@ function endGame(won,why){if(G.over)return;stopAuto();G.over=true;G.started=fals
   // ── Skills practiced: map the run to real identity-governance competencies ──
   const _div=ROOMS.filter(r=>r.soul&&r.soul.divined).length,_sum=ROOMS.filter(r=>r.soul&&r.soul.summoned).length,_ev=cleared?Math.min(1,(_div+_sum)/(cleared*2)):0;
   const SKILLS=[
-    {n:'Dormant & orphaned account triage',m:total?cleared/total:0,note:'Judged '+cleared+' of '+total+' identities'},
-    {n:'Load-bearing vs. truly-dead (the trap)',m:(_st.polters===0?1:.18),note:_st.polters?('Exorcised '+_st.polters+' live process'+(_st.polters>1?'es':'')):'No production broken'},
-    {n:'Evidence-based decisioning (Fabric &amp; Foundry IQ)',m:_ev,note:'Pulled threads/evidence on '+Math.round(_ev*100)+'% of cases'},
-    {n:'Agent-assisted adjudication',m:_acc/100,note:_acc+'% agreement with the agent council'},
-    {n:'Account-takeover response (ITDR)',m:(banished>0?1:0),note:banished?(banished+' takeover'+(banished>1?'s':'')+' contained'):'No live threat engaged'}];
+    {n:'Identity lifecycle &amp; access reviews',ms:'Entra ID Governance · SC-300',m:total?cleared/total:0,note:'Reviewed '+cleared+' of '+total+' identities'},
+    {n:'Impact analysis before deprovisioning',ms:'Entra least-privilege · SC-300',m:(_st.polters===0?1:.18),note:_st.polters?('Broke '+_st.polters+' live dependenc'+(_st.polters>1?'ies':'y')):'No production impact'},
+    {n:'Risk-based investigation',ms:'Entra ID Protection · SC-300/200',m:_ev,note:'Pulled signals/evidence on '+Math.round(_ev*100)+'% of cases'},
+    {n:'AI-assisted security operations',ms:'Security Copilot · SC-200',m:_acc/100,note:_acc+'% agreement with the agent council'},
+    {n:'Identity Threat Detection &amp; Response',ms:'Defender for Identity · SC-200',m:(banished>0?1:0),note:banished?(banished+' takeover'+(banished>1?'s':'')+' contained'):'No live threat engaged'}];
   const _sk=document.getElementById('endSkills');
-  if(_sk){const pill=v=>v>=.9?['Mastered','m']:v>=.5?['Practiced','p']:['Keep practicing','n'];
-    _sk.innerHTML=(typeof kidify==='function'?kidify:(x=>x))('<div class="aib-h">🎓 Skills practiced this run</div>'+SKILLS.map(sk=>{const v=Math.max(0,Math.min(1,sk.m)),pr=pill(v);return '<div class="skl"><div class="skl-top"><span class="skl-n">'+sk.n+'</span><span class="skl-p '+pr[1]+'">'+pr[0]+'</span></div><div class="skl-bar"><i class="skl-fill '+pr[1]+'" data-w="'+Math.round(Math.max(.04,v)*100)+'%"></i></div><div class="skl-note">'+sk.note+'</div></div>';}).join(''));
+  if(_sk){const pill=v=>v>=.9?['Mastered','m']:v>=.5?['Practiced','p']:['Keep practicing','n'],showMs=(typeof TH_ID==='undefined'||TH_ID!=='helpers');
+    _sk.innerHTML=(typeof kidify==='function'?kidify:(x=>x))('<div class="aib-h">🎓 Skills practiced this run</div>'+SKILLS.map(sk=>{const v=Math.max(0,Math.min(1,sk.m)),pr=pill(v);return '<div class="skl"><div class="skl-top"><span class="skl-n">'+sk.n+'</span><span class="skl-p '+pr[1]+'">'+pr[0]+'</span></div><div class="skl-bar"><i class="skl-fill '+pr[1]+'" data-w="'+Math.round(Math.max(.04,v)*100)+'%"></i></div><div class="skl-note">'+(showMs?'<span class="sk-ms">'+sk.ms+'</span> ':'')+sk.note+'</div></div>';}).join(''));
     setTimeout(function(){_sk.querySelectorAll('.skl-fill').forEach(function(f){f.style.width=f.getAttribute('data-w');});},760);}
   // ── achievements on the result + best-rank across runs ──
   if(typeof unlock==='function'&&won){unlock('dawn');if((_st.polters||0)===0)unlock('nopolter');if(_st.calls>=5&&_acc>=100)unlock('perfect');if(_final)unlock('hollow');}
@@ -2355,7 +2382,7 @@ function hitStop(ms,big){if(typeof G==='undefined'||!G)return;G._hitUntil=(typeo
   '.skl-p.m{color:#20F593;background:rgba(32,245,147,.14)}.skl-p.p{color:#ffb454;background:rgba(255,180,84,.15)}.skl-p.n{color:#ff7a8a;background:rgba(255,90,110,.15)}'+
   '.skl-bar{height:6px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden}.skl-fill{display:block;height:100%;width:0;border-radius:4px;transition:width 1s cubic-bezier(.2,.8,.2,1)}'+
   '.skl-fill.m{background:linear-gradient(90deg,#159f6a,#20F593)}.skl-fill.p{background:linear-gradient(90deg,#cf8a2a,#ffb454)}.skl-fill.n{background:linear-gradient(90deg,#a23a4a,#ff5a6e)}'+
-  '.skl-note{font-size:10.5px;color:#9a93b8;margin-top:3px}';
+  '.skl-note{font-size:10.5px;color:#9a93b8;margin-top:3px}.sk-ms{font-family:Consolas,monospace;font-size:9px;color:#9fc2ff;background:rgba(80,120,200,.16);border:1px solid rgba(80,120,200,.32);border-radius:5px;padding:1px 6px;letter-spacing:.2px}';
   document.head.appendChild(s);var d=document.createElement('div');d.id='dawnFx';document.body.appendChild(d);})();
 function dawnFinale(){var el=document.getElementById('dawnFx');if(el){el.classList.remove('go');void el.offsetWidth;el.classList.add('go');}
   try{sfx('victory');}catch(e){}
@@ -3997,7 +4024,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.6.3','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.6.7','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
