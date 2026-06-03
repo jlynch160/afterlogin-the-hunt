@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.5] - 2026-06-02 — Training Mode holds the turn for the coached card
+
+- When the **coached feedback card** appears after a judgment in Training Mode, the game now **pauses the Sentinel's turn** — `playerTurn` / `checkDawn` / story / floor-clear are deferred behind a continuation that only runs when you click **"Got it — continue."** No more dice rolls or attacks firing underneath the popup. (Card backdrop also added to the click-ignore selector so it can't fall through to the map.)
+
 ## [0.7.4] - 2026-06-02 — "Kill-chain Severed" payoff on threat containment
 
 - When the **ITDR remediation path** completes on a threat banish (confirm-compromised → revoke sessions → invalidate refresh tokens → disable → force MFA), it now ends with a big **"⚔ Kill-chain Severed"** banner + sting/flash. `startRemediation` gained a `done()` callback to drive it. For the final boss, the end screen is delayed so the full containment path *and* the banner play, then the sunrise finale.
