@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.16] - 2026-06-03 — Cinematic post-processing: per-act color grade + hit-punch
+
+- The existing WebGL post pass (bloom · god-rays · chromatic aberration · grain, Pro theme) now **color-grades per act**: Act I (Entra) leans **violet**, Act II (Purview) **teal**, Act III (Defender) **red** — applied as a shadow tint + a highlight multiply so each layer of the saga has its own filmic look. Added a **"punch"** that briefly **intensifies chromatic aberration + brightness on hits/crits** (driven by screen shake). Degrades gracefully to the plain 2D canvas if the shader can't compile.
+
 ## [0.7.15] - 2026-06-03 — Replace the Student homepage art (IP-safe original)
 
 - Swapped the Student homepage hero (`assets/helpers/house.png`) for an **original, screen-faced yellow helper-robot** scene — the previous art read as a well-known studio's characters and was an IP risk (now in a public repo). New design is a distinct robot cast (single glowing rectangular screen-face + antenna + egg body), no goggles/overalls. Added a `?v=2` cache-buster on the background so the swap shows immediately. Updated `ART-PROMPTS-STUDENT.md` with a stronger, negative-constrained prompt to keep future art clear of the same problem.
