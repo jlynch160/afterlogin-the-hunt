@@ -558,6 +558,19 @@
   #topbar{height:46px;background:linear-gradient(180deg,rgba(9,7,20,.97),rgba(9,7,20,.42));border-bottom:1px solid rgba(var(--accentRGB),.24);box-shadow:0 10px 30px rgba(0,0,0,.45)}
   #topbar .tb-l{font-size:14.5px} #topbar .kpi i{font-size:16px} #topbar .tlbar{height:8px;width:104px}
   #feed{top:58px;left:18px} #party{top:58px;right:18px} #status{bottom:18px;left:18px;width:238px}
+  /* ════ Scrying Pool — premium live feed ════ */
+  #feed{padding:0 0 9px;overflow:hidden;width:252px;border-color:rgba(var(--accentRGB),.34);box-shadow:0 18px 52px rgba(0,0,0,.62),0 0 30px rgba(var(--accentRGB),.16),inset 0 1px 0 rgba(255,255,255,.06)}
+  #feed::before{content:"";position:absolute;left:0;right:0;top:0;height:46px;background:radial-gradient(130% 70% at 50% -16%,rgba(var(--accentRGB),.26),transparent 72%);pointer-events:none}
+  .feed-h{margin:0;padding:11px 15px 10px;gap:9px;position:relative;font-size:14px;background:linear-gradient(180deg,rgba(var(--accentRGB),.13),transparent)}
+  .feed-h::after{content:"";position:absolute;left:13px;right:13px;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--accentRGB),.7),transparent)}
+  .feed-orb{font-size:15px;color:#fff;line-height:1;filter:drop-shadow(0 0 9px rgba(var(--accentRGB),.95));animation:feedorb 3.6s ease-in-out infinite}
+  @keyframes feedorb{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.18)}}
+  .feed-title{flex:1}
+  .feed-live{width:7px;height:7px;border-radius:50%;background:#20F593;box-shadow:0 0 9px #20F593;animation:feedlive 1.5s ease-in-out infinite}
+  @keyframes feedlive{0%,100%{opacity:.4;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+  #feedlist{padding:9px 14px 0}
+  .feed-line{box-shadow:-1px 0 9px rgba(var(--accentRGB),.13)}
+  .feed-line.good{box-shadow:-1px 0 10px rgba(32,245,147,.22)} .feed-line.bad{box-shadow:-1px 0 10px rgba(255,59,92,.22)}
   #narr{top:54px;max-width:600px;background:linear-gradient(180deg,rgba(16,11,32,.8),rgba(11,8,22,.64));border:1px solid rgba(var(--accentRGB),.3);
     border-radius:16px;padding:12px 30px;box-shadow:0 20px 52px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);font-size:19px;backdrop-filter:blur(12px)}
   #narr .sub{margin-top:5px}
@@ -764,7 +777,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.13</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.15</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -866,7 +879,7 @@
 
 <div id="narr" class="hud"></div>
 
-<div id="feed" class="hud"><div class="feed-h">⟡ Scrying Pool</div><div id="feedlist"></div></div>
+<div id="feed" class="hud"><div class="feed-h"><span class="feed-orb">⟡</span><span class="feed-title">Scrying Pool</span><span class="feed-live"></span></div><div id="feedlist"></div></div>
 
 <div id="status" class="hud">
   <div class="ledger"><span class="num" id="ledger">0</span><span class="lbl">Ledger<br>of the Dead</span></div>
@@ -1325,6 +1338,7 @@ function setTheme(id){TH_ID=THEMES[id]?id:'spectral';const th=THEMES[TH_ID];
   // chrome copy follows the theme — Student gets friendly words, Pro keeps the governance vocabulary
   const _kid=TH_ID==='helpers';
   try{const _ll=document.querySelector('#status .ledger .lbl');if(_ll)_ll.innerHTML=_kid?'Cleanup<br>Score':'Ledger<br>of the Dead';}catch(e){}
+  try{const _ft=document.querySelector('.feed-title');if(_ft)_ft.textContent=_kid?'Helper News':'Scrying Pool';const _fo=document.querySelector('.feed-orb');if(_fo)_fo.textContent=_kid?'📣':'⟡';}catch(e){}
   try{const _ab=document.getElementById('autoBtn');if(_ab&&!_ab.classList.contains('on')&&typeof huntLbl==='function')_ab.textContent=huntLbl(false);}catch(e){}
   try{const _lb=document.getElementById('loadoutBtn');if(_lb)_lb.textContent=_kid?'🎒 Backpack':'🎒 Loadout';
     const _sb=document.getElementById('storeBtn');if(_sb){const _n=(document.getElementById('storeEssN')||{}).textContent||'0';_sb.innerHTML='✦ <i id="storeEssN">'+_n+'</i> '+(_kid?'Shop':'Store');}}catch(e){}
@@ -3760,7 +3774,7 @@ function tweenNum(el,to,dur){if(!el)return;to=Math.round(to||0);const sf=el._suf
   'body[data-theme="helpers"] .emberFx{display:none}'+
   'body[data-theme="helpers"] .hp-fog{opacity:.1!important}'+
   'body[data-theme="helpers"] .hp-ghost{opacity:.45;filter:hue-rotate(40deg) saturate(.6)}'+
-  "body[data-theme=\"helpers\"] #start .hp-sky{background-image:url('assets/helpers/house.png');background-position:center 24%;filter:brightness(.92) saturate(1.05)}"+
+  "body[data-theme=\"helpers\"] #start .hp-sky{background-image:url('assets/helpers/house.png?v=2');background-position:center 22%;filter:brightness(.97) saturate(1.05)}"+
   'body[data-theme="helpers"] #start .hp-vign{display:block;background:radial-gradient(ellipse 88% 84% at 50% 40%,transparent 34%,rgba(8,20,40,.28) 74%,rgba(6,16,32,.72) 100%)}'+
   'body[data-theme="helpers"] #start .startcard{background:rgba(8,18,38,.76);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,206,43,.42);border-radius:24px;padding:26px 36px 22px;max-width:640px;box-shadow:0 30px 90px rgba(0,0,0,.55)}'+
   'body[data-theme="helpers"] #start .hp-title{font-size:clamp(40px,6.4vw,72px);letter-spacing:3px}'+
@@ -4376,7 +4390,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.7.13','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.7.15','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
