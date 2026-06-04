@@ -777,7 +777,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.17</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.18</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -1046,7 +1046,7 @@
    AFTERLOGIN: THE HUNT — Canvas2D + WebAudio. Synthetic data only.
    ========================================================================== */
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-let W=0,H=0,DPR=Math.min(2,window.devicePixelRatio||1);
+let W=0,H=0,DPR=Math.min(1.4,window.devicePixelRatio||1); // cap render resolution — HiDPI at 2x is 4x the pixels (huge GPU/CPU cost) for little visible gain
 function resize(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;cv.style.width=W+'px';cv.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);const _gl=document.getElementById('gl');if(_gl){_gl.style.width=W+'px';_gl.style.height=H+'px';}layout();buildEnv();if(GL)GL.resize();}
 addEventListener('resize',resize);
 
@@ -2693,7 +2693,7 @@ function initGL(){
     gl.attachShader(pr,b);gl.bindAttribLocation(pr,0,'p');gl.linkProgram(pr);return pr;};
   const BRIGHT=mk('precision highp float;varying vec2 uv;uniform sampler2D t;uniform float thr;void main(){vec3 c=texture2D(t,uv).rgb;float l=dot(c,vec3(.299,.587,.114));float k=smoothstep(thr,thr+.32,l);gl_FragColor=vec4(c*k,1.);}');
   const BLUR=mk('precision highp float;varying vec2 uv;uniform sampler2D t;uniform vec2 dir;void main(){vec3 s=texture2D(t,uv).rgb*0.227027;s+=(texture2D(t,uv+dir).rgb+texture2D(t,uv-dir).rgb)*0.1945946;s+=(texture2D(t,uv+dir*2.0).rgb+texture2D(t,uv-dir*2.0).rgb)*0.1216216;s+=(texture2D(t,uv+dir*3.0).rgb+texture2D(t,uv-dir*3.0).rgb)*0.0540540;s+=(texture2D(t,uv+dir*4.0).rgb+texture2D(t,uv-dir*4.0).rgb)*0.0162162;gl_FragColor=vec4(s,1.);}');
-  const COMP=mk('precision highp float;varying vec2 uv;uniform sampler2D scene;uniform sampler2D bloom;uniform vec2 res;uniform float time;uniform vec2 light;uniform float bAmt;uniform vec3 grade;uniform vec3 gmul;uniform float punch;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5);}void main(){vec2 d=uv-0.5;float ca=(0.0015+length(d)*0.0030)*(1.0+punch*4.5);vec3 col;col.r=texture2D(scene,uv+d*ca).r;col.g=texture2D(scene,uv).g;col.b=texture2D(scene,uv-d*ca).b;vec3 bl=texture2D(bloom,uv).rgb;vec2 dl=light-uv;vec3 gr=vec3(0.);for(int i=0;i<10;i++){float tt=float(i)/10.0;gr+=texture2D(bloom,uv+dl*tt*0.5).rgb*(1.0-tt);}gr/=10.0;col+=bl*bAmt+gr*vec3(0.5,0.9,0.7)*0.7*bAmt;float l=dot(col,vec3(.299,.587,.114));col=mix(vec3(l),col,1.22);col=mix(col,col*col*(3.0-2.0*col),0.42);col+=grade*(1.0-l);col*=mix(vec3(1.0),gmul,0.5+0.5*l);float vig=smoothstep(1.08,0.32,length(d*vec2(res.x/res.y,1.0)));col*=mix(0.72,1.05,vig);col+=(h(uv*res+time)-0.5)*0.05;col+=punch*0.06;gl_FragColor=vec4(col,1.);}');
+  const COMP=mk('precision highp float;varying vec2 uv;uniform sampler2D scene;uniform sampler2D bloom;uniform vec2 res;uniform float time;uniform vec2 light;uniform float bAmt;uniform vec3 grade;uniform vec3 gmul;uniform float punch;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5);}void main(){vec2 d=uv-0.5;float ca=(0.0015+length(d)*0.0030)*(1.0+punch*4.5);vec3 col;col.r=texture2D(scene,uv+d*ca).r;col.g=texture2D(scene,uv).g;col.b=texture2D(scene,uv-d*ca).b;vec3 bl=texture2D(bloom,uv).rgb;vec2 dl=light-uv;vec3 gr=vec3(0.);for(int i=0;i<6;i++){float tt=float(i)/6.0;gr+=texture2D(bloom,uv+dl*tt*0.5).rgb*(1.0-tt);}gr/=6.0;col+=bl*bAmt+gr*vec3(0.5,0.9,0.7)*0.7*bAmt;float l=dot(col,vec3(.299,.587,.114));col=mix(vec3(l),col,1.22);col=mix(col,col*col*(3.0-2.0*col),0.42);col+=grade*(1.0-l);col*=mix(vec3(1.0),gmul,0.5+0.5*l);float vig=smoothstep(1.08,0.32,length(d*vec2(res.x/res.y,1.0)));col*=mix(0.72,1.05,vig);col+=(h(uv*res+time)-0.5)*0.05;col+=punch*0.06;gl_FragColor=vec4(col,1.);}');
   if(!BRIGHT||!BLUR||!COMP)return null;
   const quad=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,quad);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
   gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
@@ -2706,7 +2706,7 @@ function initGL(){
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
   let bw,bh,bA,fA,bB,fB;
-  function resize(){glc.width=cv.width;glc.height=cv.height;bw=Math.max(2,cv.width>>1);bh=Math.max(2,cv.height>>1);
+  function resize(){glc.width=cv.width;glc.height=cv.height;bw=Math.max(2,cv.width>>2);bh=Math.max(2,cv.height>>2); // quarter-res bloom (4x cheaper blur; bloom is soft so it reads fine)
     bA=mkTex(bw,bh);fA=mkFbo(bA);bB=mkTex(bw,bh);fB=mkFbo(bB);}
   const draw=()=>gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
   function render(){
@@ -2743,13 +2743,21 @@ function safeGL(){ // WebGL reads the 2D canvas as a texture; local (file://) im
   try{ GL.render(); }
   catch(e){ GL=null; const g=document.getElementById('gl'); if(g)g.style.display='none'; /* fall back to the plain 2D canvas (still shows the art, just no bloom) */ }
 }
-function frame(now){let dt=Math.min(.05,(now-last)/1000);last=now;
+let _glEvery=1,_drawTick=0,_ftSum=0,_ftN=0,_vigGrad=null,_vigWH=-1; // adaptive-performance state + cached vignette gradient
+function frame(now){const raw=now-last;let dt=Math.min(.05,raw/1000);last=now;
   if(G&&G._hitUntil&&now<G._hitUntil)dt*=(G._hitScale||.3); // hit-stop slow-mo
   const paused=!!(G&&G.started&&!G.over&&G.sel&&!G.remed&&!(G._fxUntil&&now<G._fxUntil)); // freeze while inspecting — but animate during a strike or a remediation
   try{
-    if(!paused){if(G&&G.started&&!G.over)update(dt);if(G)G._pr=false;render();safeGL();}
+    if(!paused){if(G&&G.started&&!G.over)update(dt);
+      // throttle the heavy draw+GPU pass when running slow (keeps game logic at full rate, draws at ~30fps)
+      const _skip=GL&&_glEvery>1&&((_drawTick++%_glEvery)!==0);
+      if(!_skip){if(G)G._pr=false;render();safeGL();}}
     else if(!G._pr){render();safeGL();G._pr=true;} // render once, then freeze (cheap, no per-frame compositing under the modal)
   }catch(e){if(!frame._warned){frame._warned=1;console.error('[afterlogin] frame error:',e);}} // never let one bad frame kill the loop
+  // ── adaptive performance: if frames stay slow, first halve the GPU post-rate, then shed it entirely ──
+  if(!paused&&raw>0&&raw<250){_ftSum+=raw;if(++_ftN>=70){const avg=_ftSum/_ftN;_ftSum=0;_ftN=0;
+    if(avg>23&&GL&&_glEvery<2){_glEvery=2;}                 // ~<43fps → run the GPU post-pass at half rate
+    else if(avg>33&&GL){GL=null;const g=document.getElementById('gl');if(g)g.style.display='none';try{if(typeof scry==='function'&&G&&G.started)scry('⚙ <b>Performance mode</b> — cinematic bloom eased off to keep things smooth.','');}catch(e){}}}}
   if(A&&A.C&&paused!==A._muted){A._muted=paused;try{if(A.padGain)A.padGain.gain.setTargetAtTime(paused?0:.20,A.C.currentTime,.2);if(A.musicGain)A.musicGain.gain.setTargetAtTime(paused?0:.17,A.C.currentTime,.2);}catch(e){}}
   const pt=document.getElementById('pausetag');if(pt)pt.classList.toggle('on',paused);
   if(G)updateRoster();
@@ -3059,9 +3067,9 @@ function render(){
   drawVault();
   ctx.restore();
   if(TH_ID!=='helpers')drawLanternFlame(G.lantern.x,G.lantern.y); // screen space; Student uses the real OS cursor instead
-  // breathing cinematic vignette (gently pulses; lighter for the bright factory)
-  {const vb=(TH_ID==='helpers'?.16:.34)+Math.sin(G.t*.6)*.04;const vg=ctx.createRadialGradient(W*.5,H*.54,Math.min(W,H)*.34,W*.5,H*.54,Math.max(W,H)*.74);
-   vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(3,2,10,'+vb.toFixed(3)+')');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);}
+  // breathing cinematic vignette — only when WebGL is OFF (the shader does its own vignette); cached gradient + globalAlpha to avoid per-frame allocation
+  if(!GL){if(!_vigGrad||_vigWH!==W*1e5+H){_vigGrad=ctx.createRadialGradient(W*.5,H*.54,Math.min(W,H)*.34,W*.5,H*.54,Math.max(W,H)*.74);_vigGrad.addColorStop(0,'rgba(0,0,0,0)');_vigGrad.addColorStop(1,'rgba(3,2,10,1)');_vigWH=W*1e5+H;}
+   ctx.save();ctx.globalAlpha=(TH_ID==='helpers'?.16:.34)+Math.sin(G.t*.6)*.04;ctx.fillStyle=_vigGrad;ctx.fillRect(0,0,W,H);ctx.restore();}
   drawRemediation();                         // animated Graph-API remediation overlay (screen space)
 }
 
@@ -4404,7 +4412,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.7.17','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.7.18','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing

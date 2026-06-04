@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.18] - 2026-06-03 — Performance: the Pro theme is much lighter on the machine
+
+- The spectral (Pro) theme ran the full WebGL post pipeline every frame at up to 2× device pixel ratio, which pegged weaker GPUs. Fixes:
+  - **DPR capped 2 → 1.4** (on HiDPI displays that's roughly half the pixels to render *and* upload to the GPU each frame).
+  - **Quarter-resolution bloom** (4× cheaper blur passes) and **god-ray samples 10 → 6**.
+  - The **breathing vignette** no longer allocates a gradient per frame and is skipped when the shader is active (the shader already vignettes).
+  - **Adaptive auto-degrade**: if frame time stays high, the GPU post-pass first drops to half-rate, then disables entirely (plain 2D) with a "Performance mode" note — so it self-heals on slow machines instead of dragging the whole system down.
+
 ## [0.7.17] - 2026-06-03 — Stairwell gates the next level · also published on the jefflynch107 tenant
 
 - **The next level no longer starts until the stairwell cinematic finishes.** Clearing a floor now *holds* the whole game for the ~3.5s climb (threats, dice, clicks, auto-step all frozen, like the Graph-panel freeze), then **automatically carries the agents up to the next floor** — so the ascent and the new level begin only when the animation is over.
