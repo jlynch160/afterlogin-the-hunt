@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.17] - 2026-06-03 — Stairwell gates the next level · also published on the jefflynch107 tenant
+
+- **The next level no longer starts until the stairwell cinematic finishes.** Clearing a floor now *holds* the whole game for the ~3.5s climb (threats, dice, clicks, auto-step all frozen, like the Graph-panel freeze), then **automatically carries the agents up to the next floor** — so the ascent and the new level begin only when the animation is over.
+- **The third boss stays gated behind the Master Key.** The auto-advance routes through `floorLocked`, so the Top Floor (and its boss) won't open until a random ground-floor helper has dropped the key (with the existing safety drop guaranteeing it by ground-floor clear).
+- Also stood up a second production deployment on the **jefflynch107@gmail** tenant (new Static Web App).
+
 ## [0.7.16] - 2026-06-03 — Cinematic post-processing: per-act color grade + hit-punch
 
 - The existing WebGL post pass (bloom · god-rays · chromatic aberration · grain, Pro theme) now **color-grades per act**: Act I (Entra) leans **violet**, Act II (Purview) **teal**, Act III (Defender) **red** — applied as a shadow tint + a highlight multiply so each layer of the saga has its own filmic look. Added a **"punch"** that briefly **intensifies chromatic aberration + brightness on hits/crits** (driven by screen shake). Degrades gracefully to the plain 2D canvas if the shader can't compile.

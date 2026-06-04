@@ -777,7 +777,7 @@
         <div class="pf-go">Enter here →</div>
       </button>
     </div>
-    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.16</div>
+    <div class="pf-foot">You can switch any time from the home screen. &nbsp;·&nbsp; build 0.7.17</div>
   </div>
 </div>
 <!-- ── access gate (client-side; SHA-256 of the shared password — change pwHASH to rotate) ── -->
@@ -2037,7 +2037,7 @@ function newGame(){
      sel:null,threats:[],particles:[],shake:0,feed:[],judged:0,breach:false,lastHop:0,tut:true,lastWhisper:7,investigate:null,turn:0,huntStarted:false,focusSoul:null,
      view:'map',enteredRoom:null,cam:{zoom:1,x:0,y:0},storyFired:{},floats:[],remed:null,_fxUntil:0,
      essence:0,owned:{},buffs:{dmg:0,hit:0,freeze:0,vaultBuffer:0,essBonus:0},
-     key:false,keyRoom:0,floor:1,maxFloor:1,floorBoss:{}};
+     key:false,keyRoom:0,stairUntil:0,floor:1,maxFloor:1,floorBoss:{}};
   // each chamber holds the spirit that matches its environment (Cloud → OAuth app, Crypt → decommissioned admin, …)
   ROOMS.forEach(r=>{r.x=r.nx*W;r.y=r.ny*H;
     if(r.id>=2&&r.account){const s=SOULS[r.account];r.soul={...s,account:r.account,bind:s.bind.map(b=>({...b})),ev:[...s.ev],divined:false,summoned:false,judged:null,possessed:false,wake:0,seed:Math.random()*6,discovered:false};}});
@@ -2342,6 +2342,7 @@ function checkDawn(){const allJ=ROOMS.every(r=>!r.soul||(r.soul.judged&&r.soul.j
     if(typeof dawnFinale==='function')dawnFinale();
     schedule(G.t+1.6,()=>endGame(true,'dawn'));}}
 /* ── floor progression: clear a floor (spirits judged + guardian banished) to ascend ── */
+const STAIR_DUR=3.5; // freeze duration that matches the floor-clear stairwell cinematic
 function checkFloorClear(f){if(!G||G.over)return;if(!floorCleared(f))return;
   if(typeof unlock==='function'&&G.stats&&G.stats.polters===0)unlock('flawfloor');
   // safety: if the ground floor is done and its key-holding spirit was lost (poltergeist), the Master Key still drops here
@@ -2349,7 +2350,12 @@ function checkFloorClear(f){if(!G||G.over)return;if(!floorCleared(f))return;
   if(G.maxFloor<=f&&f<3){G.maxFloor=f+1;flash(.3);
     if(typeof playStairs==='function')playStairs(f+1); else {sfx('triumph');banner('Floor Cleared',FLOORS[f-1].name+' is clean','#20F593');}
     scry('✅ <b>'+FLOORS[f-1].name+' cleared.</b> The stair to <b>'+FLOORS[f].name+'</b> is open.','good');
-    narrate(FLOORS[f-1].name+' is clean.',f===2?(G.key?'The Master Key opens the door above — the source awaits.':'Find the Master Key to open the door above.'):'Take the stairs up — '+FLOORS[f].name+' awaits.');}
+    narrate(FLOORS[f-1].name+' is clean.',f===2?(G.key?'The Master Key opens the door above — the source awaits.':'Find the Master Key to open the door above.'):'Take the stairs up — '+FLOORS[f].name+' awaits.');
+    // HOLD the game while the agents climb (the next level can't begin until the stairwell cinematic finishes),
+    // then carry them up to it — but the boss floor still won't open without the Master Key.
+    G.stairUntil=G.t+STAIR_DUR;const _nf=f+1;
+    schedule(G.t+STAIR_DUR,function(){if(!G||G.over)return;G.stairUntil=0;
+      if(G.floor!==_nf&&!floorLocked(_nf))gotoFloor(_nf);else updateCoach();});}
   updateFloorUI();}
 // bounds of the current floor — PLUS the always-present Control Room wing when it lives on another floor,
 // so the building walls and the camera both wrap around it (no more room hanging off the right edge).
@@ -2753,6 +2759,7 @@ function update(dt){
   // ❄ FREEZE the whole game while a Microsoft Graph remediation panel is on screen — only its own clock + scheduled
   // timers keep ticking (so it animates and completes). Threats, agents, dice, particles and the camera all hold still.
   if(G.remed){G.shake*=.9;return;}
+  if(G.stairUntil&&G.t<G.stairUntil){G.shake*=.9;return;}  // ❄ hold the world while the stairwell cinematic plays
   G.lantern.x+=(G.mx-G.lantern.x)*Math.min(1,dt*14);G.lantern.y+=(G.my-G.lantern.y)*Math.min(1,dt*14);
   if(G.cam.intro){const I=G.cam.intro;I.p=Math.min(1,I.p+dt/I.dur);const e=1-Math.pow(1-I.p,3),z=I.from+(I.to-I.from)*e; // ease-out zoom-in reveal
     G.cam.zoom=z;G.cam.x=W/2-I.cx*z;G.cam.y=H/2-I.cy*z;if(I.p>=1)G.cam.intro=null;}
@@ -4278,7 +4285,7 @@ addEventListener('wheel',e=>{if(!G||G.view!=='map')return;
   e.preventDefault();G.cam.intro=null;const wpt=toWorld(e.clientX,e.clientY);
   const nz=Math.max(.5,Math.min(2.6,G.cam.zoom*(e.deltaY<0?1.12:1/1.12)));
   G.cam.zoom=nz;G.cam.x=e.clientX-wpt.x*nz;G.cam.y=e.clientY-wpt.y*nz;},{passive:false});
-addEventListener('click',e=>{if(!G||G.over)return;if(G.remed)return; // frozen while the Graph-API panel is up — only its Continue button (a DOM button) responds
+addEventListener('click',e=>{if(!G||G.over)return;if(G.remed)return;if(G.stairUntil&&G.t<G.stairUntil)return; // frozen while the Graph-API panel or the stairwell cinematic is up
   // ignore clicks on the UI panels (so buttons still work)
   if(e.target&&e.target.closest&&e.target.closest(UI_SEL))return;
   if(e.target&&e.target.id==='caseback'){G.sel=null;G.investigate=null;hideCase();updateCoach();return;}
@@ -4331,6 +4338,7 @@ function autoSmite(t){const tr=ROOMS[t.room];camTo(tr.x,tr.y,1.35,.7);
 function autoStep(){
   if(!G||!G.started||G.over){stopAuto();return;}
   if(G.remed)return;                              // hold the watch while a Graph remediation panel is frozen on screen
+  if(G.stairUntil&&G.t<G.stairUntil)return;       // ...and while the agents are climbing the stairwell
   const live=floorThreats(G.floor)[0];            // fight this floor's guardian first
   if(live){live._evShown=true;autoSmite(live);return;}
   const r=ROOMS.find(rm=>rm.floor===G.floor&&rm.soul&&!rm.soul.possessed&&!(rm.soul.judged&&rm.soul.judged!=='possessed'));
@@ -4396,7 +4404,7 @@ addEventListener('click',function(e){try{if(typeof A!=='undefined'&&A&&e.target&
 document.getElementById('beginBtn').onclick=startIntro;
 document.getElementById('enterHouse').onclick=enterManor;
 try{initTheme();}catch(e){} // apply the saved theme (palette + homepage copy) on load
-try{console.log('%cAfterlogin build 0.7.16','color:#20F593;font-weight:700');}catch(e){}
+try{console.log('%cAfterlogin build 0.7.17','color:#20F593;font-weight:700');}catch(e){}
 (function(){var tb=document.getElementById('trainBtn');if(tb)tb.onclick=openTraining;var hb=document.getElementById('helpBtn');if(hb)hb.onclick=openTraining;var lb=document.getElementById('loadoutBtn');if(lb)lb.onclick=openLoadout;})(); // Training Room (start + ?) · Loadout (topbar)
 document.getElementById('sanctumBtn').onclick=openSanctum;
 document.getElementById('againBtn').onclick=()=>{enterAct(_act);}; // restart the act you were playing
