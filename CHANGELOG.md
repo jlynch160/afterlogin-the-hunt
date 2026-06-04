@@ -1,5 +1,65 @@
 # Changelog
 
+## [0.7.13] - 2026-06-03 — Visual pass: living map · cinematic homepage · living characters + grand finale
+
+- **Living map atmosphere.** A new `drawSkyLife` layer brings the sky alive with subtle camera parallax: drifting clouds, a glowing **sun with rotating rays** (factory) / occasional **shooting stars** (manor), fireflies near the ground in the factory, and a **gently breathing cinematic vignette** over everything. The map no longer feels static.
+- **Cinematic homepage.** The cold-open got depth and motion: **pointer parallax** across the sky/manor/fog/title layers, floating **bokeh** orbs for depth, a periodic **light-sheen sweep** across the “Afterlogin” title, and a richer ember/star field. (Plays nicely with the existing idle Ken-Burns attract.)
+- **Living characters.** Every ghost/helper now sits in a **soft breathing presence aura** keyed to its grade colour (on top of the existing float bob), so they feel alive instead of pasted-on.
+- **Grand dawn/win finale.** The sunrise sweep is now a real **rising sun disc + volumetric god-rays**, every laid-to-rest soul **streaks up into the sky as a star**, and a **fireworks volley** bursts across the scene — extra colourful for the kid version. Lengthened so it lands as the “hold on it” closing shot.
+
+## [0.7.12] - 2026-06-03 — Hard freeze on the Graph panel · the boss is gated behind the Master Key
+
+- **The game now truly FREEZES while a Microsoft Graph remediation panel is on screen.** `update()` halts the entire world the moment `G.remed` is set — threats, agents, dice, particles, the camera, even the lantern all hold still; only the panel's own clock + scheduled timers keep ticking so it animates and completes. Canvas clicks are ignored across the whole panel (only its **Continue ▶** button responds), and Watch Mode's auto-stepper waits it out (with a quicker ~2.4s auto-resume in Watch Mode vs. the generous 9s when a human is reading).
+- **The boss won't appear until you find the Master Key and open the boss door.** The Top Floor (Control Room / Tier-0) is now sealed **only the Master Key opens it** — clearing the floors below is no longer enough. Since the boss only spawns when you step onto that floor, **no key ⇒ no boss.** A safety net guarantees the key drops by the time the ground floor is cleared (even if its key-holding spirit was lost to a poltergeist), so the boss floor can never soft-lock. Locked-door messaging now points you to the key.
+
+## [0.7.11] - 2026-06-03 — Floor-clear stairwell, dramatically upgraded
+
+- The ascend cinematic is now a proper showpiece:
+  - **Dimensional staircase** — solid steps with glowing tread edges and 3D side-shading that cascade up in sequence (instead of flat bars).
+  - **Volumetric god-rays** stream from the portal (masked, slowly rotating), and the **portal bursts** with a brightness flare + a radial light shock the moment the agents arrive.
+  - **Polished agents** — glowing orbs with bobbing icons and soft contact shadows that climb a clean staircase path in a staggered procession, fading into the doorway light.
+  - **Confetti burst** (multi-color) rains at the top, plus rising sparkles throughout.
+  - **Cinematic push-in** (the whole scene eases from a slight scale), a **shimmering light-sweep "FLOOR CLEARED / LEVEL DONE!"** title, and a **second "victory" sting** when they reach the portal. Runtime lengthened to ~3.7s so it lands.
+
+## [0.7.10] - 2026-06-03 — Control Room is now a wing *inside* the building (truly attached)
+
+- **Root cause fixed:** the Control Room read as "floating" because **neither the camera nor the building walls included it** — on the lower floors it was drawn off to the right, unframed and outside the walls. Now:
+  - A shared **`floorBounds()`** encloses the Control Room with the current floor, so **`drawManorFrame` / `drawFactoryShell` wrap their walls + roof around it** — it's literally inside the building.
+  - **The camera frames it too** — `framecam` and `introCamera` now fit the whole floor *plus* the vault wing (adaptive `fitZoom`), so the Control Room is always on screen instead of hanging off the edge.
+  - The connector was reworked from a floating annex into a **grand interior vault wing**: a distinct secured-floor inlay, a **partition wall with a glowing gateway arch + doorposts**, a **runner** (ornate carpet in Pro / guide-stripes in Student) leading to the door, a **floor medallion ring** under the vault, soft uplight, and a **"▸ TIER-0 WING / ▸ CONTROL ROOM"** plate. It now reads as a secured chamber that's part of the building on every floor.
+
+## [0.7.9] - 2026-06-03 — Control Room as a built-on annex · animated floor-clear stairwell · Student act-title legibility
+
+- **Animated floor-clear stairwell.** Finishing a level now plays a cinematic: a glowing staircase builds in, **your agents climb it step-by-step** (bobbing, staggered, with rising sparkles) up to a brightening doorway, over a dark dramatic backdrop, with a **"▲ FLOOR CLEARED → Ascending to <next floor>"** caption. Themed — spectral 🛡⚔🔍 in the manor, 🤖 helper-bots in the factory ("▲ LEVEL DONE! → Up to The Mezzanine"). Replaces the small "Floor Cleared" toast.
+- **The Control Room is now a built-on annex, not a floating platform.** Reworked the attachment into a **roofed, walled chamber wrapped around the vault door**, joined to the building's right wall by an **enclosed, floored vestibule** (solid floor + side walls, no support-legs-over-a-void look). Pro gets a gabled stone wing with corner bolts and an arched doorway; Student gets a sawtooth-roof steel room with hazard trim and a roll-up door. It now reads as a secure room bolted onto the building on every floor.
+- **Student act-title legibility.** The big act title (e.g. **"Day 1"**) used a white→mint gradient that washed out on the bright factory background — under Student it's now a bold high-contrast indigo with a white halo + sunny glow, and the subtitle a vivid purple. Pro is unchanged.
+
+## [0.7.8] - 2026-06-03 — Control Room attached + a thorough Student kid-friendly pass
+
+- **The Control Room no longer floats.** On the lower floors the Vault was drawn outside the building's walls with no corridor, so it looked like it was hanging in space. It now runs a **bridge from the building's right wall out to it** — a glowing stone **skybridge** (Pro) / yellow-and-black **steel gangway** (Student) with support legs — so it always reads as attached. The Vault was also pulled in from the far edge (nx .93 → .86).
+- **Store is now genuinely kid-friendly.** Every purchasable item has clean Student copy (no regex-mangled jargon): *Robo-Guard, Eagle-Eye Helper, Know-It-All Helper, Power Zap, Bullseye, Royal Lock, Gold-Star Light, Big Flashlight, Stop Sign, Super Shoo* — with friendly rarities (Super Rare / Rare / One-Use) and a **"🛒 The Helper Shop"** header. Pro keeps the real Microsoft product names (CAE, PIM, Conditional Access, Defender XDR…) for the SC-300/SC-200 alignment.
+- **Workshop power-ups (the permanent boons) get Student copy too** — *Add the Doubter/Librarian/Mapper/Fortune-Teller, Head Start, Star Jar, Sneak Peek, Stronger Chaser, Star Bonus, Extra Shield.*
+- **Loadout → "🎒 Backpack"** under Student, with kid section names (Today's Luck / Power-ups / Shields / Your Team) and kid empty-states.
+- **Party panel kid-worded** — "👥 Your Team · helpers", *Checker — thinks it through* / *Chaser — shoos the Gremlin*, and the bought-power-up line reads *⚡ Power Zap · 👑 Royal Lock · 🚫 Stop Sign · ⭐ Gold Stars* instead of CAE/PIM/CA.
+- **"Hunt Night" → "👀 Watch Mode"** under Student, and the button is restyled solid sunny-yellow with dark bold text so it's actually readable on the bright factory background (the faint spectral pill was nearly invisible).
+- **Topbar mini-labels themed** — *tidied / stars / to Control Room / GREMLIN / Shop / Backpack* under Student. All Pro wording is unchanged.
+
+## [0.7.7] - 2026-06-03 — Three showcase features + Student-version fixes + the Master Key
+
+**Showcase features (both themes):**
+- **Agents-at-work lower-third** — a cinematic **◈ Agent Council** bar (Retriever → Warden → Skeptic → Council, kid-named Finder → Checker → Doubter → Team) lights up chip-by-chip as each agent reasons, then fades out. Driven live off the reasoning trace; shows only while the agents are actually thinking.
+- **Threat-containment gate** — banishing a boss/guardian now runs the full Microsoft Graph containment path behind the **Continue ▶** gate, then drives the finale only after you advance it (no more dice/finale firing under the panel).
+- **Attract cold-open** — after ~7s idle on the homepage, a slow Ken Burns push-in + title glow + "▶ begin the hunt" prompt kicks in for a hands-free demo/booth loop; any input cancels it.
+
+**Student-version fixes (the labels in the screenshots):**
+- Floor cards now use the **factory vocabulary** ("The Top Floor / the Control Room · the top", "The Mezzanine / the busy machines") instead of leaking the Pro labels (Attic / Tier-0 · the source).
+- The status HUD label follows the theme (**Cleanup Score** for Student, Ledger of the Dead for Pro); the round clock reads "**N/N tidied**"; the coach now kid-words its hints (and uses the 🤖 helper icon) so "meet the ghost inside" reads "meet the helper inside."
+
+**The Master Key (both themes):**
+- One **random ground-floor spirit** is now hiding a **Master Key**. Judging it drops the key (golden sparkle + banner + sting) and **unseals the Control Room / Top Floor** — you can take the stairs straight up without clearing your way there.
+- The **Control Room door shows a gold "SEALED" padlock** that swings to a green "OPEN" when the key is found; the top-floor card flips 🔒 → 🔑.
+- **The Control Room is now a hub** — the Vault was pulled in from the right edge and every attic room (Legacy Crypt, Strongroom, Old Study) now opens onto it, so it reads as connected instead of a lone room.
+
 ## [0.7.6] - 2026-06-02 — Continue button on the Graph-API panel (freezes the turn)
 
 - The judgment remediation panel now **gates the turn**: it plays the full Microsoft Graph path (~3–5s), then a green **"Continue ▶"** button appears beneath it; the Sentinel's turn (dice/attacks) and the threat advance are **held until you click it** (with an auto-resume fallback if you never do). Map clicks are ignored while the panel is up. In Training Mode the coached card stays the gate (the remediation panel is un-gated there to avoid a double prompt).
