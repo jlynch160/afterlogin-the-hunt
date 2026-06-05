@@ -750,10 +750,14 @@ function show(){const a=cur,s=SOULS[a],st=ST[a];
 
 function divine(){if(!cur)return;const st=ST[cur];if(st.divined)return;st.divined=true;document.getElementById('invD').classList.add('on');renderDossier(cur);if(!st.councilDone)runCouncil(cur);tutAdvance('divine');}
 function summon(){if(!cur)return;const st=ST[cur];if(st.summoned)return;if(essence<4){sfx('tick');toast('Not enough essence to Summon — judge on what you have, or earn more by laying spirits to rest.');return;}essence-=4;updEss();st.summoned=true;document.getElementById('invS').classList.add('on');renderDossier(cur);tutAdvance('summon');}
-function runCouncil(a){if(!document.getElementById('ag0'))return;const meta=ai(a),air=meta.aiRite,a0=document.getElementById('ag0');
- const w=RE[air].w,sk=meta.split?CONTEST[SOULS[a].rite]:RE[air].s;
+async function runCouncil(a){if(!document.getElementById('ag0'))return;const meta=ai(a),air=meta.aiRite;
+ let w=RE[air].w,sk=meta.split?CONTEST[SOULS[a].rite]:RE[air].s,liveAI=false;
+ const got=await fetchCouncil(a).catch(()=>null);
+ if(cur!==a||ST[a].councilDone)return;
+ if(got){w=got.w;sk=got.s;liveAI=true;}
+ const a0=document.getElementById('ag0');if(!a0)return;
  const close=meta.split?'The agents are split — the verdict is yours.':'The council rests — the call is yours.';
- const ch=document.querySelector('#dossier .council .ch');if(ch)ch.innerHTML='◈ Agent Council · '+(meta.split?'<span style="color:#ffb454">split decision · '+meta.conf+'% sure</span>':'<span style="opacity:.85">'+meta.conf+'% confident</span>');
+ const ch=document.querySelector('#dossier .council .ch');if(ch)ch.innerHTML='◈ Agent Council · '+(liveAI?'<span style="color:rgb(var(--acc))">● live AI</span> · ':'')+(meta.split?'<span style="color:#ffb454">split · '+meta.conf+'% sure</span>':'<span style="opacity:.85">'+meta.conf+'% confident</span>');
  clearTimeout(window._c0);clearTimeout(window._c1);clearTimeout(window._c2);
  window._c0=setTimeout(()=>{a0.classList.add('on','talk');type(a0.querySelector('.sp'),w,()=>a0.classList.remove('talk'));},200);
  window._c1=setTimeout(()=>{const e=document.getElementById('ag1');if(e){e.classList.add('on','talk');if(meta.split)e.classList.add('live');type(e.querySelector('.sp'),sk,()=>e.classList.remove('talk'));}},1500);
@@ -893,8 +897,8 @@ function toggleMute(){muted=!muted;if(masterGain)masterGain.gain.value=muted?0:.
 // ── intro ──
 function enterManor(){audioInit();const i=document.getElementById('intro');if(i){i.classList.add('gone');setTimeout(()=>{i.style.display='none';},900);}setTimeout(tutStart,950);}
 // ── live AI council (graceful fallback to scripted) ──
-async function fetchCouncil(a){const s=SOULS[a];const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),2500);
- try{const res=await fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task:'council',account:s.label,grade:s.grade,kind:s.kind,dead:s.dead,recommended:RITES[s.rite],bindings:(s.bind||[]).map(b=>({label:b.label.replace(/<[^>]+>/g,''),live:b.live})),evidence:(s.ev||[]).map(e=>e.replace(/<[^>]+>/g,''))}),signal:ctrl.signal});clearTimeout(tid);if(!res.ok)return null;const j=await res.json();const w=j.warden||j.Warden,k=j.skeptic||j.Skeptic;if(w&&k)return [String(w),String(k)];return null;}catch(e){clearTimeout(tid);return null;}}
+async function fetchCouncil(a){const s=SOULS[a],meta=ai(a);const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),4500);
+ try{const res=await fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({label:s.label,kind:s.kind,grade:s.grade,last:s.last,bindings:(s.bind||[]).map(b=>b.label.replace(/<[^>]+>/g,'')+(b.live?' (LIVE)':'')),evidence:(s.ev||[]).map(e=>e.replace(/<[^>]+>/g,'')),wardenChar:meta.aiRite,skepticChar:meta.split?SOULS[a].rite:null,split:meta.split}),signal:ctrl.signal});clearTimeout(tid);if(!res.ok)return null;const j=await res.json();if(j.warden&&j.skeptic)return {w:String(j.warden),s:String(j.skeptic)};return null;}catch(e){clearTimeout(tid);return null;}}
 // ── share ──
 function shareScore(ev){const t='Afterlogin: The Hunt — I cleansed the manor. Rank '+rank()+' · '+score+'✦ · '+wards+'/3 wards held.';try{if(navigator.clipboard)navigator.clipboard.writeText(t);}catch(e){}const b=ev&&ev.target;if(b){const o=b.textContent;b.textContent='Copied ✓';setTimeout(()=>{b.textContent=o;},1500);}}
 var STATS={poltergeists:0,banishes:0,rested:0,bound:0,acked:0,correct:0};

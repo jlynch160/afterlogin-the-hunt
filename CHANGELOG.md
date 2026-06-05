@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.2] - 2026-06-05 — Live AI agents (that can still be wrong) + push-to-deploy
+
+- **Live LLM reasoning, on a leash.** The Agent Council now generates its Warden/Skeptic arguments from a live model via `/api/reason`, but the game **assigns each agent the stance to argue** — so the council can still be deterministically wrong (the load-bearing traps) or split, and it **never names the verdict**. A **● live AI** badge appears when a model is configured (`GITHUB_MODELS_TOKEN` etc.); otherwise it falls back to the scripted reasoning.
+- **Push-to-deploy CI/CD.** Added a GitHub Actions workflow so every push to `master` builds the Node Functions API and deploys the whole solution to the Static Web App automatically — no more manual CLI, and it fixes the local api-build failure.
+
 ## [0.8.1] - 2026-06-05 — Harder by design: the AI advises, you decide
 
 Turns "click what the AI said" into a real judgment game — the human is the final authority.
