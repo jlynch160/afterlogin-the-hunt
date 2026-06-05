@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.8.0] - 2026-06-05 — A new manor experience: the Encounter UX is now the site
+
+A ground-up front-end redesign, built around the original idea and plot. The classic build is preserved at **/index-classic.html**.
+
+- **Cinematic title** — a moonlit Gothic-manor silhouette (lit windows, drifting clouds, bats, stars, rising embers) with a **Manor / Factory switch** to the daylit Sunnyside variant, introducing the three AI agents.
+- **Encounter view** — face one spirit at a time over real painted room art: read its testimony, **Divine** the Fabric IQ dependency graph, **Summon** the cited Foundry IQ evidence, watch the **AI Agent Council** (Warden / Skeptic / Council — live-LLM hookup with scripted fallback) reason to a verdict, then pass the rite.
+- **The manor map** — a real 3-floor node-graph floor plan (rooms at their true coordinates, wired by the real corridors), with walls, a compass, a threat legend, hover popups, room-to-room zoom transitions, floor navigation and mouse-parallax.
+- **The Hungry** — a shadow-wraith that paths the corridors toward the nearest high-risk room, possesses it (full-screen red-vein takeover) and forces a real **d20 dice fight**; leave the master key and it becomes a boss. Reach the Vault and the manor falls.
+- **The Reliquary** — spend essence (gathered from laid-to-rest spirits) on 13 **Wardens / Rites / Charms**, each a real Microsoft security control (Security Copilot, Sentinel SOAR, CAE, PIM, Conditional Access, Defender XDR, ISPM…).
+- **Cinematic dawn finale**, a guided first-room **tutorial**, a **scorecard debrief**, **sound** (synth ambience + SFX), and a unifying **film-grain / vignette / grade** layer across every screen.
+
 ## [0.7.18] - 2026-06-03 — Performance: the Pro theme is much lighter on the machine
 
 - The spectral (Pro) theme ran the full WebGL post pipeline every frame at up to 2× device pixel ratio, which pegged weaker GPUs. Fixes:
