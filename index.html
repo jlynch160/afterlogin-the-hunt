@@ -88,6 +88,7 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:#05040
 .dossier .council .agtx b{font-family:'Cormorant Garamond',serif;font-weight:700;color:rgb(var(--acc));margin-right:4px}
 .dossier .council .ag.live.on .agtx b{color:var(--hi)}
 .dossier .vd{opacity:0;transform:translateY(6px);transition:.5s}.dossier .vd.show{opacity:1;transform:none}
+.dossier .vyours{margin-top:13px;padding:11px 13px;border-radius:11px;background:rgba(255,180,84,.1);border:1px solid rgba(255,180,84,.32);font-size:12px;color:#ffd17a;text-align:center;line-height:1.5}.dossier .vyours b{color:#fff}
 #flash{position:fixed;inset:0;z-index:9;pointer-events:none;opacity:0;background:radial-gradient(circle at 40% 44%,rgba(var(--acc),.4),transparent 58%)}
 #flash.go{animation:fl .9s ease}@keyframes fl{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
 .result{position:fixed;left:40%;top:42%;transform:translate(-50%,-50%);z-index:10;font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:700;color:#fff;text-shadow:0 0 46px rgba(var(--acc),.85);opacity:0;pointer-events:none;white-space:nowrap}
@@ -494,7 +495,7 @@ body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{tra
 
 <div class="dock2">
   <div class="inv" id="invD" onclick="press(this);divine()">◐ Divine <span class="iqb">Fabric IQ</span></div>
-  <div class="inv" id="invS" onclick="press(this);summon()">◑ Summon <span class="iqb">Foundry IQ</span></div>
+  <div class="inv" id="invS" onclick="press(this);summon()">◑ Summon · 4🔮 <span class="iqb">Foundry IQ</span></div>
 </div>
 <div class="rites locked" id="rites">
   <div class="rite" onclick="press(this);judge(0)"><span class="i">⚰</span> Lay to Rest</div>
@@ -604,6 +605,11 @@ body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{tra
 const GC={F:'#ff3b5c',D:'#ff7a45',C:'#ffb454',B:'#7cc6ff',A:'#20F593'};
 const GP={F:40,D:30,C:20,B:12,A:8};
 const RITES=['Lay to Rest','Bind & Watch','Acknowledge'];
+// AI is advisory + fallible. aiRite = what the council argues (sometimes WRONG vs the true rite). split = agents disagree. conf = shown confidence.
+const AIMETA={billing:{conf:84,aiRite:0,fallible:true},etl:{conf:81,aiRite:0,fallible:true},breakglass:{conf:52,split:true,aiRite:1},vendor:{conf:61,split:true,aiRite:0},steward:{conf:74},okafor:{conf:90},santos:{conf:96}};
+function ai(a){const m=AIMETA[a]||{};return {conf:m.conf||(88+(a.charCodeAt(0)%9)),aiRite:(m.aiRite!==undefined?m.aiRite:SOULS[a].rite),fallible:!!m.fallible,split:!!m.split};}
+const RE=[{w:'No live thread remains — this account is dormant. I would lay it to rest.',s:'Confirmed dead — no objection.'},{w:'A live binding still feeds from it — I would disable and watch, never delete.',s:'Agreed — exorcising it would break a running process.'},{w:'This one is active and governed — I would leave it be.',s:'It is live by design — acknowledge only.'}];
+const CONTEST=['I disagree — nothing truly depends on it; deprovision it.','I disagree — a live process still binds it; disable, do not delete.','I disagree — it is governed and active; do not touch it.'];
 // rite: correct judgment index (0 rest · 1 bind · 2 acknowledge). lb: load-bearing — resting it is a poltergeist.
 const SOULS={
  santos:{label:'usr-m.santos',kind:'member',grade:'A',last:'11 min',owner:'Finance · active',dead:false,form:'user',rite:2,lb:false,
@@ -711,7 +717,7 @@ function buildRoster(){const fn=kid()?TMFLOORS[floor]:FLOORS[floor-1].name;R.inn
 
 function setBg(a){const room=roomSrc(a),bg=document.getElementById('bg');bg.style.background=room?("url('"+room+"') center/cover"):"radial-gradient(120% 90% at 70% 12%,#fff7e0,#cfe6ff 48%,#a9d2f3)";}
 function sigOf(a){const s=SOULS[a];return [['last seen',s.last],['type',s.kind],['owner',s.owner],['standing',s.dead?'dormant':'active']];}
-function setRitesLocked(lock){document.getElementById('rites').classList.toggle('locked',lock);document.getElementById('hint').textContent=lock?'Divine + Summon to uncover the truth, then pass judgment':'Pass the rite the Council recommends';}
+function setRitesLocked(lock){document.getElementById('rites').classList.toggle('locked',lock);document.getElementById('hint').textContent=lock?'Divine to investigate — the agents will advise':'Weigh the evidence and decide — the agents can be wrong';}
 
 function renderDossier(a){const s=SOULS[a],st=ST[a],lb=s.lb;let h='<h4>The Case · '+s.label+'</h4><div class="sig">'+sigOf(a).map(x=>'<div class="x"><div class="k">'+x[0]+'</div><div class="v">'+x[1]+'</div></div>').join('')+'</div>';
  if(buffs.warden&&recIdx(a)===1)h+='<div style="margin-top:11px;font-size:11.5px;color:var(--hi);font-weight:600">🛡 Warden flags this as <b>load-bearing</b> — bind &amp; watch, never delete.</div>';
@@ -720,11 +726,11 @@ function renderDossier(a){const s=SOULS[a],st=ST[a],lb=s.lb;let h='<h4>The Case 
    gr.forEach((b,i)=>{const y=N>1?12+i*(40/(N-1)):30,col=b.live?'#ff3b5c':'rgba(150,140,190,.5)',lbl=b.label.replace(/<[^>]+>/g,'');h+='<path d="M47 30 C110 30 150 '+y+' 214 '+y+'" fill="none" stroke="'+col+'" stroke-width="'+(b.live?2.2:1.3)+'"'+(b.live?' stroke-dasharray="5 6" class="flowdash"':'')+' opacity="'+(b.live?.95:.5)+'"/><circle cx="226" cy="'+y+'" r="6" fill="rgba(20,16,40,.6)" stroke="'+col+'"/><text x="238" y="'+(y+3.4)+'" fill="rgba(155,148,186,.92)" font-size="9">'+(lbl.length>31?lbl.slice(0,30)+'…':lbl)+'</text>';});
    h+='</svg>'+(liveN?'<div style="color:#ff3b5c;font-size:11px;font-weight:600;margin-top:4px">⚠ '+liveN+' live, load-bearing binding'+(liveN>1?'s':'')+'</div>':'<div style="color:'+GC[s.grade]+';font-size:11px;margin-top:4px">no live bindings — safe to retire</div>');}
  else h+='<div class="locknote">⊘ Divine to reveal what still depends on it.</div>';
- h+='</div><div class="rev"><div class="rh">🔎 <b>Foundry IQ</b> · cited, permission-aware evidence</div>';
+ h+='</div><div class="rev"><div class="rh">🔎 <b>Foundry IQ</b> · cited evidence</div>';
  if(st.summoned)h+=(s.ev||[]).map(e=>'<div class="ev">'+e+'</div>').join('');
- else h+='<div class="locknote">⊘ Summon to pull the cited evidence.</div>';
+ else h+='<div class="locknote">⊘ Summon (costs <b>4</b> 🔮) to pull the cited evidence — use it to <b>verify the council</b>.</div>';
  h+='</div>';
- if(st.divined&&st.summoned)h+='<div class="council"><div class="ch">◈ Agent Council deliberates</div><div class="ag'+(st.councilDone?' on':'')+'" id="ag0"><span class="agav">🛡</span><span class="agtx"><b>Warden</b> <span class="sp"></span></span></div><div class="ag'+(lb?' live':'')+(st.councilDone?' on':'')+'" id="ag1"><span class="agav">🔍</span><span class="agtx"><b>Skeptic</b> <span class="sp"></span></span></div><div class="ag'+(st.councilDone?' on':'')+'" id="ag2"><span class="agav">✓</span><span class="agtx"><b>Council</b> <span class="sp"></span></span></div></div><div class="vd'+(st.councilDone?' show':'')+'" id="vd"><div class="k2">Verdict</div><div class="r">'+RITES[s.rite]+'</div></div>';
+ if(st.divined)h+='<div class="council"><div class="ch">◈ Agent Council deliberates</div><div class="ag'+(st.councilDone?' on':'')+'" id="ag0"><span class="agav">🛡</span><span class="agtx"><b>Warden</b> <span class="sp"></span></span></div><div class="ag'+(st.councilDone?' on':'')+'" id="ag1"><span class="agav">🔍</span><span class="agtx"><b>Skeptic</b> <span class="sp"></span></span></div><div class="ag'+(st.councilDone?' on':'')+'" id="ag2"><span class="agav">✓</span><span class="agtx"><b>Council</b> <span class="sp"></span></span></div></div><div class="vyours">⚖ The verdict is <b>yours</b> — the agents only advise, and they are sometimes wrong.</div>';
  document.getElementById('dossier').innerHTML=h;}
 
 function show(){const a=cur,s=SOULS[a],st=ST[a];
@@ -738,25 +744,20 @@ function show(){const a=cur,s=SOULS[a],st=ST[a];
  document.getElementById('invD').classList.toggle('on',!!st.divined);
  document.getElementById('invS').classList.toggle('on',!!st.summoned);
  renderDossier(a);
- if(st.divined&&st.summoned&&!st.councilDone)runCouncil(a);
+ if(st.divined&&!st.councilDone)runCouncil(a);
  setRitesLocked(!st.councilDone);
  updateProg();}
 
-function divine(){if(!cur)return;const st=ST[cur];if(st.divined)return;st.divined=true;document.getElementById('invD').classList.add('on');renderDossier(cur);if(st.summoned)afterBoth();tutAdvance('divine');}
-function summon(){if(!cur)return;const st=ST[cur];if(st.summoned)return;st.summoned=true;document.getElementById('invS').classList.add('on');renderDossier(cur);if(st.divined)afterBoth();tutAdvance('summon');}
-function afterBoth(){renderDossier(cur);if(!ST[cur].councilDone)runCouncil(cur);}
-async function runCouncil(a){const r=SOULS[a].rite;if(!document.getElementById('ag0'))return;
- const SC=[['No live thread remains — truly dormant. Safe to lay to rest.','Confirmed dead — no objection.'],['A live binding still feeds from it — disable and watch, never delete.','Agreed — exorcising this breaks a running process. I contest any “rest”.'],['This one is active and governed — do not harm or remove it.','I checked — it is live by design. Acknowledge only.']][r];
- let lines=SC,live=false;
- const got=await fetchCouncil(a).catch(()=>null);
- if(cur!==a||ST[a].councilDone)return;
- if(got){lines=got;live=true;}
- const a0=document.getElementById('ag0');if(!a0)return;
- const ch=document.querySelector('#dossier .council .ch');if(ch)ch.innerHTML='◈ Agent Council · '+(live?'<span style="color:rgb(var(--acc))">● live AI</span>':'<span style="opacity:.7">deliberating</span>');
+function divine(){if(!cur)return;const st=ST[cur];if(st.divined)return;st.divined=true;document.getElementById('invD').classList.add('on');renderDossier(cur);if(!st.councilDone)runCouncil(cur);tutAdvance('divine');}
+function summon(){if(!cur)return;const st=ST[cur];if(st.summoned)return;if(essence<4){sfx('tick');toast('Not enough essence to Summon — judge on what you have, or earn more by laying spirits to rest.');return;}essence-=4;updEss();st.summoned=true;document.getElementById('invS').classList.add('on');renderDossier(cur);tutAdvance('summon');}
+function runCouncil(a){if(!document.getElementById('ag0'))return;const meta=ai(a),air=meta.aiRite,a0=document.getElementById('ag0');
+ const w=RE[air].w,sk=meta.split?CONTEST[SOULS[a].rite]:RE[air].s;
+ const close=meta.split?'The agents are split — the verdict is yours.':'The council rests — the call is yours.';
+ const ch=document.querySelector('#dossier .council .ch');if(ch)ch.innerHTML='◈ Agent Council · '+(meta.split?'<span style="color:#ffb454">split decision · '+meta.conf+'% sure</span>':'<span style="opacity:.85">'+meta.conf+'% confident</span>');
  clearTimeout(window._c0);clearTimeout(window._c1);clearTimeout(window._c2);
- window._c0=setTimeout(()=>{a0.classList.add('on','talk');type(a0.querySelector('.sp'),lines[0],()=>a0.classList.remove('talk'));},200);
- window._c1=setTimeout(()=>{const e=document.getElementById('ag1');if(e){e.classList.add('on','talk');type(e.querySelector('.sp'),lines[1],()=>e.classList.remove('talk'));}},1500);
- window._c2=setTimeout(()=>{const e=document.getElementById('ag2');if(e){e.classList.add('on','talk');type(e.querySelector('.sp'),'Both agents concur → '+RITES[r]+'.',()=>{e.classList.remove('talk');const vd=document.getElementById('vd');if(vd)vd.classList.add('show');ST[a].councilDone=true;if(cur===a)setRitesLocked(false);tutAdvance('council');});}},2900);}
+ window._c0=setTimeout(()=>{a0.classList.add('on','talk');type(a0.querySelector('.sp'),w,()=>a0.classList.remove('talk'));},200);
+ window._c1=setTimeout(()=>{const e=document.getElementById('ag1');if(e){e.classList.add('on','talk');if(meta.split)e.classList.add('live');type(e.querySelector('.sp'),sk,()=>e.classList.remove('talk'));}},1500);
+ window._c2=setTimeout(()=>{const e=document.getElementById('ag2');if(e){e.classList.add('on','talk');type(e.querySelector('.sp'),close,()=>{e.classList.remove('talk');ST[a].councilDone=true;if(cur===a)setRitesLocked(false);tutAdvance('council');});}},2900);}
 
 function advance(){if(allAccts().every(a=>ST[a].done)){breakDawn();return;}
  let next=acctRoomsOn(floor).map(r=>r.account).find(a=>!ST[a].done);
@@ -821,7 +822,7 @@ function breakDawn(){const ds=document.getElementById('dsouls');if(ds){let p='';
  document.getElementById('dawnStat').innerHTML='<div class="scrow"><span>Rank</span><b>'+rank()+'</b></div><div class="scrow"><span>Score</span><b>'+score+' ✦</b></div><div class="scrow"><span>Wards held</span><b>'+wards+' / 3</b></div><div class="scrow"><span>Souls judged</span><b>'+STATS.correct+' / '+allAccts().length+'</b></div><div class="scrow"><span>Poltergeists</span><b>'+STATS.poltergeists+'</b></div><div class="scrow"><span>Hungry banished</span><b>'+STATS.banishes+'</b></div><div class="skills"><div class="sh">Security skills practiced</div>'+(sk.length?sk.map(s=>'<div class="sk">✓ '+s+'</div>').join(''):'<div class="sk">—</div>')+'</div>';
  sfx('dawn');document.getElementById('dawn').classList.add('show');}
 function lose(){document.getElementById('combat').classList.remove('show');sfx('fall');document.getElementById('loseStat').innerHTML='Souls judged <b>'+STATS.correct+'/'+allAccts().length+'</b> · Score <b>'+score+'</b> ✦ · Poltergeists <b>'+STATS.poltergeists+'</b>';document.getElementById('lose').classList.add('show');}
-function restart(){Object.keys(ST).forEach(a=>ST[a]={});score=0;wards=3;combatTgt=null;floor=1;cur=acctRoomsOn(1)[0].account;H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);STATS.poltergeists=STATS.banishes=STATS.rested=STATS.bound=STATS.acked=STATS.correct=0;essence=0;freeze=0;buffs.dmg=0;buffs.hitEasy=false;buffs.essBonus=0;buffs.oracle=false;buffs.sentinel=false;buffs.warden=false;buffs.softPolter=false;buffs.beacon=false;buffs.autoBanish=false;Object.keys(owned).forEach(k=>delete owned[k]);updEss();document.getElementById('dawn').classList.remove('show');document.getElementById('lose').classList.remove('show');document.getElementById('combat').classList.remove('show');buildFloorTabs();buildRoster();show();updateHud();updateThreatUI();}
+function restart(){Object.keys(ST).forEach(a=>ST[a]={});score=0;wards=3;combatTgt=null;floor=1;cur=acctRoomsOn(1)[0].account;H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);STATS.poltergeists=STATS.banishes=STATS.rested=STATS.bound=STATS.acked=STATS.correct=0;essence=10;freeze=0;buffs.dmg=0;buffs.hitEasy=false;buffs.essBonus=0;buffs.oracle=false;buffs.sentinel=false;buffs.warden=false;buffs.softPolter=false;buffs.beacon=false;buffs.autoBanish=false;Object.keys(owned).forEach(k=>delete owned[k]);updEss();document.getElementById('dawn').classList.remove('show');document.getElementById('lose').classList.remove('show');document.getElementById('combat').classList.remove('show');buildFloorTabs();buildRoster();show();updateHud();updateThreatUI();}
 
 // ── MAP — real floor-plan node-graph ──
 function buildMap(){const fl=document.getElementById('floor'),k=kid();const rooms=ROOMS.filter(r=>r.floor===floor),onR={};rooms.forEach(r=>onR[r.id]=r);
@@ -900,11 +901,10 @@ var STATS={poltergeists:0,banishes:0,rested:0,bound:0,acked:0,correct:0};
 // ── guided tutorial (first room) ──
 let tutActive=false,tutStep=0,tutDone=false,hungryEnabled=false;
 const TUT=[
- {sel:'.portrait',side:'right',title:'A spirit awaits judgment',body:'Meet <b>usr-m.santos</b> — an account lingering in the manor. Read its testimony, then uncover the truth before you judge it.',advance:'next'},
- {sel:'#invD',side:'top',title:'Step 1 · Divine',body:'Click <b>◐ Divine</b> to reveal what still depends on this account — its live bindings, mapped by <b>Fabric IQ</b>.',advance:'divine'},
- {sel:'#invS',side:'top',title:'Step 2 · Summon',body:'Click <b>◑ Summon</b> to pull the cited, permission-aware evidence from <b>Foundry IQ</b>.',advance:'summon'},
- {sel:'.dossier .council',side:'left',title:'Step 3 · The Council reasons',body:'Your AI agents — the <b>Warden</b> and the <b>Skeptic</b> — weigh the evidence and agree on the safe verdict. Watch them deliberate…',advance:'council'},
- {sel:'.rites',side:'top',title:'Step 4 · Pass judgment',body:'santos is <b>alive and least-privileged</b> — never exorcise the living. The Council recommends <b>Acknowledge</b>. Click <b>🕯 Acknowledge</b> to let it rest in peace.',advance:'judge'}
+ {sel:'.portrait',side:'right',title:'A spirit awaits judgment',body:'Meet <b>usr-m.santos</b>. Read its testimony, uncover the facts — then <b>you</b> decide its fate. The agents only advise.',advance:'next'},
+ {sel:'#invD',side:'top',title:'Step 1 · Divine',body:'Click <b>◐ Divine</b> to map its live bindings (Fabric IQ). The <b>Agent Council</b> then gives its read — but it only advises, and it is <b>sometimes wrong</b>.',advance:'divine'},
+ {sel:'#invS',side:'top',title:'Step 2 · Summon (costs essence)',body:'Click <b>◑ Summon</b> to spend essence on the <b>cited evidence</b> — use it to <b>verify the council</b> when a case looks fishy. You can also judge without it, at your own risk.',advance:'summon'},
+ {sel:'.rites',side:'top',title:'Step 3 · Your verdict',body:'Weigh the evidence yourself. santos is plainly <b>alive</b> — the safe call is <b>Acknowledge</b>. <b>Never just follow the AI.</b>',advance:'judge'}
 ];
 function tutStart(){if(tutDone)return;tutActive=true;tutStep=0;cur=acctRoomsOn(1)[0].account;floor=1;buildFloorTabs();buildRoster();show();setTimeout(tutShow,380);}
 function tutShow(){if(!tutActive)return;if(tutStep>=TUT.length){tutEnd();return;}
@@ -925,7 +925,7 @@ function tutEnd(){tutActive=false;tutDone=true;hungryEnabled=true;const sp=docum
 function toast(m){const t=document.getElementById('toast');if(!t)return;t.innerHTML=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),5500);}
 addEventListener('resize',()=>{if(tutActive)tutShow();});
 // ── essence store (real Microsoft security controls, dressed as rites) ──
-let essence=0,freeze=0;const ESS={F:8,D:6,C:4,B:3,A:2};const buffs={dmg:0,hitEasy:false,essBonus:0,oracle:false,sentinel:false,warden:false,softPolter:false,beacon:false,autoBanish:false};const owned={};
+let essence=10,freeze=0;const ESS={F:8,D:6,C:4,B:3,A:2};const buffs={dmg:0,hitEasy:false,essBonus:0,oracle:false,sentinel:false,warden:false,softPolter:false,beacon:false,autoBanish:false};const owned={};
 const STORE2=[
  {id:'copilot',cat:'Agent',ic:'🔮',name:'The Oracle',kind:'Security Copilot',cost:30,once:true,desc:'Copilot pre-reads every spirit — <b>auto-Divine + Summon</b> the moment you open a case.',buy(){buffs.oracle=true;if(cur)show();}},
  {id:'sentinel',cat:'Agent',ic:'⚔️',name:'Sentinel’s Playbook',kind:'Microsoft Sentinel · SOAR',cost:28,once:true,desc:'A SOAR playbook joins the hunt — every fight opens with <b>8 free damage</b> to the takeover.',buy(){buffs.sentinel=true;}},

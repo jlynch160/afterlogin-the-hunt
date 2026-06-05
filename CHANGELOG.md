@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.8.1] - 2026-06-05 — Harder by design: the AI advises, you decide
+
+Turns "click what the AI said" into a real judgment game — the human is the final authority.
+
+- **Advisory, not authoritative.** The council argues the case and shows its **confidence %**, but **never names the verdict** — *"the verdict is yours."*
+- **A fallible AI.** On the load-bearing traps (`svc-billing-reconcile`, `svc-etl-nightly`) the council confidently recommends *lay to rest* — but they're load-bearing; following blindly triggers a **poltergeist**. The tells live in the Fabric IQ graph (live thread) and the cited evidence. **Overruling the AI is the win.**
+- **Split councils.** On governed/ambiguous accounts (`adm-breakglass-02`, `app-orchard-connector`) the Warden and Skeptic **openly disagree** and confidence drops — you break the tie. Clear-cut spirits stay high-confidence, so the skill is knowing *which* to trust.
+- **Triage under pressure.** Divine is free; **Summon now costs 4 essence** (the cited evidence) — the same currency as the Reliquary — so you choose whether to verify a fishy case or judge on partial info at your own risk.
+
 ## [0.8.0] - 2026-06-05 — A new manor experience: the Encounter UX is now the site
 
 A ground-up front-end redesign, built around the original idea and plot. The classic build is preserved at **/index-classic.html**.
