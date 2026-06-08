@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.9.0] - 2026-06-07 — A real game: honest AI, a living hunt, combat, and a roguelite meta
+
+A large content + systems pass turning the encounter into a genuine, replayable game.
+
+**Judgment — the AI advises, you decide (and it never lies)**
+- The Agent Council is now **honest but humble**: it gives an accurate surface read, **surfaces its own doubt** (the real counter-signal), shows **calibrated confidence**, and **defers the verdict to you**. It never states a wrong recommendation — you fail by ignoring the flag it raised.
+- **Divine vs Summon are now distinct.** Divine (free) maps the dependency graph but leaves bindings **unverified** and gives only a **preliminary** council read. **Summon** (costs essence) reveals **which bindings are live**, pulls the cited evidence, unlocks the **Skeptic's full read + live-AI**, and reveals the **confidence %** — judging unverified is a real gamble.
+
+**Difficulty**
+- **Difficulty tiers** — Casual / Auditor / Nightmare — scale AI confidence visibility, Summon cost, and Hungry speed.
+- **Floor escalation** — deeper floors cost more to investigate and the Hungry moves faster.
+- **Blind trust has teeth** — a poltergeist now haunts the room and **surges the Hungry two steps toward the Vault**.
+
+**The hunt — a named, living antagonist**
+- The threat is now **The Hollow** (the **Tangle** in the factory), and it **taunts you by name**.
+- **Proximity dread** — when it's one room from striking, the screen flickers, a red vignette pulses, and it growls.
+- **Active counter-play** — a **Seal the Door** (Conditional Access) prompt holds it for 3 steps.
+
+**Combat — a real round-based fight**
+- Bosses now **fight back** each round: drain your **Resolve**, heal, or weaken your next strike.
+- New **Resolve bar** — break it and you **lose a ward**; lose them all and the manor falls.
+- **Four remediations per round**, each a real control: ⚔ **Strike** (d20) · ⚡ **Revoke** (CAE) · 🛡 **Harden** (MFA) · 💥 **Disrupt** (Defender XDR).
+- **Per-floor / per-act bosses restored** with their original names + art: **The Token Thief** (Ground · boss1), **The Consent Daemon** (Upper · boss2), **The Hollow** (Attic · boss3).
+
+**Addiction loops + meta-progression (saved locally)**
+- **Streak combo** — chain correct verdicts for a ×2→×5 score & essence multiplier; a miss resets it.
+- **Roguelite ranks** — lifetime score climbs an Auditor ladder (Novice → Grandmaster) shown on the title + debrief.
+- **Daily Challenge** — one seeded manor per day with a rotating modifier and your daily best.
+- **Achievements + leaderboard** — six unlockable badges and a top-5 high-score table.
+
+**Showcase + polish**
+- **"Behind the Game" codex** — maps every element to its real Microsoft control.
+- **Shareable audit report** — a branded "Manor Audit Report" PNG at the finale.
+- **Cinematic title screen** — shimmering wordmark, moonbeam god-rays, drifting wisps, rolling fog, a shooting star, vignette.
+- **Cleaner Dawn/Loss debrief** — the summary now sits in a readable card instead of overlapping the sunrise.
+
 ## [0.8.2] - 2026-06-05 — Live AI agents (that can still be wrong) + push-to-deploy
 
 - **Live LLM reasoning, on a leash.** The Agent Council now generates its Warden/Skeptic arguments from a live model via `/api/reason`, but the game **assigns each agent the stance to argue** — so the council can still be deterministically wrong (the load-bearing traps) or split, and it **never names the verdict**. A **● live AI** badge appears when a model is configured (`GITHUB_MODELS_TOKEN` etc.); otherwise it falls back to the scripted reasoning.
