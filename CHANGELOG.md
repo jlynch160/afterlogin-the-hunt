@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.10.0] - 2026-06-08 — Boss-gated floors, multi-stage fights, and real attack-response training
+
+**Progression**
+- **Boss-gated floors.** Each floor's **guardian must be defeated to ascend** — higher floors are locked (🔒), and a guardian can't be judged, only *confronted*. Beat the Ground guardian → unlock the Upper, etc. The Attic boss (**The Hollow**) is the finale.
+
+**Combat is now real attack-response training**
+- **Multiple-choice remediations.** Each round you pick a control from a rotating set; **choosing it rolls the d20** for execution. The choices **refresh after every boss attack**.
+- **The right control is decisive, the wrong one whiffs — with a "why."** Each attack maps to its correct remediation and the *gotchas* (e.g., a password reset does NOT kill a stolen session token; revoking user sessions doesn't remove an OAuth grant; MFA won't strip standing Global Admin). Verified: ideal control ≈ 100% win; wrong control ≈ 7%.
+- **Multi-stage bosses.** Each guardian is a **kill-chain** of 2–3 stages, each a distinct attack step with its own ideal control (Token Thief: revoke token → lock re-entry; Consent Daemon: revoke grant → pull the forwarding rule; The Hollow: strip PIM → rotate the krbtgt → run a SOAR playbook). Generic takeovers now teach the basics too.
+
+**Power-ups (Reliquary)**
+- New: 🧠 **The Analyst** (marks the ★ ideal control), 🧘 **Steady Hand** (no fumbles), 🧱 **Fortified Resolve** (+10 max Resolve), 🌬️ **Second Wind** (survive your last ward breaking once). Fixed **Mark of Precision** (it had gone inert).
+
+**Investigation**
+- **Divine vs Summon are now distinct.** Divine maps bindings but leaves them *unverified* + a preliminary council read; **Summon** (essence) reveals which bindings are **live**, the cited evidence, the Skeptic's full read, and the confidence %.
+
+**Polish + fixes**
+- Theme (Manor/Factory) is now chosen **only at the title screen** and locked for the run.
+- Sunnyside factory visual pass — warm title, readable text, distinct agent cards.
+- Removed an unreachable store item, cleaned dead combat code, and guarded the tutorial's Summon so a Frugal-daily start can't soft-lock.
+
 ## [0.9.0] - 2026-06-07 — A real game: honest AI, a living hunt, combat, and a roguelite meta
 
 A large content + systems pass turning the encounter into a genuine, replayable game.

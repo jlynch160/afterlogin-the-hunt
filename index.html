@@ -112,6 +112,7 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:#05040
 .actbar{display:flex;gap:4px}
 .ab{cursor:pointer;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--mut);padding:6px 12px;border-radius:16px;border:1px solid transparent;transition:.18s}
 .ab.on{color:var(--ink);border-color:var(--stroke);background:var(--glass)}
+.ab.locked{opacity:.42;cursor:not-allowed}
 .dread{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#ff8aa3;cursor:pointer}
 .dread .bar{width:80px;height:6px;border-radius:6px;background:rgba(255,255,255,.1);overflow:hidden}
 .dread .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb454,#ff3b5c);transition:width .6s}
@@ -157,13 +158,26 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:#05040
 .crbar{flex:1;height:9px;border-radius:5px;background:rgba(255,255,255,.1);overflow:hidden;border:1px solid rgba(120,200,255,.3)}
 .crbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#5ad1ff,#9fe6ff);box-shadow:0 0 10px rgba(120,200,255,.55);transition:width .35s ease}
 .cresolve.low .crbar i{background:linear-gradient(90deg,#ff5b78,#ff9aa6);box-shadow:0 0 10px rgba(255,90,120,.6)}
-.cactions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:16px}
-.cbtn{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:var(--ink);background:rgba(255,255,255,.07);border:1px solid var(--stroke);border-radius:12px;padding:10px 8px;transition:.15s}
-.cbtn small{font-family:inherit;font-weight:400;font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--mut)}
-.cbtn:hover{background:rgba(255,255,255,.13);transform:translateY(-1px);border-color:rgba(var(--acc),.5)}
+.cprompt{margin:15px 0 9px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut)}.cprompt b{color:rgb(var(--acc))}
+.cactions{display:grid;grid-template-columns:1fr;gap:8px}
+.cbtn{cursor:pointer;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:var(--ink);background:rgba(255,255,255,.07);border:1px solid var(--stroke);border-radius:12px;padding:10px 8px;transition:.15s}
+.cbtn.rem{display:flex;flex-direction:row;align-items:center;gap:12px;text-align:left;padding:11px 15px}
+.cbtn.rem .ric{flex:0 0 30px;width:30px;text-align:center;font-size:21px}
+.cbtn.rem .rtx{display:flex;flex-direction:column;min-width:0}
+.cbtn.rem .rtx b{font-size:16px;line-height:1.12}
+.cbtn.rem .rtx small{font-family:'Inter',sans-serif;font-weight:500;font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);margin-top:1px}
+.cbtn:hover{background:rgba(255,255,255,.14);transform:translateY(-1px);border-color:rgba(var(--acc),.55)}
 .cbtn.off{opacity:.4;cursor:not-allowed;pointer-events:none}
+.cbtn.rem.reco{border-color:rgba(255,210,90,.7);background:rgba(255,210,90,.08);box-shadow:0 0 18px rgba(255,200,80,.25)}
+.recostar{font-family:'Inter',sans-serif;font-weight:700;font-size:8.5px;letter-spacing:.5px;color:#ffce5b;margin-left:7px;vertical-align:middle}
 .cdmg.res{color:#9fe6ff;text-shadow:0 0 14px rgba(120,200,255,.75)}
-@media(max-width:560px){.cactions{grid-template-columns:1fr}.cresolve,.cwrap .chp{width:88vw;max-width:300px}}
+.cdmg.res.heal{color:#7dffb0;text-shadow:0 0 14px rgba(80,230,150,.75)}
+.cteach{max-height:0;overflow:hidden;opacity:0;transition:.3s;text-align:left;border-radius:11px;font-size:11.5px;line-height:1.5}
+.cteach.show{max-height:160px;opacity:1;padding:11px 14px;margin-top:13px}
+.cteach.good{background:rgba(45,210,150,.1);border:1px solid rgba(45,210,150,.32);color:#bff3dd}
+.cteach.bad{background:rgba(255,90,110,.12);border:1px solid rgba(255,90,110,.38);color:#ffccd4}
+.cteach b{color:#fff}
+@media(max-width:560px){.cresolve,.cwrap .chp{width:88vw;max-width:300px}}
 .hudstat{font-family:'Cormorant Garamond',serif;font-size:17px;letter-spacing:.5px}
 #scoreEl{color:rgb(var(--acc))}#wardsEl{color:#ffd17a}
 body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{transform:translate(-7px,3px)}45%{transform:translate(6px,-3px)}70%{transform:translate(-4px,2px)}}
@@ -210,6 +224,7 @@ body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{tra
 [data-theme="helpers"] .fb{background:rgba(255,255,255,.5)}
 .fb:hover{color:var(--ink);border-color:rgba(var(--acc),.5)}
 .fb.on{color:#06231a;background:rgb(var(--acc));border-color:transparent;box-shadow:0 0 18px rgba(var(--acc),.5)}
+.fb.locked{opacity:.4;cursor:not-allowed;font-size:14px}
 .fb .ft{position:absolute;left:48px;white-space:nowrap;font-family:'Inter',sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);opacity:0;transition:.18s;pointer-events:none}
 .fb:hover .ft{opacity:1}
 .floor{position:absolute;inset:30px 30px 30px 74px;border-radius:12px;border:1px solid rgba(var(--acc),.16);box-shadow:inset 0 0 70px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.03);transition:transform .25s ease-out;background:linear-gradient(rgba(var(--acc),.06) 1px,transparent 1px) -1px -1px/34px 34px,linear-gradient(90deg,rgba(var(--acc),.06) 1px,transparent 1px) -1px -1px/34px 34px,radial-gradient(130% 110% at 50% 45%,rgba(22,16,42,.35),rgba(5,4,12,.62))}
@@ -530,17 +545,36 @@ body.flick{animation:flick .56s steps(1) both}
 [data-theme="helpers"] .istars,[data-theme="helpers"] .ibat,[data-theme="helpers"] .lightning{display:none}
 [data-theme="helpers"] .icloud{background:rgba(255,255,255,.85)}
 [data-theme="helpers"] .introfog{background:linear-gradient(0deg,rgba(255,255,255,.55),transparent)}
-[data-theme="helpers"] .introscrim{background:radial-gradient(72% 82% at 40% 44%,rgba(255,255,255,.4),transparent 72%)}
-[data-theme="helpers"] .ititle{color:#15324c;text-shadow:0 0 30px rgba(255,220,120,.6),0 2px 14px rgba(0,0,0,.12)}
-[data-theme="helpers"] .itag{color:#2a4a66}
-[data-theme="helpers"] .ikick{color:#1f8a6e;opacity:1}
-[data-theme="helpers"] .iag{background:rgba(255,255,255,.72);border-color:rgba(60,120,170,.3)}
-[data-theme="helpers"] .iag b{color:#1f8a6e}
+[data-theme="helpers"] .introscrim{background:radial-gradient(72% 82% at 40% 44%,rgba(255,255,255,.2),transparent 72%)}
+[data-theme="helpers"] .ititle{background:linear-gradient(110deg,#ff8f2e,#ffd25a 20%,#ff7a2e 42%,#ffdd6f 64%,#ff8f2e 86%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 2px 3px rgba(120,55,0,.45)) drop-shadow(0 0 26px rgba(255,170,60,.55))}
+[data-theme="helpers"] .itag{color:#5a3a22}
+[data-theme="helpers"] .ikick{color:#0f7e63;opacity:1;text-shadow:0 1px 6px rgba(255,255,255,.6)}
+[data-theme="helpers"] .iag{background:rgba(255,255,255,.9);border-color:rgba(60,120,170,.28);box-shadow:0 16px 34px rgba(70,110,150,.2)}
+[data-theme="helpers"] .iag b{color:#0f7e63}
 [data-theme="helpers"] .iag i{color:#5a7088}
-[data-theme="helpers"] .iag .ico{background:radial-gradient(circle at 38% 32%,rgba(45,180,140,.18),rgba(45,180,140,.04));border-color:rgba(45,180,140,.4);box-shadow:0 0 16px rgba(45,180,140,.2)}
-[data-theme="helpers"] .iag::before{background:linear-gradient(90deg,transparent,#2db48c,transparent)}
+[data-theme="helpers"] .iag .ico{background:radial-gradient(circle at 42% 36%,#ffffff,#eef4ff);border-width:2px;font-size:24px;box-shadow:0 5px 14px rgba(70,110,150,.18),inset 0 1px 0 rgba(255,255,255,.8)}
+[data-theme="helpers"] .iag:hover{border-color:rgba(80,150,230,.4);box-shadow:0 22px 46px rgba(70,110,150,.26)}
+[data-theme="helpers"] .iag:nth-child(1) .ico{border-color:#4d96f0;box-shadow:0 5px 14px rgba(60,130,230,.3),0 0 0 4px rgba(77,150,240,.14)}
+[data-theme="helpers"] .iag:nth-child(1) b{color:#2b6fd0}
+[data-theme="helpers"] .iag:nth-child(1)::before{background:linear-gradient(90deg,transparent,#4d96f0,transparent);opacity:1}
+[data-theme="helpers"] .iag:nth-child(2) .ico{border-color:#ffa53c;box-shadow:0 5px 14px rgba(235,150,40,.3),0 0 0 4px rgba(255,165,60,.16)}
+[data-theme="helpers"] .iag:nth-child(2) b{color:#d2761a}
+[data-theme="helpers"] .iag:nth-child(2)::before{background:linear-gradient(90deg,transparent,#ffa53c,transparent);opacity:1}
+[data-theme="helpers"] .iag:nth-child(3) .ico{border-color:#2db48c;box-shadow:0 5px 14px rgba(40,180,120,.3),0 0 0 4px rgba(45,180,140,.16)}
+[data-theme="helpers"] .iag:nth-child(3) b{color:#13966a}
+[data-theme="helpers"] .iag:nth-child(3)::before{background:linear-gradient(90deg,transparent,#2db48c,transparent);opacity:1}
 [data-theme="helpers"] .ifoot{color:#3a5a72}
-[data-theme="helpers"] .istart{color:#3a2a00}
+[data-theme="helpers"] .istart{color:#5a3a00}
+[data-theme="helpers"] .difflbl{color:#566a80}
+[data-theme="helpers"] .cvrank{color:#c9711a}
+[data-theme="helpers"] .cvbest,[data-theme="helpers"] .cvbadge{color:#566a82}
+[data-theme="helpers"] .cvbar{background:rgba(60,90,130,.16)}
+[data-theme="helpers"] .cvbar i{background:#ffae3a;box-shadow:0 0 10px rgba(255,170,60,.6)}
+[data-theme="helpers"] .ilink{color:#3f5a72;border-bottom-color:rgba(60,120,170,.55)}
+[data-theme="helpers"] .ilink:hover{color:#c9711a}
+[data-theme="helpers"] .cvdaily{background:rgba(255,200,90,.26);border-color:rgba(230,160,40,.5);color:#6a4410}
+[data-theme="helpers"] .cvdaily span{color:#566a80}
+[data-theme="helpers"] .introvig{background:radial-gradient(125% 92% at 50% 38%,transparent 72%,rgba(40,60,90,.08) 100%)}
 /* silhouette swap */
 .ifactory{position:absolute;left:0;right:0;bottom:0;width:100%;height:46vh;z-index:2;animation:hrise 1.6s cubic-bezier(.2,.8,.2,1) both;display:none}
 [data-theme="helpers"] .imanor{display:none}
@@ -574,7 +608,7 @@ body.flick{animation:flick .56s steps(1) both}
 <div class="top">
   <div class="brand"><span class="d"></span>AFTERLOGIN</div>
   <div class="actbar" id="actbar"></div>
-  <div class="right"><span class="dread" id="dread" onclick="hungryStep()" title="The Hungry stalks the corridors — judge the F-grade rooms before it arrives (click to hasten it)"><span id="dreadLbl">Hungry</span><span class="bar"><i id="dreadBar"></i></span></span><span class="dawn">⏱ <b>04:12</b></span><span class="hudstat" id="scoreEl">✦ 0</span><span class="hudstat combohud" id="comboEl"></span><span class="hudstat" id="wardsEl">🛡 ✦✦✦</span><span class="prog" id="prog">— souls judged</span><span class="toggle" id="storeBtn" title="The Essence Store">🔮 <b id="essN">0</b></span><span class="toggle" id="codexBtn" onclick="openCodex()" title="Behind the Game — the real Microsoft controls">📖</span><span class="toggle" id="mapBtn">🗺 Manor</span><span class="toggle" id="muteBtn" onclick="toggleMute()" title="Sound">🔊</span><span class="toggle" id="themeBtn">☼ Sunnyside</span></div>
+  <div class="right"><span class="dread" id="dread" onclick="hungryStep()" title="The Hungry stalks the corridors — judge the F-grade rooms before it arrives (click to hasten it)"><span id="dreadLbl">Hungry</span><span class="bar"><i id="dreadBar"></i></span></span><span class="dawn">⏱ <b>04:12</b></span><span class="hudstat" id="scoreEl">✦ 0</span><span class="hudstat combohud" id="comboEl"></span><span class="hudstat" id="wardsEl">🛡 ✦✦✦</span><span class="prog" id="prog">— souls judged</span><span class="toggle" id="storeBtn" title="The Essence Store">🔮 <b id="essN">0</b></span><span class="toggle" id="codexBtn" onclick="openCodex()" title="Behind the Game — the real Microsoft controls">📖</span><span class="toggle" id="mapBtn">🗺 Manor</span><span class="toggle" id="muteBtn" onclick="toggleMute()" title="Sound">🔊</span></div>
 </div>
 
 <div class="roster" id="roster"></div>
@@ -600,7 +634,7 @@ body.flick{animation:flick .56s steps(1) both}
 <div class="hint" id="hint">Divine + Summon to uncover the truth, then pass judgment</div>
 <div class="tag">Encounter · real engine data</div>
 
-<div id="combat"><div class="cwrap"><div class="cimg" id="cimg"></div><div class="ct" id="combatTitle">The Hungry</div><div class="cs" id="combatSub">an account takeover · it possessed the spirit</div><div class="chp"><i id="chp"></i></div><div class="cresolve"><span class="crlbl">🛡 your Resolve</span><div class="crbar"><i id="crbar"></i></div></div><div class="cdie"><div class="dstage"><div class="d20" id="d20"><div class="d20i"><svg viewBox="0 0 100 100"><g class="facets"><polygon points="50,27 11,27 50,4" fill="#4a3a72"/><polygon points="50,27 50,4 89,27" fill="#5a4788"/><polygon points="50,27 11,27 28,70" fill="#36284f"/><polygon points="50,27 28,70 72,70" fill="#6b53a0"/><polygon points="50,27 72,70 89,27" fill="#42325f"/><polygon points="28,70 11,27 11,73" fill="#2c2046"/><polygon points="28,70 11,73 50,96" fill="#36284f"/><polygon points="28,70 72,70 50,96" fill="#42325f"/><polygon points="72,70 50,96 89,73" fill="#2c2046"/><polygon points="72,70 89,73 89,27" fill="#36284f"/></g><polygon class="rim" points="50,4 89,27 89,73 50,96 11,73 11,27" fill="none"/><text class="num" id="d20n" x="50" y="54" text-anchor="middle" dominant-baseline="middle">20</text></svg></div></div><div class="dshadow"></div></div></div><div class="cactions"><button class="cbtn" onclick="playerStrike()">⚔ Strike<small>d20 · crit/miss</small></button><button class="cbtn" onclick="doRevoke()">⚡ Revoke<small>CAE · sure hit</small></button><button class="cbtn" onclick="doHarden()">🛡 Harden<small>MFA · +Resolve</small></button><button class="cbtn" id="cdisrupt" onclick="doDisrupt()">💥 Disrupt<small>XDR · <b id="cdn">1</b> left</small></button></div></div></div>
+<div id="combat"><div class="cwrap"><div class="cimg" id="cimg"></div><div class="ct" id="combatTitle">The Hungry</div><div class="cs" id="combatSub">an account takeover · it possessed the spirit</div><div class="chp"><i id="chp"></i></div><div class="cresolve"><span class="crlbl">🛡 your Resolve</span><div class="crbar"><i id="crbar"></i></div></div><div class="cdie"><div class="dstage"><div class="d20" id="d20"><div class="d20i"><svg viewBox="0 0 100 100"><g class="facets"><polygon points="50,27 11,27 50,4" fill="#4a3a72"/><polygon points="50,27 50,4 89,27" fill="#5a4788"/><polygon points="50,27 11,27 28,70" fill="#36284f"/><polygon points="50,27 28,70 72,70" fill="#6b53a0"/><polygon points="50,27 72,70 89,27" fill="#42325f"/><polygon points="28,70 11,27 11,73" fill="#2c2046"/><polygon points="28,70 11,73 50,96" fill="#36284f"/><polygon points="28,70 72,70 50,96" fill="#42325f"/><polygon points="72,70 50,96 89,73" fill="#2c2046"/><polygon points="72,70 89,73 89,27" fill="#36284f"/></g><polygon class="rim" points="50,4 89,27 89,73 50,96 11,73 11,27" fill="none"/><text class="num" id="d20n" x="50" y="54" text-anchor="middle" dominant-baseline="middle">20</text></svg></div></div><div class="dshadow"></div></div></div><div class="cprompt">Choose a remediation — the <b>d20</b> decides how well it lands</div><div class="cactions" id="cactions"></div><div class="cteach" id="cteach"></div></div></div>
 
 <div id="store"><div class="storeaura"></div><div class="storemotes" id="storeMotes"></div><div class="storewrap">
   <div class="storehead"><div><div class="sh1" id="storeTitle">🕯️ The Reliquary</div><div class="sh2" id="storeSub">Essence — the residue of every spirit you lay to rest — pools here.</div></div><div class="sbal"><span class="balorb">🔮</span><b id="essN2">0</b><span id="balLabel">essence</span></div><span class="storeclose" onclick="closeStore()">✕</span></div>
@@ -816,8 +850,9 @@ const TMROOMS={0:'The Front Desk',1:'The Control Room',2:'Records Bay',3:'Visito
 const TMFLOORS={1:'The Factory Floor',2:'The Mezzanine',3:'The Top Floor'};
 const GHOSTS={billing:1,breakglass:1,legacy:1,okafor:1,santos:1,spooler:1},GFALL={service:'spooler',admin:'legacy',user:'okafor'},ROOMART={billing:1,breakglass:1,contractor:1,etl:1,guestwifi:1,intern:1,kiosk:1,legacy:1,okafor:1,santos:1,spooler:1,vendor:1};
 const ST={};Object.keys(SOULS).forEach(a=>ST[a]={});
-let floor=1,cur=null,score=0,wards=3,combatTgt=null,thp=30,thpMax=30,MAXD=8;const H={room:0};const haunted={};
-let resolve=24,resolveMax=24,cWeaken=0,cHarden=false,disruptLeft=1,cLock=false;
+let floor=1,floorMax=1,cur=null,score=0,wards=3,combatTgt=null,thp=30,thpMax=30,MAXD=8;const H={room:0};const haunted={};
+function floorBossAcct(f){for(const k in BOSSES){if(BOSSES[k].floor===f)return k;}return null;}
+let resolve=24,resolveMax=24,cWeaken=0,cHarden=false,cLock=false;
 function theme(){return document.documentElement.getAttribute('data-theme');}
 function kid(){return theme()==='helpers';}
 function ghostSrc(a){const s=SOULS[a];return (kid()?'assets/helpers/ghost_':'assets/ghost_')+(GHOSTS[a]?a:(GFALL[s.form]||'okafor'))+'.png';}
@@ -833,8 +868,8 @@ function updateProg(){const t=allAccts(),d=t.filter(a=>ST[a].done).length;docume
 function updateHud(){document.getElementById('scoreEl').textContent='✦ '+score;document.getElementById('wardsEl').textContent='🛡 '+(wards>0?'✦'.repeat(wards):'—');const ce=document.getElementById('comboEl');if(ce)ce.textContent=combo>=2?'🔥 '+combo+' streak ·×'+comboMult():'';}
 function rank(){return score>=320?'S':score>=240?'A':score>=150?'B':score>=70?'C':'D';}
 
-function buildFloorTabs(){document.getElementById('actbar').innerHTML=FLOORS.map(f=>'<span class="ab'+(f.f===floor?' on':'')+'" onclick="setFloor('+f.f+')">'+(kid()?TMFLOORS[f.f]:f.name)+'</span>').join('');}
-function setFloor(f){floor=f;buildFloorTabs();buildRoster();if(document.getElementById('map').classList.contains('show')){buildMap();const fl=document.getElementById('floor');if(fl){fl.style.animation='none';void fl.offsetWidth;fl.style.animation='floorin .42s ease';}}}
+function buildFloorTabs(){document.getElementById('actbar').innerHTML=FLOORS.map(f=>{const lk=f.f>floorMax;return '<span class="ab'+(f.f===floor?' on':'')+(lk?' locked':'')+'" onclick="setFloor('+f.f+')">'+(lk?'🔒 ':'')+(kid()?TMFLOORS[f.f]:f.name)+'</span>';}).join('');}
+function setFloor(f){if(f>floorMax){sfx('tick');const ba=floorBossAcct(floor),bn=ba&&BOSSES[ba]?BOSSES[ba].name:'the guardian';toast('🔒 Defeat <b>'+bn+'</b> — clear this floor before you ascend.');return;}floor=f;buildFloorTabs();buildRoster();if(document.getElementById('map').classList.contains('show')){buildMap();const fl=document.getElementById('floor');if(fl){fl.style.animation='none';void fl.offsetWidth;fl.style.animation='floorin .42s ease';}}}
 
 function buildRoster(){const fn=kid()?TMFLOORS[floor]:FLOORS[floor-1].name;R.innerHTML='<div class="rhead">⌂ Rooms · <b>'+fn+'</b></div>';
  acctRoomsOn(floor).forEach(r=>{const a=r.account,s=SOULS[a],t=document.createElement('div');t.className='tile'+(a===cur?' sel':'')+(ST[a].done?' done':'');t.style.setProperty('--gc',GC[s.grade]);
@@ -848,6 +883,7 @@ function setRitesLocked(lock){document.getElementById('rites').classList.toggle(
 
 function renderDossier(a){const s=SOULS[a],st=ST[a],lb=s.lb;let h='<h4>The Case · '+s.label+'</h4><div class="sig">'+sigOf(a).map(x=>'<div class="x"><div class="k">'+x[0]+'</div><div class="v">'+x[1]+'</div></div>').join('')+'</div>';
  if(buffs.warden&&recIdx(a)===1)h+='<div style="margin-top:11px;font-size:11.5px;color:var(--hi);font-weight:600">🛡 Warden flags this as <b>load-bearing</b> — bind &amp; watch, never delete.</div>';
+ if(BOSSES[a]&&!st.done)h+='<div style="margin-top:11px;font-size:11.5px;color:#ff9ab0;font-weight:700">⚔ <b>'+BOSSES[a].name+'</b> — a floor <b>guardian</b>. It cannot be judged; clear the floor’s other spirits, then confront it.</div>';
  h+='<div class="rev fg"><div class="rh">⬡ <b>Fabric IQ</b> · dependency graph</div>';
  if(st.divined){const gr=s.bind||[],N=gr.length,sm=st.summoned,liveN=gr.filter(b=>b.live).length;h+='<svg viewBox="0 0 280 '+(N>1?78:50)+'"><circle cx="34" cy="30" r="13" fill="rgba(120,110,160,.16)" stroke="'+GC[s.grade]+'" stroke-width="2"/><text x="34" y="35" text-anchor="middle" fill="'+GC[s.grade]+'" font-family="Cormorant Garamond,serif" font-size="14" font-weight="700">'+s.grade+'</text>';
    gr.forEach((b,i)=>{const y=N>1?12+i*(40/(N-1)):30,hot=b.live&&sm,col=hot?'#ff3b5c':'rgba(150,140,190,.5)',lbl=b.label.replace(/<[^>]+>/g,'');h+='<path d="M47 30 C110 30 150 '+y+' 214 '+y+'" fill="none" stroke="'+col+'" stroke-width="'+(hot?2.2:1.3)+'"'+(hot?' stroke-dasharray="5 6" class="flowdash"':'')+' opacity="'+(hot?.95:.45)+'"/><circle cx="226" cy="'+y+'" r="6" fill="rgba(20,16,40,.6)" stroke="'+col+'"/><text x="238" y="'+(y+3.4)+'" fill="rgba(155,148,186,.92)" font-size="9">'+(lbl.length>31?lbl.slice(0,30)+'…':lbl)+'</text>';});
@@ -876,7 +912,7 @@ function show(){const a=cur,s=SOULS[a],st=ST[a];
  updateProg();}
 
 function divine(){if(!cur)return;const st=ST[cur];if(st.divined)return;st.divined=true;document.getElementById('invD').classList.add('on');renderDossier(cur);if(!st.councilDone)runCouncil(cur);tutAdvance('divine');}
-function summon(){if(!cur)return;const st=ST[cur];if(st.summoned)return;const c=summonCost();if(essence<c){sfx('tick');toast('Not enough essence to Summon (need '+c+' 🔮) — judge on what you have, or earn more by laying spirits to rest.');return;}essence-=c;essSpent+=c;updEss();st.summoned=true;renderDossier(cur);const iS=document.getElementById('invS');iS.classList.add('on');iS.innerHTML='◑ Summoned ✓ <span class="iqb">Foundry IQ</span>';runCouncil(cur);toast('🔎 <b>Foundry IQ</b> — evidence in. The live bindings are verified and the council reaches its full read.');tutAdvance('summon');}
+function summon(){if(!cur)return;const st=ST[cur];if(st.summoned)return;const c=tutActive?0:summonCost();if(essence<c){sfx('tick');toast('Not enough essence to Summon (need '+c+' 🔮) — judge on what you have, or earn more by laying spirits to rest.');return;}if(c){essence-=c;essSpent+=c;updEss();}st.summoned=true;renderDossier(cur);const iS=document.getElementById('invS');iS.classList.add('on');iS.innerHTML='◑ Summoned ✓ <span class="iqb">Foundry IQ</span>';runCouncil(cur);toast('🔎 <b>Foundry IQ</b> — evidence in. The live bindings are verified and the council reaches its full read.');tutAdvance('summon');}
 async function runCouncil(a){if(!document.getElementById('ag0'))return;const c=ai(a),sm=ST[a].summoned,showC=DIFF[diff].conf&&!modis('fog');
  let w=c.w,sk=sm?c.s:'I can read the surface, but I cannot confirm it without the cited evidence — Summon to be certain.',liveAI=false;
  if(sm){const got=await fetchCouncil(a).catch(()=>null);if(cur===a&&got){w=got.w;sk=got.s;liveAI=true;}}
@@ -890,12 +926,17 @@ async function runCouncil(a){if(!document.getElementById('ag0'))return;const c=a
  window._c1=setTimeout(()=>{const e=document.getElementById('ag1');if(e){e.classList.add('on','talk');if(sm&&c.flag)e.classList.add('live');else e.classList.remove('live');type(e.querySelector('.sp'),sk,()=>e.classList.remove('talk'));}},1600);
  window._c2=setTimeout(()=>{const e=document.getElementById('ag2');if(e){e.classList.add('on','talk');type(e.querySelector('.sp'),close,()=>{e.classList.remove('talk');ST[a].councilDone=true;if(cur===a)setRitesLocked(false);tutAdvance('council');});}},2900);}
 
-function advance(){if(allAccts().every(a=>ST[a].done)){breakDawn();return;}
- let next=acctRoomsOn(floor).map(r=>r.account).find(a=>!ST[a].done);
- if(!next){const nf=FLOORS.map(f=>f.f).find(f=>acctRoomsOn(f).some(r=>!ST[r.account].done));if(nf){floor=nf;buildFloorTabs();next=acctRoomsOn(nf).map(r=>r.account).find(a=>!ST[a].done);}}
- if(next){cur=next;buildRoster();show();}}
+function advance(){if(combatTgt)return;
+ if(allAccts().every(a=>ST[a].done)){breakDawn();return;}
+ const ba=floorBossAcct(floor);
+ let next=acctRoomsOn(floor).map(r=>r.account).find(a=>!ST[a].done&&a!==ba);
+ if(next){cur=next;buildRoster();show();return;}
+ if(ba&&!ST[ba].done){cur=ba;buildRoster();show();setTimeout(()=>{if(!combatTgt&&!ST[ba].done){toast('👁 The floor is cleared of spirits — its <b>guardian</b> rises. Confront it!');possessAt(ba);}},850);return;}
+ const nf=FLOORS.map(f=>f.f).filter(f=>f<=floorMax).find(f=>acctRoomsOn(f).some(r=>!ST[r.account].done));
+ if(nf){floor=nf;buildFloorTabs();advance();}}
 
 function judge(idx){const a=cur,s=SOULS[a],st=ST[a];if(!a||st.done||!st.councilDone)return;
+ if(BOSSES[a]){sfx('tick');toast('⚔ <b>'+BOSSES[a].name+'</b> is a guardian — it must be <b>confronted</b>, not judged. Clear the floor’s other spirits first.');return;}
  const correct=idx===s.rite,polter=idx===0&&s.lb;
  const fl=document.getElementById('flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');
  const rs=document.getElementById('result');rs.classList.remove('go','bad');void rs.offsetWidth;
@@ -911,7 +952,7 @@ function bfsNext(from,goalFn){if(goalFn(from))return{next:from,dist:0,goal:from}
  const prev={};prev[from]=null;const q=[from];let goal=null;
  while(q.length&&goal===null){const node=q.shift();for(const nb of neighbors(node)){if(!(nb in prev)){prev[nb]=node;if(goalFn(nb)){goal=nb;break;}q.push(nb);}}}
  if(goal===null)return null;const path=[goal];let c=goal;while(c!==from){c=prev[c];path.unshift(c);}return{next:path[1],dist:path.length-1,goal:goal};}
-function isPrey(n){const r=ROOMS.find(x=>x.id===n);return !!(r&&r.account&&(SOULS[r.account].grade==='F'||BOSSES[r.account])&&!ST[r.account].done);}
+function isPrey(n){const r=ROOMS.find(x=>x.id===n);return !!(r&&r.account&&(SOULS[r.account].grade==='F'||BOSSES[r.account])&&!ST[r.account].done&&r.floor<=floorMax);}
 function isVaultGoal(n){const r=ROOMS.find(x=>x.id===n);return !!(r&&r.vault);}
 /* ───────── the nemesis — a named, taunting predator + proximity dread + active counter ───────── */
 function nemName(){return kid()?'The Tangle':'The Hollow';}
@@ -931,22 +972,75 @@ function hungryStep(){if(!hungryEnabled||combatTgt||document.getElementById('com
  if(r.vault){lose();return;}
  if(r.account&&SOULS[r.account].grade==='F'&&!ST[r.account].done){possessAt(r.account);return;}
  const look=bfsNext(H.room,isPrey)||bfsNext(H.room,isVaultGoal);if(look&&look.dist===1)huntAlarm();}
-// the original floor guardians + Attic boss — real identity-attack archetypes (art by tier: boss1/2/3)
+// the floor guardians + Attic boss — each a MULTI-STAGE kill-chain. Each stage is a real attack step with
+// its own ideal remediation (weak) and the truth about which controls work / whiff (fx).
 const BOSSES={
- guestwifi:{name:'The Token Thief',sub:'svc-guest-wifi · stolen session cookie · adversary-in-the-middle · Floor I guardian',art:'boss1',hp:36,score:20,ess:7,tier:'mini',floor:1},
- billing:{name:'The Consent Daemon',sub:'svc-billing-reconcile · illicit OAuth consent · tenant-wide Mail.Read.All · Floor II guardian',art:'boss2',hp:60,score:28,ess:10,tier:'mini',floor:2},
- steward:{name:'The Hollow',sub:'adm-estate-steward · the abandoned master-admin key · domain compromise · the Attic boss',art:'boss3',hp:100,score:40,ess:16,tier:'boss',floor:3}
+ guestwifi:{name:'The Token Thief',art:'boss1',score:24,ess:8,tier:'mini',floor:1,phases:[
+  {sub:'a stolen session token — signed in as the user right now',hp:34,weak:'revoke',fx:{
+    revoke:{t:'good',why:'Revoking sessions kills the stolen token — the only move that ends a live adversary-in-the-middle session.'},
+    pwreset:{t:'bad',why:'A password reset does NOT invalidate an already-stolen session token — they stay signed in until you revoke the session.'},
+    consent:{t:'bad',why:'No rogue app is involved in token theft — revoking consent changes nothing.'}}},
+  {sub:'locked out of the session, they hammer the door for re-entry',hp:32,weak:'cablock',fx:{
+    cablock:{t:'good',why:'Conditional Access — phishing-resistant MFA + a compliant-device rule — slams the door on re-entry.'},
+    revoke:{t:'good',why:'Keep revoking any fresh sessions they manage to spin up.'},
+    pwreset:{t:'bad',why:'They’re replaying tokens, not the password — a reset won’t stop the re-entry attempts.'}}}
+ ]},
+ billing:{name:'The Consent Daemon',art:'boss2',score:32,ess:11,tier:'mini',floor:2,phases:[
+  {sub:'an illicit OAuth grant — the app is reading mail tenant-wide',hp:38,weak:'consent',fx:{
+    consent:{t:'good',why:'Revoking the app’s OAuth grant removes its access — the root of a consent-phishing attack.'},
+    revoke:{t:'bad',why:'Revoking user sessions doesn’t touch the app’s consent — the grant keeps reading mail.'},
+    pwreset:{t:'bad',why:'The app holds its own OAuth refresh token — a password reset leaves the grant fully intact.'}}},
+  {sub:'the app planted a hidden inbox-forwarding rule to exfiltrate',hp:36,weak:'xdr',fx:{
+    xdr:{t:'good',why:'Defender XDR rips out the malicious app and the mailbox rule it planted.'},
+    quarantine:{t:'good',why:'Quarantine the mailbox and delete the forwarding rule to stop the exfiltration.'},
+    pwreset:{t:'bad',why:'The forwarding rule runs server-side — a password reset doesn’t remove it.'}}}
+ ]},
+ steward:{name:'The Hollow',art:'boss3',score:44,ess:18,tier:'boss',floor:3,phases:[
+  {sub:'a long-abandoned Global Admin, now abused',hp:40,weak:'pim',fx:{
+    pim:{t:'good',why:'Stripping the standing Global Admin via PIM removes the attacker’s crown-jewel access.'},
+    mfa:{t:'bad',why:'MFA won’t remove standing Global Admin — the excess privilege is the real problem.'},
+    quarantine:{t:'bad',why:'A mailbox action does nothing about a privileged-identity compromise.'}}},
+  {sub:'golden-ticket persistence forged across the domain',hp:42,weak:'pwreset',fx:{
+    pwreset:{t:'good',why:'Reset the admin and rotate the krbtgt secret — that invalidates the forged tickets.'},
+    pim:{t:'good',why:'Keep privilege stripped so a re-grant can’t restore access.'},
+    cablock:{t:'bad',why:'Conditional Access can’t revoke an already-forged Kerberos ticket — you must rotate the secret.'}}},
+  {sub:'at the Vault door — a full domain takeover unfolding',hp:48,weak:'soar',fx:{
+    soar:{t:'good',why:'A Sentinel SOAR playbook isolates, revokes, and resets across the whole blast radius at once.'},
+    xdr:{t:'good',why:'Defender XDR coordinates the cross-domain incident response.'},
+    mfa:{t:'bad',why:'A single control can’t contain a domain takeover — you need an orchestrated response.'}}}
+ ]}
 };
+// remediation pool — pick a control each round; the d20 decides how well it lands.
+const REMEDIES=[
+ {id:'revoke',ic:'⚡',name:'Revoke Sessions',ctrl:'Continuous Access Evaluation',pow:1.0,kind:'dmg'},
+ {id:'consent',ic:'🔌',name:'Revoke OAuth Consent',ctrl:'Enterprise Apps',pow:1.0,kind:'dmg'},
+ {id:'pwreset',ic:'🔑',name:'Force Credential Reset',ctrl:'Entra ID',pow:1.0,kind:'dmg'},
+ {id:'cablock',ic:'🚫',name:'Conditional Access Block',ctrl:'Conditional Access',pow:0.9,kind:'dmg'},
+ {id:'xdr',ic:'💥',name:'Disrupt the Attack',ctrl:'Defender XDR',pow:1.35,kind:'dmg'},
+ {id:'pim',ic:'👑',name:'Revoke Privileged Roles',ctrl:'PIM',pow:1.1,kind:'dmg'},
+ {id:'soar',ic:'🧯',name:'Run a SOAR Playbook',ctrl:'Microsoft Sentinel',pow:1.15,kind:'dmg'},
+ {id:'mfa',ic:'🛡',name:'Enforce MFA',ctrl:'Multi-Factor Auth',pow:0.7,kind:'shield'},
+ {id:'quarantine',ic:'📦',name:'Quarantine the Mailbox',ctrl:'Defender for Office',pow:0.7,kind:'shield'}
+];
+let lastRem=[],combatPhase=0;
+// fallback "phase" for ordinary (non-boss) account takeovers — so even generic fights teach the basics
+const GENERIC_PHASE={sub:'an account takeover',weak:'revoke',fx:{
+ revoke:{t:'good',why:'Revoking sessions ends the takeover by killing the attacker’s live tokens.'},
+ pwreset:{t:'good',why:'Reset the credential so the attacker can’t sign back in.'},
+ cablock:{t:'good',why:'A Conditional Access block stops the compromised sign-ins.'},
+ quarantine:{t:'bad',why:'A mailbox action doesn’t address the account compromise itself.'}}};
+function curPhase(){const B=BOSSES[combatTgt];if(B&&B.phases)return B.phases[combatPhase];return combatTgt?GENERIC_PHASE:null;}
 function possessAt(a){if(combatTgt)return;
- if(buffs.autoBanish){buffs.autoBanish=false;ST[a].possessed=false;H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);score+=15;essence+=5;STATS.banishes++;updateHud();updEss();sfx('banish');if(document.getElementById('map').classList.contains('show'))buildMap();updateThreatUI();toast('🧂 The honeytoken sprung — the takeover is auto-contained.');return;}
- const B=BOSSES[a];ST[a].possessed=true;combatTgt=a;thpMax=B?B.hp:30;thp=thpMax;if(buffs.sentinel)thp=Math.max(1,thp-8);resolve=resolveMax;cWeaken=0;cHarden=false;disruptLeft=B?(B.tier==='boss'?2:1):1;cLock=false;updateHud();updateThreatUI();
+ if(buffs.autoBanish&&!BOSSES[a]){buffs.autoBanish=false;ST[a].possessed=false;H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);score+=15;essence+=5;STATS.banishes++;updateHud();updEss();sfx('banish');if(document.getElementById('map').classList.contains('show'))buildMap();updateThreatUI();toast('🧂 The honeytoken sprung — the takeover is auto-contained.');return;}
+ if(buffs.autoBanish&&BOSSES[a])toast('🧂 The honeytoken can’t hold a <b>guardian</b> — you must confront it.');
+ const B=BOSSES[a];ST[a].possessed=true;combatTgt=a;combatPhase=0;thpMax=B?(B.phases?B.phases[0].hp:30):30;thp=thpMax;if(buffs.sentinel)thp=Math.max(1,thp-8);resolveMax=24+(buffs.resolveBonus||0);resolve=resolveMax;cWeaken=0;cHarden=false;cLock=false;updateHud();updateThreatUI();
  if(document.getElementById('map').classList.contains('show'))buildMap();
  const img=B?(kid()?'assets/helpers/'+B.art+'.png':'assets/'+B.art+'.png'):(kid()?'assets/helpers/threat_possession.png':'assets/threat_possession.png');
  document.getElementById('cimg').style.background="url('"+img+"') center/cover";
  document.getElementById('combatTitle').textContent=B?B.name:nemName();
- document.getElementById('combatSub').textContent=B?B.sub:'an account takeover · '+nemName()+' wears the spirit';
- updateCombatUI();var _d=document.getElementById('d20');if(_d){_d.className='d20';document.getElementById('d20n').textContent='20';}
- sfx('growl');nemSpeak('possess');if(B)setTimeout(()=>toast((B.tier==='boss'?'👑 <b>':'⚔ <b>')+B.name+'</b> — '+(B.tier==='boss'?'the Attic boss':'a floor guardian')+' · '+B.hp+' HP. Strike true.'),320);
+ document.getElementById('combatSub').textContent=B?('Stage 1/'+B.phases.length+' · '+B.phases[0].sub):'an account takeover · '+nemName()+' wears the spirit';
+ lastRem=[];updateCombatUI();dealRemedies();cteachMsg('Read the attack above, then pick the control that actually stops it — the wrong tool will whiff.');var _d=document.getElementById('d20');if(_d){_d.className='d20';document.getElementById('d20n').textContent='20';}
+ sfx('growl');nemSpeak('possess');if(B)setTimeout(()=>toast((B.tier==='boss'?'👑 <b>':'⚔ <b>')+B.name+'</b> — '+(B.tier==='boss'?'the Attic boss':'a floor guardian')+' · a <b>'+B.phases.length+'-stage</b> kill-chain. Read each stage.'),320);
  const pv=document.getElementById('possess');pv.querySelector('.ptext').textContent=B?B.name.toUpperCase():'POSSESSED';pv.classList.remove('go');void pv.offsetWidth;pv.classList.add('go');document.body.classList.add('shake');setTimeout(()=>document.body.classList.remove('shake'),520);
  setTimeout(()=>{document.getElementById('combat').classList.add('show');},1250);}
 function updateThreatUI(){const lbl=document.getElementById('dreadLbl'),bar=document.getElementById('dreadBar');if(!lbl)return;
@@ -956,34 +1050,67 @@ function updateThreatUI(){const lbl=document.getElementById('dreadLbl'),bar=docu
  let tgt='';if(buffs.beacon){const pr=bfsNext(H.room,isPrey)||bfsNext(H.room,isVaultGoal);if(pr){const tr=ROOMS.find(x=>x.id===pr.goal);if(tr)tgt=' <span style="color:#ffb454">⌖ '+rname(tr)+'</span>';}}
  lbl.innerHTML=nemName()+' ▸ '+fn+' · '+dist+'<span style="opacity:.55">→Vault</span>'+tgt+(freeze>0?' <span style="color:#9fe6ff">❄'+freeze+'</span>':'');bar.style.width=prox+'%';}
 function cBusy(){return cLock;}
-function updateCombatUI(){const chp=document.getElementById('chp');if(chp)chp.style.width=(Math.max(0,thp)/thpMax*100)+'%';const cr=document.getElementById('crbar');if(cr){cr.style.width=(Math.max(0,resolve)/resolveMax*100)+'%';if(cr.parentElement)cr.parentElement.classList.toggle('low',resolve<=resolveMax*0.34);}const cd=document.getElementById('cdn');if(cd)cd.textContent=disruptLeft;const db=document.getElementById('cdisrupt');if(db)db.classList.toggle('off',disruptLeft<=0);}
-function afterAction(){updateCombatUI();if(thp<=0){cLock=true;setTimeout(banish,700);return;}setTimeout(bossTurn,820);}
-function playerStrike(){if(cBusy())return;cLock=true;const d=document.getElementById('d20'),n=document.getElementById('d20n');d.className='d20 rolling';
- let k=0;clearInterval(d._t);d._t=setInterval(()=>{n.textContent=1+Math.floor(Math.random()*20);if(++k>13){clearInterval(d._t);
-  const roll=1+Math.floor(Math.random()*20),crit=roll===20,miss=roll<(buffs.hitEasy?5:8);n.textContent=roll;d.className='d20 land'+(crit?' crit':miss?' miss':'');sfx('clack');
-  if(!miss){const dmg=Math.max(1,Math.floor(roll/2)+5+(crit?8:0)+buffs.dmg-cWeaken);cWeaken=0;thp=Math.max(0,thp-dmg);floatDmg(dmg,crit);setTimeout(()=>sfx('hit'),150);}else{cWeaken=0;}
+function updateCombatUI(){const chp=document.getElementById('chp');if(chp)chp.style.width=(Math.max(0,thp)/thpMax*100)+'%';const cr=document.getElementById('crbar');if(cr){cr.style.width=(Math.max(0,resolve)/resolveMax*100)+'%';if(cr.parentElement)cr.parentElement.classList.toggle('low',resolve<=resolveMax*0.34);}}
+function afterAction(){updateCombatUI();if(thp<=0){const B=BOSSES[combatTgt];cLock=true;if(B&&B.phases&&combatPhase<B.phases.length-1)setTimeout(nextPhase,850);else setTimeout(banish,700);return;}setTimeout(bossTurn,820);}
+function nextPhase(){const B=BOSSES[combatTgt];if(!B||!B.phases)return;combatPhase++;const ph=B.phases[combatPhase];thpMax=ph.hp;thp=thpMax;cWeaken=0;cHarden=false;lastRem=[];
+ const sub=document.getElementById('combatSub');if(sub)sub.textContent='Stage '+(combatPhase+1)+'/'+B.phases.length+' · '+ph.sub;
+ sfx('growl');nemSpeak('possess');
+ const pv=document.getElementById('possess');if(pv){pv.querySelector('.ptext').textContent='STAGE '+(combatPhase+1);pv.classList.remove('go');void pv.offsetWidth;pv.classList.add('go');}
+ document.body.classList.add('shake');setTimeout(()=>document.body.classList.remove('shake'),420);
+ cteachMsg('⛓ The attack escalates — <b>'+ph.sub+'</b>. A new stage needs a new control.',false);
+ toast('⛓ <b>Stage '+(combatPhase+1)+'/'+B.phases.length+'</b> — '+ph.sub);
+ updateCombatUI();dealRemedies();cLock=false;}
+function dealRemedies(){if(!combatTgt)return;const ph=curPhase(),ideal=(ph&&ph.weak)?REMEDIES.find(r=>r.id===ph.weak):null;
+ let others=REMEDIES.filter(r=>(!ideal||r.id!==ideal.id)&&!lastRem.includes(r.id));
+ if(others.length<2)others=REMEDIES.filter(r=>!ideal||r.id!==ideal.id);
+ others=others.sort(()=>Math.random()-0.5).slice(0,ideal?2:3);
+ const picks=(ideal?[ideal].concat(others):others).sort(()=>Math.random()-0.5);
+ lastRem=picks.map(r=>r.id);
+ const el=document.getElementById('cactions');if(!el)return;
+ el.innerHTML=picks.map(r=>{const rec=!!(buffs.analyst&&ideal&&r.id===ideal.id);return '<button class="cbtn rem'+(rec?' reco':'')+'" onclick="useRemedy(\''+r.id+'\')"><span class="ric">'+r.ic+'</span><span class="rtx"><b>'+r.name+(rec?' <span class="recostar">★ recommended</span>':'')+'</b><small>'+r.ctrl+'</small></span></button>';}).join('');}
+function cteachMsg(t,bad){const el=document.getElementById('cteach');if(!el)return;el.className='cteach show'+(bad?' bad':' good');el.innerHTML=t;}
+function useRemedy(id){if(cBusy())return;const r=REMEDIES.find(x=>x.id===id);if(!r)return;cLock=true;const ph=curPhase(),ideal=!!(ph&&ph.weak===id),fx=(ph&&ph.fx&&ph.fx[id])||null;
+ const el=document.getElementById('cactions');if(el)el.querySelectorAll('button').forEach(b=>b.classList.add('off'));
+ const d=document.getElementById('d20'),n=document.getElementById('d20n');d.className='d20 rolling';
+ let k=0;clearInterval(d._t);d._t=setInterval(()=>{n.textContent=1+(Math.random()*20|0);if(++k>13){clearInterval(d._t);
+  const roll=1+(Math.random()*20|0),crit=roll===20,fumble=(!buffs.steady)&&roll<(buffs.hitEasy?3:6);n.textContent=roll;d.className='d20 land'+(crit?' crit':fumble?' miss':'');sfx('clack');
+  if(r.kind==='shield'){let heal=Math.round(6+roll*0.5)+(crit?8:0);resolve=Math.min(resolveMax,resolve+heal);cHarden=true;floatRes(heal,true);toast(r.ic+' <b>'+r.name+'</b> — +'+heal+' Resolve.');
+   cteachMsg('🛡 <b>'+r.name+'</b> buys you time'+((fx&&fx.t==='bad')?' — but it won’t remove the threat. '+fx.why:' — but you must still apply the right remediation to win.'),fx&&fx.t==='bad');}
+  else{let mult,tag,why,bad=false;
+   if(ideal){mult=1.4;tag='✓ textbook!';why=fx?fx.why:'';}
+   else if(fx&&fx.t==='good'){mult=1.1;tag='✓ effective';why=fx.why;}
+   else if(fx&&fx.t==='bad'){mult=0.2;tag='✗ wrong tool';why=fx.why;bad=true;}
+   else{mult=0.7;tag='partial';why='Helps a little, but it isn’t the control this stage calls for.';}
+   let dmg=(Math.floor(roll/2)+4)*r.pow*mult+buffs.dmg;if(crit)dmg+=Math.floor(roll/2);dmg=Math.round(Math.max(1,dmg-cWeaken));if(fumble)dmg=Math.max(1,Math.round(dmg*0.5));cWeaken=0;thp=Math.max(0,thp-dmg);floatDmg(dmg,crit||ideal);setTimeout(()=>sfx(bad?'tick':'hit'),140);
+   toast(r.ic+' <b>'+r.name+'</b> — '+tag+' · −'+dmg+(crit?' CRIT!':''));
+   cteachMsg((bad?'✗ ':((ideal||(fx&&fx.t==='good'))?'✓ ':'• '))+'<b>'+r.name+'</b>: '+(why||''),bad);}
   afterAction();}},55);}
-function doRevoke(){if(cBusy())return;cLock=true;const dmg=Math.max(1,8+buffs.dmg-cWeaken);cWeaken=0;thp=Math.max(0,thp-dmg);floatDmg(dmg,false);sfx('hit');toast('⚡ <b>Continuous Access Evaluation</b> revokes the token — a sure −'+dmg+'.');afterAction();}
-function doHarden(){if(cBusy())return;cLock=true;resolve=Math.min(resolveMax,resolve+10);cHarden=true;sfx('seal');toast('🛡 <b>MFA enforced</b> — you brace: +10 Resolve, the next attack is blunted.');afterAction();}
-function doDisrupt(){if(cBusy())return;if(disruptLeft<=0){sfx('tick');toast('💥 No Attack Disruptions left this fight.');return;}cLock=true;disruptLeft--;const dmg=14;thp=Math.max(0,thp-dmg);floatDmg(dmg,true);sfx('hit');toast('💥 <b>Defender XDR</b> disables the account — −'+dmg+'.');afterAction();}
 function bossTurn(){const B=BOSSES[combatTgt],nm=B?B.name:nemName(),base=B?(B.floor>=3?10:B.floor===2?8:6):6,r=Math.random();let msg,dmg=0;
  if(B&&r<0.20){const hl=B.floor>=3?12:7;thp=Math.min(thpMax,thp+hl);msg='forges a golden key — heals +'+hl+' HP';}
- else if(r<0.34){cWeaken=(B&&B.floor>=3)?4:3;msg='hollows your blade — your next Strike lands weaker';}
+ else if(r<0.34){cWeaken=(B&&B.floor>=3)?4:3;msg='hollows your hand — your next remediation lands weaker';}
  else {dmg=base+(Math.random()*3|0);msg='drives at your defenses';}
  if(cHarden&&dmg>0){dmg=Math.floor(dmg/2);cHarden=false;}
  if(dmg>0){resolve-=dmg;floatRes(dmg);}
  sfx('growl');toast('👁 <b>'+nm+'</b> '+msg+(dmg>0?' · −'+dmg+' Resolve':'')+'.');
- if(resolve<=0){wards--;resolve=resolveMax;updateHud();if(wards<0){updateCombatUI();cLock=true;toast('🛡 Your last ward shattered — the manor falls.');setTimeout(()=>{document.getElementById('combat').classList.remove('show');lose();},600);return;}toast('🛡 Your defenses broke — a ward is spent. <b>'+wards+'</b> left.');}
- updateCombatUI();cLock=false;}
+ if(resolve<=0){
+   if(wards<=0&&buffs.secondWind){buffs.secondWind=false;resolve=resolveMax;updateHud();toast('🌬️ <b>Second Wind</b> — your break-glass standby kicks in; you hold the line.');}
+   else{wards--;resolve=resolveMax;updateHud();if(wards<0){updateCombatUI();cLock=true;toast('🛡 Your last ward shattered — the manor falls.');setTimeout(()=>{document.getElementById('combat').classList.remove('show');lose();},600);return;}toast('🛡 Your defenses broke — a ward is spent. <b>'+wards+'</b> left.');}
+ }
+ updateCombatUI();dealRemedies();cLock=false;}
 function floatDmg(dmg,crit){const el=document.createElement('div');el.className='cdmg'+(crit?' crit':'');el.textContent='−'+dmg+(crit?' CRIT!':'');const w=document.querySelector('.cwrap');if(w){w.appendChild(el);setTimeout(()=>el.remove(),1100);}}
-function floatRes(n){const el=document.createElement('div');el.className='cdmg res';el.textContent='−'+n+' 🛡';const w=document.querySelector('.cwrap');if(w){w.appendChild(el);setTimeout(()=>el.remove(),1100);}}
-function banish(){document.getElementById('combat').classList.remove('show');const t=combatTgt;combatTgt=null;if(t)ST[t].possessed=false;const Bb=BOSSES[t];score+=Bb?Bb.score:15;essence+=Bb?Bb.ess:5;updEss();STATS.banishes++;sfx('banish');nemSpeak('banish');H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);updateHud();updateThreatUI();const rs=document.getElementById('result');rs.classList.remove('bad');rs.textContent='⚔ Kill-chain Severed';rs.classList.remove('go');void rs.offsetWidth;rs.classList.add('go');const fl=document.getElementById('flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');if(t){cur=t;floor=roomOf(t).floor;buildFloorTabs();buildRoster();show();}}
+function floatRes(n,heal){const el=document.createElement('div');el.className='cdmg res'+(heal?' heal':'');el.textContent=(heal?'+':'−')+n+' 🛡';const w=document.querySelector('.cwrap');if(w){w.appendChild(el);setTimeout(()=>el.remove(),1100);}}
+function banish(){document.getElementById('combat').classList.remove('show');const t=combatTgt;combatTgt=null;if(t)ST[t].possessed=false;const Bb=BOSSES[t];score+=Bb?Bb.score:15;essence+=Bb?Bb.ess:5;updEss();STATS.banishes++;sfx('banish');nemSpeak('banish');H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);updateHud();updateThreatUI();const rs=document.getElementById('result');rs.classList.remove('bad');rs.textContent='⚔ Kill-chain Severed';rs.classList.remove('go');void rs.offsetWidth;rs.classList.add('go');const fl=document.getElementById('flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');
+ if(Bb){ST[t].done=true;updateProg();const bf=Bb.floor;if(bf<3&&bf+1>floorMax)floorMax=bf+1;buildFloorTabs();
+  if(allAccts().every(a=>ST[a].done)){setTimeout(breakDawn,1000);return;}
+  toast('🏆 <b>'+Bb.name+'</b> severed — Act '+['','I','II','III'][bf]+' cleared. The way up is open.');
+  setTimeout(()=>{floor=Math.min(floorMax,bf+1);buildFloorTabs();advance();},1100);return;}
+ if(t){cur=t;floor=roomOf(t).floor;buildFloorTabs();buildRoster();show();}}
 
 function breakDawn(){const earned=endRun(true);renderCareer();const ds=document.getElementById('dsouls');if(ds){let p='';for(let i=0;i<16;i++)p+='<i style="left:'+(7+Math.random()*86).toFixed(0)+'%;animation-delay:'+(Math.random()*1.8).toFixed(2)+'s;animation-duration:'+(3.8+Math.random()*2).toFixed(1)+'s"></i>';ds.innerHTML=p;}const sk=[];if(STATS.rested)sk.push('Dormant-account cleanup');if(STATS.bound)sk.push('Load-bearing detection');if(STATS.acked)sk.push('Least-privilege validation');if(STATS.banishes)sk.push('Account-takeover response');
  document.getElementById('dawnStat').innerHTML='<div class="scrow"><span>Rank</span><b>'+rank()+'</b></div><div class="scrow"><span>Score</span><b>'+score+' ✦</b></div><div class="scrow"><span>Wards held</span><b>'+wards+' / 3</b></div><div class="scrow"><span>Souls judged</span><b>'+STATS.correct+' / '+allAccts().length+'</b></div><div class="scrow"><span>Poltergeists</span><b>'+STATS.poltergeists+'</b></div><div class="scrow"><span>Hungry banished</span><b>'+STATS.banishes+'</b></div><div class="skills"><div class="sh">Security skills practiced</div>'+(sk.length?sk.map(s=>'<div class="sk">✓ '+s+'</div>').join(''):'<div class="sk">—</div>')+'</div>'+metaPanel(earned);
  sfx('dawn');document.getElementById('dawn').classList.add('show');}
 function lose(){const earned=endRun(false);renderCareer();document.getElementById('combat').classList.remove('show');sfx('fall');document.getElementById('loseStat').innerHTML='Souls judged <b>'+STATS.correct+'/'+allAccts().length+'</b> · Score <b>'+score+'</b> ✦ · Poltergeists <b>'+STATS.poltergeists+'</b>'+metaPanel(earned);document.getElementById('lose').classList.add('show');}
-function restart(){Object.keys(ST).forEach(a=>ST[a]={});score=0;combo=0;maxCombo=0;essSpent=0;dailyMode=false;dailyMod=null;wards=3;combatTgt=null;floor=1;cur=acctRoomsOn(1)[0].account;H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);STATS.poltergeists=STATS.banishes=STATS.rested=STATS.bound=STATS.acked=STATS.correct=0;essence=10;freeze=0;buffs.dmg=0;buffs.hitEasy=false;buffs.essBonus=0;buffs.oracle=false;buffs.sentinel=false;buffs.warden=false;buffs.softPolter=false;buffs.beacon=false;buffs.autoBanish=false;Object.keys(owned).forEach(k=>delete owned[k]);updEss();document.getElementById('dawn').classList.remove('show');document.getElementById('lose').classList.remove('show');document.getElementById('combat').classList.remove('show');buildFloorTabs();buildRoster();show();updateHud();updateThreatUI();}
+function restart(){Object.keys(ST).forEach(a=>ST[a]={});score=0;combo=0;maxCombo=0;essSpent=0;dailyMode=false;dailyMod=null;wards=3;combatTgt=null;floor=1;floorMax=1;cur=acctRoomsOn(1)[0].account;H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);STATS.poltergeists=STATS.banishes=STATS.rested=STATS.bound=STATS.acked=STATS.correct=0;essence=10;freeze=0;buffs.dmg=0;buffs.hitEasy=false;buffs.essBonus=0;buffs.oracle=false;buffs.sentinel=false;buffs.warden=false;buffs.softPolter=false;buffs.beacon=false;buffs.autoBanish=false;buffs.analyst=false;buffs.steady=false;buffs.resolveBonus=0;buffs.secondWind=false;Object.keys(owned).forEach(k=>delete owned[k]);updEss();document.getElementById('dawn').classList.remove('show');document.getElementById('lose').classList.remove('show');document.getElementById('combat').classList.remove('show');buildFloorTabs();buildRoster();show();updateHud();updateThreatUI();}
 
 // ── MAP — real floor-plan node-graph ──
 function buildMap(){const fl=document.getElementById('floor'),k=kid();const rooms=ROOMS.filter(r=>r.floor===floor),onR={};rooms.forEach(r=>onR[r.id]=r);
@@ -1015,7 +1142,7 @@ document.getElementById('map').addEventListener('mousemove',function(e){const cx
  const fl=document.getElementById('floor');if(fl)fl.style.transform='translate('+(cx*-15).toFixed(1)+'px,'+(cy*-11).toFixed(1)+'px)';
  const hh=document.getElementById('mhouse');if(hh)hh.style.transform='translate(calc(-50% + '+(cx*24).toFixed(1)+'px),calc(-50% + '+(cy*18).toFixed(1)+'px))';
  const mn=document.querySelector('.mmoon');if(mn)mn.style.transform='translate('+(cx*20).toFixed(1)+'px,'+(cy*14).toFixed(1)+'px)';});
-function buildFloorNav(){const hf=roomFloor(H.room),won=allAccts().every(a=>ST[a].done);document.getElementById('floornav').innerHTML=FLOORS.map(f=>'<div class="fb'+(f.f===floor?' on':'')+(f.f===hf&&!won?' hf':'')+'" onclick="setFloor('+f.f+')">'+['','Ⅰ','Ⅱ','Ⅲ'][f.f]+'<span class="ft">'+(kid()?TMFLOORS[f.f]:f.name)+'</span></div>').join('');}
+function buildFloorNav(){const hf=roomFloor(H.room),won=allAccts().every(a=>ST[a].done);document.getElementById('floornav').innerHTML=FLOORS.map(f=>{const lk=f.f>floorMax;return '<div class="fb'+(f.f===floor?' on':'')+(f.f===hf&&!won?' hf':'')+(lk?' locked':'')+'" onclick="setFloor('+f.f+')">'+(lk?'🔒':['','Ⅰ','Ⅱ','Ⅲ'][f.f])+'<span class="ft">'+(kid()?TMFLOORS[f.f]:f.name)+'</span></div>';}).join('');}
 function showPop(a,node){const s=SOULS[a],p=document.getElementById('mpop'),r=node.getBoundingClientRect();p.innerHTML='<b style="color:'+GC[s.grade]+'">'+s.grade+'</b>'+s.label+'<span>'+s.kind+' · <em>'+(ST[a].done?'judged':s.dead?'looks dormant':'active')+'</em></span>';p.style.left=(r.left+r.width/2)+'px';p.style.top=(r.top-8)+'px';p.classList.add('show');}
 function hidePop(){document.getElementById('mpop').classList.remove('show');}
 function enterRoom(a){hidePop();const tr=document.getElementById('transition'),rb=roomSrc(a);if(rb)tr.style.background="url('"+rb+"') center/cover";else tr.style.background="radial-gradient(120% 90% at 70% 12%,#fff7e0,#cfe6ff 48%,#a9d2f3)";
@@ -1030,17 +1157,15 @@ document.getElementById('storeBtn').onclick=openStore;
 function setDiff(d){if(!DIFF[d])return;diff=d;document.querySelectorAll('.diffswitch .dfw').forEach(b=>b.classList.toggle('on',b.getAttribute('data-d')===d));}
 function setTheme(t){const sp=t==='spectral';document.documentElement.setAttribute('data-theme',t);
  document.documentElement.style.setProperty('--acc',sp?'32,245,147':'255,206,43');document.documentElement.style.setProperty('--gold',sp?'#c9a24b':'#36c2a8');
- document.getElementById('themeBtn').textContent=sp?'☼ Sunnyside':'☾ Haunted';
  document.getElementById('mapBtn').textContent=sp?'🗺 Manor':'🏭 Factory';
  updateIntroTheme();buildFloorTabs();buildRoster();if(cur)show();if(document.getElementById('map').classList.contains('show'))buildMap();}
-document.getElementById('themeBtn').onclick=function(){setTheme(theme()==='spectral'?'helpers':'spectral');};
 function updateIntroTheme(){const sp=theme()==='spectral';
  const t=document.getElementById('ititleT'),k=document.getElementById('ikick'),g=document.getElementById('itag'),ag=document.getElementById('iagents'),st=document.getElementById('istart');
  if(t)t.textContent=sp?'AFTERLOGIN':'HELPER PATROL';
  if(k)k.textContent=sp?'A security haunting · identity · data · breach':'A friendly tidy-up adventure · find · check · tidy';
  if(g)g.textContent=sp?'The manor wakes at midnight — and every door you stopped watching is the way in.':'When the factory sleeps the little helpers wander off and make a mess — round them up before the morning bell!';
  if(st)st.textContent=sp?'Enter the Manor':'Start the Patrol';
- if(ag)ag.innerHTML=sp?'<div class="iag"><span class="ico">🛡</span><b>The Warden</b><i>reasons the safe call</i></div><div class="iag"><span class="ico">🔍</span><b>The Skeptic</b><i>contests the load-bearing</i></div><div class="iag"><span class="ico">✓</span><b>The Council</b><i>renders the verdict</i></div>':'<div class="iag"><span class="ico">🔎</span><b>The Checker</b><i>spots what each helper really does</i></div><div class="iag"><span class="ico">🧹</span><b>The Chaser</b><i>chases down the Gremlin</i></div><div class="iag"><span class="ico">✓</span><b>The Crew</b><i>makes the final call</i></div>';
+ if(ag)ag.innerHTML=sp?'<div class="iag"><span class="ico">🛡</span><b>The Warden</b><i>reasons the safe call</i></div><div class="iag"><span class="ico">🔍</span><b>The Skeptic</b><i>contests the load-bearing</i></div><div class="iag"><span class="ico">✓</span><b>The Council</b><i>renders the verdict</i></div>':'<div class="iag"><span class="ico">🔎</span><b>The Checker</b><i>spots what each helper really does</i></div><div class="iag"><span class="ico">🧹</span><b>The Chaser</b><i>chases down the Gremlin</i></div><div class="iag"><span class="ico">✅</span><b>The Crew</b><i>makes the final call</i></div>';
  document.querySelectorAll('.iswitch .isw').forEach(b=>b.classList.toggle('on',b.getAttribute('data-t')===theme()));}
 function press(el){sfx('tick');el.style.transform='translateY(0) scale(.96)';setTimeout(()=>el.style.transform='',150);}
 // ── audio (Web Audio synth — no files) ──
@@ -1155,21 +1280,24 @@ function tutEnd(){tutActive=false;tutDone=true;hungryEnabled=true;const sp=docum
 function toast(m){const t=document.getElementById('toast');if(!t)return;t.innerHTML=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),5500);}
 addEventListener('resize',()=>{if(tutActive)tutShow();});
 // ── essence store (real Microsoft security controls, dressed as rites) ──
-let essence=10,freeze=0;const ESS={F:8,D:6,C:4,B:3,A:2};const buffs={dmg:0,hitEasy:false,essBonus:0,oracle:false,sentinel:false,warden:false,softPolter:false,beacon:false,autoBanish:false};const owned={};
+let essence=10,freeze=0;const ESS={F:8,D:6,C:4,B:3,A:2};const buffs={dmg:0,hitEasy:false,essBonus:0,oracle:false,sentinel:false,warden:false,softPolter:false,beacon:false,autoBanish:false,analyst:false,steady:false,resolveBonus:0,secondWind:false};const owned={};
 const STORE2=[
  {id:'copilot',cat:'Agent',ic:'🔮',name:'The Oracle',kind:'Security Copilot',cost:30,once:true,desc:'Copilot pre-reads every spirit — <b>auto-Divine + Summon</b> the moment you open a case.',buy(){buffs.oracle=true;if(cur)show();}},
  {id:'sentinel',cat:'Agent',ic:'⚔️',name:'Sentinel’s Playbook',kind:'Microsoft Sentinel · SOAR',cost:28,once:true,desc:'A SOAR playbook joins the hunt — every fight opens with <b>8 free damage</b> to the takeover.',buy(){buffs.sentinel=true;}},
  {id:'warden',cat:'Agent',ic:'🛡️',name:'Warden’s Sight',kind:'Entra ID Protection',cost:18,once:true,desc:'ID Protection patrols every account — it <b>flags load-bearing spirits</b> in the case file before you judge.',buy(){buffs.warden=true;if(cur)renderDossier(cur);}},
+ {id:'analyst',cat:'Agent',ic:'🧠',name:'The Analyst',kind:'Security Copilot · recommendations',cost:30,once:true,desc:'Copilot recommends the fix — in every boss fight the <b>ideal remediation is marked ★</b>.',buy(){buffs.analyst=true;if(combatTgt)dealRemedies();}},
  {id:'revoke',cat:'Spell',ic:'⚡',name:'Rite of Revocation',kind:'Continuous Access Evaluation',cost:20,once:true,desc:'CAE kills tokens in near-real-time — every strike lands <b>+3</b> harder.',buy(){buffs.dmg+=3;}},
  {id:'precision',cat:'Spell',ic:'🎯',name:'Mark of Precision',kind:'Risk-Based Conditional Access',cost:18,once:true,desc:'Targets the compromised session exactly — your dice <b>miss far less often</b>.',buy(){buffs.hitEasy=true;}},
  {id:'sanctuary',cat:'Spell',ic:'👑',name:'Sanctuary of PIM',kind:'Privileged Identity Management',cost:26,repeat:true,desc:'Just-in-time, approval-gated Tier-0 access — restores <b>+1 Vault ward</b>.',buy(){wards++;updateHud();}},
  {id:'governance',cat:'Spell',ic:'📋',name:'Lantern of Audit',kind:'Entra ID Governance',cost:16,once:true,desc:'Automated access reviews turn cleanup into value — <b>+2 essence</b> per spirit judged.',buy(){buffs.essBonus+=2;}},
  {id:'leastpriv',cat:'Spell',ic:'⚖️',name:'Ward of Least Privilege',kind:'Access Reviews',cost:16,once:true,desc:'Tighter scopes blunt your mistakes — a <b>poltergeist costs far less</b> should you slip.',buy(){buffs.softPolter=true;}},
  {id:'beacon',cat:'Spell',ic:'📡',name:'Beacon of Defender',kind:'Defender for Identity',cost:20,once:true,desc:'Lateral-movement detection lights the path — the readout <b>reveals the Hungry’s next target</b>.',buy(){buffs.beacon=true;updateThreatUI();}},
+ {id:'steady',cat:'Spell',ic:'🧘',name:'Steady Hand',kind:'Practised Response',cost:22,once:true,desc:'A well-drilled response — your combat dice <b>never fumble</b> (even low rolls land cleanly).',buy(){buffs.steady=true;}},
+ {id:'fortify',cat:'Spell',ic:'🧱',name:'Fortified Resolve',kind:'Zero Trust posture',cost:20,once:true,desc:'Defence in depth — you enter every fight with <b>+10 max Resolve</b>.',buy(){buffs.resolveBonus+=10;}},
+ {id:'secondwind',cat:'Spell',ic:'🌬️',name:'Second Wind',kind:'Break-Glass Standby',cost:28,once:true,desc:'Once per night, the blow that would break your <b>last ward is survived</b> — defences restored.',buy(){buffs.secondWind=true;}},
  {id:'block',cat:'Scroll',ic:'🚫',name:'Block & Revoke',kind:'Conditional Access',cost:16,repeat:true,desc:'A CA block + session revoke — the Hungry <b>cannot advance for 2 steps</b>.',buy(){freeze+=2;updateThreatUI();toast('🚫 <b>Conditional Access block</b> — the Hungry is pinned for 2 steps.');}},
- {id:'disrupt',cat:'Scroll',ic:'💥',name:'Attack Disruption',kind:'Defender XDR',cost:20,repeat:true,combat:true,desc:'Defender XDR disables the account on the spot — <b>12 instant damage</b>, no roll. (during a fight)',buy(){thp=Math.max(0,thp-12);document.getElementById('chp').style.width=(thp/thpMax*100)+'%';floatDmg(12,false);sfx('hit');if(thp<=0)setTimeout(banish,500);}},
  {id:'posture',cat:'Scroll',ic:'🔦',name:'Posture Scan',kind:'Identity Secure Score · ISPM',cost:18,repeat:true,desc:'A posture scan lights the estate — <b>Divine + Summon every spirit on this floor</b> at once.',buy(){acctRoomsOn(floor).forEach(r=>{ST[r.account].divined=true;ST[r.account].summoned=true;});if(cur)show();toast('🔦 <b>Posture Scan</b> — every spirit on this floor revealed.');}},
- {id:'salt',cat:'Scroll',ic:'🧂',name:'Sacred Salt',kind:'Honeytoken Deception',cost:24,repeat:true,desc:'A planted decoy springs the trap — the <b>next possession is auto-contained</b>, no fight.',buy(){buffs.autoBanish=true;toast('🧂 <b>Honeytoken set</b> — the next takeover will spring the trap.');}}
+ {id:'salt',cat:'Scroll',ic:'🧂',name:'Sacred Salt',kind:'Honeytoken Deception',cost:24,repeat:true,desc:'A planted decoy springs the trap — the <b>next ordinary takeover is auto-contained</b>, no fight. (Guardians must still be confronted.)',buy(){buffs.autoBanish=true;toast('🧂 <b>Honeytoken set</b> — the next takeover will spring the trap.');}}
 ];
 function updEss(){const a=document.getElementById('essN'),b=document.getElementById('essN2');if(a)a.textContent=essence;if(b)b.textContent=essence;}
 function openStore(){if(tutActive)return;const mt=document.getElementById('storeMotes');if(mt){let m='';for(let i=0;i<18;i++)m+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;animation-duration:'+(6+Math.random()*6).toFixed(1)+'s;animation-delay:'+(-Math.random()*8).toFixed(1)+'s"></i>';mt.innerHTML=m;}renderStore();document.getElementById('store').classList.add('show');}
