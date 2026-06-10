@@ -1,0 +1,12 @@
+{
+  "name": "afterlogin-foundry-setup",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": { "setup": "node setup.mjs" },
+  "dependencies": {
+    "@azure/ai-agents": "^1.0.0",
+    "@azure/identity": "^4.4.1"
+  },
+  "engines": { "node": ">=20" }
+}

@@ -9,6 +9,7 @@ The Agent Council is no longer scripted prose — `/api/reason` is now a genuine
 - **Returns the reasoning trace + citations.** The game shows a **"● live agents · N tools"** badge, an *"agents investigating…"* state, the synthesised line, and a toast of the **tool calls + cited sources** (Entra sign-in logs, Purview runbook index, CMDB, OAuth consent audit…).
 - Falls back to the scripted council when no model is configured. Works with **Azure OpenAI / GitHub Models / OpenAI** (function calling).
 - **MCP server (`/mcp`).** The same identity-governance tools are also exposed over the **Model Context Protocol** (real, protocol-validated server) so any agent — Copilot, VS Code, Claude, or an **Azure AI Foundry** agent — can call them. Includes a Dockerfile (Azure Container Apps) and the Foundry agent setup guide.
+- **Azure AI Foundry path.** `/api/reason` now has an optional **Foundry agent** tier: when `FOUNDRY_*` settings are present it routes the council to real **Azure AI Foundry agents** (threads/runs + function-tool execution), and falls back to the inline agents otherwise. Ships a one-command provisioning script (`foundry/setup.mjs`) that creates the Warden/Skeptic/Council agents, and a runbook. Layered: **Foundry → inline agents → scripted.**
 
 ## [0.10.0] - 2026-06-08 — Boss-gated floors, multi-stage fights, and real attack-response training
 

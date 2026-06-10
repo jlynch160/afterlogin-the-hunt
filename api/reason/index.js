@@ -173,6 +173,10 @@ module.exports = async function (context, req) {
   const trace = [];
   const t0 = Date.now();
   try {
+    // Foundry path (real Azure AI Foundry agents) — used only if provisioned; falls back to inline agents on any issue.
+    if (process.env.FOUNDRY_PROJECT_ENDPOINT) {
+      try { const fr = await require('./foundry').runFoundryCouncil(sig, { recordFor: recordFor, runTool: runTool }); if (fr) return J(200, fr); } catch (e) { /* fall through to the inline tool-calling agents */ }
+    }
     const warden = await runAgent(ep, WARDEN_SYS, 'Investigate ' + acct + ' and give your read.', rec, trace, 'Warden');
     const skeptic = await runAgent(ep, SKEPTIC_SYS, 'Account: ' + acct + '. The Warden concluded: "' + warden + '". Verify independently, then contest or confirm.', rec, trace, 'Skeptic');
     const synth = await chat(ep, [
