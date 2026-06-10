@@ -8,6 +8,7 @@ The Agent Council is no longer scripted prose — `/api/reason` is now a genuine
 - **A Council agent synthesises** a cited advisory + a confidence — and still **never names the verdict** (human decides).
 - **Returns the reasoning trace + citations.** The game shows a **"● live agents · N tools"** badge, an *"agents investigating…"* state, the synthesised line, and a toast of the **tool calls + cited sources** (Entra sign-in logs, Purview runbook index, CMDB, OAuth consent audit…).
 - Falls back to the scripted council when no model is configured. Works with **Azure OpenAI / GitHub Models / OpenAI** (function calling).
+- **MCP server (`/mcp`).** The same identity-governance tools are also exposed over the **Model Context Protocol** (real, protocol-validated server) so any agent — Copilot, VS Code, Claude, or an **Azure AI Foundry** agent — can call them. Includes a Dockerfile (Azure Container Apps) and the Foundry agent setup guide.
 
 ## [0.10.0] - 2026-06-08 — Boss-gated floors, multi-stage fights, and real attack-response training
 

@@ -1,0 +1,18 @@
+{
+  "name": "afterlogin-identity-mcp",
+  "version": "1.0.0",
+  "description": "Afterlogin — Identity Governance tools exposed over the Model Context Protocol (MCP).",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "stdio": "node server.js --stdio",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "express": "^4.19.2",
+    "zod": "^3.23.8"
+  },
+  "engines": { "node": ">=20" }
+}
