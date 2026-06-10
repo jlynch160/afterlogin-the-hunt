@@ -1,25 +1,106 @@
 /**
- * Afterlogin — POST /api/reason  (the Agent Council, live)
+ * Afterlogin — POST /api/reason  (REAL multi-agent, tool-calling council)
  * ---------------------------------------------------------------------------
- * Server-side LLM reasoning so API keys never touch the browser. Configure ONE
- * provider via SWA app settings:
+ * Two autonomous agents (Warden, Skeptic) investigate a forgotten account by
+ * CALLING TOOLS over a synthetic identity store, debate, then a Council agent
+ * synthesises a cited advisory. The human still decides — agents never name the
+ * final verdict. Returns {warden, skeptic, council, confidence, citations, trace}.
+ *
+ * Configure ONE provider via SWA app settings (else -> {configured:false}, game
+ * falls back to its scripted council):
  *   GitHub Models : GITHUB_MODELS_TOKEN (free; GITHUB_MODELS_MODEL default gpt-4o)
  *   Azure OpenAI  : AZURE_OPENAI_ENDPOINT + AZURE_OPENAI_KEY (+ AZURE_OPENAI_DEPLOYMENT)
  *   OpenAI        : OPENAI_API_KEY (+ OPENAI_MODEL)
- * Unconfigured → {configured:false}; the game falls back to scripted reasoning.
- *
- * Two modes:
- *  - Council mode (encounter UX): body includes wardenChar — the game ASSIGNS the
- *    stance each agent argues (so the AI can be deterministically "wrong" or "split"
- *    while the prose is generated live). Returns {warden, skeptic}. The model is told
- *    NOT to name a final verdict, so the player still decides.
- *  - Legacy mode (classic build): returns {rite, why, conf}.
  */
-const CHAR = [
-  'this account is truly dead — nothing live depends on it any longer',
-  'this account is load-bearing — a live process or token still quietly feeds from it',
-  'this account is alive and governed — it is in active, sanctioned use and must be left untouched'
+
+// ── synthetic identity store the agents read through TOOLS (no real PII) ──
+const STORE = {
+  'svc-billing-reconcile': {
+    grade: 'F', kind: 'service account',
+    signin: { lastInteractive: '412 days ago', lastTokenRefresh: '3 hours ago (non-interactive)', mfa: 'not enforced' },
+    dependencies: [{ name: 'nightly AP-Close job (runbook AP-Close.ps1:88)', status: 'LIVE' }, { name: 'delegated rights from adm-breakglass', status: 'inactive' }],
+    oauthGrants: [], groups: ['Finance-Service-Accounts'],
+    source: 'Entra sign-in logs · Purview runbook index · CMDB'
+  },
+  'svc-etl-nightly': {
+    grade: 'F', kind: 'service account',
+    signin: { lastInteractive: '377 days ago', lastTokenRefresh: '1 hour ago (app-only)', mfa: 'not enforced' },
+    dependencies: [{ name: 'nightly ETL into the warehouse (ETL-Nightly.ps1)', status: 'LIVE' }, { name: 'created by adm-estate-steward', status: 'inactive' }],
+    oauthGrants: [], groups: ['Data-Service-Accounts'],
+    source: 'Entra sign-in logs · Data Factory pipeline registry'
+  },
+  'adm-legacy-backup': {
+    grade: 'F', kind: 'privileged admin',
+    signin: { lastInteractive: '511 days ago', lastTokenRefresh: 'none', mfa: 'not enforced' },
+    dependencies: [{ name: 'tape-backup service (decommissioned 2022)', status: 'inactive' }, { name: 'group: Backup-Operators (empty)', status: 'inactive' }],
+    oauthGrants: [], groups: ['Domain Admins', 'Backup-Operators'],
+    source: 'Entra roles · CMDB decommission record'
+  },
+  'adm-breakglass-02': {
+    grade: 'D', kind: 'privileged admin',
+    signin: { lastInteractive: '88 days ago', lastTokenRefresh: 'n/a', mfa: 'FIDO2 (phishing-resistant)' },
+    dependencies: [{ name: 'emergency Global Admin (break-glass, governed)', status: 'LIVE (by design)' }],
+    oauthGrants: [], groups: ['Global Administrators (break-glass)'],
+    governance: 'Governed by break-glass policy; attested last quarter; excluded from the MFA campaign by design.',
+    source: 'Entra PIM · break-glass policy · access review'
+  },
+  'adm-estate-steward': {
+    grade: 'F', kind: 'privileged admin (the master key)',
+    signin: { lastInteractive: '604 days ago', lastTokenRefresh: 'none', mfa: 'never enforced' },
+    dependencies: [{ name: 'created svc-etl-nightly and other service identities', status: 'historical' }],
+    oauthGrants: [], groups: ['Global Administrators'],
+    source: 'Entra roles · Tier-0 privileged audit'
+  },
+  'app-orchard-connector': {
+    grade: 'D', kind: 'third-party enterprise app',
+    signin: { lastInteractive: 'n/a (app)', lastTokenRefresh: 'active', mfa: 'n/a' },
+    dependencies: [], groups: [],
+    oauthGrants: [{ scope: 'Mail.Read.All + offline_access', consent: 'tenant-wide, admin-consented', status: 'LIVE' }],
+    source: 'Enterprise apps · OAuth consent audit'
+  },
+  'usr-j.okafor': {
+    grade: 'B', kind: 'member',
+    signin: { lastInteractive: '2 hours ago', lastTokenRefresh: 'active', mfa: 'registered' },
+    dependencies: [{ name: 'owns Q3-Close workbook', status: 'LIVE' }, { name: 'shares AP mailbox with usr-m.santos', status: 'LIVE' }],
+    oauthGrants: [], groups: ['Finance-Readers'],
+    source: 'Entra sign-in logs · access package'
+  },
+  'usr-m.santos': {
+    grade: 'A', kind: 'member',
+    signin: { lastInteractive: '11 minutes ago', lastTokenRefresh: 'active', mfa: 'registered' },
+    dependencies: [], oauthGrants: [], groups: ['Records-Team'],
+    source: 'Entra sign-in logs'
+  }
+};
+
+// build a record from the request payload when an account isn't in the store
+function recordFor(sig) {
+  if (sig && sig.label && STORE[sig.label]) return STORE[sig.label];
+  const binds = (sig && sig.bindings) || [];
+  return {
+    grade: (sig && sig.grade) || '?', kind: (sig && sig.kind) || 'account',
+    signin: { lastInteractive: (sig && sig.last) || 'unknown', lastTokenRefresh: 'unknown', mfa: 'unknown' },
+    dependencies: binds.map(b => ({ name: String(b).replace(/\s*\(LIVE\)\s*$/i, ''), status: /LIVE/i.test(String(b)) ? 'LIVE' : 'inactive' })),
+    oauthGrants: [], groups: [],
+    source: 'Cited evidence (Foundry IQ)'
+  };
+}
+
+// ── the tools the agents can call ──
+const TOOLS = [
+  { type: 'function', function: { name: 'get_signin_activity', description: 'Last interactive sign-in, last token refresh, and MFA status for the account.', parameters: { type: 'object', properties: {}, required: [] } } },
+  { type: 'function', function: { name: 'get_dependencies', description: 'What still depends on the account: its bindings and whether each is LIVE or inactive.', parameters: { type: 'object', properties: {}, required: [] } } },
+  { type: 'function', function: { name: 'get_oauth_grants', description: 'OAuth app consents/grants tied to the account (scope, consent, status).', parameters: { type: 'object', properties: {}, required: [] } } },
+  { type: 'function', function: { name: 'get_group_memberships', description: 'Directory groups and privileged roles the account holds.', parameters: { type: 'object', properties: {}, required: [] } } }
 ];
+function runTool(name, rec) {
+  const cite = rec.source || 'identity signals';
+  if (name === 'get_signin_activity') return Object.assign({}, rec.signin, { source: cite });
+  if (name === 'get_dependencies') return { bindings: rec.dependencies, liveCount: rec.dependencies.filter(d => /LIVE/i.test(d.status)).length, source: cite };
+  if (name === 'get_oauth_grants') return { grants: rec.oauthGrants, source: cite };
+  if (name === 'get_group_memberships') return { groups: rec.groups, governance: rec.governance, source: cite };
+  return { error: 'unknown tool' };
+}
 
 function provider() {
   if (process.env.AZURE_OPENAI_ENDPOINT && process.env.AZURE_OPENAI_KEY) return 'azure-openai';
@@ -27,9 +108,8 @@ function provider() {
   if (process.env.OPENAI_API_KEY) return 'openai';
   return null;
 }
-
 function endpoint(prov) {
-  let url, headers = { 'content-type': 'application/json' }, model, jsonMode = true;
+  let url, headers = { 'content-type': 'application/json' }, model;
   if (prov === 'azure-openai') {
     model = process.env.AZURE_OPENAI_DEPLOYMENT || 'gpt-4o';
     const ver = process.env.AZURE_OPENAI_API_VERSION || '2024-08-01-preview';
@@ -39,69 +119,71 @@ function endpoint(prov) {
     model = process.env.GITHUB_MODELS_MODEL || 'gpt-4o';
     url = (process.env.GITHUB_MODELS_ENDPOINT || 'https://models.inference.ai.azure.com') + '/chat/completions';
     headers['authorization'] = 'Bearer ' + (process.env.GITHUB_MODELS_TOKEN || process.env.GITHUB_TOKEN);
-    jsonMode = false; // GitHub Models doesn't always honor response_format
   } else {
     model = process.env.OPENAI_MODEL || 'gpt-4o';
     url = (process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1') + '/chat/completions';
     headers['authorization'] = 'Bearer ' + process.env.OPENAI_API_KEY;
   }
-  return { url, headers, model, jsonMode };
+  return { url, headers, model };
+}
+async function chat(ep, messages, useTools) {
+  const body = { model: ep.model, messages: messages, temperature: 0.4, max_tokens: 400 };
+  if (useTools) { body.tools = TOOLS; body.tool_choice = 'auto'; }
+  const r = await fetch(ep.url, { method: 'POST', headers: ep.headers, body: JSON.stringify(body) });
+  if (!r.ok) throw new Error('model HTTP ' + r.status);
+  const j = await r.json();
+  return j.choices[0].message;
 }
 
-module.exports = async function (context, req) {
-  const J = (status, body) => { context.res = { status, headers: { 'content-type': 'application/json', 'access-control-allow-origin': '*' }, body }; };
-  if (req.method === 'OPTIONS') return J(204, {});
+// one tool-using agent: loops call -> run tools -> call again until it answers (max 4 turns)
+async function runAgent(ep, system, userMsg, rec, trace, who) {
+  const messages = [{ role: 'system', content: system }, { role: 'user', content: userMsg }];
+  for (let turn = 0; turn < 4; turn++) {
+    const m = await chat(ep, messages, true);
+    messages.push(m);
+    if (m.tool_calls && m.tool_calls.length) {
+      for (const tc of m.tool_calls) {
+        const result = runTool(tc.function.name, rec);
+        trace.push({ agent: who, tool: tc.function.name, result: result });
+        messages.push({ role: 'tool', tool_call_id: tc.id, content: JSON.stringify(result) });
+      }
+      continue;
+    }
+    return (m.content || '').trim();
+  }
+  return (messages[messages.length - 1].content || '').trim();
+}
 
+const WARDEN_SYS = 'You are the WARDEN, an L2 identity-governance agent. Investigate the account by CALLING the provided tools (sign-in activity, dependencies, OAuth grants, group memberships) before forming a view. ' +
+  'Then give ONE short, specific read of the account, citing the data source the tools returned. Surface any doubt. Do NOT state a final action or verdict — the human decides. Keep it under 180 chars. Reply with just the sentence.';
+const SKEPTIC_SYS = 'You are the SKEPTIC, an adversarial reviewer. The Warden has given a read. Independently CALL the tools to verify it, hunting for a contradicting signal the Warden may have missed (a live token, a hidden grant, governed status). ' +
+  'Then contest or confirm in ONE short, specific sentence, citing the data source. Do NOT name a final verdict. Under 180 chars. Reply with just the sentence.';
+
+module.exports = async function (context, req) {
+  const J = (status, body) => { context.res = { status: status, headers: { 'content-type': 'application/json', 'access-control-allow-origin': '*' }, body: body }; };
+  if (req.method === 'OPTIONS') return J(204, {});
   const prov = provider();
   if (!prov) return J(200, { configured: false, note: 'No model configured. Set GITHUB_MODELS_TOKEN (or AZURE_OPENAI_* / OPENAI_API_KEY) in the Static Web App configuration.' });
 
-  let sig = req.body;
-  if (typeof sig === 'string') { try { sig = JSON.parse(sig || '{}'); } catch (e) { sig = {}; } }
+  let sig = req.body; if (typeof sig === 'string') { try { sig = JSON.parse(sig || '{}'); } catch (e) { sig = {}; } }
   sig = sig || {};
-
-  const ctx = `Account ${sig.label} (${sig.kind}, grade ${sig.grade}). Last interactive sign-in: ${sig.last || 'unknown'}. ` +
-    `Bindings: ${(sig.bindings || []).join('; ') || 'none'}. Evidence: ${(sig.evidence || []).join('; ') || 'none'}.`;
-
-  const council = sig.wardenChar !== undefined && sig.wardenChar !== null;
-  let messages;
-  if (council) {
-    const wc = sig.wardenChar, sc = sig.skepticChar, split = !!sig.split;
-    const sys = 'You are two AI security agents debating a forgotten cloud account in a haunted-manor governance game. ' +
-      'The WARDEN argues this read of the account: "' + (CHAR[wc] || CHAR[1]) + '". ' +
-      ((split && sc !== undefined && sc !== null) ? 'The SKEPTIC DISAGREES and argues instead: "' + (CHAR[sc] || '') + '". '
-        : 'The SKEPTIC AGREES with the Warden and reinforces the point with a different detail. ') +
-      'Each writes ONE short, specific, in-character sentence (max 150 chars), citing the actual bindings or evidence. ' +
-      'Do NOT name a final action or verdict word (rest / bind / acknowledge / lay to rest / deprovision / disable) — argue only the reasoning; the human decides. ' +
-      'Return ONLY JSON: {"warden":"...","skeptic":"..."}.';
-    messages = [{ role: 'system', content: sys }, { role: 'user', content: ctx }];
-  } else {
-    const sys = 'You are the Warden, an L2 identity-governance agent triaging a forgotten account. ' +
-      'Choose the SAFE, least-destructive action: "rest" (deprovision — ONLY if truly dead with no live bindings), ' +
-      '"bind" (disable + monitor — if load-bearing or high-privilege), or "ack" (it is a living, least-privilege resident). ' +
-      'Reply with ONLY JSON: {"rite":"rest|bind|ack","why":"<=180 chars rationale","conf":0-100}.';
-    messages = [{ role: 'system', content: sys }, { role: 'user', content: ctx }];
-  }
-
-  const { url, headers, model, jsonMode } = endpoint(prov);
-  const body = { model, messages, temperature: council ? 0.6 : 0.2, max_tokens: 220 };
-  if (jsonMode) body.response_format = { type: 'json_object' };
-
+  const rec = recordFor(sig);
+  const acct = (sig.label || 'the account') + ' (' + rec.kind + ', grade ' + rec.grade + ')';
+  const ep = endpoint(prov);
+  const trace = [];
   const t0 = Date.now();
   try {
-    const r = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
-    if (!r.ok) return J(502, { error: `model HTTP ${r.status}`, source: prov, configured: true });
-    const j = await r.json();
-    const txt = (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || '';
-    const m = txt.match(/\{[\s\S]*\}/);
-    if (!m) return J(502, { error: 'model returned no JSON', source: prov, configured: true });
-    const o = JSON.parse(m[0]);
-    const meta = { model, source: prov, latency: Date.now() - t0, tokens: j.usage && j.usage.total_tokens };
-    if (council) {
-      if (!o.warden || !o.skeptic) return J(502, { error: 'no council in response', source: prov, configured: true });
-      return J(200, Object.assign({ warden: String(o.warden), skeptic: String(o.skeptic) }, meta));
-    }
-    if (!o.rite) return J(502, { error: 'no rite in response', source: prov, configured: true });
-    return J(200, Object.assign({ rite: o.rite, why: o.why, conf: o.conf }, meta));
+    const warden = await runAgent(ep, WARDEN_SYS, 'Investigate ' + acct + ' and give your read.', rec, trace, 'Warden');
+    const skeptic = await runAgent(ep, SKEPTIC_SYS, 'Account: ' + acct + '. The Warden concluded: "' + warden + '". Verify independently, then contest or confirm.', rec, trace, 'Skeptic');
+    const synth = await chat(ep, [
+      { role: 'system', content: 'You are the COUNCIL chair. Given the Warden and Skeptic findings, write ONE sentence summarising the advisory and your confidence as a percent. Do NOT name a final action — the human decides. Reply ONLY JSON: {"council":"<=160 chars","confidence":0-100}.' },
+      { role: 'user', content: 'Warden: ' + warden + '\nSkeptic: ' + skeptic }
+    ], false);
+    let council = 'The evidence is in — the verdict is yours.', confidence = 60;
+    const mm = (synth.content || '').match(/\{[\s\S]*\}/);
+    if (mm) { try { const o = JSON.parse(mm[0]); if (o.council) council = String(o.council); if (typeof o.confidence === 'number') confidence = o.confidence; } catch (e) {} }
+    const citations = Array.from(new Set(trace.map(function (t) { return t.result && t.result.source; }).filter(Boolean)));
+    return J(200, { configured: true, agentic: true, warden: warden, skeptic: skeptic, council: council, confidence: confidence, citations: citations, toolCalls: trace.length, trace: trace, model: ep.model, source: prov, latency: Date.now() - t0 });
   } catch (e) {
     return J(502, { error: String(e.message), source: prov, configured: true });
   }

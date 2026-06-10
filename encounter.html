@@ -478,8 +478,14 @@ body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{tra
 .cvdaily:hover{background:rgba(var(--acc),.16);transform:translateY(-1px)}
 .cvdaily span{display:block;font-size:10px;font-weight:400;color:var(--mut);text-transform:none;letter-spacing:0;margin-top:2px}
 [data-theme="helpers"] .cvdaily{color:#234}
-.ilink{cursor:pointer;margin:14px auto 0;font-size:12px;letter-spacing:1px;color:var(--mut);border-bottom:1px dashed rgba(var(--acc),.4);display:inline-block;padding-bottom:2px;transition:.16s}
-.ilink:hover{color:rgb(var(--acc))}
+.icodexbadge{position:absolute;top:20px;right:22px;z-index:7;display:flex;align-items:center;gap:11px;cursor:pointer;padding:9px 16px 9px 10px;border-radius:16px;background:linear-gradient(135deg,rgba(30,22,56,.82),rgba(16,11,30,.74));border:1px solid rgba(var(--acc),.42);box-shadow:0 12px 32px rgba(0,0,0,.42),0 0 22px rgba(var(--acc),.16);backdrop-filter:blur(11px);transition:transform .2s,box-shadow .2s,border-color .2s;animation:fadeup .9s ease .7s both,cbadge 3.4s ease-in-out infinite 1.8s}
+@keyframes cbadge{0%,100%{box-shadow:0 12px 32px rgba(0,0,0,.42),0 0 18px rgba(var(--acc),.14)}50%{box-shadow:0 12px 32px rgba(0,0,0,.42),0 0 30px rgba(var(--acc),.34)}}
+.icodexbadge:hover{transform:translateY(-2px);border-color:rgba(var(--acc),.75);box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 34px rgba(var(--acc),.34)}
+.icb-ic{flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:radial-gradient(circle at 38% 32%,rgba(var(--acc),.3),rgba(var(--acc),.07));border:1px solid rgba(var(--acc),.5);box-shadow:0 0 16px rgba(var(--acc),.3) inset,0 0 12px rgba(var(--acc),.2)}
+.icb-tx{display:flex;flex-direction:column;line-height:1.18;text-align:left}
+.icb-tx b{font-family:'Cormorant Garamond',serif;font-size:15.5px;font-weight:700;color:var(--ink);letter-spacing:.3px}
+.icb-tx span{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mut);margin-top:1px}
+@media(max-width:600px){.icodexbadge{top:14px;right:14px;padding:8px 12px 8px 9px}.icb-tx span{display:none}.icb-tx b{font-size:13.5px}}
 /* behind-the-game codex */
 #codex{position:fixed;inset:0;z-index:15;display:none;place-items:center;background:rgba(4,3,11,.84);backdrop-filter:blur(8px)}
 #codex.show{display:grid;animation:fadein .3s ease}
@@ -570,8 +576,11 @@ body.flick{animation:flick .56s steps(1) both}
 [data-theme="helpers"] .cvbest,[data-theme="helpers"] .cvbadge{color:#566a82}
 [data-theme="helpers"] .cvbar{background:rgba(60,90,130,.16)}
 [data-theme="helpers"] .cvbar i{background:#ffae3a;box-shadow:0 0 10px rgba(255,170,60,.6)}
-[data-theme="helpers"] .ilink{color:#3f5a72;border-bottom-color:rgba(60,120,170,.55)}
-[data-theme="helpers"] .ilink:hover{color:#c9711a}
+[data-theme="helpers"] .icodexbadge{background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(244,250,255,.84));border-color:rgba(60,120,170,.4);box-shadow:0 12px 30px rgba(70,110,150,.2),0 0 18px rgba(45,180,140,.14)}
+[data-theme="helpers"] .icodexbadge:hover{border-color:rgba(45,180,140,.6)}
+[data-theme="helpers"] .icb-tx b{color:#234}
+[data-theme="helpers"] .icb-tx span{color:#5a6a80}
+[data-theme="helpers"] .icb-ic{background:radial-gradient(circle at 38% 32%,rgba(45,180,140,.2),rgba(45,180,140,.05));border-color:rgba(45,180,140,.5);box-shadow:0 0 12px rgba(45,180,140,.2)}
 [data-theme="helpers"] .cvdaily{background:rgba(255,200,90,.26);border-color:rgba(230,160,40,.5);color:#6a4410}
 [data-theme="helpers"] .cvdaily span{color:#566a80}
 [data-theme="helpers"] .introvig{background:radial-gradient(125% 92% at 50% 38%,transparent 72%,rgba(40,60,90,.08) 100%)}
@@ -723,6 +732,10 @@ body.flick{animation:flick .56s steps(1) both}
   <div class="introfog"></div>
   <div class="iember" id="iember"></div>
   <div class="introscrim"></div>
+  <div class="icodexbadge" onclick="openCodex()" title="The real Microsoft security capability behind every game element">
+    <span class="icb-ic">📖</span>
+    <span class="icb-tx"><b>Behind the Game</b><span>the real Microsoft controls →</span></span>
+  </div>
   <div class="introcontent">
     <div class="iswitch"><span class="isw on" data-t="spectral" onclick="setTheme('spectral')">🏰 Manor</span><span class="isw" data-t="helpers" onclick="setTheme('helpers')">🏭 Factory</span></div>
     <div class="diffrow"><span class="difflbl">Difficulty</span><div class="diffswitch"><span class="dfw" data-d="casual" onclick="setDiff('casual')">Casual</span><span class="dfw on" data-d="auditor" onclick="setDiff('auditor')">Auditor</span><span class="dfw" data-d="nightmare" onclick="setDiff('nightmare')">Nightmare</span></div></div>
@@ -737,7 +750,6 @@ body.flick{animation:flick .56s steps(1) both}
     </div>
     <button class="istart" id="istart" onclick="enterManor()">Enter the Manor</button>
     <div class="career" id="career"></div>
-    <div class="ilink" onclick="openCodex()">📖 Behind the Game — see the real Microsoft controls</div>
     <div class="ifoot">Synthetic data · powered by <b>Foundry IQ</b> + <b>Fabric IQ</b> · built with <b>Copilot</b></div>
   </div>
 </div>
@@ -914,17 +926,18 @@ function show(){const a=cur,s=SOULS[a],st=ST[a];
 function divine(){if(!cur)return;const st=ST[cur];if(st.divined)return;st.divined=true;document.getElementById('invD').classList.add('on');renderDossier(cur);if(!st.councilDone)runCouncil(cur);tutAdvance('divine');}
 function summon(){if(!cur)return;const st=ST[cur];if(st.summoned)return;const c=tutActive?0:summonCost();if(essence<c){sfx('tick');toast('Not enough essence to Summon (need '+c+' 🔮) — judge on what you have, or earn more by laying spirits to rest.');return;}if(c){essence-=c;essSpent+=c;updEss();}st.summoned=true;renderDossier(cur);const iS=document.getElementById('invS');iS.classList.add('on');iS.innerHTML='◑ Summoned ✓ <span class="iqb">Foundry IQ</span>';runCouncil(cur);toast('🔎 <b>Foundry IQ</b> — evidence in. The live bindings are verified and the council reaches its full read.');tutAdvance('summon');}
 async function runCouncil(a){if(!document.getElementById('ag0'))return;const c=ai(a),sm=ST[a].summoned,showC=DIFF[diff].conf&&!modis('fog');
- let w=c.w,sk=sm?c.s:'I can read the surface, but I cannot confirm it without the cited evidence — Summon to be certain.',liveAI=false;
- if(sm){const got=await fetchCouncil(a).catch(()=>null);if(cur===a&&got){w=got.w;sk=got.s;liveAI=true;}}
+ let w=c.w,sk=sm?c.s:'I can read the surface, but I cannot confirm it without the cited evidence — Summon to be certain.',liveAI=false,agData=null;
+ if(sm){const ch0=document.querySelector('#dossier .council .ch');if(ch0)ch0.innerHTML='◈ Agent Council · <span style="color:rgb(var(--acc))">🔧 agents investigating…</span>';const got=await fetchCouncil(a).catch(()=>null);if(cur===a&&got){w=got.w;sk=got.s;liveAI=true;agData=got;}}
  if(cur!==a)return;
  const a0=document.getElementById('ag0');if(!a0)return;
- const close=sm?'The evidence is in — the verdict is yours.':'A preliminary read only — Summon the evidence to be sure.';
+ const close=(agData&&agData.council)?agData.council:(sm?'The evidence is in — the verdict is yours.':'A preliminary read only — Summon the evidence to be sure.');
  const conf=!sm?'<span style="opacity:.6">preliminary · unverified</span>':(showC?(c.flag?'<span style="color:#ffb454">'+c.conf+'% · low confidence</span>':'<span style="opacity:.85">'+c.conf+'% confident</span>'):'<span style="opacity:.7">confidence withheld</span>');
- const ch=document.querySelector('#dossier .council .ch');if(ch)ch.innerHTML='◈ Agent Council · '+(liveAI?'<span style="color:rgb(var(--acc))">● live AI</span> · ':'')+conf;
+ const badge=liveAI?'<span style="color:rgb(var(--acc))">● '+((agData&&agData.agentic)?'live agents · '+agData.tools+' tools':'live AI')+'</span> · ':'';
+ const ch=document.querySelector('#dossier .council .ch');if(ch)ch.innerHTML='◈ Agent Council · '+badge+conf;
  clearTimeout(window._c0);clearTimeout(window._c1);clearTimeout(window._c2);
  window._c0=setTimeout(()=>{a0.classList.add('on','talk');type(a0.querySelector('.sp'),w,()=>a0.classList.remove('talk'));},200);
  window._c1=setTimeout(()=>{const e=document.getElementById('ag1');if(e){e.classList.add('on','talk');if(sm&&c.flag)e.classList.add('live');else e.classList.remove('live');type(e.querySelector('.sp'),sk,()=>e.classList.remove('talk'));}},1600);
- window._c2=setTimeout(()=>{const e=document.getElementById('ag2');if(e){e.classList.add('on','talk');type(e.querySelector('.sp'),close,()=>{e.classList.remove('talk');ST[a].councilDone=true;if(cur===a)setRitesLocked(false);tutAdvance('council');});}},2900);}
+ window._c2=setTimeout(()=>{const e=document.getElementById('ag2');if(e){e.classList.add('on','talk');type(e.querySelector('.sp'),close,()=>{e.classList.remove('talk');ST[a].councilDone=true;if(cur===a)setRitesLocked(false);tutAdvance('council');if(agData&&agData.agentic&&agData.citations&&agData.citations.length)toast('🔧 The council ran <b>'+agData.tools+' tool calls</b> · cited: '+agData.citations.join('; '));});}},2900);}
 
 function advance(){if(combatTgt)return;
  if(allAccts().every(a=>ST[a].done)){breakDawn();return;}
@@ -1180,8 +1193,8 @@ function toggleMute(){muted=!muted;if(masterGain)masterGain.gain.value=muted?0:.
 // ── intro ──
 function enterManor(){audioInit();const i=document.getElementById('intro');if(i){i.classList.add('gone');setTimeout(()=>{i.style.display='none';},900);}setTimeout(tutStart,950);}
 // ── live AI council (graceful fallback to scripted) ──
-async function fetchCouncil(a){const s=SOULS[a],c=ai(a);const sc=(c.sc!==undefined?c.sc:s.rite),cc=(c.cc!==undefined&&c.cc!==null)?c.cc:null,split=cc!==null;const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),4500);
- try{const res=await fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({label:s.label,kind:s.kind,grade:s.grade,last:s.last,bindings:(s.bind||[]).map(b=>b.label.replace(/<[^>]+>/g,'')+(b.live?' (LIVE)':'')),evidence:(s.ev||[]).map(e=>e.replace(/<[^>]+>/g,'')),wardenChar:sc,skepticChar:cc,split}),signal:ctrl.signal});clearTimeout(tid);if(!res.ok)return null;const j=await res.json();if(j.warden&&j.skeptic)return {w:String(j.warden),s:String(j.skeptic)};return null;}catch(e){clearTimeout(tid);return null;}}
+async function fetchCouncil(a){const s=SOULS[a];const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),16000);
+ try{const res=await fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({label:s.label,kind:s.kind,grade:s.grade,last:s.last,bindings:(s.bind||[]).map(b=>b.label.replace(/<[^>]+>/g,'')+(b.live?' (LIVE)':'')),evidence:(s.ev||[]).map(e=>e.replace(/<[^>]+>/g,''))}),signal:ctrl.signal});clearTimeout(tid);if(!res.ok)return null;const j=await res.json();if(j.warden&&j.skeptic)return {w:String(j.warden),s:String(j.skeptic),council:j.council,citations:j.citations||[],tools:j.toolCalls||0,agentic:!!j.agentic};return null;}catch(e){clearTimeout(tid);return null;}}
 // ── share ──
 function shareScore(ev){const t='Afterlogin: The Hunt — I cleansed the manor. Rank '+rank()+' · '+score+'✦ · '+wards+'/3 wards held.';try{if(navigator.clipboard)navigator.clipboard.writeText(t);}catch(e){}const b=ev&&ev.target;if(b){const o=b.textContent;b.textContent='Copied ✓';setTimeout(()=>{b.textContent=o;},1500);}}
 var STATS={poltergeists:0,banishes:0,rested:0,bound:0,acked:0,correct:0};

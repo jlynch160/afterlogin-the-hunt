@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.11.0] - 2026-06-09 — A real multi-agent council: tool-calling Warden + Skeptic
+
+The Agent Council is no longer scripted prose — `/api/reason` is now a genuine **multi-agent, tool-calling** endpoint.
+
+- **Two autonomous agents investigate, then debate.** The **Warden** and **Skeptic** each call function **tools** (`get_signin_activity`, `get_dependencies`, `get_oauth_grants`, `get_group_memberships`) over a server-side **synthetic identity store**, form independent reads, and the Skeptic hunts the contradicting signal the Warden may have missed.
+- **A Council agent synthesises** a cited advisory + a confidence — and still **never names the verdict** (human decides).
+- **Returns the reasoning trace + citations.** The game shows a **"● live agents · N tools"** badge, an *"agents investigating…"* state, the synthesised line, and a toast of the **tool calls + cited sources** (Entra sign-in logs, Purview runbook index, CMDB, OAuth consent audit…).
+- Falls back to the scripted council when no model is configured. Works with **Azure OpenAI / GitHub Models / OpenAI** (function calling).
+
 ## [0.10.0] - 2026-06-08 — Boss-gated floors, multi-stage fights, and real attack-response training
 
 **Progression**
