@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.13.2] - 2026-06-11 — Moon/sun no longer overlaps the title
+
+- **Moved the moon (manor) / sun (factory) disc into the top-right corner and tamed its glow** so it
+  clears the now-centered AFTERLOGIN title instead of washing over the text.
+
 ## [0.13.1] - 2026-06-11 — Fix menu centering (root-cause)
 
 - **Re-centered the entire main menu.** The shared `fadeup` intro animation ended on
