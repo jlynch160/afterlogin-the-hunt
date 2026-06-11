@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.3] - 2026-06-11 — Cinematic boot screen
+
+- **Richer loading screen.** The boot card is now a small cinematic: drifting ember particles, a
+  pulsing glow halo behind the candle, a moving shimmer-sweep across the AFTERLOGIN wordmark,
+  vignette + slow-drifting fog, and **cycling status text** ("lighting the candles… → reading the
+  ledgers… → summoning the council… → the hunt begins…"). Still skippable and `?demo`-aware.
+
 ## [0.12.2] - 2026-06-11 — Boot splash + cursor glow (shipped-product sheen)
 
 - **Boot splash.** A branded title-card boot screen (candle sigil, AFTERLOGIN wordmark, fill bar)

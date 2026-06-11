@@ -558,18 +558,40 @@ body.flick{animation:flick .56s steps(1) both}
 .iscdemo:hover{color:rgb(var(--acc))}
 [data-theme="helpers"] .iscdemo{color:#3f5a72}
 /* ── boot splash ── */
-#boot{position:fixed;inset:0;z-index:60;background:radial-gradient(ellipse at 50% 38%,#1b1436,#0a0716 72%);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity .7s ease,visibility .7s}
+#boot{position:fixed;inset:0;z-index:60;background:radial-gradient(ellipse at 50% 36%,#241a44 0%,#120d28 45%,#070512 82%);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;transition:opacity .8s ease,visibility .8s}
 #boot.gone{opacity:0;visibility:hidden;pointer-events:none}
-.bootinner{text-align:center;animation:bootrise .9s cubic-bezier(.2,.8,.2,1) both}
-.bootsigil{font-size:46px;animation:bootflame 2.2s ease-in-out infinite}
-.bootmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(36px,7vw,60px);letter-spacing:.16em;color:#f1ebff;margin-top:8px;text-shadow:0 0 30px rgba(150,110,255,.55)}
-.bootsub{font-size:13px;letter-spacing:.55em;color:#a48fe0;margin:4px 0 22px;padding-left:.55em}
-.bootbar{width:min(240px,58vw);height:3px;border-radius:3px;background:rgba(255,255,255,.1);margin:0 auto;overflow:hidden}
-.bootbar>i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#7c5cff,#b89bff);box-shadow:0 0 12px rgba(150,110,255,.7);animation:bootfill 1.5s ease forwards}
-.boottip{font-size:11px;letter-spacing:.22em;color:#6b5a92;margin-top:18px;text-transform:uppercase}
-@keyframes bootrise{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
-@keyframes bootflame{0%,100%{transform:translateY(0) rotate(-2deg);filter:drop-shadow(0 0 14px rgba(168,140,255,.7))}50%{transform:translateY(-3px) rotate(2deg);filter:drop-shadow(0 0 26px rgba(190,160,255,.95))}}
-@keyframes bootfill{0%{width:0}82%{width:100%}100%{width:100%}}
+#boot::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 200px 70px rgba(0,0,0,.65)}
+.bootfog{position:absolute;inset:-20%;pointer-events:none;background:radial-gradient(circle at 30% 38%,rgba(124,92,255,.20),transparent 45%),radial-gradient(circle at 72% 62%,rgba(90,60,180,.16),transparent 45%);filter:blur(8px);animation:bootfog 14s ease-in-out infinite alternate}
+@keyframes bootfog{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-3%,2%) scale(1.08)}}
+.bootembers{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.bootembers i{position:absolute;bottom:-12px;width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#e6d8ff,rgba(170,130,255,0) 70%);box-shadow:0 0 9px 1px rgba(176,140,255,.85);opacity:0;animation:emberrise linear infinite}
+@keyframes emberrise{0%{transform:translateY(0) translateX(0) scale(.5);opacity:0}12%{opacity:.95}80%{opacity:.55}100%{transform:translateY(-104vh) translateX(26px) scale(1.15);opacity:0}}
+.bootembers i:nth-child(1){left:7%;animation-duration:7.5s;animation-delay:-1s}
+.bootembers i:nth-child(2){left:16%;animation-duration:9s;animation-delay:-4s}
+.bootembers i:nth-child(3){left:26%;animation-duration:6.5s;animation-delay:-2.5s;width:3px;height:3px}
+.bootembers i:nth-child(4){left:34%;animation-duration:10s;animation-delay:-6s}
+.bootembers i:nth-child(5){left:43%;animation-duration:8s;animation-delay:-3s;width:5px;height:5px}
+.bootembers i:nth-child(6){left:52%;animation-duration:7s;animation-delay:-5s}
+.bootembers i:nth-child(7){left:60%;animation-duration:9.5s;animation-delay:-1.5s;width:3px;height:3px}
+.bootembers i:nth-child(8){left:68%;animation-duration:6.8s;animation-delay:-4.5s}
+.bootembers i:nth-child(9){left:76%;animation-duration:8.5s;animation-delay:-2s;width:5px;height:5px}
+.bootembers i:nth-child(10){left:84%;animation-duration:7.2s;animation-delay:-5.5s}
+.bootembers i:nth-child(11){left:91%;animation-duration:9.2s;animation-delay:-3.5s;width:3px;height:3px}
+.bootembers i:nth-child(12){left:48%;animation-duration:11s;animation-delay:-7s}
+.bootinner{position:relative;text-align:center;animation:bootrise 1s cubic-bezier(.2,.8,.2,1) both}
+.boothalo{position:absolute;left:50%;top:-8px;width:190px;height:190px;margin-left:-95px;border-radius:50%;background:radial-gradient(circle,rgba(150,110,255,.45),rgba(150,110,255,0) 70%);filter:blur(6px);pointer-events:none;animation:boothalo 2.6s ease-in-out infinite}
+@keyframes boothalo{0%,100%{transform:scale(.9);opacity:.55}50%{transform:scale(1.14);opacity:.92}}
+.bootsigil{position:relative;font-size:52px;animation:bootflame 2.2s ease-in-out infinite}
+.bootmark{position:relative;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(38px,7.5vw,66px);letter-spacing:.16em;margin-top:6px;background:linear-gradient(100deg,#b9a3ff 0%,#fff 42%,#8a6cff 60%,#b9a3ff 100%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 26px rgba(150,110,255,.5));animation:bootsheen 3.4s linear infinite}
+@keyframes bootsheen{to{background-position:-220% center}}
+.bootsub{font-size:13px;letter-spacing:.55em;color:#a48fe0;margin:6px 0 24px;padding-left:.55em;animation:bootsubfade 1.4s ease both;animation-delay:.3s}
+@keyframes bootsubfade{from{opacity:0;letter-spacing:.18em}to{opacity:1;letter-spacing:.55em}}
+.bootbar{position:relative;width:min(260px,60vw);height:3px;border-radius:3px;background:rgba(255,255,255,.1);margin:0 auto;overflow:hidden}
+.bootbar>i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#6b48ff,#b89bff);box-shadow:0 0 14px 2px rgba(160,120,255,.85);animation:bootfill 1.7s cubic-bezier(.4,0,.2,1) forwards}
+.boottip{font-size:11px;letter-spacing:.24em;color:#7d6aa6;margin-top:18px;text-transform:uppercase;min-height:14px;transition:opacity .25s}
+@keyframes bootrise{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes bootflame{0%,100%{transform:translateY(0) rotate(-3deg);filter:drop-shadow(0 0 16px rgba(168,140,255,.75))}50%{transform:translateY(-4px) rotate(3deg);filter:drop-shadow(0 0 30px rgba(195,165,255,1))}}
+@keyframes bootfill{0%{width:0}85%{width:100%}100%{width:100%}}
 /* ── cursor glow (fine-pointer only) ── */
 #cursorglow{position:fixed;top:-40px;left:-40px;width:26px;height:26px;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(var(--acc),.5),rgba(var(--acc),0) 70%);mix-blend-mode:screen;opacity:0;transition:opacity .3s;will-change:left,top}
 #cursorglow.on{opacity:1}
@@ -675,7 +697,7 @@ body.flick{animation:flick .56s steps(1) both}
 </style>
 </head>
 <body>
-<div id="boot"><div class="bootinner"><div class="bootsigil">🕯️</div><div class="bootmark">AFTERLOGIN</div><div class="bootsub">THE HUNT</div><div class="bootbar"><i></i></div><div class="boottip">identity governance, after dark</div></div></div>
+<div id="boot"><div class="bootfog"></div><div class="bootembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bootinner"><div class="boothalo"></div><div class="bootsigil">🕯️</div><div class="bootmark">AFTERLOGIN</div><div class="bootsub">THE HUNT</div><div class="bootbar"><i></i></div><div class="boottip" id="boottip">lighting the candles…</div></div></div>
 <div id="cursorglow"></div>
 <div id="bg"></div>
 <div class="candleglow"></div><div class="motes" id="motes"></div>
@@ -1477,8 +1499,15 @@ loadSave();renderCareer();probeAgentTier();
 window._hungryT=setTimeout(hungryLoop,DIFF[diff].hms);
 if(typeof location!=='undefined'&&location.search&&location.search.indexOf('demo')>=0)setTimeout(startShowcase,700);
 if(typeof document!=='undefined'&&document.addEventListener)document.addEventListener('keydown',e=>{if(e.key==='Escape'&&showcaseOn)stopShowcase();});
-/* boot splash — auto-dismiss + skip on click/key */
-(function(){if(typeof document==='undefined'||!document.getElementById)return;var b=document.getElementById('boot');if(!b||!b.classList||!document.addEventListener)return;function go(){b.classList.add('gone');}var d=(typeof location!=='undefined'&&location.search&&location.search.indexOf('demo')>=0)?500:1750;var t=setTimeout(go,d);if(b.addEventListener)b.addEventListener('click',function(){clearTimeout(t);go();});document.addEventListener('keydown',function f(){clearTimeout(t);go();if(document.removeEventListener)document.removeEventListener('keydown',f);});})();
+/* boot splash — cycling status, auto-dismiss + skip on click/key */
+(function(){if(typeof document==='undefined'||!document.getElementById)return;var b=document.getElementById('boot');if(!b||!b.classList||!document.addEventListener)return;
+ var demo=(typeof location!=='undefined'&&location.search&&location.search.indexOf('demo')>=0);
+ var tip=document.getElementById('boottip'),phrases=['lighting the candles…','reading the ledgers…','summoning the council…','the hunt begins…'],pi=0,ti=null;
+ if(tip&&!demo&&typeof setInterval!=='undefined'){ti=setInterval(function(){pi=(pi+1)%phrases.length;try{tip.style.opacity=0;setTimeout(function(){try{tip.textContent=phrases[pi];tip.style.opacity=1;}catch(e){}},220);}catch(e){}},440);}
+ function go(){b.classList.add('gone');if(ti){clearInterval(ti);ti=null;}}
+ var d=demo?500:2000;var t=setTimeout(go,d);
+ if(b.addEventListener)b.addEventListener('click',function(){clearTimeout(t);go();});
+ document.addEventListener('keydown',function f(){clearTimeout(t);go();if(document.removeEventListener)document.removeEventListener('keydown',f);});})();
 /* cursor glow — fine pointer only */
 (function(){if(typeof document==='undefined'||!document.getElementById)return;var g=document.getElementById('cursorglow');if(!g||!g.style||!document.addEventListener)return;if(typeof window==='undefined'||!window.matchMedia||!window.matchMedia('(pointer:fine)').matches)return;document.addEventListener('mousemove',function(e){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';if(g.classList)g.classList.add('on');});document.addEventListener('mouseleave',function(){if(g.classList)g.classList.remove('on');});})();
 </script>
