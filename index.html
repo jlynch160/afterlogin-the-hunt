@@ -557,6 +557,26 @@ body.flick{animation:flick .56s steps(1) both}
 .iscdemo{cursor:pointer;margin:14px auto 0;font-size:12px;letter-spacing:1px;color:var(--mut);transition:.16s;animation:fadeup .9s ease .75s both}
 .iscdemo:hover{color:rgb(var(--acc))}
 [data-theme="helpers"] .iscdemo{color:#3f5a72}
+/* ── mobile / responsive (gated; desktop untouched) ── */
+@media(max-width:760px){
+ .topbar,.bar{flex-wrap:wrap;height:auto;padding:6px 8px}
+ .right{flex-wrap:wrap;gap:7px;row-gap:5px;justify-content:flex-end}
+ .right .dawn,.right .prog{display:none}
+ .hudstat{font-size:14px}
+ .roster{display:none}
+ .stage{place-items:start center;padding-top:58px}
+ .portrait{width:min(148px,40vw);margin-top:0}
+ .nameplate{transform:scale(.9)}
+ .dossier{position:fixed;left:6px;right:6px;top:auto;bottom:72px;width:auto;max-height:46vh;transform:none;padding:14px;border-radius:14px}
+ .rites{bottom:10px;gap:7px;width:96vw;left:50%}
+ .rites button,.rites .rite{padding:11px 12px!important;font-size:13px!important}
+ #agentpanel{left:8px;right:8px;width:auto;top:54px;bottom:auto;max-height:30vh}
+ #showcap{bottom:14px;width:94vw;font-size:14px}
+ .iagents{gap:10px}.iag{min-width:140px}
+}
+.agenttier{font-size:11px;letter-spacing:.3px;cursor:default}
+.agenttier.live{color:#0b231a;background:rgb(var(--acc));border-color:transparent;box-shadow:0 0 14px rgba(var(--acc),.4)}
+[data-theme="helpers"] .agenttier.live{color:#143427}
 .ifoot b{color:rgb(var(--acc));font-weight:700}
 [data-theme="helpers"] .ifoot b{color:#1f8a6e}
 /* manor / factory switch */
@@ -647,7 +667,7 @@ body.flick{animation:flick .56s steps(1) both}
 <div class="top">
   <div class="brand"><span class="d"></span>AFTERLOGIN</div>
   <div class="actbar" id="actbar"></div>
-  <div class="right"><span class="dread" id="dread" onclick="hungryStep()" title="The Hungry stalks the corridors — judge the F-grade rooms before it arrives (click to hasten it)"><span id="dreadLbl">Hungry</span><span class="bar"><i id="dreadBar"></i></span></span><span class="dawn">⏱ <b>04:12</b></span><span class="hudstat" id="scoreEl">✦ 0</span><span class="hudstat combohud" id="comboEl"></span><span class="hudstat" id="wardsEl">🛡 ✦✦✦</span><span class="prog" id="prog">— souls judged</span><span class="toggle" id="storeBtn" title="The Essence Store">🔮 <b id="essN">0</b></span><span class="toggle" id="codexBtn" onclick="openCodex()" title="Behind the Game — the real Microsoft controls">📖</span><span class="toggle" id="mapBtn">🗺 Manor</span><span class="toggle" id="muteBtn" onclick="toggleMute()" title="Sound">🔊</span></div>
+  <div class="right"><span class="dread" id="dread" onclick="hungryStep()" title="The Hungry stalks the corridors — judge the F-grade rooms before it arrives (click to hasten it)"><span id="dreadLbl">Hungry</span><span class="bar"><i id="dreadBar"></i></span></span><span class="dawn">⏱ <b>04:12</b></span><span class="hudstat" id="scoreEl">✦ 0</span><span class="hudstat combohud" id="comboEl"></span><span class="hudstat" id="wardsEl">🛡 ✦✦✦</span><span class="prog" id="prog">— souls judged</span><span class="toggle agenttier" id="agenttier" title="Which agent tier is running">◈ scripted</span><span class="toggle" id="storeBtn" title="The Essence Store">🔮 <b id="essN">0</b></span><span class="toggle" id="codexBtn" onclick="openCodex()" title="Behind the Game — the real Microsoft controls">📖</span><span class="toggle" id="mapBtn">🗺 Manor</span><span class="toggle" id="muteBtn" onclick="toggleMute()" title="Sound">🔊</span></div>
 </div>
 
 <div class="roster" id="roster"></div>
@@ -969,6 +989,7 @@ async function runCouncil(a){if(!document.getElementById('ag0'))return;const c=a
  const badge=liveAI?'<span style="color:rgb(var(--acc))">● '+((agData&&agData.agentic)?'live agents · '+agData.tools+' tools':'live AI')+'</span> · ':'';
  const ch=document.querySelector('#dossier .council .ch');if(ch)ch.innerHTML='◈ Agent Council · '+badge+conf;
  if(agData&&agData.agentic&&agData.trace&&agData.trace.length)showAgentPanel(agData);
+ if(agData)setAgentTier(agData);
  clearTimeout(window._c0);clearTimeout(window._c1);clearTimeout(window._c2);
  window._c0=setTimeout(()=>{a0.classList.add('on','talk');type(a0.querySelector('.sp'),w,()=>a0.classList.remove('talk'));},200);
  window._c1=setTimeout(()=>{const e=document.getElementById('ag1');if(e){e.classList.add('on','talk');if(sm&&c.flag)e.classList.add('live');else e.classList.remove('live');type(e.querySelector('.sp'),sk,()=>e.classList.remove('talk'));}},1600);
@@ -1022,6 +1043,11 @@ function showAgentPanel(d){const p=document.getElementById('agentpanel'),body=do
  lines.forEach((ln,i)=>setTimeout(()=>{const b=document.getElementById('apbody');if(b&&p.classList.contains('show')){b.insertAdjacentHTML('beforeend',ln);b.scrollTop=b.scrollHeight;}},i*430));
  clearTimeout(window._apT);window._apT=setTimeout(hideAgentPanel,13000);}
 function hideAgentPanel(){const p=document.getElementById('agentpanel');if(p)p.classList.remove('show');}
+function setAgentTier(d){const el=document.getElementById('agenttier');if(!el)return;
+ if(d&&d.foundry){el.innerHTML='◈ Foundry agents';el.classList.add('live');el.title='Real Azure AI Foundry agents';}
+ else if(d&&(d.agentic||(d.configured&&d.source))&&d.source){el.innerHTML='◈ live agents'+(d.model?' · '+d.model:'');el.classList.add('live');el.title='Live tool-calling agents · '+d.source;}
+ else{el.innerHTML='◈ scripted';el.classList.remove('live');el.title='Scripted council (no model configured)';}}
+function probeAgentTier(){try{fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({probe:true})}).then(r=>r.ok?r.json():null).then(d=>{if(d)setAgentTier(d);}).catch(()=>{});}catch(e){}}
 function huntAlarm(){if(document.getElementById('combat').classList.contains('show'))return;let e=document.getElementById('huntalarm');if(!e){e=document.createElement('div');e.id='huntalarm';document.body.appendChild(e);}e.classList.remove('go');void e.offsetWidth;e.classList.add('go');document.body.classList.remove('flick');void document.body.offsetWidth;document.body.classList.add('flick');setTimeout(()=>document.body.classList.remove('flick'),560);sfx('growl');nemSpeak('near');sealPrompt();}
 function sealPrompt(){let e=document.getElementById('sealbanner');if(!e){e=document.createElement('div');e.id='sealbanner';document.body.appendChild(e);}e.innerHTML='⚠ <b>'+nemName()+'</b> is in the next room <button onclick="sealDoor()">⛓ Seal the Door · 6🔮</button>';e.classList.add('on');clearTimeout(window._sealT);window._sealT=setTimeout(()=>{e.classList.remove('on');},5200);}
 function sealDoor(){if(combatTgt)return;const cost=6;if(essence<cost){sfx('tick');toast('Not enough essence to seal the door — '+cost+' 🔮 needed.');return;}essence-=cost;essSpent+=cost;freeze+=3;updEss();updateThreatUI();sfx('seal');const sb=document.getElementById('sealbanner');if(sb)sb.classList.remove('on');toast('⛓ A <b>Conditional Access</b> block seals the corridor — '+nemName()+' is held for 3 steps.');nemSpeak('seal');}
@@ -1428,7 +1454,7 @@ function hungryLoop(){hungryStep();window._hungryT=setTimeout(hungryLoop,hungryS
 cur=acctRoomsOn(1)[0].account;
 MAXD=(bfsNext(0,isVaultGoal)||{dist:8}).dist||8;
 buildFloorTabs();buildRoster();show();updateHud();updateThreatUI();updateIntroTheme();updEss();
-loadSave();renderCareer();
+loadSave();renderCareer();probeAgentTier();
 window._hungryT=setTimeout(hungryLoop,DIFF[diff].hms);
 if(typeof location!=='undefined'&&location.search&&location.search.indexOf('demo')>=0)setTimeout(startShowcase,700);
 if(typeof document!=='undefined'&&document.addEventListener)document.addEventListener('keydown',e=>{if(e.key==='Escape'&&showcaseOn)stopShowcase();});

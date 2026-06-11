@@ -167,6 +167,8 @@ module.exports = async function (context, req) {
 
   let sig = req.body; if (typeof sig === 'string') { try { sig = JSON.parse(sig || '{}'); } catch (e) { sig = {}; } }
   sig = sig || {};
+  // lightweight tier probe — report which agent tier is live without running the agents
+  if (sig.probe) return J(200, { configured: true, source: prov, foundry: !!process.env.FOUNDRY_PROJECT_ENDPOINT, model: endpoint(prov).model });
   const rec = recordFor(sig);
   const acct = (sig.label || 'the account') + ' (' + rec.kind + ', grade ' + rec.grade + ')';
   const ep = endpoint(prov);

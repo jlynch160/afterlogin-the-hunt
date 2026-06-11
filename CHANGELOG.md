@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.12.1] - 2026-06-11 — Agent-tier status chip + mobile pass
+
+- **Agent-tier chip.** A HUD chip shows which tier is running — **◈ scripted** by default, lighting
+  up to **◈ live agents · gpt-4o** or **◈ Foundry agents** (accent glow) when detected via a new
+  lightweight `/api/reason` probe (no agent run). Credibility at a glance.
+- **Mobile/responsive pass.** A desktop-safe reflow at ≤760px: the roster collapses, the case file
+  becomes a full-width bottom sheet above the judge buttons, the portrait shrinks, the HUD wraps,
+  and the agent panel moves up so nothing collides — playable on a phone.
+
 ## [0.12.0] - 2026-06-09 — Showcase the agents: live trace panel, sound, attract mode + polish
 
 - **Live agent-activity panel.** A mission-control panel streams the real agents' tool calls in
