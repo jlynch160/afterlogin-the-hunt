@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.2] - 2026-06-11 — Boot splash + cursor glow (shipped-product sheen)
+
+- **Boot splash.** A branded title-card boot screen (candle sigil, AFTERLOGIN wordmark, fill bar)
+  on load, fading to the menu after ~1.7s; skippable on click/key, and shortened automatically in
+  `?demo` showcase mode so it never covers the attract loop.
+- **Cursor glow.** A soft accent-colored glow trails the pointer (screen-blended), enabled only on
+  fine-pointer devices and hidden on touch. Both are fully guarded for headless safety.
+
 ## [0.12.1] - 2026-06-11 — Agent-tier status chip + mobile pass
 
 - **Agent-tier chip.** A HUD chip shows which tier is running — **◈ scripted** by default, lighting

@@ -557,6 +557,23 @@ body.flick{animation:flick .56s steps(1) both}
 .iscdemo{cursor:pointer;margin:14px auto 0;font-size:12px;letter-spacing:1px;color:var(--mut);transition:.16s;animation:fadeup .9s ease .75s both}
 .iscdemo:hover{color:rgb(var(--acc))}
 [data-theme="helpers"] .iscdemo{color:#3f5a72}
+/* ── boot splash ── */
+#boot{position:fixed;inset:0;z-index:60;background:radial-gradient(ellipse at 50% 38%,#1b1436,#0a0716 72%);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity .7s ease,visibility .7s}
+#boot.gone{opacity:0;visibility:hidden;pointer-events:none}
+.bootinner{text-align:center;animation:bootrise .9s cubic-bezier(.2,.8,.2,1) both}
+.bootsigil{font-size:46px;animation:bootflame 2.2s ease-in-out infinite}
+.bootmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(36px,7vw,60px);letter-spacing:.16em;color:#f1ebff;margin-top:8px;text-shadow:0 0 30px rgba(150,110,255,.55)}
+.bootsub{font-size:13px;letter-spacing:.55em;color:#a48fe0;margin:4px 0 22px;padding-left:.55em}
+.bootbar{width:min(240px,58vw);height:3px;border-radius:3px;background:rgba(255,255,255,.1);margin:0 auto;overflow:hidden}
+.bootbar>i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#7c5cff,#b89bff);box-shadow:0 0 12px rgba(150,110,255,.7);animation:bootfill 1.5s ease forwards}
+.boottip{font-size:11px;letter-spacing:.22em;color:#6b5a92;margin-top:18px;text-transform:uppercase}
+@keyframes bootrise{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes bootflame{0%,100%{transform:translateY(0) rotate(-2deg);filter:drop-shadow(0 0 14px rgba(168,140,255,.7))}50%{transform:translateY(-3px) rotate(2deg);filter:drop-shadow(0 0 26px rgba(190,160,255,.95))}}
+@keyframes bootfill{0%{width:0}82%{width:100%}100%{width:100%}}
+/* ── cursor glow (fine-pointer only) ── */
+#cursorglow{position:fixed;top:-40px;left:-40px;width:26px;height:26px;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(var(--acc),.5),rgba(var(--acc),0) 70%);mix-blend-mode:screen;opacity:0;transition:opacity .3s;will-change:left,top}
+#cursorglow.on{opacity:1}
+@media(pointer:coarse){#cursorglow{display:none}}
 /* ── mobile / responsive (gated; desktop untouched) ── */
 @media(max-width:760px){
  .topbar,.bar{flex-wrap:wrap;height:auto;padding:6px 8px}
@@ -658,6 +675,8 @@ body.flick{animation:flick .56s steps(1) both}
 </style>
 </head>
 <body>
+<div id="boot"><div class="bootinner"><div class="bootsigil">🕯️</div><div class="bootmark">AFTERLOGIN</div><div class="bootsub">THE HUNT</div><div class="bootbar"><i></i></div><div class="boottip">identity governance, after dark</div></div></div>
+<div id="cursorglow"></div>
 <div id="bg"></div>
 <div class="candleglow"></div><div class="motes" id="motes"></div>
 <div class="scrim"></div><div class="vig"></div>
@@ -1458,6 +1477,10 @@ loadSave();renderCareer();probeAgentTier();
 window._hungryT=setTimeout(hungryLoop,DIFF[diff].hms);
 if(typeof location!=='undefined'&&location.search&&location.search.indexOf('demo')>=0)setTimeout(startShowcase,700);
 if(typeof document!=='undefined'&&document.addEventListener)document.addEventListener('keydown',e=>{if(e.key==='Escape'&&showcaseOn)stopShowcase();});
+/* boot splash — auto-dismiss + skip on click/key */
+(function(){if(typeof document==='undefined'||!document.getElementById)return;var b=document.getElementById('boot');if(!b||!b.classList||!document.addEventListener)return;function go(){b.classList.add('gone');}var d=(typeof location!=='undefined'&&location.search&&location.search.indexOf('demo')>=0)?500:1750;var t=setTimeout(go,d);if(b.addEventListener)b.addEventListener('click',function(){clearTimeout(t);go();});document.addEventListener('keydown',function f(){clearTimeout(t);go();if(document.removeEventListener)document.removeEventListener('keydown',f);});})();
+/* cursor glow — fine pointer only */
+(function(){if(typeof document==='undefined'||!document.getElementById)return;var g=document.getElementById('cursorglow');if(!g||!g.style||!document.addEventListener)return;if(typeof window==='undefined'||!window.matchMedia||!window.matchMedia('(pointer:fine)').matches)return;document.addEventListener('mousemove',function(e){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';if(g.classList)g.classList.add('on');});document.addEventListener('mouseleave',function(){if(g.classList)g.classList.remove('on');});})();
 </script>
 </body>
 </html>
