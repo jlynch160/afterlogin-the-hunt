@@ -478,14 +478,14 @@ body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{tra
 .cvdaily:hover{background:rgba(var(--acc),.16);transform:translateY(-1px)}
 .cvdaily span{display:block;font-size:10px;font-weight:400;color:var(--mut);text-transform:none;letter-spacing:0;margin-top:2px}
 [data-theme="helpers"] .cvdaily{color:#234}
-.icodexbadge{position:absolute;top:20px;right:22px;z-index:7;display:flex;align-items:center;gap:11px;cursor:pointer;padding:9px 16px 9px 10px;border-radius:16px;background:linear-gradient(135deg,rgba(30,22,56,.82),rgba(16,11,30,.74));border:1px solid rgba(var(--acc),.42);box-shadow:0 12px 32px rgba(0,0,0,.42),0 0 22px rgba(var(--acc),.16);backdrop-filter:blur(11px);transition:transform .2s,box-shadow .2s,border-color .2s;animation:fadeup .9s ease .7s both,cbadge 3.4s ease-in-out infinite 1.8s}
+.icodexbadge{display:flex;width:fit-content;margin:18px auto 2px;align-items:center;gap:11px;cursor:pointer;padding:9px 16px 9px 10px;border-radius:16px;background:linear-gradient(135deg,rgba(30,22,56,.82),rgba(16,11,30,.74));border:1px solid rgba(var(--acc),.42);box-shadow:0 12px 32px rgba(0,0,0,.42),0 0 22px rgba(var(--acc),.16);backdrop-filter:blur(11px);transition:transform .2s,box-shadow .2s,border-color .2s;animation:fadeup .9s ease .7s both,cbadge 3.4s ease-in-out infinite 1.8s}
 @keyframes cbadge{0%,100%{box-shadow:0 12px 32px rgba(0,0,0,.42),0 0 18px rgba(var(--acc),.14)}50%{box-shadow:0 12px 32px rgba(0,0,0,.42),0 0 30px rgba(var(--acc),.34)}}
 .icodexbadge:hover{transform:translateY(-2px);border-color:rgba(var(--acc),.75);box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 34px rgba(var(--acc),.34)}
 .icb-ic{flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:radial-gradient(circle at 38% 32%,rgba(var(--acc),.3),rgba(var(--acc),.07));border:1px solid rgba(var(--acc),.5);box-shadow:0 0 16px rgba(var(--acc),.3) inset,0 0 12px rgba(var(--acc),.2)}
 .icb-tx{display:flex;flex-direction:column;line-height:1.18;text-align:left}
 .icb-tx b{font-family:'Cormorant Garamond',serif;font-size:15.5px;font-weight:700;color:var(--ink);letter-spacing:.3px}
 .icb-tx span{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mut);margin-top:1px}
-@media(max-width:600px){.icodexbadge{top:14px;right:14px;padding:8px 12px 8px 9px}.icb-tx span{display:none}.icb-tx b{font-size:13.5px}}
+@media(max-width:600px){.icodexbadge{margin:14px auto 2px;padding:8px 12px 8px 9px}.icb-tx b{font-size:13.5px}}
 /* behind-the-game codex */
 #codex{position:fixed;inset:0;z-index:15;display:none;place-items:center;background:rgba(4,3,11,.84);backdrop-filter:blur(8px)}
 #codex.show{display:grid;animation:fadein .3s ease}
@@ -849,10 +849,6 @@ body.flick{animation:flick .56s steps(1) both}
   <div class="introfog"></div>
   <div class="iember" id="iember"></div>
   <div class="introscrim"></div>
-  <div class="icodexbadge" onclick="openCodex()" title="The real Microsoft security capability behind every game element">
-    <span class="icb-ic">📖</span>
-    <span class="icb-tx"><b>Behind the Game</b><span>the real Microsoft controls →</span></span>
-  </div>
   <div class="introcontent">
     <div class="iswitch"><span class="isw on" data-t="spectral" onclick="setTheme('spectral')">🏰 Manor</span><span class="isw" data-t="helpers" onclick="setTheme('helpers')">🏭 Factory</span></div>
     <div class="diffrow"><span class="difflbl">Difficulty</span><div class="diffswitch"><span class="dfw" data-d="casual" onclick="setDiff('casual')">Casual</span><span class="dfw on" data-d="auditor" onclick="setDiff('auditor')">Auditor</span><span class="dfw" data-d="nightmare" onclick="setDiff('nightmare')">Nightmare</span></div></div>
@@ -866,6 +862,7 @@ body.flick{animation:flick .56s steps(1) both}
       <div class="iag"><span class="ico">✓</span><b>The Council</b><i>renders the verdict</i></div>
     </div>
     <button class="istart" id="istart" onclick="enterManor()">Enter the Manor</button>
+    <div class="icodexbadge" onclick="openCodex()" title="The real Microsoft security capability behind every game element"><span class="icb-ic">📖</span><span class="icb-tx"><b>Behind the Game</b><span>the real Microsoft controls →</span></span></div>
     <div class="career" id="career"></div>
     <div class="iscdemo" onclick="startShowcase()">▶ Watch the 90-second showcase</div>
     <div class="ifoot">Synthetic data · powered by <b>Foundry IQ</b> + <b>Fabric IQ</b> · built with <b>Copilot</b></div>

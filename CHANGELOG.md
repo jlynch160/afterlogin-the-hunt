@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.12.6] - 2026-06-11 — "Behind the Game" moved inline into the menu
+
+- **Relocated the "Behind the Game" entry point** from a floating top-right chip to an inline button
+  in the menu column, directly under the Start button — part of the flow, less cluttered, and it
+  keeps its factory-theme variant so it reads correctly in both worlds.
+
 ## [0.12.5] - 2026-06-11 — Boot screen: explicit "Hunt × Helper Patrol" dual identity
 
 - **Both modes, named.** The boot center icon now crossfades between 🕯️ (The Hunt) and 🏭 (Helper
