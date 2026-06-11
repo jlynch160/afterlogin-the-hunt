@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.15.0] - 2026-06-11 — New mechanic: the Discernment meter (human-in-the-loop, as a system)
+
+- **Discernment vs Hubris.** A new HUD meter (🧠) makes the games thesis a mechanic: judging a soul
+  *after* verifying it with Summon raises Discernment; judging on the surface read alone (or breaking
+  a load-bearing account) breeds Hubris. **Clear-eyed (≥75) multiplies your score ×1.25; Hubris (≤25)
+  taxes it ×0.8.** Threshold crossings toast, and the Dawn summary reports your Discernment + awards a
+  Verify-first discipline skill. Turns dont blindly trust the AI into something you can feel.
+
 ## [0.14.0] - 2026-06-11 — Combat juice + factory-theme polish + floor transitions
 
 - **Combat juice.** Hits now land: the boss portrait flashes + staggers, crits punch a golden
