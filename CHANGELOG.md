@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.1] - 2026-06-11 — Fix menu centering (root-cause)
+
+- **Re-centered the entire main menu.** The shared `fadeup` intro animation ended on
+  `transform:translateX(-50%)`, which permanently shifted every menu element left by half its own
+  width (wider elements like the title shifted more) — the left-skewed look. `fadeup` now animates
+  vertically only; the one genuinely centered element (`.testimony`) uses a new `fadeupC` variant.
+
 ## [0.13.0] - 2026-06-11 — Factory theme gets its room art
 
 - **Helper Patrol (factory) room art is in.** Added all 15 `assets/helpers/room_*.png` backgrounds
