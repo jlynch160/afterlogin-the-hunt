@@ -1,57 +1,67 @@
 # Afterlogin: The Hunt — Submission
 
-**Microsoft Agents League · AI Skills Fest 2026 · Track: Creative Apps (GitHub Copilot)**
-
-## Inspiration / problem
-Every organization is haunted by **forgotten identities** — dormant service accounts,
-orphaned admins, stale privileges. They're invisible, dangerous, and the #1 thing
-attackers hunt. Identity-governance triage is also *tedious*, so it gets skipped.
-Afterlogin makes it a game you *want* to play.
+## One-liner
+A game that trains identity-attack response, powered by a **real multi-agent system** —
+Warden & Skeptic agents call tools to investigate, debate, and reach a **cited** advisory;
+the human makes the call.
 
 ## What it is
-A turn-based, **D&D-style** browser game where forgotten accounts are **ghosts** haunting a
-manor and you're the auditor who must judge each one before dawn. The twist is the real
-lesson: **not every "dead" account is safe to delete** — some are load-bearing service
-accounts powering live jobs, and exorcising one unleashes a **poltergeist** (you broke
-production). Meanwhile an active **monster** (an account takeover) hunts the ghosts and
-advances toward the **Vault** each round — you fight it with **dice-based attacks**.
+The night auditor of a haunted estate triages "spirits" (forgotten accounts) before dawn.
+An **Agent Council** investigates each one and advises — but the player decides. Neglect a
+high-risk account and an adversary (**The Hollow**) takes it over, triggering a **multi-stage
+kill-chain** the player fights by **choosing the control that actually remediates the attack**
+(the right one is decisive; the wrong one whiffs with a one-line *why*). It's wrapped as a
+polished game with two themes (haunted manor / cheery factory), boss-gated floors, a dice
+combat system, ranks, a daily challenge, and a shareable audit report.
 
-## How it uses the required tech
-- **Built with GitHub Copilot**, and **built *for* Copilot**: an **MCP server** exposes the
-  whole game as tools so **GitHub Copilot / Copilot CLI can play it headlessly**
-  (`list_rooms`, `divine_bindings`, `summon_evidence`, `cast_judgment`, `banish`, …).
-- **Foundry IQ (genuine integration):** the agent's evidence ("the grimoire") comes from
-  **agentic, permission-aware, cited retrieval** over a knowledge base (Azure AI Search) of
-  synthetic runbooks / CMDB / Conditional-Access docs (`backend/foundry-iq.mjs`,
-  `/api/ground`). Offline, it falls back to baked synthetic evidence.
-- **Fabric IQ (modelled)** as the identity **ontology** that determines load-bearing vs
-  orphaned (the spirit-threads); **Work IQ (modelled)** for work-context signals.
+## Why it matters
+Forgotten and over-privileged identities are a top breach vector, and the *gotchas* are
+exactly what people get wrong (a password reset doesn't kill a stolen session token; revoking
+sessions doesn't remove an OAuth grant; MFA doesn't strip standing Global Admin). Afterlogin
+teaches the **threat → correct-control** mapping and the **human-in-the-loop** discipline of
+not blindly trusting AI — through play.
 
-## The agents (the heart of it)
-Two AI **hunter agents** are your party:
-- **Warden (L2) — reasons:** investigates each ghost, runs a visible analysis pipeline
-  (Investigate → Fabric IQ → Foundry IQ → recommendation), and **recommends the correct rite**.
-- **Sentinel (L3) — fights:** a party member that **rolls d20 attacks** on the monster each round.
-- **Autopilot mode** lets the agents play the whole night hands-free.
+## How it works (the agentic core)
+- **`/api/reason`** is a genuine **multi-agent, tool-calling** endpoint. The **Warden** and
+  **Skeptic** each call function tools (`get_signin_activity`, `get_dependencies`,
+  `get_oauth_grants`, `get_group_memberships`) over a synthetic identity store, investigate
+  independently, **debate**, and a **Council** agent synthesises a **cited** advisory + confidence
+  — never naming the verdict.
+- **MCP server** (`mcp/`) exposes the same tools over the **Model Context Protocol**
+  (protocol-validated), so Copilot / VS Code / Foundry can drive them too.
+- **Azure AI Foundry** path (`foundry/`) turns the council into real **connected-agents** with a
+  one-command provisioning script; `/api/reason` routes to it when configured.
+- The game **streams the live tool-call trace** on screen ("● live agents · N tools", with model,
+  latency, and citations) — the agentic behaviour is visible, not claimed.
+- Layered fallback: **Foundry → inline agents → scripted**, so it always works.
+- **Synthetic data only — no PII.**
 
-## Multi-step reasoning / flow
-Investigate → **Divine** (ontology) → **Summon** (cited grounding) → **Agent recommends** →
-**Judge** → round resolves (you → Sentinel → monster). A visible **IQ pipeline stepper**
-lights up each stage; the **Party roster** shows the agents' live status.
+## Microsoft tech used
+Azure Static Web Apps + managed Azure Functions · Azure OpenAI / GitHub Models (function calling)
+· **Model Context Protocol** (`@modelcontextprotocol/sdk`) · **Azure AI Foundry Agent Service**
+(`@azure/ai-agents`) · Entra/Defender/Purview/Sentinel concepts as the real controls behind the game.
 
-## How to run
-- **Game:** open `index.html` (offline, single file).
-- **Copilot:** register `mcp-server.mjs` in `.vscode/mcp.json`, then ask Copilot to play.
-- **Backend / Foundry IQ:** `node backend/server.mjs`; set `FOUNDRY_SEARCH_*` env to enable
-  real grounded retrieval (see README → "Genuine Foundry IQ").
+## Mapped to judging criteria
+- **Innovation** — a *game* as an agent front-end; agents that teach by being honest-but-uncertain;
+  the same tools usable in-game *and* from any MCP client.
+- **Technical implementation** — real multi-agent tool-calling loop, MCP server, Foundry path,
+  CI/CD, graceful layered fallback. Validated end-to-end.
+- **Use of the platform** — MCP + Foundry connected-agents + Azure OpenAI tool calling, deployed
+  on Azure SWA, in-tenant inference option.
+- **Impact** — teaches real attack-response and identity-governance judgment, with the exact
+  gotchas, to a broad audience.
+- **Demo quality** — a memorable, polished product (most submissions are bare chat UIs) with a
+  self-running showcase mode and an in-game "Behind the Game" architecture reveal.
 
-## Responsible / compliant
-- **Synthetic data only** — no PII, no secrets, no confidential or proprietary information.
-- Original work; zero third-party dependencies; **procedurally generated audio**.
-- Mild, tasteful fantasy theme (D&D-style); no real-person likenesses.
+## Try it
+**Live:** https://victorious-plant-0c1e7790f.7.azurestaticapps.net
+**Repo:** https://github.com/jlynch160/afterlogin-the-hunt — see `README.md` (architecture) and
+`mcp/` / `foundry/` for the agent layers.
 
-## Links (fill in before submitting)
-- Demo video (≤5 min, YouTube/Vimeo): `<add>`
-- Public GitHub repo: `<add>`
-- Architecture diagram: see `ARCHITECTURE.md`
-- Microsoft Learn username(s): `<add>`
+## 90-second demo path
+1. Read a case → **Divine** (map dependencies) → **Summon** (the agents investigate via tools; the
+   trace streams on screen) → judge a clearly-live account: **Acknowledge**.
+2. A *load-bearing* trap that **looks** dormant → overrule the surface read → **Bind & Watch**.
+3. Neglect an account → **The Hollow** takes it → fight the kill-chain by picking the **right
+   remediation** each stage (wrong tool whiffs with a why) → **Dawn**.
+4. Open **📖 Behind the Game** → every element maps to a real Microsoft control.

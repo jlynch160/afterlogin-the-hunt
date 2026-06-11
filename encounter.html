@@ -195,7 +195,7 @@ body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{tra
 .restart:hover{background:rgba(255,255,255,.16)}
 /* ===== MAP — real floor-plan node-graph ===== */
 #map{position:fixed;inset:0;z-index:8;display:none;overflow:hidden;background:radial-gradient(72% 64% at 50% 14%,#271c52,#0e0a24 56%,#05040f)}
-[data-theme="helpers"] #map{background:radial-gradient(84% 72% at 50% 8%,#fff7e0,#cfe6ff 46%,#a6cff2)}
+[data-theme="helpers"] #map{background:radial-gradient(84% 72% at 50% 8%,#d4c8a9,#a3bcda 46%,#7aa1cb)}
 #map.show{display:grid;place-items:center;animation:fadein .45s ease}
 .mmoon{position:absolute;top:6%;right:12%;width:128px;height:128px;border-radius:50%;background:radial-gradient(circle at 38% 36%,#fff,#dfe7ff 55%,#b6c2e6);box-shadow:0 0 90px 30px rgba(205,222,255,.3);z-index:0}
 [data-theme="helpers"] .mmoon{background:radial-gradient(circle at 40% 38%,#fffef2,#ffe9a0 60%,#ffd25a);box-shadow:0 0 100px 36px rgba(255,220,130,.55)}
@@ -403,7 +403,7 @@ body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{tra
 #toast.on{opacity:1}#toast b{color:rgb(var(--acc))}
 .hint{position:fixed;left:50%;bottom:8px;transform:translateX(-50%);z-index:5;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mut);opacity:.55}
 /* intro / title */
-#intro{position:fixed;inset:0;z-index:40;display:grid;place-items:center;overflow:hidden;background:radial-gradient(120% 90% at 50% 120%,#1a1338,#0a0720 55%,#040310)}
+#intro{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(120% 90% at 50% 120%,#1a1338,#0a0720 55%,#040310)}
 #intro.gone{animation:introout .9s ease forwards}
 @keyframes introout{to{opacity:0;transform:scale(1.06);visibility:hidden}}
 .introsky{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 0,rgba(90,70,160,.25),transparent 60%)}
@@ -435,7 +435,7 @@ body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{tra
 .rain{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(108deg,transparent 0 6px,rgba(180,190,230,.05) 6px 7px);animation:rainmove .5s linear infinite}
 @keyframes rainmove{to{background-position:36px 120px}}
 .introfog{position:absolute;left:0;right:0;bottom:0;height:34vh;background:linear-gradient(0deg,rgba(120,110,170,.32),transparent);pointer-events:none}
-.introcontent{position:relative;z-index:5;text-align:center;padding:20px}
+.introcontent{position:relative;z-index:5;width:min(860px,92vw);margin:auto;padding:24px 20px;display:flex;flex-direction:column;align-items:center;text-align:center}
 .ititle{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(48px,9vw,78px);letter-spacing:8px;background:linear-gradient(110deg,#e8e0ff 0%,#ffffff 16%,#c8b4f7 36%,#efe9ff 58%,#cdbcf6 80%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 0 52px rgba(var(--acc),.55)) drop-shadow(0 4px 26px rgba(0,0,0,.75));animation:fadeup .9s ease both,shimmer 6.5s linear infinite}
 @keyframes shimmer{0%{background-position:150% 0}100%{background-position:-50% 0}}
 /* cinematic title-scene layers */
@@ -448,8 +448,8 @@ body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{tra
 .introfog{position:absolute;left:-10%;right:-10%;bottom:0;height:36%;z-index:3;pointer-events:none;background:linear-gradient(0deg,rgba(150,140,195,.2),transparent);filter:blur(9px)}
 .introfog::before{content:"";position:absolute;inset:0;background:radial-gradient(58% 100% at 28% 100%,rgba(180,170,225,.2),transparent 70%),radial-gradient(58% 100% at 76% 100%,rgba(170,160,215,.16),transparent 70%);animation:fogdrift 26s ease-in-out infinite alternate}
 @keyframes fogdrift{0%{transform:translateX(-4%)}100%{transform:translateX(5%)}}
-[data-theme="helpers"] .introfog{background:linear-gradient(0deg,rgba(255,255,255,.5),transparent)}
-[data-theme="helpers"] .introfog::before{background:radial-gradient(58% 100% at 30% 100%,rgba(255,255,255,.6),transparent 70%),radial-gradient(58% 100% at 74% 100%,rgba(255,255,255,.45),transparent 70%)}
+[data-theme="helpers"] .introfog{background:linear-gradient(0deg,rgba(255,255,255,.28),transparent)}
+[data-theme="helpers"] .introfog::before{background:radial-gradient(58% 100% at 30% 100%,rgba(255,255,255,.3),transparent 70%),radial-gradient(58% 100% at 74% 100%,rgba(255,255,255,.22),transparent 70%)}
 .shootstar{position:absolute;top:13%;left:62%;width:3px;height:3px;z-index:1;background:#fff;border-radius:50%;box-shadow:0 0 9px 2px rgba(255,255,255,.85);opacity:0;animation:shoot 13s ease-in infinite}
 .shootstar::after{content:"";position:absolute;right:2px;top:1px;width:130px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75));transform:rotate(20deg);transform-origin:right center}
 @keyframes shoot{0%,84%{opacity:0;transform:translate(0,0)}85%{opacity:1}93%{opacity:1;transform:translate(-280px,90px)}95%,100%{opacity:0;transform:translate(-280px,90px)}}
@@ -527,6 +527,36 @@ body.flick{animation:flick .56s steps(1) both}
 #sealbanner.on{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
 #sealbanner button{cursor:pointer;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:14px;color:#0b0a0f;background:#9fe6ff;border:none;border-radius:9px;padding:8px 15px;white-space:nowrap;box-shadow:0 4px 14px rgba(120,200,255,.35)}
 #sealbanner button:hover{transform:translateY(-1px)}
+/* live agent-activity panel */
+#agentpanel{position:fixed;left:18px;bottom:18px;z-index:13;width:min(360px,82vw);background:linear-gradient(180deg,rgba(11,15,25,.95),rgba(6,9,16,.97));border:1px solid rgba(var(--acc),.42);border-radius:13px;box-shadow:0 20px 50px rgba(0,0,0,.55),0 0 30px rgba(var(--acc),.14);opacity:0;transform:translateY(14px);pointer-events:none;transition:.35s}
+#agentpanel.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.aphead{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid rgba(var(--acc),.2);color:var(--ink)}
+.aphead b{font-family:'Cormorant Garamond',serif;font-size:15px;letter-spacing:.5px}
+.apdot{flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:rgb(var(--acc));box-shadow:0 0 8px rgb(var(--acc));animation:appulse 1.2s ease-in-out infinite}
+@keyframes appulse{0%,100%{opacity:.45}50%{opacity:1}}
+.apmeta{margin-left:auto;font-size:8.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--mut)}
+.apx{cursor:pointer;color:var(--mut);font-size:13px;padding:0 3px}.apx:hover{color:var(--ink)}
+.apbody{padding:9px 13px 12px;overflow-y:auto;max-height:36vh}
+.apline{font-size:11px;line-height:1.5;color:#cfe0d8;margin-bottom:7px;animation:apin .3s ease both;font-family:ui-monospace,'SFMono-Regular',Menlo,monospace}
+@keyframes apin{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.apag{color:rgb(var(--acc));font-weight:600}
+.aptool{color:#9fe6ff}
+.apres{display:block;color:var(--mut);padding-left:15px;font-size:10.5px}
+.apline.apdone{color:rgb(var(--acc));font-weight:600;border-top:1px solid rgba(255,255,255,.08);padding-top:7px;margin-top:3px}
+[data-theme="helpers"] #agentpanel{background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(243,249,255,.97));border-color:rgba(60,120,170,.4)}
+[data-theme="helpers"] .aphead{color:#1f2c44}[data-theme="helpers"] .apline{color:#33425c}[data-theme="helpers"] .aptool{color:#2b6fd0}
+@media(max-width:560px){#agentpanel{left:10px;right:10px;width:auto;bottom:10px}}
+/* self-running showcase caption bar */
+#showcap{position:fixed;left:50%;bottom:30px;transform:translate(-50%,12px);z-index:30;display:flex;align-items:center;gap:14px;width:min(760px,92vw);padding:13px 20px;border-radius:16px;background:linear-gradient(180deg,rgba(12,9,24,.93),rgba(8,5,16,.96));border:1px solid rgba(var(--acc),.45);box-shadow:0 18px 50px rgba(0,0,0,.55),0 0 30px rgba(var(--acc),.18);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:.4s}
+#showcap.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.scbadge{flex:0 0 auto;font-size:9px;font-weight:700;letter-spacing:2px;color:#0b0a0f;background:rgb(var(--acc));border-radius:20px;padding:5px 11px}
+.sctext{flex:1;font-family:'Cormorant Garamond',serif;font-size:16.5px;line-height:1.35;color:#f3eeff;text-align:left}.sctext b{color:rgb(var(--acc))}.sctext i{opacity:.85}
+.scstop{flex:0 0 auto;cursor:pointer;font-size:11px;letter-spacing:1px;color:var(--mut);white-space:nowrap}.scstop:hover{color:#fff}
+[data-theme="helpers"] #showcap{background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(244,250,255,.96));border-color:rgba(60,120,170,.4)}
+[data-theme="helpers"] .sctext{color:#23304a}
+.iscdemo{cursor:pointer;margin:14px auto 0;font-size:12px;letter-spacing:1px;color:var(--mut);transition:.16s;animation:fadeup .9s ease .75s both}
+.iscdemo:hover{color:rgb(var(--acc))}
+[data-theme="helpers"] .iscdemo{color:#3f5a72}
 .ifoot b{color:rgb(var(--acc));font-weight:700}
 [data-theme="helpers"] .ifoot b{color:#1f8a6e}
 /* manor / factory switch */
@@ -544,7 +574,7 @@ body.flick{animation:flick .56s steps(1) both}
 [data-theme="helpers"] .dfw.on{color:#3a2a00}
 .dfw[data-d="nightmare"].on{background:#ff5b78;color:#1a0008}
 /* daylight / factory re-theme of the intro */
-[data-theme="helpers"] #intro{background:radial-gradient(120% 95% at 50% 115%,#cdeaff,#a9d4f4 52%,#dff0ff)}
+[data-theme="helpers"] #intro{background:radial-gradient(120% 95% at 50% 115%,#9fbedd,#7299c2 52%,#aecae4)}
 [data-theme="helpers"] .introsky{background:radial-gradient(80% 60% at 50% 0,rgba(255,240,180,.4),transparent 60%)}
 [data-theme="helpers"] .imoon{top:6%;right:18%;background:radial-gradient(circle at 40% 38%,#fffef2,#ffe27a 55%,#ffc23a);box-shadow:0 0 130px 50px rgba(255,210,90,.5),0 0 240px 90px rgba(255,200,80,.22)}
 [data-theme="helpers"] .imoon::after{display:none}
@@ -676,6 +706,7 @@ body.flick{animation:flick .56s steps(1) both}
 <div class="mpop" id="mpop"></div>
 <div id="transition"></div>
 <div id="possess"><div class="pveins"></div><div class="ptext">POSSESSED</div></div>
+<div id="agentpanel"><div class="aphead"><span class="apdot"></span><b>Agents at work</b><span class="apmeta" id="apmeta"></span><span class="apx" onclick="hideAgentPanel()">✕</span></div><div class="apbody" id="apbody"></div></div>
 <div id="grade"><div class="grain"></div></div><span class="gcorner tl"></span><span class="gcorner tr"></span><span class="gcorner bl"></span><span class="gcorner br"></span>
 <div id="tutspot"></div><div id="coach"></div><div id="toast"></div>
 <div id="intro">
@@ -750,6 +781,7 @@ body.flick{animation:flick .56s steps(1) both}
     </div>
     <button class="istart" id="istart" onclick="enterManor()">Enter the Manor</button>
     <div class="career" id="career"></div>
+    <div class="iscdemo" onclick="startShowcase()">▶ Watch the 90-second showcase</div>
     <div class="ifoot">Synthetic data · powered by <b>Foundry IQ</b> + <b>Fabric IQ</b> · built with <b>Copilot</b></div>
   </div>
 </div>
@@ -889,7 +921,9 @@ function buildRoster(){const fn=kid()?TMFLOORS[floor]:FLOORS[floor-1].name;R.inn
   t.innerHTML='<div class="timg" style="background:'+(rb?"url('"+rb+"') center/cover":"linear-gradient(160deg,#cfe0f2,#9fc0e0)")+'"><span class="tghost" style="background-image:url(\''+ghostSrc(a)+'\')"></span></div><div class="tinfo"><div class="troom">'+rname(r)+'</div><div class="tacc">'+s.label+'</div></div><div class="tg" style="color:'+GC[s.grade]+'">'+s.grade+'</div>';
   t.onclick=()=>{if(tutActive)return;cur=a;buildRoster();show();};R.appendChild(t);});}
 
-function setBg(a){const room=roomSrc(a),bg=document.getElementById('bg');bg.style.background=room?("url('"+room+"') center/cover"):"radial-gradient(120% 90% at 70% 12%,#fff7e0,#cfe6ff 48%,#a9d2f3)";}
+function setBg(a){const bg=document.getElementById('bg');const grad="radial-gradient(120% 90% at 70% 12%,#d4c8a9,#a3bcda 48%,#7aa1cb)";
+ if(kid()){bg.style.background=grad;const url='assets/helpers/room_'+a+'.png';const img=new Image();img.onload=function(){if(cur===a)bg.style.background="url('"+url+"') center/cover";};img.onerror=function(){};img.src=url;return;}
+ const room=roomSrc(a);bg.style.background=room?("url('"+room+"') center/cover"):grad;}
 function sigOf(a){const s=SOULS[a];return [['last seen',s.last],['type',s.kind],['owner',s.owner],['standing',s.dead?'dormant':'active']];}
 function setRitesLocked(lock){document.getElementById('rites').classList.toggle('locked',lock);document.getElementById('hint').textContent=lock?'Divine to map it — the council gives a preliminary read':'Summon to verify, then decide — judging unverified is a gamble';}
 
@@ -934,6 +968,7 @@ async function runCouncil(a){if(!document.getElementById('ag0'))return;const c=a
  const conf=!sm?'<span style="opacity:.6">preliminary · unverified</span>':(showC?(c.flag?'<span style="color:#ffb454">'+c.conf+'% · low confidence</span>':'<span style="opacity:.85">'+c.conf+'% confident</span>'):'<span style="opacity:.7">confidence withheld</span>');
  const badge=liveAI?'<span style="color:rgb(var(--acc))">● '+((agData&&agData.agentic)?'live agents · '+agData.tools+' tools':'live AI')+'</span> · ':'';
  const ch=document.querySelector('#dossier .council .ch');if(ch)ch.innerHTML='◈ Agent Council · '+badge+conf;
+ if(agData&&agData.agentic&&agData.trace&&agData.trace.length)showAgentPanel(agData);
  clearTimeout(window._c0);clearTimeout(window._c1);clearTimeout(window._c2);
  window._c0=setTimeout(()=>{a0.classList.add('on','talk');type(a0.querySelector('.sp'),w,()=>a0.classList.remove('talk'));},200);
  window._c1=setTimeout(()=>{const e=document.getElementById('ag1');if(e){e.classList.add('on','talk');if(sm&&c.flag)e.classList.add('live');else e.classList.remove('live');type(e.querySelector('.sp'),sk,()=>e.classList.remove('talk'));}},1600);
@@ -972,6 +1007,21 @@ function nemName(){return kid()?'The Tangle':'The Hollow';}
 const NEMTAUNT={near:['I can smell the stale tokens from here, auditor.','One door between us now — you should hurry.','You left this one to rot too long.','I hear a heartbeat. Is it yours?'],possess:['This shell will do nicely.','Another credential, another mask.','You blinked — and I moved.'],banish:['…cold iron. You only delay me.','Severed. But I am patient, auditor.','One thread cut. I have so many.'],seal:['A locked door has never held me for long.','Conditional Access. How quaint.']};
 function nemSpeak(kind){const arr=NEMTAUNT[kind];if(!arr||!arr.length)return;nemesisBanner(arr[(Math.random()*arr.length)|0]);}
 function nemesisBanner(t){let e=document.getElementById('nemesis');if(!e){e=document.createElement('div');e.id='nemesis';document.body.appendChild(e);}e.innerHTML='<span class="nmname">'+nemName()+'</span>“'+t+'”';e.classList.remove('go');void e.offsetWidth;e.classList.add('go');}
+function traceSnippet(tool,r){if(!r)return '';
+ if(tool==='get_signin_activity')return 'last sign-in '+(r.lastInteractive||'?')+' · token '+(r.lastTokenRefresh||'?')+' · MFA '+(r.mfa||'?');
+ if(tool==='get_dependencies')return (r.liveCount||0)+' live binding'+(r.liveCount===1?'':'s')+' of '+((r.bindings||[]).length);
+ if(tool==='get_oauth_grants')return (r.grants&&r.grants.length)?(r.grants.length+' grant · '+r.grants[0].scope):'no OAuth grants';
+ if(tool==='get_group_memberships')return (r.groups&&r.groups.length)?r.groups.join(', '):'no groups';
+ return '';}
+function agentIcon(a){return a==='Warden'?'🛡':a==='Skeptic'?'🔍':a==='Council'?'✓':'◈';}
+function showAgentPanel(d){const p=document.getElementById('agentpanel'),body=document.getElementById('apbody'),meta=document.getElementById('apmeta');if(!p||!body)return;
+ if(meta)meta.textContent=(d.model||'model')+(d.source?' · '+d.source:'')+(d.latency?' · '+(d.latency/1000).toFixed(1)+'s':'');
+ const lines=(d.trace||[]).map(t=>'<div class="apline"><span class="apag">'+agentIcon(t.agent)+' '+t.agent+'</span> → <span class="aptool">'+t.tool+'</span><span class="apres">↳ '+traceSnippet(t.tool,t.result)+'</span></div>');
+ lines.push('<div class="apline apdone">✓ '+(d.tools||0)+' tool call'+(d.tools===1?'':'s')+(d.citations&&d.citations.length?' · cited: '+d.citations.join('; '):'')+'</div>');
+ body.innerHTML='';p.classList.add('show');
+ lines.forEach((ln,i)=>setTimeout(()=>{const b=document.getElementById('apbody');if(b&&p.classList.contains('show')){b.insertAdjacentHTML('beforeend',ln);b.scrollTop=b.scrollHeight;}},i*430));
+ clearTimeout(window._apT);window._apT=setTimeout(hideAgentPanel,13000);}
+function hideAgentPanel(){const p=document.getElementById('agentpanel');if(p)p.classList.remove('show');}
 function huntAlarm(){if(document.getElementById('combat').classList.contains('show'))return;let e=document.getElementById('huntalarm');if(!e){e=document.createElement('div');e.id='huntalarm';document.body.appendChild(e);}e.classList.remove('go');void e.offsetWidth;e.classList.add('go');document.body.classList.remove('flick');void document.body.offsetWidth;document.body.classList.add('flick');setTimeout(()=>document.body.classList.remove('flick'),560);sfx('growl');nemSpeak('near');sealPrompt();}
 function sealPrompt(){let e=document.getElementById('sealbanner');if(!e){e=document.createElement('div');e.id='sealbanner';document.body.appendChild(e);}e.innerHTML='⚠ <b>'+nemName()+'</b> is in the next room <button onclick="sealDoor()">⛓ Seal the Door · 6🔮</button>';e.classList.add('on');clearTimeout(window._sealT);window._sealT=setTimeout(()=>{e.classList.remove('on');},5200);}
 function sealDoor(){if(combatTgt)return;const cost=6;if(essence<cost){sfx('tick');toast('Not enough essence to seal the door — '+cost+' 🔮 needed.');return;}essence-=cost;essSpent+=cost;freeze+=3;updEss();updateThreatUI();sfx('seal');const sb=document.getElementById('sealbanner');if(sb)sb.classList.remove('on');toast('⛓ A <b>Conditional Access</b> block seals the corridor — '+nemName()+' is held for 3 steps.');nemSpeak('seal');}
@@ -1158,7 +1208,7 @@ document.getElementById('map').addEventListener('mousemove',function(e){const cx
 function buildFloorNav(){const hf=roomFloor(H.room),won=allAccts().every(a=>ST[a].done);document.getElementById('floornav').innerHTML=FLOORS.map(f=>{const lk=f.f>floorMax;return '<div class="fb'+(f.f===floor?' on':'')+(f.f===hf&&!won?' hf':'')+(lk?' locked':'')+'" onclick="setFloor('+f.f+')">'+(lk?'🔒':['','Ⅰ','Ⅱ','Ⅲ'][f.f])+'<span class="ft">'+(kid()?TMFLOORS[f.f]:f.name)+'</span></div>';}).join('');}
 function showPop(a,node){const s=SOULS[a],p=document.getElementById('mpop'),r=node.getBoundingClientRect();p.innerHTML='<b style="color:'+GC[s.grade]+'">'+s.grade+'</b>'+s.label+'<span>'+s.kind+' · <em>'+(ST[a].done?'judged':s.dead?'looks dormant':'active')+'</em></span>';p.style.left=(r.left+r.width/2)+'px';p.style.top=(r.top-8)+'px';p.classList.add('show');}
 function hidePop(){document.getElementById('mpop').classList.remove('show');}
-function enterRoom(a){hidePop();const tr=document.getElementById('transition'),rb=roomSrc(a);if(rb)tr.style.background="url('"+rb+"') center/cover";else tr.style.background="radial-gradient(120% 90% at 70% 12%,#fff7e0,#cfe6ff 48%,#a9d2f3)";
+function enterRoom(a){hidePop();const tr=document.getElementById('transition'),rb=roomSrc(a);if(rb)tr.style.background="url('"+rb+"') center/cover";else tr.style.background="radial-gradient(120% 90% at 70% 12%,#d4c8a9,#a3bcda 48%,#7aa1cb)";
  tr.classList.remove('go');void tr.offsetWidth;tr.classList.add('go');
  setTimeout(()=>{closeMap();cur=a;floor=roomOf(a).floor;buildFloorTabs();buildRoster();show();},480);
  setTimeout(()=>tr.classList.remove('go'),900);}
@@ -1184,17 +1234,58 @@ function press(el){sfx('tick');el.style.transform='translateY(0) scale(.96)';set
 // ── audio (Web Audio synth — no files) ──
 var AC=null,masterGain=null,muted=false,ambientNodes=null;
 function audioInit(){if(AC)return;try{AC=new (window.AudioContext||window.webkitAudioContext)();masterGain=AC.createGain();masterGain.gain.value=muted?0:.85;masterGain.connect(AC.destination);startAmbient();}catch(e){}}
-function startAmbient(){if(!AC||ambientNodes)return;const g=AC.createGain();g.gain.value=.07;g.connect(masterGain);const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=300;lp.connect(g);const o1=AC.createOscillator();o1.type='sawtooth';o1.frequency.value=55;const o2=AC.createOscillator();o2.type='sine';o2.frequency.value=82.4;o1.connect(lp);o2.connect(lp);const lfo=AC.createOscillator();lfo.frequency.value=.07;const lg=AC.createGain();lg.gain.value=110;lfo.connect(lg);lg.connect(lp.frequency);o1.start();o2.start();lfo.start();ambientNodes={g};}
+function startAmbient(){if(!AC||ambientNodes)return;const k=kid();
+ const g=AC.createGain();g.gain.value=k?.05:.07;g.connect(masterGain);
+ const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=k?540:300;lp.connect(g);
+ const o1=AC.createOscillator();o1.type=k?'triangle':'sawtooth';o1.frequency.value=k?98:55;
+ const o2=AC.createOscillator();o2.type='sine';o2.frequency.value=k?147:82.4;
+ o1.connect(lp);o2.connect(lp);
+ const lfo=AC.createOscillator();lfo.frequency.value=k?.09:.07;const lg=AC.createGain();lg.gain.value=k?60:110;lfo.connect(lg);lg.connect(lp.frequency);
+ o1.start();o2.start();lfo.start();ambientNodes={g};scheduleMelody(k);}
+function scheduleMelody(k){if(!AC)return;const scale=k?[392,440,523,587,659,784]:[196,233,262,294,349,392];
+ function tick(){if(!AC)return;if(!muted&&ambientNodes){const f=scale[(Math.random()*scale.length)|0];blip(f,k?1.1:1.7,k?'sine':'triangle',k?.05:.04);if(k&&Math.random()<.4)setTimeout(()=>blip(f*1.5,.6,'sine',.025),260);}window._melT=setTimeout(tick,(k?3600:5200)+Math.random()*3200);}
+ clearTimeout(window._melT);window._melT=setTimeout(tick,2600);}
 function blip(freq,dur,type,vol,glideTo){if(!AC||muted)return;const o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.setValueAtTime(freq,AC.currentTime);if(glideTo)o.frequency.exponentialRampToValueAtTime(glideTo,AC.currentTime+dur);g.gain.setValueAtTime(.0001,AC.currentTime);g.gain.linearRampToValueAtTime(vol||.2,AC.currentTime+.012);g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+dur);o.connect(g);g.connect(masterGain);o.start();o.stop(AC.currentTime+dur+.03);}
 function noiseBurst(dur,vol,ff){if(!AC||muted)return;const len=Math.floor(AC.sampleRate*dur),b=AC.createBuffer(1,len,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);const n=AC.createBufferSource();n.buffer=b;const f=AC.createBiquadFilter();f.type='bandpass';f.frequency.value=ff||1200;const g=AC.createGain();g.gain.value=vol||.3;n.connect(f);f.connect(g);g.connect(masterGain);n.start();}
 var SFX={tick:()=>blip(820,.05,'square',.035),clack:()=>{noiseBurst(.06,.22,2200);blip(170,.05,'square',.07);},seal:()=>blip(130,.34,'sine',.28,62),dissolve:()=>{blip(420,.6,'sine',.11,1500);noiseBurst(.5,.07,3200);},growl:()=>blip(68,.55,'sawtooth',.2,46),hit:()=>{noiseBurst(.08,.28,900);blip(92,.12,'sawtooth',.11);},banish:()=>{blip(330,.5,'sine',.16,680);blip(440,.5,'sine',.1,880);},dawn:()=>[262,330,392,523].forEach((f,i)=>setTimeout(()=>blip(f,1.7,'sine',.13),i*130)),fall:()=>[196,165,131,98].forEach((f,i)=>setTimeout(()=>blip(f,.7,'sawtooth',.15),i*150))};
 function sfx(n){try{if(SFX[n]&&AC&&!muted)SFX[n]();}catch(e){}}
 function toggleMute(){muted=!muted;if(masterGain)masterGain.gain.value=muted?0:.85;var b=document.getElementById('muteBtn');if(b)b.textContent=muted?'🔇':'🔊';}
+// ── self-running showcase (attract loop) ──
+let showcaseOn=false;
+function ensureShowcap(){let c=document.getElementById('showcap');if(!c){c=document.createElement('div');c.id='showcap';c.innerHTML='<span class="scbadge">▶ SHOWCASE</span><span class="sctext" id="sctext"></span><span class="scstop" onclick="stopShowcase()">✕ exit</span>';document.body.appendChild(c);}return c;}
+function scSay(t){const c=ensureShowcap();c.classList.add('on');const tx=document.getElementById('sctext');if(tx)tx.innerHTML=t;}
+const scSleep=ms=>new Promise(r=>{clearTimeout(window._scT);window._scT=setTimeout(r,ms);});
+function stopShowcase(){showcaseOn=false;clearTimeout(window._scT);const c=document.getElementById('showcap');if(c)c.classList.remove('on');}
+function scSelect(a){if(!SOULS[a]||!roomOf(a))return;cur=a;floor=roomOf(a).floor;buildFloorTabs();buildRoster();show();}
+async function startShowcase(){if(showcaseOn)return;showcaseOn=true;try{audioInit();}catch(e){}
+ tutDone=true;tutActive=false;hungryEnabled=false;
+ const intro=document.getElementById('intro');if(intro&&!intro.classList.contains('gone')){intro.classList.add('gone');setTimeout(()=>{intro.style.display='none';},900);}
+ ['coach','tutspot'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.remove('on');});
+ ensureShowcap();await scSleep(700);
+ while(showcaseOn){try{await showcaseRun();}catch(e){}if(!showcaseOn)break;await scSleep(1600);}}
+async function showcaseRun(){
+ const beat=async(t,ms)=>{if(!showcaseOn)return false;scSay(t);await scSleep(ms);return showcaseOn;};
+ if(!await beat('🏰 An estate of forgotten accounts — each one a risk. Judge them before dawn.',3600))return;
+ scSelect('santos');if(!await beat('Meet a spirit. Read its testimony, then investigate.',2800))return;
+ try{divine();}catch(e){}if(!await beat('◐ <b>Divine</b> maps what still depends on it (Fabric IQ).',3600))return;
+ try{summon();}catch(e){}if(!await beat('◑ <b>Summon</b> — the live agents investigate via tools and cite the evidence.',4800))return;
+ if(!await beat('The agents advise and flag doubt — but never decide. <b>You</b> hold the verdict.',3200))return;
+ try{if(ST.santos&&ST.santos.councilDone)judge(SOULS.santos.rite);}catch(e){}if(!await beat('✓ Alive, least-privilege → <b>Acknowledge</b>. Correct.',3000))return;
+ scSelect('billing');try{divine();}catch(e){}await scSleep(1300);try{summon();}catch(e){}
+ if(!await beat('⚠ This one <i>looks</i> dormant — no interactive sign-in in 412 days…',3800))return;
+ if(!await beat('…but a token refreshed 3h ago and a runbook still calls it. <b>Don’t trust the surface.</b>',4200))return;
+ try{if(ST.billing&&ST.billing.councilDone)judge(SOULS.billing.rite);}catch(e){}if(!await beat('✓ Load-bearing → <b>Bind &amp; Watch</b>. The AI can be wrong — you caught it.',3600))return;
+ if(!await beat('Neglect a high-risk account and <b>The Hollow</b> takes it — a multi-stage kill-chain.',3600))return;
+ try{if(!combatTgt)possessAt('guestwifi');}catch(e){}await scSleep(2200);
+ if(!await beat('⚔ Read the attack → choose the control that actually stops it. The d20 rolls.',2800))return;
+ for(let i=0;i<10&&showcaseOn&&combatTgt;i++){try{const ph=curPhase();if(ph&&ph.weak)useRemedy(ph.weak);}catch(e){}await scSleep(2800);}
+ await scSleep(1200);
+ if(!await beat('🌅 Real agents. Real Microsoft controls. Your call. — <i>Afterlogin: The Hunt</i>',4800))return;}
 // ── intro ──
 function enterManor(){audioInit();const i=document.getElementById('intro');if(i){i.classList.add('gone');setTimeout(()=>{i.style.display='none';},900);}setTimeout(tutStart,950);}
 // ── live AI council (graceful fallback to scripted) ──
 async function fetchCouncil(a){const s=SOULS[a];const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),16000);
- try{const res=await fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({label:s.label,kind:s.kind,grade:s.grade,last:s.last,bindings:(s.bind||[]).map(b=>b.label.replace(/<[^>]+>/g,'')+(b.live?' (LIVE)':'')),evidence:(s.ev||[]).map(e=>e.replace(/<[^>]+>/g,''))}),signal:ctrl.signal});clearTimeout(tid);if(!res.ok)return null;const j=await res.json();if(j.warden&&j.skeptic)return {w:String(j.warden),s:String(j.skeptic),council:j.council,citations:j.citations||[],tools:j.toolCalls||0,agentic:!!j.agentic};return null;}catch(e){clearTimeout(tid);return null;}}
+ try{const res=await fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({label:s.label,kind:s.kind,grade:s.grade,last:s.last,bindings:(s.bind||[]).map(b=>b.label.replace(/<[^>]+>/g,'')+(b.live?' (LIVE)':'')),evidence:(s.ev||[]).map(e=>e.replace(/<[^>]+>/g,''))}),signal:ctrl.signal});clearTimeout(tid);if(!res.ok)return null;const j=await res.json();if(j.warden&&j.skeptic)return {w:String(j.warden),s:String(j.skeptic),council:j.council,citations:j.citations||[],tools:j.toolCalls||0,agentic:!!j.agentic,trace:j.trace||[],model:j.model||'',latency:j.latency||0,source:j.source||''};return null;}catch(e){clearTimeout(tid);return null;}}
 // ── share ──
 function shareScore(ev){const t='Afterlogin: The Hunt — I cleansed the manor. Rank '+rank()+' · '+score+'✦ · '+wards+'/3 wards held.';try{if(navigator.clipboard)navigator.clipboard.writeText(t);}catch(e){}const b=ev&&ev.target;if(b){const o=b.textContent;b.textContent='Copied ✓';setTimeout(()=>{b.textContent=o;},1500);}}
 var STATS={poltergeists:0,banishes:0,rested:0,bound:0,acked:0,correct:0};
@@ -1339,6 +1430,8 @@ MAXD=(bfsNext(0,isVaultGoal)||{dist:8}).dist||8;
 buildFloorTabs();buildRoster();show();updateHud();updateThreatUI();updateIntroTheme();updEss();
 loadSave();renderCareer();
 window._hungryT=setTimeout(hungryLoop,DIFF[diff].hms);
+if(typeof location!=='undefined'&&location.search&&location.search.indexOf('demo')>=0)setTimeout(startShowcase,700);
+if(typeof document!=='undefined'&&document.addEventListener)document.addEventListener('keydown',e=>{if(e.key==='Escape'&&showcaseOn)stopShowcase();});
 </script>
 </body>
 </html>

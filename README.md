@@ -1,139 +1,110 @@
 # 🕯️ Afterlogin: The Hunt
 
-**A haunted-house identity-governance game where the ghosts are your forgotten accounts, the ontology decides who's really dead, and every exorcism comes with a citation.**
+**A game that trains identity-attack response — powered by real, tool-calling AI agents.**
+You're the night auditor of a haunted estate. Every "spirit" is a forgotten account; the
+**Agent Council** investigates and advises, but *you* decide its fate — and when a neglected
+account is taken over, you fight the **kill-chain** by choosing the control that actually
+remediates the attack.
 
-Built for the **Microsoft Agents League — Creative Apps track** (GitHub Copilot). Single-file, zero-dependency, runs offline. MajorKey-themed.
+Built for the **Microsoft Agents League**. The narrative is a haunted house; the engine is a
+real multi-agent system with function tools, the **Model Context Protocol**, and an optional
+**Azure AI Foundry** agent path.
 
-> Synthetic data only. No PII, no real tenant data. Every account, sign-in, and policy is fabricated for demonstration.
+🎮 **Live:** https://victorious-plant-0c1e7790f.7.azurestaticapps.net
+📖 In-game **"Behind the Game"** badge maps every element to the real Microsoft control.
 
 ---
 
-## The pitch in one breath
+## Why it's actually agentic (not a chatbot)
 
-Every dormant, orphaned, or over-privileged account that lingers past its purpose becomes a **ghost** haunting the Manor. You are the **Revenant Auditor**. Sweep your green lantern to reveal the rooms, investigate each spirit, and pass judgment before dawn. The twist that makes it a game *and* a real safety lesson: **not every ghost is dead** — some are service accounts still silently powering a live process. Exorcise one of those and you trigger a **poltergeist cascade** (you broke production).
+The council is a genuine **multi-agent, tool-calling** system. The **Warden** and **Skeptic**
+each call function tools over an identity store, investigate independently, *debate*, and a
+**Council** agent synthesises a **cited** advisory — and never names the verdict (human decides).
 
-And something is **hunting the ghosts**. Leave a high-severity spirit un-judged and the Hungry will **possess** it — turning a passive orphan into an active threat racing toward the **Vault** (Tier-0). That's the truest thing about identity security: *your forgotten accounts are the attack surface.*
+```mermaid
+flowchart LR
+  G[Game UI<br/>encounter + combat] -->|account| API[/api/reason<br/>Azure Function/]
+  subgraph Council [Multi-agent council]
+    W[🛡 Warden agent] -->|debate| S[🔍 Skeptic agent] --> C[✓ Council agent]
+  end
+  API --> Council
+  Council -->|tool calls| T[(Identity tools<br/>signin · deps · oauth · groups)]
+  T -->|cited results| Council
+  Council -->|warden · skeptic · verdict<br/>+ citations + trace| G
+  T -. also exposed over .-> MCP[[MCP server<br/>Copilot / VS Code / Foundry]]
+  API -. optional .-> F[Azure AI Foundry<br/>connected agents]
+```
+
+**Three tiers, each falling back safely:**
+
+| Tier | What runs | Activate |
+|---|---|---|
+| **Azure AI Foundry** | Warden/Skeptic/Council as Foundry connected-agents | `foundry/setup.mjs` + `FOUNDRY_*` settings |
+| **Inline agents** *(default)* | tool-calling loop in the Function (Azure OpenAI / GitHub Models) | set a model token |
+| **Scripted** | curated reasoning, no model | always works (offline) |
+
+A live run shows **"● live agents · N tools"** and streams the real tool-call trace in an
+on-screen panel (model · latency · citations).
+
+---
+
+## The tools (real, protocol-validated)
+
+The agents call these over function-calling, and the **same tools are exposed over MCP**
+([`mcp/`](mcp/)) so Copilot / VS Code / Claude / Foundry can drive them too:
+
+- `get_signin_activity` · `get_dependencies` · `get_oauth_grants` · `get_group_memberships`
+
+Each result is **cited** (Entra sign-in logs, Purview runbook index, CMDB, OAuth consent audit).
+**Synthetic data only — no real PII.**
+
+## Real attack-response training
+
+Each boss is a real attack as a **multi-stage kill-chain**; the **right control is decisive, the
+wrong one whiffs with a "why"** (the gotchas people get wrong):
+
+- **Stolen session token (AiTM)** → ✅ Revoke Sessions · ❌ password reset *doesn't kill a live token*
+- **Illicit OAuth consent** → ✅ Revoke the grant · ❌ revoking sessions *leaves the app's access*
+- **Domain-admin compromise** → ✅ Strip PIM + rotate krbtgt · ❌ MFA *won't remove standing privilege*
+
+The investigation loop teaches **identity governance**: don't delete a *load-bearing* service
+account, verify live bindings before deprovisioning, and keep a human in the loop.
+
+---
 
 ## Run it
 
-**The game** — just open `index.html` in any Chromium browser, full screen. Click **Begin the Night**. Move the mouse (the lantern), click a room, **Divine** the bindings, **Summon** the grimoire, then judge. Watch the Scrying Pool (top-left) for the Hunt.
-
-**The MCP server** — the same manor, playable headlessly by GitHub Copilot:
-
+**Game (static, zero-dep):**
 ```bash
-node mcp-server.mjs
+python -m http.server 8080   # then open http://localhost:8080
 ```
-
-Register it for Copilot in VS Code (`.vscode/mcp.json`):
-
-```json
-{ "servers": { "orphan-manor": { "command": "node", "args": ["mcp-server.mjs"] } } }
-```
-
-Then in Copilot Chat: *"List the rooms, divine the Boiler Room, and only lay it to rest if it's truly dead."* The browser game and the MCP server share one model — the visual showpiece and the agent surface are the same product. That's the track's "built for Copilot" bonus, earned rather than bolted on.
-
-## How the Microsoft IQ layers are load-bearing (not decorative)
-
-| Layer | Role in the manor | Why it's load-bearing |
-|---|---|---|
-| **Fabric IQ** | The **spirit-threads** — the entity ontology (account → owns → mailbox, → member-of → group, → *invoked-by* → live job). "Is this ghost dead?" is a multi-hop graph question. | Strip it and the game is random clicking; the threads are the only way to know a "dead" account is secretly load-bearing. |
-| **Foundry IQ** | The **grimoire** — cited evidence per judgment (sign-in logs, CMDB, runbook line, CA policy) and the threat's risk dossier (impossible travel). | Every exorcism and banishment must be justified with a citation; that's what makes it an audit artifact, not a guess. |
-
-## Identity threats — the Hunt
-
-Active threats are a second, *predatory* class of entity (reusing the L3 Threat-Response flow):
-
-- **The Possession** — account takeover (impossible travel). Ignites mid-game and **moves** along the entitlement graph toward the Vault.
-- **Possession-of-the-ignored** — if it reaches an un-judged grade-D/F ghost, it **possesses** it (strength ×, harder to banish). This is the interlock: cleaning ghosts starves the predator; ignoring them feeds it.
-- **Banish (L3 rite)** — requires summoning the cited risk dossier first (no banishing on hearsay), then revoke/isolate.
-
-## How it maps to the judging rubric
-
-| Criterion | Weight | How Afterlogin scores |
-|---|---|---|
-| Accuracy & Relevance | 20% | Real orphaned-account / attack-surface problem; redeems to an audit-ready triage tool; Fabric IQ load-bearing; MCP bonus hit |
-| Reasoning & Multi-step | 20% | Each judgment is a multi-hop ontology + cited-evidence inference; the threat AI pathfinds and prioritizes bait |
-| Reliability & Safety | 20% | The *entire game* is "don't make the unsafe call" — poltergeist on a wrong exorcism, false-positive tension, human-judged, cited |
-| Creativity & Originality | 15% | A voiced haunted-house IGA game — nobody ships this |
-| UX & Presentation | 15% | Lantern fog-of-war, procedural ghosts, animated threads, Web Audio mood, a live predator |
-| Community vote | 10% | "Exorcise the ghost," beat-the-Hunt tension, shareable |
-
-## Build status
-
-**Real now (this repo):**
-- Lantern fog-of-war engine, procedural ghosts (severity-graded), animated Fabric IQ spirit-threads
-- Foundry IQ cited grimoire; three judgment rites with correct/incorrect consequences
-- **Poltergeist cascade** fail-state (exorcising a load-bearing account)
-- **Live threat** that ignites, hops the entitlement graph, and **possesses** un-judged ghosts; banish rite gated on cited evidence
-- Ledger scoring, Dawn clock, win/lose, procedural Web Audio (drone, stings, dread swell)
-- Working **MCP server** (10 tools) so Copilot can play it headlessly
-
-**Roadmap (stretch):**
-- Neural-voice ghost testimony (wire the San Mateo TTS WAVs through a reverb)
-- The **Shadow Steward** boss; multiple manor wings (Finance / Healthcare / SLED skins)
-- Co-op "Hunt Night" + competitive leaderboard for the League's Show & Tell battle
-- Point `divine_bindings` at a real (synthetic) dormant-account export → gamified IGA triage that emits cited deprovisioning recommendations
-
-## Hunter Agents (allied)
-
-Your own autonomous defenders patrol the manor (the L2/L3 roles from identity-agent-demo), rendered as sleek holographic constructs with scan-rings and an energy beam:
-
-- **Warden (L2)** — patrols and auto-**flags** un-investigated wraiths (surfaces grade + dormancy in the Scrying Pool), narrowing your search.
-- **Sentinel (L3)** — **hunts the Possession**: chases it across the graph, **pins it in place** (it can't advance while the Sentinel is co-located), and **weakens** its strength. You still land the banish — the agents buy you time and intel.
-
-## Backend & realistic data
-
-A standalone, zero-dependency Node REST API scores a realistic synthetic Entra-style dataset the way a real IGA triage tool would:
-
+**MCP server:**
 ```bash
-node backend/server.mjs     # http://localhost:8787
+cd mcp && npm install && npm test   # validate over the protocol
+npm start                           # HTTP  /mcp   (or: npm run stdio)
+```
+**Foundry agents:** see [`foundry/README.md`](foundry/README.md).
+
+## Deploy (Azure Static Web Apps + managed Functions)
+
+Push to `master` → GitHub Action builds the Function and deploys the whole app.
+Turn the live agents on with one app setting:
+```bash
+az staticwebapp appsettings set -n afterlogin -g rg-afterlogin --setting-names GITHUB_MODELS_TOKEN=<token>
+# or AZURE_OPENAI_ENDPOINT + AZURE_OPENAI_KEY (+ AZURE_OPENAI_DEPLOYMENT) to keep inference in-tenant
 ```
 
-- `data/identities.json` — synthetic identities with real-shaped fields (objectId GUIDs, UPNs, `lastInteractiveSignIn` / `lastNonInteractiveSignIn`, `riskLevel`, `assignedRoles`, `memberOf`, `oauth2Grants`, `runbookReferences`, owner status).
-- **Risk-scoring engine** derives the haunting grade (A–F) from privilege + dormancy + MFA + risk, and resolves **load-bearing vs orphaned** from live bindings (recent app-only auth, runbook refs, active OAuth, sealed CA policy).
-- Endpoints: `GET /api/identities` (graded), `GET /api/identities/:id`, `GET /api/threats`, `POST /api/judge {id,rite}` (returns the poltergeist if you exorcise a load-bearing account), `GET /api/ledger`, `GET /api/ground?q=` (Foundry IQ), `GET /api/health`.
+## Tech
+Azure Static Web Apps · Azure Functions (Node) · Azure OpenAI / GitHub Models · **Model Context
+Protocol** (`@modelcontextprotocol/sdk`) · **Azure AI Foundry** (`@azure/ai-agents`) · Web Audio.
+Frontend: a single zero-dependency `index.html` (DOM + SVG + Canvas-free).
 
-## Genuine Foundry IQ (grounded, cited retrieval)
-
-The agent's evidence ("the grimoire") is wired to a **real Foundry IQ knowledge layer**
-(`backend/foundry-iq.mjs`) — agentic, permission-aware, cited retrieval over Azure AI Search
-(the infrastructure Foundry IQ is built on). It's **pluggable**: configure it and the MCP
-`summon_evidence` tool + the backend `/api/ground` return live cited passages; leave it
-unset and everything falls back to the baked synthetic evidence (so the demo runs offline).
-
-**Enable it:**
-1. In your Microsoft Foundry project, create a **Foundry IQ knowledge base** (Azure AI Search index, e.g. `orphan-manor-knowledge`) and **index the synthetic corpus** in `data/knowledge/*.md` (runbooks, CMDB, CA policy).
-2. Set environment variables (never commit secrets):
-   ```bash
-   export FOUNDRY_SEARCH_ENDPOINT="https://<your-search>.search.windows.net"
-   export FOUNDRY_SEARCH_KEY="<query-key>"
-   export FOUNDRY_SEARCH_INDEX="orphan-manor-knowledge"
-   # optional, for extractive answers:
-   export FOUNDRY_SEMANTIC_CONFIG="<semantic-config-name>"
-   ```
-3. `node backend/server.mjs` → `GET /api/health` now reports `"foundryIQ": true`, and `GET /api/ground?q=...` returns cited results. Copilot driving the MCP `summon_evidence` tool gets the same live grounding.
-
-> Synthetic knowledge only — no PII or confidential data is indexed.
-- The browser game, the MCP server, and this backend share **one scoring model** — synthetic data only, no PII.
-
-## Files
-
+## Repo
 ```
-orphan-manor-demo/
-├── index.html              # the whole game — open this
-├── mcp-server.mjs          # MCP server — "built for Copilot"
-├── backend/
-│   ├── server.mjs          # REST API + risk-scoring engine
-│   └── foundry-iq.mjs      # genuine Foundry IQ grounded-retrieval client
-├── data/
-│   ├── identities.json     # synthetic Entra-style dataset
-│   └── knowledge/          # synthetic corpus to index into Foundry IQ
-├── assets/                 # drop-in AI creature art (+ prompts in README)
-├── ARCHITECTURE.md         # architecture diagram (submission)
-├── SUBMISSION.md           # project description (submission)
-├── staticwebapp.config.json
-├── README.md
-└── CHANGELOG.md
+index.html              the game (also encounter.html, the dev copy)
+api/reason/             /api/reason — inline multi-agent endpoint + foundry.js tier
+mcp/                    Identity-Governance MCP server (+ Dockerfile, tests)
+foundry/                Foundry agent provisioning (setup.mjs) + runbook
+assets/                 painted room + ghost art
+CHANGELOG.md            full history
 ```
-
-*Personas, accounts, and signals are fictional. For sales conversations, demos, and the hackathon only.*

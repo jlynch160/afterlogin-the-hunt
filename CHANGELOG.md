@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.12.0] - 2026-06-09 — Showcase the agents: live trace panel, sound, attract mode + polish
+
+- **Live agent-activity panel.** A mission-control panel streams the real agents' tool calls in
+  real time (`🛡 Warden → get_signin_activity ↳ …`, `🔍 Skeptic → get_dependencies ↳ 1 live binding`),
+  with model · source · latency and the cited sources. Appears when the live agents run.
+- **Self-running showcase mode.** A hands-free attract loop ("▶ Watch the 90-second showcase" /
+  `?demo`) auto-plays investigate → overrule the AI → boss kill-chain → dawn with captions; loops,
+  exits on click/Esc.
+- **Sound & music.** Theme-aware ambient bed (eerie minor manor / warm major factory) with a gentle
+  melodic layer; respects the mute toggle.
+- **Factory room art wired.** `setBg` now uses `assets/helpers/room_<account>.png` if present, else
+  the muted gradient — drop in generated art and it appears.
+- **Visual polish.** Centered, bounded main-menu column (was left-shifted); muted the blinding
+  factory backgrounds; relocated "Behind the Game" to a floating top-right badge.
+- **Submission artifacts.** Judge-facing `README.md` (architecture diagram + agentic story) and a
+  `SUBMISSION.md` pitch mapped to the judging criteria.
+
 ## [0.11.0] - 2026-06-09 — A real multi-agent council: tool-calling Warden + Skeptic
 
 The Agent Council is no longer scripted prose — `/api/reason` is now a genuine **multi-agent, tool-calling** endpoint.
