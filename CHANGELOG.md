@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.12.5] - 2026-06-11 — Boot screen: explicit "Hunt × Helper Patrol" dual identity
+
+- **Both modes, named.** The boot center icon now crossfades between 🕯️ (The Hunt) and 🏭 (Helper
+  Patrol), and the subtitle is two clearly-styled mode badges — **🕯️ The Hunt × Helper Patrol ☀️**
+  (manor-purple vs. factory-gold) — so it reads instantly as one game with two worlds.
+
 ## [0.12.4] - 2026-06-11 — Boot screen: arcane summoning ring + both-worlds palette
 
 - **Summoning ring.** The candle now sits inside a rotating arcane sigil ring (two counter-spinning

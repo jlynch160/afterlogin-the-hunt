@@ -590,7 +590,18 @@ body.flick{animation:flick .56s steps(1) both}
 .r-ticks2{stroke:rgba(255,205,120,.4);stroke-width:4;stroke-dasharray:1 11;animation:ringspin 18s linear infinite reverse}
 .r-prog{stroke:url(#bgprog);stroke-width:2.5;stroke-linecap:round;stroke-dasharray:540;stroke-dashoffset:540;transform:rotate(-90deg);filter:drop-shadow(0 0 6px rgba(190,150,255,.95));animation:ringdraw 1.9s cubic-bezier(.3,0,.2,1) forwards}
 .boothalo{position:absolute;left:50%;top:50%;width:160px;height:160px;margin:-80px 0 0 -80px;border-radius:50%;background:radial-gradient(circle,rgba(180,140,255,.42),rgba(255,200,110,.12) 55%,rgba(150,110,255,0) 72%);filter:blur(6px);pointer-events:none;animation:boothalo 2.6s ease-in-out infinite}
-.bootsigil{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:54px;animation:bootflame 2.2s ease-in-out infinite}
+.bootsigil{position:absolute;left:0;right:0;top:0;bottom:0;animation:bootflame 2.2s ease-in-out infinite}
+.bootsigil span{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font-size:50px}
+.bootsigil .gm{text-shadow:0 0 16px rgba(170,130,255,.8);animation:glyphA 4.6s ease-in-out infinite}
+.bootsigil .gf{text-shadow:0 0 16px rgba(255,200,110,.85);animation:glyphB 4.6s ease-in-out infinite}
+@keyframes glyphA{0%,40%{opacity:1}52%,90%{opacity:0}100%{opacity:1}}
+@keyframes glyphB{0%,40%{opacity:0}52%,90%{opacity:1}100%{opacity:0}}
+.bootmodes{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:11px;margin:11px 0 22px;animation:bootbadgein .9s ease both .4s}
+.bm{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;padding:5px 13px;border-radius:999px;border:1px solid;white-space:nowrap}
+.bm-hunt{color:#cdbcff;border-color:rgba(150,110,255,.45);background:rgba(124,92,255,.12);text-shadow:0 0 12px rgba(150,110,255,.5)}
+.bm-patrol{color:#ffd98f;border-color:rgba(255,196,92,.5);background:rgba(255,196,92,.12);text-shadow:0 0 12px rgba(255,196,92,.5)}
+.bm-amp{color:#9385bd;font-size:13px;font-weight:700}
+@keyframes bootbadgein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes boothalo{0%,100%{transform:scale(.9);opacity:.55}50%{transform:scale(1.14);opacity:.92}}
 @keyframes auraspin{to{transform:rotate(360deg)}}
 @keyframes ringspin{to{transform:rotate(360deg)}}
@@ -711,7 +722,7 @@ body.flick{animation:flick .56s steps(1) both}
 </style>
 </head>
 <body>
-<div id="boot"><div class="bootfog"></div><div class="bootembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bootinner"><div class="bootcrest"><div class="bootaura"></div><div class="boothalo"></div><svg class="bootring" viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="bgprog" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6cff"/><stop offset="1" stop-color="#ffcf7a"/></linearGradient></defs><circle class="r-out" cx="100" cy="100" r="94"/><circle class="r-track" cx="100" cy="100" r="86"/><circle class="r-ticks" cx="100" cy="100" r="78"/><circle class="r-ticks2" cx="100" cy="100" r="66"/><circle class="r-prog" cx="100" cy="100" r="86"/></svg><div class="bootsigil">🕯️</div></div><div class="bootmark">AFTERLOGIN</div><div class="bootsub">THE HUNT</div><div class="bootbar"><i></i></div><div class="boottip" id="boottip">lighting the candles…</div></div></div>
+<div id="boot"><div class="bootfog"></div><div class="bootembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bootinner"><div class="bootcrest"><div class="bootaura"></div><div class="boothalo"></div><svg class="bootring" viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="bgprog" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6cff"/><stop offset="1" stop-color="#ffcf7a"/></linearGradient></defs><circle class="r-out" cx="100" cy="100" r="94"/><circle class="r-track" cx="100" cy="100" r="86"/><circle class="r-ticks" cx="100" cy="100" r="78"/><circle class="r-ticks2" cx="100" cy="100" r="66"/><circle class="r-prog" cx="100" cy="100" r="86"/></svg><div class="bootsigil"><span class="gm">🕯️</span><span class="gf">🏭</span></div></div><div class="bootmark">AFTERLOGIN</div><div class="bootmodes"><span class="bm bm-hunt">🕯️ The Hunt</span><span class="bm-amp">×</span><span class="bm bm-patrol">Helper Patrol ☀️</span></div><div class="bootbar"><i></i></div><div class="boottip" id="boottip">lighting the candles…</div></div></div>
 <div id="cursorglow"></div>
 <div id="bg"></div>
 <div class="candleglow"></div><div class="motes" id="motes"></div>
