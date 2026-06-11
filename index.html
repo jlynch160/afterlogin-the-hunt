@@ -482,6 +482,12 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 .ifoot{margin-top:24px;font-size:11.5px;letter-spacing:2.5px;text-transform:uppercase;color:#cfc7ea;opacity:.95;text-shadow:0 1px 8px rgba(0,0,0,.6);animation:fadeup .9s ease .6s both}
 /* career panel (intro) */
 .career{margin:18px auto 0;width:min(380px,82vw);animation:fadeup .9s ease .55s both}
+.cvrelics{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;margin-top:11px}
+.cvrh{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);margin-right:3px}
+.cvrelic{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:9px;font-size:17px;background:rgba(255,255,255,.06);border:1px solid var(--stroke);cursor:pointer;transition:.15s}
+.cvrelic:hover{transform:translateY(-2px);border-color:rgba(var(--acc),.6)}
+.cvrelic.lk{opacity:.34;filter:grayscale(1);cursor:default}.cvrelic.lk:hover{transform:none;border-color:var(--stroke)}
+.cvrelic.eq{background:rgba(var(--acc),.16);border-color:rgba(var(--acc),.72);box-shadow:0 0 14px rgba(var(--acc),.32)}
 .cvrow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:12px}
 .cvrank{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:15px;color:rgb(var(--acc))}
 .cvbest,.cvbadge{color:var(--mut);font-size:11px;letter-spacing:.5px}
@@ -1285,7 +1291,7 @@ function breakDawn(){const earned=endRun(true);renderCareer();const ds=document.
  document.getElementById('dawnStat').innerHTML='<div class="scrow"><span>Rank</span><b>'+rank()+'</b></div><div class="scrow"><span>Score</span><b>'+score+' ✦</b></div><div class="scrow"><span>Wards held</span><b>'+wards+' / 3</b></div><div class="scrow"><span>Souls judged</span><b>'+STATS.correct+' / '+allAccts().length+'</b></div><div class="scrow"><span>Poltergeists</span><b>'+STATS.poltergeists+'</b></div><div class="scrow"><span>Hungry banished</span><b>'+STATS.banishes+'</b></div><div class="scrow"><span>Discernment</span><b>🧠 '+discern+(discern>=75?' · clear-eyed':discern<=25?' · hubris':'')+'</b></div><div class="skills"><div class="sh">Security skills practiced</div>'+(sk.length?sk.map(s=>'<div class="sk">✓ '+s+'</div>').join(''):'<div class="sk">—</div>')+'</div>'+metaPanel(earned);
  sfx('dawn');document.getElementById('dawn').classList.add('show');}
 function lose(){const earned=endRun(false);renderCareer();document.getElementById('combat').classList.remove('show');sfx('fall');document.getElementById('loseStat').innerHTML='Souls judged <b>'+STATS.correct+'/'+allAccts().length+'</b> · Score <b>'+score+'</b> ✦ · Poltergeists <b>'+STATS.poltergeists+'</b>'+metaPanel(earned);document.getElementById('lose').classList.add('show');}
-function restart(){Object.keys(ST).forEach(a=>ST[a]={});score=0;combo=0;maxCombo=0;essSpent=0;dailyMode=false;dailyMod=null;wards=3;discern=50;combatTgt=null;floor=1;floorMax=1;cur=acctRoomsOn(1)[0].account;H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);STATS.poltergeists=STATS.banishes=STATS.rested=STATS.bound=STATS.acked=STATS.correct=0;essence=10;freeze=0;buffs.dmg=0;buffs.hitEasy=false;buffs.essBonus=0;buffs.oracle=false;buffs.sentinel=false;buffs.warden=false;buffs.softPolter=false;buffs.beacon=false;buffs.autoBanish=false;buffs.analyst=false;buffs.steady=false;buffs.resolveBonus=0;buffs.secondWind=false;Object.keys(owned).forEach(k=>delete owned[k]);updEss();document.getElementById('dawn').classList.remove('show');document.getElementById('lose').classList.remove('show');document.getElementById('combat').classList.remove('show');buildFloorTabs();buildRoster();show();updateHud();updateThreatUI();}
+function restart(){Object.keys(ST).forEach(a=>ST[a]={});score=0;combo=0;maxCombo=0;essSpent=0;dailyMode=false;dailyMod=null;wards=3;discern=50;combatTgt=null;floor=1;floorMax=1;cur=acctRoomsOn(1)[0].account;H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);STATS.poltergeists=STATS.banishes=STATS.rested=STATS.bound=STATS.acked=STATS.correct=0;essence=10;freeze=0;buffs.dmg=0;buffs.hitEasy=false;buffs.essBonus=0;buffs.oracle=false;buffs.sentinel=false;buffs.warden=false;buffs.softPolter=false;buffs.beacon=false;buffs.autoBanish=false;buffs.analyst=false;buffs.steady=false;buffs.resolveBonus=0;buffs.secondWind=false;Object.keys(owned).forEach(k=>delete owned[k]);applyRelic();updEss();document.getElementById('dawn').classList.remove('show');document.getElementById('lose').classList.remove('show');document.getElementById('combat').classList.remove('show');buildFloorTabs();buildRoster();show();updateHud();updateThreatUI();}
 
 // ── MAP — real floor-plan node-graph ──
 function buildMap(){const fl=document.getElementById('floor'),k=kid();const rooms=ROOMS.filter(r=>r.floor===floor),onR={};rooms.forEach(r=>onR[r.id]=r);
@@ -1394,7 +1400,7 @@ async function showcaseRun(){
  await scSleep(1200);
  if(!await beat('🌅 Real agents. Real Microsoft controls. Your call. — <i>Afterlogin: The Hunt</i>',4800))return;}
 // ── intro ──
-function enterManor(){audioInit();const i=document.getElementById('intro');if(i){i.classList.add('gone');setTimeout(()=>{i.style.display='none';},900);}setTimeout(tutStart,950);}
+function enterManor(){audioInit();if(!dailyMode){applyRelic();updEss();updateHud();}const i=document.getElementById('intro');if(i){i.classList.add('gone');setTimeout(()=>{i.style.display='none';},900);}setTimeout(tutStart,950);}
 // ── live AI council (graceful fallback to scripted) ──
 async function fetchCouncil(a){const s=SOULS[a];const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),16000);
  try{const res=await fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({label:s.label,kind:s.kind,grade:s.grade,last:s.last,bindings:(s.bind||[]).map(b=>b.label.replace(/<[^>]+>/g,'')+(b.live?' (LIVE)':'')),evidence:(s.ev||[]).map(e=>e.replace(/<[^>]+>/g,''))}),signal:ctrl.signal});clearTimeout(tid);if(!res.ok)return null;const j=await res.json();if(j.warden&&j.skeptic)return {w:String(j.warden),s:String(j.skeptic),council:j.council,citations:j.citations||[],tools:j.toolCalls||0,agentic:!!j.agentic,trace:j.trace||[],model:j.model||'',latency:j.latency||0,source:j.source||''};return null;}catch(e){clearTimeout(tid);return null;}}
@@ -1404,8 +1410,8 @@ var STATS={poltergeists:0,banishes:0,rested:0,bound:0,acked:0,correct:0};
 
 /* ───────── meta: combo · ranks · daily · achievements (localStorage, synthetic only) ───────── */
 let combo=0,maxCombo=0,essSpent=0,dailyMode=false,seed=0,dailyMod=null;
-const SAVE={best:0,lifetime:0,plays:0,wins:0,daily:{},badges:{},scores:[]};
-function loadSave(){try{const s=JSON.parse(localStorage.getItem('afterlogin_save')||'{}');SAVE.best=s.best||0;SAVE.lifetime=s.lifetime||0;SAVE.plays=s.plays||0;SAVE.wins=s.wins||0;SAVE.daily=s.daily||{};SAVE.badges=s.badges||{};SAVE.scores=s.scores||[];}catch(e){}}
+const SAVE={best:0,lifetime:0,plays:0,wins:0,daily:{},badges:{},scores:[],relic:null};
+function loadSave(){try{const s=JSON.parse(localStorage.getItem('afterlogin_save')||'{}');SAVE.best=s.best||0;SAVE.lifetime=s.lifetime||0;SAVE.plays=s.plays||0;SAVE.wins=s.wins||0;SAVE.daily=s.daily||{};SAVE.badges=s.badges||{};SAVE.scores=s.scores||[];SAVE.relic=s.relic||null;}catch(e){}}
 function saveSave(){try{localStorage.setItem('afterlogin_save',JSON.stringify(SAVE));}catch(e){}}
 const RANKS=[['Novice',0],['Apprentice',600],['Warden',1600],['Archivist',3600],['Grandmaster',7000]];
 function metaRank(lt){let r=RANKS[0];for(const x of RANKS){if(lt>=x[1])r=x;}return r[0];}
@@ -1418,6 +1424,17 @@ const DAILYMODS=[{id:'fog',name:'Fogbound',desc:'the council withholds all confi
 function modis(id){return dailyMode&&dailyMod&&dailyMod.id===id;}
 const BADGES=[{id:'survivor',ic:'🌅',name:'Survivor',desc:'Reach dawn',t:w=>w},{id:'perfect',ic:'🕯️',name:'Perfect Night',desc:'Win with no poltergeists',t:w=>w&&STATS.poltergeists===0},{id:'banisher',ic:'⚔️',name:'Banisher',desc:'Banish the Hungry',t:()=>STATS.banishes>0},{id:'ascetic',ic:'🪙',name:'Ascetic',desc:'Win spending no essence',t:w=>w&&essSpent===0},{id:'roll',ic:'🔥',name:'On a Roll',desc:'Reach a ×4 combo',t:()=>maxCombo>=6},{id:'flawless',ic:'💎',name:'Flawless',desc:'Every soul judged correctly',t:w=>w&&STATS.poltergeists===0&&STATS.correct===allAccts().length}];
 function checkBadges(won){const e=[];BADGES.forEach(b=>{if(b.t(won)&&!SAVE.badges[b.id]){SAVE.badges[b.id]=1;e.push(b);}});return e;}
+// ── Relics: persistent boons unlocked by lifetime ✦, equip one per run ──
+const RELICS=[
+ {id:'tithe',ic:'🪙',name:'Tithe',desc:'Begin each night with +6 essence.',need:0,apply:()=>{essence+=6;}},
+ {id:'bulwark',ic:'🛡',name:'Bulwark',desc:'Start the night with a 4th ward.',need:900,apply:()=>{wards=Math.min(5,wards+1);}},
+ {id:'analyst',ic:'🧠',name:'Analyst’s Eye',desc:'The council marks the ideal control in every fight.',need:2200,apply:()=>{buffs.analyst=true;}},
+ {id:'oracle',ic:'🔮',name:'Oracle’s Favor',desc:'Begin attuned — the Oracle’s read sharpens your sight.',need:4200,apply:()=>{buffs.oracle=true;}},
+ {id:'whetstone',ic:'⚔️',name:'Whetstone',desc:'Your remediations strike harder (+2 damage).',need:6500,apply:()=>{buffs.dmg+=2;}}
+];
+function relicUnlocked(r){return SAVE.lifetime>=r.need;}
+function equipRelic(id){const r=RELICS.find(x=>x.id===id);if(!r||!relicUnlocked(r))return;if(SAVE.relic===id){SAVE.relic=null;toast('Relic unequipped.');}else{SAVE.relic=id;toast(r.ic+' <b>'+r.name+'</b> equipped — '+r.desc);}saveSave();renderCareer();}
+function applyRelic(){if(!SAVE.relic)return;const r=RELICS.find(x=>x.id===SAVE.relic);if(r&&relicUnlocked(r))r.apply();}
 function endRun(won){SAVE.plays++;if(won)SAVE.wins++;SAVE.lifetime+=score;if(score>SAVE.best)SAVE.best=score;SAVE.scores.push(score);SAVE.scores.sort((a,b)=>b-a);SAVE.scores=SAVE.scores.slice(0,5);if(dailyMode){const k=String(seed);SAVE.daily[k]=Math.max(SAVE.daily[k]||0,score);}const earned=checkBadges(won);saveSave();return earned;}
 function metaPanel(earned){const lt=SAVE.lifetime,nr=nextRank(lt);let bar;if(nr){const pf=rankFloor(lt),pct=Math.min(100,Math.round((lt-pf)/(nr[1]-pf)*100));bar='<div class="mpbar"><i style="width:'+pct+'%"></i></div><div class="mphint">'+lt+' / '+nr[1]+' lifetime ✦ → <b>'+nr[0]+'</b></div>';}else bar='<div class="mphint">Lifetime ✦ '+lt+' · max rank held</div>';
  const nb=(earned&&earned.length)?'<div class="mpbadges">'+earned.map(b=>'<span class="mpb">'+b.ic+' '+b.name+'</span>').join('')+'</div>':'';
@@ -1426,7 +1443,8 @@ function metaPanel(earned){const lt=SAVE.lifetime,nr=nextRank(lt);let bar;if(nr)
 function renderCareer(){const el=document.getElementById('career');if(!el)return;const lt=SAVE.lifetime,nr=nextRank(lt),bc=BADGES.filter(b=>SAVE.badges[b.id]).length;
  const ds=todaySeed(),dbest=SAVE.daily[String(ds)]||0,dmod=DAILYMODS[ds%DAILYMODS.length];
  let bar='';if(nr){const pf=rankFloor(lt);bar='<div class="cvbar"><i style="width:'+Math.min(100,Math.round((lt-pf)/(nr[1]-pf)*100))+'%"></i></div>';}
- el.innerHTML='<div class="cvrow"><span class="cvrank">▰ '+metaRank(lt)+'</span>'+(SAVE.best?'<span class="cvbest">best '+SAVE.best+' ✦</span>':'')+(bc?'<span class="cvbadge">🏅 '+bc+'/'+BADGES.length+'</span>':'')+'</div>'+bar+'<div class="cvdaily" onclick="startDaily()">🗓 <b>Daily Challenge</b> · '+dmod.name+(dbest?' · best '+dbest+'✦':'')+'<span>'+dmod.desc+'</span></div>';}
+ el.innerHTML='<div class="cvrow"><span class="cvrank">▰ '+metaRank(lt)+'</span>'+(SAVE.best?'<span class="cvbest">best '+SAVE.best+' ✦</span>':'')+(bc?'<span class="cvbadge">🏅 '+bc+'/'+BADGES.length+'</span>':'')+'</div>'+bar+'<div class="cvdaily" onclick="startDaily()">🗓 <b>Daily Challenge</b> · '+dmod.name+(dbest?' · best '+dbest+'✦':'')+'<span>'+dmod.desc+'</span></div>'+relStrip();}
+function relStrip(){return '<div class="cvrelics"><span class="cvrh">Relics · equip one</span>'+RELICS.map(r=>{const u=relicUnlocked(r),eq=SAVE.relic===r.id;return '<span class="cvrelic'+(u?'':' lk')+(eq?' eq':'')+'"'+(u?' onclick="equipRelic(\''+r.id+'\')"':'')+' title="'+r.name+' — '+r.desc.replace(/['"]/g,'')+(u?' · tap to equip':' · unlock at '+r.need+' lifetime ✦')+'">'+r.ic+'</span>';}).join('')+'</div>';}
 function startDaily(){dailyMode=true;seed=todaySeed();dailyMod=DAILYMODS[seed%DAILYMODS.length];diff='auditor';essence=modis('frugal')?0:10;wards=modis('firstlight')?2:3;updEss();updateHud();enterManor();}
 
 /* ───────── showcase: "Behind the Game" codex + shareable audit report ───────── */

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0] - 2026-06-11 — New mechanic: Relics (roguelite meta-progression)
+
+- **Relics.** Five persistent boons unlock as your lifetime ✦ grows (Tithe, Bulwark, Analyst’s Eye,
+  Oracle’s Favor, Whetstone). Equip one on the menu and it applies at the start of every run —
+  giving a reason to come back and a sense of growth across nights. Locked relics show what lifetime
+  total unlocks them. (Skipped in Daily Challenge, which stays a fixed test.)
+
 ## [0.15.0] - 2026-06-11 — New mechanic: the Discernment meter (human-in-the-loop, as a system)
 
 - **Discernment vs Hubris.** A new HUD meter (🧠) makes the games thesis a mechanic: judging a soul
