@@ -182,6 +182,17 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:#05040
 .hudstat{font-family:'Cormorant Garamond',serif;font-size:17px;letter-spacing:.5px}
 #scoreEl{color:rgb(var(--acc))}#wardsEl{color:#ffd17a}
 body.shake{animation:shk .42s ease}@keyframes shk{0%,100%{transform:none}20%{transform:translate(-7px,3px)}45%{transform:translate(6px,-3px)}70%{transform:translate(-4px,2px)}}
+body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shkBig{0%,100%{transform:none}10%{transform:translate(-11px,5px)}25%{transform:translate(11px,-6px)}40%{transform:translate(-9px,4px)}55%{transform:translate(8px,-4px)}70%{transform:translate(-5px,2px)}85%{transform:translate(4px,-2px)}}
+.cwrap .cimg.hit{animation:cimghit .32s ease}@keyframes cimghit{0%{transform:scale(1)}16%{transform:scale(1.08) translate(3px,-2px);filter:brightness(2) saturate(.5)}42%{transform:scale(.96) translate(-3px,1px);filter:brightness(1.2)}100%{transform:scale(1);filter:none}}
+.cwrap .cimg.hitcrit{animation:cimghc .44s ease}@keyframes cimghc{0%{transform:scale(1)}14%{transform:scale(1.15) translate(4px,-3px);filter:brightness(2.6) saturate(0) drop-shadow(0 0 30px rgba(255,213,74,.9))}40%{transform:scale(.93) translate(-4px,2px);filter:brightness(1.4)}70%{transform:scale(1.03)}100%{transform:scale(1);filter:none}}
+#combat.phit::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:6;background:radial-gradient(72% 72% at 50% 50%,transparent 42%,rgba(255,30,50,.45));animation:phitf .38s ease forwards}@keyframes phitf{0%{opacity:0}22%{opacity:1}100%{opacity:0}}
+#combat.critf::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:6;background:radial-gradient(60% 60% at 50% 46%,rgba(255,213,74,.34),transparent 60%);animation:critff .5s ease forwards}@keyframes critff{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
+#wipe{position:fixed;inset:0;z-index:50;pointer-events:none;background:linear-gradient(100deg,#0a0618,#241548);transform:translateX(-120%) skewX(-9deg);box-shadow:0 0 60px rgba(0,0,0,.6)}
+#wipe.cover{animation:wcover .3s cubic-bezier(.7,0,.35,1) forwards}
+#wipe.reveal{animation:wreveal .34s cubic-bezier(.65,0,.3,1) forwards}
+@keyframes wcover{from{transform:translateX(-122%) skewX(-9deg)}to{transform:translateX(0) skewX(-9deg)}}
+@keyframes wreveal{from{transform:translateX(0) skewX(-9deg)}to{transform:translateX(122%) skewX(-9deg)}}
+[data-theme="helpers"] #wipe{background:linear-gradient(100deg,#fff7e6,#ffd98a)}
 #dawn,#lose{position:fixed;inset:0;z-index:12;display:none;place-items:center}
 #dawn{background:radial-gradient(ellipse 140% 95% at 50% 128%,rgba(255,210,120,.58),rgba(255,160,86,.24) 38%,rgba(6,4,12,.97) 72%)}
 #lose{background:radial-gradient(ellipse 120% 90% at 50% 50%,rgba(70,4,16,.6),rgba(4,2,8,.95))}
@@ -693,6 +704,10 @@ body.flick{animation:flick .56s steps(1) both}
 [data-theme="helpers"] .cvbar i{background:#ffae3a;box-shadow:0 0 10px rgba(255,170,60,.6)}
 [data-theme="helpers"] .icodexbadge{background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(244,250,255,.84));border-color:rgba(60,120,170,.4);box-shadow:0 12px 30px rgba(70,110,150,.2),0 0 18px rgba(45,180,140,.14)}
 [data-theme="helpers"] .icodexbadge:hover{border-color:rgba(45,180,140,.6)}
+[data-theme="helpers"] .inv .iqb{color:#2f7a58;background:rgba(45,180,140,.15);border-color:rgba(45,180,140,.36)}
+[data-theme="helpers"] .toggle{color:#26405a;background:rgba(255,255,255,.82);border-color:rgba(70,120,170,.32);box-shadow:0 4px 14px rgba(70,110,150,.12)}
+[data-theme="helpers"] .toggle b{color:#1c3247}
+[data-theme="helpers"] .agenttier{color:#3f5a72}
 [data-theme="helpers"] .icb-tx b{color:#234}
 [data-theme="helpers"] .icb-tx span{color:#5a6a80}
 [data-theme="helpers"] .icb-ic{background:radial-gradient(circle at 38% 32%,rgba(45,180,140,.2),rgba(45,180,140,.05));border-color:rgba(45,180,140,.5);box-shadow:0 0 12px rgba(45,180,140,.2)}
@@ -792,6 +807,7 @@ body.flick{animation:flick .56s steps(1) both}
 </div>
 <div class="mpop" id="mpop"></div>
 <div id="transition"></div>
+<div id="wipe"></div>
 <div id="possess"><div class="pveins"></div><div class="ptext">POSSESSED</div></div>
 <div id="agentpanel"><div class="aphead"><span class="apdot"></span><b>Agents at work</b><span class="apmeta" id="apmeta"></span><span class="apx" onclick="hideAgentPanel()">✕</span></div><div class="apbody" id="apbody"></div></div>
 <div id="grade"><div class="grain"></div></div><span class="gcorner tl"></span><span class="gcorner tr"></span><span class="gcorner bl"></span><span class="gcorner br"></span>
@@ -997,7 +1013,8 @@ function updateHud(){document.getElementById('scoreEl').textContent='✦ '+score
 function rank(){return score>=320?'S':score>=240?'A':score>=150?'B':score>=70?'C':'D';}
 
 function buildFloorTabs(){document.getElementById('actbar').innerHTML=FLOORS.map(f=>{const lk=f.f>floorMax;return '<span class="ab'+(f.f===floor?' on':'')+(lk?' locked':'')+'" onclick="setFloor('+f.f+')">'+(lk?'🔒 ':'')+(kid()?TMFLOORS[f.f]:f.name)+'</span>';}).join('');}
-function setFloor(f){if(f>floorMax){sfx('tick');const ba=floorBossAcct(floor),bn=ba&&BOSSES[ba]?BOSSES[ba].name:'the guardian';toast('🔒 Defeat <b>'+bn+'</b> — clear this floor before you ascend.');return;}floor=f;buildFloorTabs();buildRoster();if(document.getElementById('map').classList.contains('show')){buildMap();const fl=document.getElementById('floor');if(fl){fl.style.animation='none';void fl.offsetWidth;fl.style.animation='floorin .42s ease';}}}
+function sceneWipe(mid){const w=document.getElementById('wipe');if(!w){if(mid)mid();return;}w.classList.remove('cover','reveal');void w.offsetWidth;w.classList.add('cover');setTimeout(()=>{if(mid)mid();w.classList.remove('cover');void w.offsetWidth;w.classList.add('reveal');setTimeout(()=>w.classList.remove('reveal'),360);},300);}
+function setFloor(f){if(f>floorMax){sfx('tick');const ba=floorBossAcct(floor),bn=ba&&BOSSES[ba]?BOSSES[ba].name:'the guardian';toast('🔒 Defeat <b>'+bn+'</b> — clear this floor before you ascend.');return;}const changed=f!==floor;floor=f;const rebuild=()=>{buildFloorTabs();buildRoster();if(document.getElementById('map').classList.contains('show')){buildMap();const fl=document.getElementById('floor');if(fl){fl.style.animation='none';void fl.offsetWidth;fl.style.animation='floorin .42s ease';}}};if(changed){sfx('dissolve');sceneWipe(rebuild);}else rebuild();}
 
 function buildRoster(){const fn=kid()?TMFLOORS[floor]:FLOORS[floor-1].name;R.innerHTML='<div class="rhead">⌂ Rooms · <b>'+fn+'</b></div>';
  acctRoomsOn(floor).forEach(r=>{const a=r.account,s=SOULS[a],t=document.createElement('div');t.className='tile'+(a===cur?' sel':'')+(ST[a].done?' done':'');t.style.setProperty('--gc',GC[s.grade]);
@@ -1234,7 +1251,7 @@ function useRemedy(id){if(cBusy())return;const r=REMEDIES.find(x=>x.id===id);if(
    else if(fx&&fx.t==='good'){mult=1.1;tag='✓ effective';why=fx.why;}
    else if(fx&&fx.t==='bad'){mult=0.2;tag='✗ wrong tool';why=fx.why;bad=true;}
    else{mult=0.7;tag='partial';why='Helps a little, but it isn’t the control this stage calls for.';}
-   let dmg=(Math.floor(roll/2)+4)*r.pow*mult+buffs.dmg;if(crit)dmg+=Math.floor(roll/2);dmg=Math.round(Math.max(1,dmg-cWeaken));if(fumble)dmg=Math.max(1,Math.round(dmg*0.5));cWeaken=0;thp=Math.max(0,thp-dmg);floatDmg(dmg,crit||ideal);setTimeout(()=>sfx(bad?'tick':'hit'),140);
+   let dmg=(Math.floor(roll/2)+4)*r.pow*mult+buffs.dmg;if(crit)dmg+=Math.floor(roll/2);dmg=Math.round(Math.max(1,dmg-cWeaken));if(fumble)dmg=Math.max(1,Math.round(dmg*0.5));cWeaken=0;thp=Math.max(0,thp-dmg);floatDmg(dmg,crit||ideal);flashBoss(crit);shakeScreen(crit||ideal);if(crit)combatFx('critf',520);setTimeout(()=>sfx(bad?'tick':'hit'),140);
    toast(r.ic+' <b>'+r.name+'</b> — '+tag+' · −'+dmg+(crit?' CRIT!':''));
    cteachMsg((bad?'✗ ':((ideal||(fx&&fx.t==='good'))?'✓ ':'• '))+'<b>'+r.name+'</b>: '+(why||''),bad);}
   afterAction();}},55);}
@@ -1243,16 +1260,19 @@ function bossTurn(){const B=BOSSES[combatTgt],nm=B?B.name:nemName(),base=B?(B.fl
  else if(r<0.34){cWeaken=(B&&B.floor>=3)?4:3;msg='hollows your hand — your next remediation lands weaker';}
  else {dmg=base+(Math.random()*3|0);msg='drives at your defenses';}
  if(cHarden&&dmg>0){dmg=Math.floor(dmg/2);cHarden=false;}
- if(dmg>0){resolve-=dmg;floatRes(dmg);}
+ if(dmg>0){resolve-=dmg;floatRes(dmg);combatFx('phit',380);shakeScreen(dmg>=8);}
  sfx('growl');toast('👁 <b>'+nm+'</b> '+msg+(dmg>0?' · −'+dmg+' Resolve':'')+'.');
  if(resolve<=0){
    if(wards<=0&&buffs.secondWind){buffs.secondWind=false;resolve=resolveMax;updateHud();toast('🌬️ <b>Second Wind</b> — your break-glass standby kicks in; you hold the line.');}
    else{wards--;resolve=resolveMax;updateHud();if(wards<0){updateCombatUI();cLock=true;toast('🛡 Your last ward shattered — the manor falls.');setTimeout(()=>{document.getElementById('combat').classList.remove('show');lose();},600);return;}toast('🛡 Your defenses broke — a ward is spent. <b>'+wards+'</b> left.');}
  }
  updateCombatUI();dealRemedies();cLock=false;}
+function shakeScreen(big){const b=document.body;b.classList.remove('shake','shakeBig');void b.offsetWidth;b.classList.add(big?'shakeBig':'shake');setTimeout(()=>b.classList.remove('shake','shakeBig'),big?520:430);}
+function flashBoss(crit){const c=document.getElementById('cimg');if(!c)return;c.classList.remove('hit','hitcrit');void c.offsetWidth;c.classList.add(crit?'hitcrit':'hit');setTimeout(()=>c.classList.remove('hit','hitcrit'),crit?460:340);}
+function combatFx(cls,ms){const cb=document.getElementById('combat');if(!cb)return;cb.classList.remove(cls);void cb.offsetWidth;cb.classList.add(cls);setTimeout(()=>cb.classList.remove(cls),ms);}
 function floatDmg(dmg,crit){const el=document.createElement('div');el.className='cdmg'+(crit?' crit':'');el.textContent='−'+dmg+(crit?' CRIT!':'');const w=document.querySelector('.cwrap');if(w){w.appendChild(el);setTimeout(()=>el.remove(),1100);}}
 function floatRes(n,heal){const el=document.createElement('div');el.className='cdmg res'+(heal?' heal':'');el.textContent=(heal?'+':'−')+n+' 🛡';const w=document.querySelector('.cwrap');if(w){w.appendChild(el);setTimeout(()=>el.remove(),1100);}}
-function banish(){document.getElementById('combat').classList.remove('show');const t=combatTgt;combatTgt=null;if(t)ST[t].possessed=false;const Bb=BOSSES[t];score+=Bb?Bb.score:15;essence+=Bb?Bb.ess:5;updEss();STATS.banishes++;sfx('banish');nemSpeak('banish');H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);updateHud();updateThreatUI();const rs=document.getElementById('result');rs.classList.remove('bad');rs.textContent='⚔ Kill-chain Severed';rs.classList.remove('go');void rs.offsetWidth;rs.classList.add('go');const fl=document.getElementById('flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');
+function banish(){document.getElementById('combat').classList.remove('show');const t=combatTgt;combatTgt=null;if(t)ST[t].possessed=false;const Bb=BOSSES[t];score+=Bb?Bb.score:15;essence+=Bb?Bb.ess:5;updEss();STATS.banishes++;sfx('banish');shakeScreen(true);nemSpeak('banish');H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);updateHud();updateThreatUI();const rs=document.getElementById('result');rs.classList.remove('bad');rs.textContent='⚔ Kill-chain Severed';rs.classList.remove('go');void rs.offsetWidth;rs.classList.add('go');const fl=document.getElementById('flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');
  if(Bb){ST[t].done=true;updateProg();const bf=Bb.floor;if(bf<3&&bf+1>floorMax)floorMax=bf+1;buildFloorTabs();
   if(allAccts().every(a=>ST[a].done)){setTimeout(breakDawn,1000);return;}
   toast('🏆 <b>'+Bb.name+'</b> severed — Act '+['','I','II','III'][bf]+' cleared. The way up is open.');

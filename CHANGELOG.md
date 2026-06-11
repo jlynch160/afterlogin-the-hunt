@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.14.0] - 2026-06-11 — Combat juice + factory-theme polish + floor transitions
+
+- **Combat juice.** Hits now land: the boss portrait flashes + staggers, crits punch a golden
+  full-screen flash, big hits and boss attacks shake the screen, and a red vignette pulses when
+  your Resolve takes damage (on top of the existing floating numbers + 3D d20 roll).
+- **Factory-theme pass.** Fixed elements stuck manor-purple in Helper Patrol mode — the IQ pills and
+  the HUD chips now adopt the light factory palette.
+- **Floor transition.** Changing floors now plays a quick cinematic wipe instead of an instant cut.
+
 ## [0.13.2] - 2026-06-11 — Moon/sun no longer overlaps the title
 
 - **Moved the moon (manor) / sun (factory) disc into the top-right corner and tamed its glow** so it
