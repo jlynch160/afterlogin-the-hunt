@@ -983,7 +983,7 @@ let resolve=24,resolveMax=24,cWeaken=0,cHarden=false,cLock=false;
 function theme(){return document.documentElement.getAttribute('data-theme');}
 function kid(){return theme()==='helpers';}
 function ghostSrc(a){const s=SOULS[a];return (kid()?'assets/helpers/ghost_':'assets/ghost_')+(GHOSTS[a]?a:(GFALL[s.form]||'okafor'))+'.png';}
-function roomSrc(a){return kid()?null:'assets/room_'+(ROOMART[a]?a:'legacy')+'.png';}
+function roomSrc(a){return kid()?'assets/helpers/room_'+a+'.png':'assets/room_'+(ROOMART[a]?a:'legacy')+'.png';}
 function recIdx(a){return SOULS[a].rite;}
 function acctRoomsOn(f){return ROOMS.filter(r=>r.account&&r.floor===f);}
 function allAccts(){return ROOMS.filter(r=>r.account).map(r=>r.account);}

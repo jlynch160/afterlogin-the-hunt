@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.13.0] - 2026-06-11 — Factory theme gets its room art
+
+- **Helper Patrol (factory) room art is in.** Added all 15 `assets/helpers/room_*.png` backgrounds
+  (Front Desk, Records Bay, Pay Station, Machine Room, Conveyor Control, Control Room, Forgotten
+  Storeroom, Supply Cage, etc.) so every room in the factory theme now has its painted background
+  instead of a flat gradient.
+- **Roster tiles use the art too.** `roomSrc` now returns the helpers room art in factory theme, so
+  the room list thumbnails show the painted rooms (were blank gradients before).
+
 ## [0.12.6] - 2026-06-11 — "Behind the Game" moved inline into the menu
 
 - **Relocated the "Behind the Game" entry point** from a floating top-right chip to an inline button
