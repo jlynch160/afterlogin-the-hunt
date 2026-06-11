@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.0] - 2026-06-11 — New mechanic: Cross-examine (deduction)
+
+- **Cross-examine.** After Divine, you commit a hypothesis *before* verifying — is this spirit safe
+  to retire, or load-bearing? Read the dependency graph + evidence and call it. A correct read (then
+  Summon to confirm) banks +8 ✦ and raises Discernment; a misread nudges you to check the live
+  bindings. Turns the games signature gotcha (dormant ≠ safe) into an active deduction.
+
 ## [0.16.0] - 2026-06-11 — New mechanic: Relics (roguelite meta-progression)
 
 - **Relics.** Five persistent boons unlock as your lifetime ✦ grows (Tithe, Bulwark, Analyst’s Eye,

@@ -488,6 +488,14 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 .cvrelic:hover{transform:translateY(-2px);border-color:rgba(var(--acc),.6)}
 .cvrelic.lk{opacity:.34;filter:grayscale(1);cursor:default}.cvrelic.lk:hover{transform:none;border-color:var(--stroke)}
 .cvrelic.eq{background:rgba(var(--acc),.16);border-color:rgba(var(--acc),.72);box-shadow:0 0 14px rgba(var(--acc),.32)}
+.xexam{margin-top:12px;padding:11px 13px;border-radius:11px;background:rgba(255,255,255,.05);border:1px solid var(--stroke)}
+.xexam.good{background:rgba(45,210,150,.1);border-color:rgba(45,210,150,.34)}
+.xexam.bad{background:rgba(255,160,70,.1);border-color:rgba(255,160,70,.34)}
+.xexam .xh{font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--hi);font-weight:700;margin-bottom:7px}
+.xexam .xres{font-size:11.5px;line-height:1.5;color:var(--ink)}
+.xbtns{display:flex;gap:7px}
+.xbtn{flex:1;cursor:pointer;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--stroke);border-radius:9px;padding:8px 6px;transition:.15s}
+.xbtn:hover{background:rgba(var(--acc),.14);border-color:rgba(var(--acc),.6);transform:translateY(-1px)}
 .cvrow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:12px}
 .cvrank{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:15px;color:rgb(var(--acc))}
 .cvbest,.cvbadge{color:var(--mut);font-size:11px;letter-spacing:.5px}
@@ -1049,7 +1057,9 @@ function renderDossier(a){const s=SOULS[a],st=ST[a],lb=s.lb;let h='<h4>The Case 
  else h+='<div class="locknote">⊘ <b>Summon</b> (costs <b>'+summonCost()+'</b> 🔮) for the decisive evidence — it verifies the live bindings, unlocks the Skeptic’s full read, and reveals the council’s confidence.</div>';
  h+='</div>';
  if(st.divined)h+='<div class="council"><div class="ch">◈ Agent Council deliberates</div><div class="ag'+(st.councilDone?' on':'')+'" id="ag0"><span class="agav">🛡</span><span class="agtx"><b>Warden</b> <span class="sp"></span></span></div><div class="ag'+(st.councilDone?' on':'')+'" id="ag1"><span class="agav">🔍</span><span class="agtx"><b>Skeptic</b> <span class="sp"></span></span></div><div class="ag'+(st.councilDone?' on':'')+'" id="ag2"><span class="agav">✓</span><span class="agtx"><b>Council</b> <span class="sp"></span></span></div></div><div class="vyours">⚖ The verdict is <b>yours</b> — the agents advise and flag their own doubts; weigh the evidence and decide.</div>';
+ if(st.divined&&!st.done&&!BOSSES[a]){if(!st.examined)h+='<div class="xexam"><div class="xh">🔍 Cross-examine · your call before you verify</div><div class="xres" style="margin-bottom:8px">Read the graph &amp; evidence: should this spirit be retired, or does something <b>live</b> still depend on it?</div><div class="xbtns"><button class="xbtn" onclick="crossExamine(\''+a+'\',false)">🗑 Safe to retire</button><button class="xbtn" onclick="crossExamine(\''+a+'\',true)">🔗 Load-bearing</button></div></div>';else{var _ok=st.examined==='right';h+='<div class="xexam '+(_ok?'good':'bad')+'"><div class="xh">'+(_ok?'✓ Sharp read · +8 ✦':'✗ Misread')+'</div><div class="xres">'+(_ok?'You called it before the agents confirmed — Summon to bank the insight.':'The evidence points the other way — check which bindings are live.')+'</div></div>';}}
  document.getElementById('dossier').innerHTML=h;}
+function crossExamine(a,guessLB){const s=SOULS[a],st=ST[a];if(!st||st.examined||st.done)return;const right=(!!s.lb)===guessLB;st.examined=right?'right':'wrong';if(right){score+=8;setDiscern(discern+6);sfx('seal');toast('🔍 <b>Sharp read</b> — your cross-examination holds. +8 ✦ · Discernment rises.');}else{setDiscern(discern-4);sfx('tick');toast('🔍 <b>Misread</b> — the evidence points the other way; check the live bindings.');}updateHud();renderDossier(a);}
 
 function show(){const a=cur,s=SOULS[a],st=ST[a];
  if(buffs.oracle){st.divined=true;st.summoned=true;}
