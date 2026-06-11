@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.12.4] - 2026-06-11 — Boot screen: arcane summoning ring + both-worlds palette
+
+- **Summoning ring.** The candle now sits inside a rotating arcane sigil ring (two counter-spinning
+  tick rings + a progress arc that *draws itself* as the game loads) with a rotating conic aura.
+- **Both worlds in one.** The boot now blends the haunted manor and the sunny factory: a purple↔gold
+  conic aura, mixed warm/cool rising embers, a purple→gold shimmer across the wordmark, a warm glow
+  in the corner, and loading text that nods to both ("booting the helper factory…", "waking the
+  sunnyside crew…"). Wordmark also wipes in left-to-right.
+
 ## [0.12.3] - 2026-06-11 — Cinematic boot screen
 
 - **Richer loading screen.** The boot card is now a small cinematic: drifting ember particles, a
