@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.18.0] - 2026-06-11 — Cinematic boss intros + Dawn victory sequence
+
+- **Boss-intro splash cards.** When a guardian (or the final boss) rises, a cinematic card slams in:
+  a red slash sweep, the boss portrait pulsing in a ring, its name, and the kill-chain tease — a beat
+  of anticipation before the fight. (Generic takeovers keep the POSSESSED veins.)
+- **Dawn victory sequence.** The win screen is now a payoff: the sun rises while a golden light-wash
+  sweeps up the scene, sun rays fan out and slowly turn, and the Dawn Breaks title flourishes in.
+
 ## [0.17.0] - 2026-06-11 — New mechanic: Cross-examine (deduction)
 
 - **Cross-examine.** After Divine, you commit a hypothesis *before* verifying — is this spirit safe

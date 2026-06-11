@@ -368,6 +368,19 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 @media(max-width:520px){.sgrid{grid-template-columns:1fr}}
 /* possession takeover */
 #possess{position:fixed;inset:0;z-index:13;display:none;pointer-events:none;background:radial-gradient(circle at 50% 50%,transparent 28%,rgba(110,0,18,.4))}
+#bossintro{position:fixed;inset:0;z-index:14;display:none;place-items:center;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(60,4,16,.74),rgba(4,2,8,.95))}
+#bossintro.go{display:grid;animation:bifin .4s ease,bifout .45s ease 1.55s forwards}
+@keyframes bifin{from{opacity:0}to{opacity:1}}@keyframes bifout{to{opacity:0}}
+#bossintro::before{content:"";position:absolute;left:-20%;top:50%;width:140%;height:2px;transform:translateY(-50%);background:linear-gradient(90deg,transparent,rgba(255,60,80,.85),transparent);box-shadow:0 0 30px rgba(255,40,60,.85);animation:bislash .55s ease both}
+@keyframes bislash{from{transform:translateY(-50%) scaleX(0)}to{transform:translateY(-50%) scaleX(1)}}
+.biwrap{text-align:center;animation:bislam .55s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes bislam{0%{transform:scale(1.5);opacity:0;filter:blur(8px)}60%{opacity:1}100%{transform:scale(1);opacity:1;filter:blur(0)}}
+.bilabel{font-size:13px;letter-spacing:7px;text-transform:uppercase;color:#ff8a9c;text-shadow:0 0 20px rgba(255,40,60,.8);margin-bottom:14px}
+.biportrait{width:158px;height:158px;margin:0 auto;border-radius:50%;background-size:cover;background-position:center;border:3px solid #ff6a8a;box-shadow:0 0 50px rgba(255,40,60,.6),inset 0 0 30px rgba(0,0,0,.4);animation:bipulse 1.4s ease-in-out infinite}
+@keyframes bipulse{0%,100%{box-shadow:0 0 50px rgba(255,40,60,.6),inset 0 0 30px rgba(0,0,0,.4)}50%{box-shadow:0 0 84px rgba(255,40,60,.95),inset 0 0 30px rgba(0,0,0,.4)}}
+.biname{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,7vw,58px);font-weight:700;color:#fff;text-shadow:0 0 40px rgba(255,40,60,.7);margin-top:16px;letter-spacing:2px}
+.bitease{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#ffb4c2;margin-top:8px}
+[data-theme="helpers"] #bossintro{background:radial-gradient(circle at 50% 45%,rgba(255,120,40,.5),rgba(40,20,4,.93))}
 #possess.go{display:block;animation:posflash 1.3s ease forwards}
 @keyframes posflash{0%{opacity:0}10%{opacity:1}82%{opacity:1}100%{opacity:0}}
 .pveins{position:absolute;inset:0;mix-blend-mode:screen;background:radial-gradient(circle at 0% 50%,rgba(255,30,60,.55),transparent 34%),radial-gradient(circle at 100% 50%,rgba(255,30,60,.55),transparent 34%),radial-gradient(circle at 50% 0%,rgba(255,30,60,.42),transparent 34%),radial-gradient(circle at 50% 100%,rgba(255,30,60,.42),transparent 34%);animation:veinpulse 1.3s ease forwards}
@@ -380,6 +393,12 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 .dsun{position:absolute;left:50%;bottom:-240px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,#fff,#ffe9a0 48%,#ffba50);box-shadow:0 0 120px 46px rgba(255,200,100,.5);transform:translateX(-50%);animation:sunrise 3.6s cubic-bezier(.3,.7,.4,1) forwards}
 @keyframes sunrise{0%{bottom:-240px;opacity:.5}100%{bottom:-2%;opacity:1}}
 .dmanor{position:absolute;left:0;bottom:0;width:100%;height:32vh;fill:#0a0712}
+.dawnsweep{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(255,205,115,.55),rgba(255,180,90,.12) 42%,transparent 62%);opacity:0;animation:dsweep 3.8s ease forwards}
+@keyframes dsweep{0%{opacity:0}45%{opacity:.25}100%{opacity:1}}
+.drays{position:absolute;left:50%;bottom:-30px;width:130vw;height:130vh;transform:translateX(-50%);pointer-events:none;opacity:0;mix-blend-mode:screen;background:conic-gradient(from 0deg at 50% 100%,transparent 0deg,rgba(255,222,150,.16) 9deg,transparent 19deg,rgba(255,222,150,.1) 31deg,transparent 43deg,rgba(255,222,150,.16) 55deg,transparent 67deg,rgba(255,222,150,.1) 79deg,transparent 91deg);animation:draysin 4.2s ease 1.1s forwards,drayspin 90s linear infinite}
+@keyframes draysin{to{opacity:.65}}@keyframes drayspin{to{transform:translateX(-50%) rotate(7deg)}}
+#dawn .dt{animation:dtin .9s cubic-bezier(.2,.9,.3,1) .3s both}
+@keyframes dtin{from{opacity:0;transform:translateY(16px) scale(.95)}to{opacity:1;transform:none}}
 .dsouls{position:absolute;inset:0}
 .dsouls i{position:absolute;bottom:20vh;width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 12px 2px #ffe9a0;animation:soulrise 4.5s ease-in infinite}
 @keyframes soulrise{0%{opacity:0;transform:translateY(0) scale(1)}12%{opacity:1}100%{opacity:0;transform:translateY(-72vh) scale(.35)}}
@@ -801,7 +820,7 @@ body.flick{animation:flick .56s steps(1) both}
   <div class="codexlist" id="codexList"></div>
 </div></div>
 <div id="dawn">
-  <div class="dawnscene"><div class="dsun"></div><svg class="dmanor" viewBox="0 0 1200 200" preserveAspectRatio="none"><polygon points="0,200 0,150 70,150 95,108 120,150 250,150 250,120 300,66 350,120 350,150 520,150 545,98 560,56 575,98 600,150 760,150 760,116 810,66 860,116 860,150 1000,150 1025,104 1050,150 1130,150 1155,114 1180,150 1200,150 1200,200"/></svg><div class="dsouls" id="dsouls"></div><div class="dfog2"></div></div>
+  <div class="dawnscene"><div class="drays"></div><div class="dsun"></div><div class="dawnsweep"></div><svg class="dmanor" viewBox="0 0 1200 200" preserveAspectRatio="none"><polygon points="0,200 0,150 70,150 95,108 120,150 250,150 250,120 300,66 350,120 350,150 520,150 545,98 560,56 575,98 600,150 760,150 760,116 810,66 860,116 860,150 1000,150 1025,104 1050,150 1130,150 1155,114 1180,150 1200,150 1200,200"/></svg><div class="dsouls" id="dsouls"></div><div class="dfog2"></div></div>
   <div class="dawninner"><div class="dt">Dawn Breaks</div><div class="ds">the manor is clean · every soul judged before first light</div><div class="dstat" id="dawnStat"></div><div class="drow"><span class="restart" onclick="saveReport()">📄 Save Report</span><span class="restart" onclick="shareScore(event)">⇪ Share</span><span class="restart" onclick="restart()">↺ Hunt again</span></div></div>
 </div>
 <div id="lose"><div><div class="dt">The Vault Falls</div><div class="ds">the Hungry reached Tier-0 — the manor is breached</div><div class="dstat" id="loseStat"></div><div class="drow"><span class="restart" onclick="saveReport()">📄 Save Report</span><span class="restart" onclick="restart()">↺ Try again</span></div></div></div>
@@ -824,6 +843,7 @@ body.flick{animation:flick .56s steps(1) both}
 <div id="transition"></div>
 <div id="wipe"></div>
 <div id="possess"><div class="pveins"></div><div class="ptext">POSSESSED</div></div>
+<div id="bossintro"><div class="biwrap"><div class="bilabel" id="biLabel">⚔ GUARDIAN RISES</div><div class="biportrait" id="biPortrait"></div><div class="biname" id="biName"></div><div class="bitease" id="biTease"></div></div></div>
 <div id="agentpanel"><div class="aphead"><span class="apdot"></span><b>Agents at work</b><span class="apmeta" id="apmeta"></span><span class="apx" onclick="hideAgentPanel()">✕</span></div><div class="apbody" id="apbody"></div></div>
 <div id="grade"><div class="grain"></div></div><span class="gcorner tl"></span><span class="gcorner tr"></span><span class="gcorner bl"></span><span class="gcorner br"></span>
 <div id="tutspot"></div><div id="coach"></div><div id="toast"></div>
@@ -1229,8 +1249,8 @@ function possessAt(a){if(combatTgt)return;
  document.getElementById('combatSub').textContent=B?('Stage 1/'+B.phases.length+' · '+B.phases[0].sub):'an account takeover · '+nemName()+' wears the spirit';
  lastRem=[];updateCombatUI();dealRemedies();cteachMsg('Read the attack above, then pick the control that actually stops it — the wrong tool will whiff.');var _d=document.getElementById('d20');if(_d){_d.className='d20';document.getElementById('d20n').textContent='20';}
  sfx('growl');nemSpeak('possess');if(B)setTimeout(()=>toast((B.tier==='boss'?'👑 <b>':'⚔ <b>')+B.name+'</b> — '+(B.tier==='boss'?'the Attic boss':'a floor guardian')+' · a <b>'+B.phases.length+'-stage</b> kill-chain. Read each stage.'),320);
- const pv=document.getElementById('possess');pv.querySelector('.ptext').textContent=B?B.name.toUpperCase():'POSSESSED';pv.classList.remove('go');void pv.offsetWidth;pv.classList.add('go');document.body.classList.add('shake');setTimeout(()=>document.body.classList.remove('shake'),520);
- setTimeout(()=>{document.getElementById('combat').classList.add('show');},1250);}
+ if(B){bossIntro(B);shakeScreen(true);}else{const pv=document.getElementById('possess');pv.querySelector('.ptext').textContent='POSSESSED';pv.classList.remove('go');void pv.offsetWidth;pv.classList.add('go');shakeScreen(true);}
+ setTimeout(()=>{document.getElementById('combat').classList.add('show');},B?2050:1250);}
 function updateThreatUI(){const lbl=document.getElementById('dreadLbl'),bar=document.getElementById('dreadBar');if(!lbl)return;
  if(allAccts().every(a=>ST[a].done)){lbl.textContent='Cleansed';bar.style.width='0%';return;}
  const v=bfsNext(H.room,isVaultGoal),dist=v?v.dist:MAXD,prox=Math.max(5,Math.min(100,Math.round((1-dist/MAXD)*100)));
@@ -1286,6 +1306,7 @@ function bossTurn(){const B=BOSSES[combatTgt],nm=B?B.name:nemName(),base=B?(B.fl
  }
  updateCombatUI();dealRemedies();cLock=false;}
 function shakeScreen(big){const b=document.body;b.classList.remove('shake','shakeBig');void b.offsetWidth;b.classList.add(big?'shakeBig':'shake');setTimeout(()=>b.classList.remove('shake','shakeBig'),big?520:430);}
+function bossIntro(B){const bi=document.getElementById('bossintro');if(!bi||!B)return;const img=kid()?'assets/helpers/'+B.art+'.png':'assets/'+B.art+'.png';document.getElementById('biLabel').textContent=B.tier==='boss'?'👑 THE FINAL BOSS RISES':'⚔ A GUARDIAN RISES';document.getElementById('biPortrait').style.background="url('"+img+"') center/cover";document.getElementById('biName').textContent=B.name;document.getElementById('biTease').textContent=B.phases.length+'-stage kill-chain · '+(B.phases[0]&&B.phases[0].sub||'');bi.classList.remove('go');void bi.offsetWidth;bi.classList.add('go');setTimeout(()=>bi.classList.remove('go'),2050);}
 function flashBoss(crit){const c=document.getElementById('cimg');if(!c)return;c.classList.remove('hit','hitcrit');void c.offsetWidth;c.classList.add(crit?'hitcrit':'hit');setTimeout(()=>c.classList.remove('hit','hitcrit'),crit?460:340);}
 function combatFx(cls,ms){const cb=document.getElementById('combat');if(!cb)return;cb.classList.remove(cls);void cb.offsetWidth;cb.classList.add(cls);setTimeout(()=>cb.classList.remove(cls),ms);}
 function floatDmg(dmg,crit){const el=document.createElement('div');el.className='cdmg'+(crit?' crit':'');el.textContent='−'+dmg+(crit?' CRIT!':'');const w=document.querySelector('.cwrap');if(w){w.appendChild(el);setTimeout(()=>el.remove(),1100);}}
