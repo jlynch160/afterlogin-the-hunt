@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.23.1] - 2026-06-11 — Four new generated scene plates (procedurally painted PNGs)
+
+- **Generated four original images in-house** with a custom pixel renderer (gradients, additive
+  glows, value-noise fog, silhouettes, film grain → real PNGs): the **Reliquary** backdrop (manor:
+  glowing vials on dark shelves, warm counter light · factory: sunny supply nook), and the **Dawn
+  finale** plates (manor: god-rays sunrise behind the manor silhouette with lit windows · factory:
+  bright morning windows). Wired in behind the store and the dawn screen, theme-aware.
+
 ## [0.23.0] - 2026-06-11 — Unified design language + combat arena art (new images)
 
 - **One design language on every surface.** The case file, agent panel, coach, dawn/defeat cards and
