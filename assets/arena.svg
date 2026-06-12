@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<defs>
+<radialGradient id="sky" cx="50%" cy="30%" r="80%"><stop offset="0" stop-color="#2a1430"/><stop offset=".55" stop-color="#140a1c"/><stop offset="1" stop-color="#070310"/></radialGradient>
+<radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffb352" stop-opacity=".9"/><stop offset="1" stop-color="#ffb352" stop-opacity="0"/></radialGradient>
+<radialGradient id="moonbeam" cx="50%" cy="0%" r="90%"><stop offset="0" stop-color="#c9b8ff" stop-opacity=".22"/><stop offset="1" stop-color="#c9b8ff" stop-opacity="0"/></radialGradient>
+<linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c0f24"/><stop offset="1" stop-color="#05020a"/></linearGradient>
+<filter id="soft"><feGaussianBlur stdDeviation="6"/></filter>
+<filter id="soft2"><feGaussianBlur stdDeviation="14"/></filter>
+</defs>
+<rect width="1600" height="900" fill="url(#sky)"/>
+<ellipse cx="800" cy="120" rx="700" ry="420" fill="url(#moonbeam)"/>
+<!-- far arches -->
+<g fill="none" stroke="#3a2450" stroke-width="10" opacity=".55">
+<path d="M200 900 L200 470 Q330 300 460 470 L460 900"/>
+<path d="M1140 900 L1140 470 Q1270 300 1400 470 L1400 900"/>
+</g>
+<g fill="none" stroke="#4a2f66" stroke-width="14" opacity=".8">
+<path d="M430 900 L430 400 Q620 170 810 400 L810 900" transform="translate(-15,0)"/>
+<path d="M790 900 L790 400 Q980 170 1170 400 L1170 900" transform="translate(15,0)"/>
+</g>
+<!-- center grand arch -->
+<path d="M560 900 L560 360 Q800 80 1040 360 L1040 900" fill="#0d0616" stroke="#6b4a8e" stroke-width="7" opacity=".95"/>
+<path d="M600 900 L600 385 Q800 135 1000 385 L1000 900" fill="none" stroke="#8a64b4" stroke-width="2.5" opacity=".6"/>
+<!-- hanging chains -->
+<g stroke="#3c2a52" stroke-width="4" opacity=".7"><path d="M700 0 L700 150"/><path d="M900 0 L900 130"/></g>
+<circle cx="700" cy="165" r="10" fill="#1c1228" stroke="#54407a" stroke-width="3"/>
+<circle cx="900" cy="145" r="10" fill="#1c1228" stroke="#54407a" stroke-width="3"/>
+<!-- floor -->
+<rect y="700" width="1600" height="200" fill="url(#floor)"/>
+<ellipse cx="800" cy="760" rx="560" ry="80" fill="#0a0512"/>
+<ellipse cx="800" cy="750" rx="430" ry="55" fill="none" stroke="#6b4a8e" stroke-width="2.5" opacity=".5" stroke-dasharray="6 14"/>
+<ellipse cx="800" cy="750" rx="300" ry="38" fill="none" stroke="#9a6fd0" stroke-width="1.6" opacity=".4"/>
+<!-- candles -->
+<g>
+<rect x="332" y="640" width="16" height="62" rx="5" fill="#241430"/><ellipse cx="340" cy="624" rx="34" ry="40" fill="url(#glow)" filter="url(#soft)"/><ellipse cx="340" cy="630" rx="5" ry="11" fill="#ffd9a0"/>
+<rect x="1252" y="640" width="16" height="62" rx="5" fill="#241430"/><ellipse cx="1260" cy="624" rx="34" ry="40" fill="url(#glow)" filter="url(#soft)"/><ellipse cx="1260" cy="630" rx="5" ry="11" fill="#ffd9a0"/>
+<rect x="135" y="690" width="13" height="48" rx="4" fill="#1d1028"/><ellipse cx="141" cy="676" rx="26" ry="30" fill="url(#glow)" filter="url(#soft)" opacity=".8"/><ellipse cx="141" cy="681" rx="4" ry="9" fill="#ffd9a0"/>
+<rect x="1452" y="690" width="13" height="48" rx="4" fill="#1d1028"/><ellipse cx="1458" cy="676" rx="26" ry="30" fill="url(#glow)" filter="url(#soft)" opacity=".8"/><ellipse cx="1458" cy="681" rx="4" ry="9" fill="#ffd9a0"/>
+</g>
+<!-- drifting motes -->
+<g fill="#cdbcf6" opacity=".5"><circle cx="420" cy="330" r="3"/><circle cx="1180" cy="280" r="2.5"/><circle cx="980" cy="200" r="2"/><circle cx="640" cy="250" r="2"/><circle cx="1330" cy="420" r="2.5"/><circle cx="260" cy="520" r="2"/></g>
+<!-- fog -->
+<ellipse cx="800" cy="880" rx="900" ry="120" fill="#6a52a0" opacity=".18" filter="url(#soft2)"/>
+<ellipse cx="380" cy="860" rx="420" ry="80" fill="#54407a" opacity=".14" filter="url(#soft2)"/>
+</svg>

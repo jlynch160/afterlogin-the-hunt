@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.23.0] - 2026-06-11 — Unified design language + combat arena art (new images)
+
+- **One design language on every surface.** The case file, agent panel, coach, dawn/defeat cards and
+  combat all now speak the command-console aesthetic — gold-trimmed glass, accent top edges — and
+  every button has press feedback.
+- **Combat is an arena.** The fight screen now sits in a framed KILL-CHAIN ENGAGED panel over a
+  painted arena backdrop — **two new original artworks shipped** (hand-authored SVG: a candlelit
+  crypt-hall with grand arches + ritual circle for the manor; a dusk factory floor with glowing
+  windows + spotlight for Helper Patrol). The loader prefers `arena.png` if you generate one
+  (prompts included) and falls back to the SVG art.
+- **Art Pack v2** (`art-prompts-v2.md`): ready-to-run prompts for arena/store/dawn/vault plates —
+  drop the PNGs in and they appear with zero code changes.
+
 ## [0.22.0] - 2026-06-11 — Game-screen presentation: command console + HUD chips + stage light
 
 - **Command console.** Divine/Summon and the three judgment rites now sit in a framed, gold-edged

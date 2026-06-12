@@ -567,6 +567,23 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
  .hint{bottom:160px;opacity:.8;font-size:9.5px;z-index:6}
  #toast{bottom:196px}
 }
+/* ══ unified panel language — every surface speaks console ══ */
+.rite:active,.inv:active,.cbtn:active,.sbuy:active,.toggle:active,.senter:active,.xbtn:active,.dlink:active,.fb:active{transform:scale(.96)!important}
+.dossier{border-color:rgba(201,162,75,.3);box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08),inset 0 2px 0 -1px rgba(var(--acc),.35)}
+#agentpanel{border-color:rgba(201,162,75,.32)}
+.aphead{background:linear-gradient(180deg,rgba(var(--acc),.1),transparent)}
+#coach{border-color:rgba(201,162,75,.38)}
+.dawninner{border-color:rgba(255,214,140,.34);box-shadow:0 30px 90px rgba(0,0,0,.62),inset 0 2px 0 -1px rgba(255,214,140,.5)}
+#lose>div{border-color:rgba(255,120,140,.3);box-shadow:0 30px 90px rgba(0,0,0,.62),inset 0 2px 0 -1px rgba(255,120,140,.45)}
+/* combat becomes an arena */
+#combat::before{content:"";position:absolute;inset:0;background:var(--arena,none) center/cover no-repeat;opacity:.34;filter:saturate(.9)}
+.cwrap{background:linear-gradient(180deg,rgba(16,8,18,.74),rgba(8,4,10,.88));border:1px solid rgba(255,90,120,.32);border-radius:22px;padding:24px 22px 22px;backdrop-filter:blur(12px);box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07),inset 0 2px 0 -1px rgba(255,90,120,.4)}
+.cwrap::after{content:"KILL-CHAIN ENGAGED";position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:8.5px;letter-spacing:3px;color:#ff9ab0;background:#16060c;padding:2px 12px;border-radius:8px;border:1px solid rgba(255,90,120,.4);white-space:nowrap}
+.cwrap .chp{position:relative;border-radius:9px;height:14px;border-color:rgba(255,90,120,.5);box-shadow:inset 0 2px 6px rgba(0,0,0,.6)}
+.cwrap .chp i{background:linear-gradient(90deg,#ff3b5c,#ff8aa3);box-shadow:0 0 14px rgba(255,60,90,.6)}
+.cbtn.rem{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border-color:rgba(255,255,255,.14)}
+.cbtn.rem:hover{border-color:rgba(var(--acc),.6);background:rgba(var(--acc),.08)}
+[data-theme="helpers"] .cwrap{background:linear-gradient(180deg,rgba(46,28,40,.82),rgba(24,12,20,.9))}
 @media(max-width:760px){
  .splitwrap{flex-direction:column}
  .splitwrap:hover .side:not(:hover){filter:none}
@@ -1375,6 +1392,7 @@ function possessAt(a){if(combatTgt)return;
  if(document.getElementById('map').classList.contains('show'))buildMap();
  const img=B?(kid()?'assets/helpers/'+B.art+'.png':'assets/'+B.art+'.png'):(kid()?'assets/helpers/threat_possession.png':'assets/threat_possession.png');
  document.getElementById('cimg').style.background="url('"+img+"') center/cover";
+ try{const cb=document.getElementById('combat');cb.style.removeProperty('--arena');const ab=kid()?'assets/helpers/arena':'assets/arena';const tl=function(ext,next){const ai=new Image();ai.onload=function(){cb.style.setProperty('--arena',"url('"+ab+ext+"')");};if(next)ai.onerror=next;ai.src=ab+ext;};tl('.png',function(){tl('.svg');});}catch(e){}
  document.getElementById('combatTitle').textContent=B?B.name:nemName();
  document.getElementById('combatSub').textContent=B?('Stage 1/'+B.phases.length+' · '+B.phases[0].sub):'an account takeover · '+nemName()+' wears the spirit';
  lastRem=[];updateCombatUI();dealRemedies();cteachMsg('Read the attack above, then pick the control that actually stops it — the wrong tool will whiff.');var _d=document.getElementById('d20');if(_d){_d.className='d20';document.getElementById('d20n').textContent='20';}
