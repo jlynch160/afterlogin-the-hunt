@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.20.0] - 2026-06-11 — All-new landing: the split-world diptych
+
+- **A completely new title screen.** The landing is now a cinematic split-screen diptych — the
+  moonlit manor (The Hunt) on the left, the sunny helper factory (Helper Patrol) on the right —
+  divided by a glowing seam with a pulsing × medallion. Hover a world and it expands while the other
+  dims; click it to enter that world directly (the old Manor/Factory toggle is gone — the worlds ARE
+  the choice). AFTERLOGIN crowns the seam in a purple-to-gold gradient that bridges both identities.
+- Each side is alive: stars, lightning, wisps and embers haunt the manor; golden sun-motes drift
+  through the factory. Per-side painted art with slow Ken Burns, cinematic color-grade veils, and
+  world-styled CTAs (Begin the Hunt / Start the Patrol) that fill on hover.
+- Difficulty, career/relics, Behind the Game, and the showcase link live in a slim glass dock at the
+  bottom. Fully responsive — the diptych stacks vertically on phones with a horizontal seam.
+
 ## [0.19.0] - 2026-06-11 — Painted landing page + professional UX pass
 
 - **The landing page is now the artwork.** The menu backdrop is a full-bleed painted hero — the

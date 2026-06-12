@@ -449,13 +449,72 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 #intro.gone{animation:introout .9s ease forwards}
 @keyframes introout{to{opacity:0;transform:scale(1.06);visibility:hidden}}
 .introsky{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 0,rgba(90,70,160,.25),transparent 60%)}
-/* painted hero scene — the artwork IS the landing */
-.ihero{position:absolute;inset:-3%;z-index:0;background:url('assets/house.png') center 36%/cover no-repeat;animation:heroken 38s ease-in-out infinite alternate;filter:saturate(1.06)}
-[data-theme="helpers"] .ihero{background-image:url('assets/helpers/home.png');background-position:center 32%;filter:saturate(1.04) brightness(1.02)}
-@keyframes heroken{from{transform:scale(1) translateY(0)}to{transform:scale(1.07) translateY(-1.2%)}}
-.ihero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,3,11,.42),transparent 30%,transparent 50%,rgba(4,3,11,.9) 97%)}
-[data-theme="helpers"] .ihero::after{background:linear-gradient(180deg,rgba(140,185,230,.16),transparent 28%,transparent 46%,rgba(225,240,252,.82) 95%)}
-.imoon,.moonbeams,.istars,.icloud,.ibat,.shootstar,.imanor,.ifactory{display:none}
+/* ══ split-world landing — one night, two worlds ══ */
+.splitwrap{position:absolute;inset:0;display:flex;z-index:1}
+.side{position:relative;flex:1 1 0;overflow:hidden;cursor:pointer;transition:flex-grow .65s cubic-bezier(.3,.85,.25,1),filter .5s ease}
+.side:hover{flex-grow:1.45}
+.splitwrap:hover .side:not(:hover){filter:brightness(.6) saturate(.65)}
+.sbg{position:absolute;inset:-4%;background-size:cover;background-position:center 38%;animation:heroken 42s ease-in-out infinite alternate}
+@keyframes heroken{from{transform:scale(1) translateY(0)}to{transform:scale(1.08) translateY(-1.2%)}}
+.shunt .sbg{background-image:url('assets/house.png')}
+.spatrol .sbg{background-image:url('assets/helpers/home.png');background-position:center 30%;animation-delay:-21s}
+.sveil{position:absolute;inset:0;z-index:2}
+.shunt .sveil{background:linear-gradient(180deg,rgba(5,4,12,.55),rgba(5,4,12,.06) 32%,rgba(5,4,12,.14) 56%,rgba(4,3,11,.92) 97%)}
+.spatrol .sveil{background:linear-gradient(180deg,rgba(64,38,98,.42),rgba(50,30,60,.05) 32%,rgba(58,32,18,.12) 56%,rgba(44,22,6,.88) 97%)}
+.sinner{position:absolute;left:0;right:0;bottom:10vh;z-index:3;text-align:center;padding:0 7%;pointer-events:none}
+.sglyph{font-size:38px;margin-bottom:8px;filter:drop-shadow(0 0 18px rgba(255,220,150,.55))}
+.shunt .sglyph{filter:drop-shadow(0 0 18px rgba(var(--acc),.65));animation:bootflame 2.6s ease-in-out infinite}
+.sname{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(32px,4.4vw,50px);letter-spacing:2.5px;line-height:1.05}
+.shunt .sname{color:#efe9ff;text-shadow:0 3px 22px rgba(0,0,0,.9),0 0 46px rgba(var(--acc),.4)}
+.spatrol .sname{color:#fff6df;text-shadow:0 3px 22px rgba(40,18,2,.9),0 0 46px rgba(255,200,90,.5)}
+.smood{max-width:380px;margin:9px auto 0;font-size:13px;line-height:1.65;text-shadow:0 2px 10px rgba(0,0,0,.85)}
+.smood b{font-weight:600}
+.shunt .smood{color:#c9c0e6}.shunt .smood b{color:#ff8a9c}
+.spatrol .smood{color:#ffe9c4}.spatrol .smood b{color:#ffd76e}
+.senter{display:inline-block;margin-top:17px;font-family:'Cormorant Garamond',serif;font-size:17.5px;font-weight:700;letter-spacing:1px;padding:12px 32px;border-radius:12px;backdrop-filter:blur(8px);transition:transform .3s,box-shadow .3s,background .3s,color .3s}
+.shunt .senter{color:#d9f7e8;border:1px solid rgba(var(--acc),.55);background:rgba(8,20,14,.45);box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.spatrol .senter{color:#fff1cf;border:1px solid rgba(255,206,90,.6);background:rgba(50,28,4,.42);box-shadow:0 10px 30px rgba(30,14,0,.5)}
+.shunt:hover .senter{background:rgb(var(--acc));color:#06231a;transform:translateY(-3px);box-shadow:0 16px 40px rgba(var(--acc),.45)}
+.spatrol:hover .senter{background:#ffce5b;color:#3a2305;transform:translateY(-3px);box-shadow:0 16px 40px rgba(255,200,80,.45)}
+.smotes{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.smotes i{position:absolute;bottom:-12px;width:5px;height:5px;border-radius:50%;background:rgba(255,224,140,.9);box-shadow:0 0 13px 3px rgba(255,210,110,.6);opacity:0;animation:wisp 16s ease-in-out infinite}
+.smotes i:nth-child(1){left:14%;animation-delay:-2s}.smotes i:nth-child(2){left:30%;animation-delay:-7s;animation-duration:19s}.smotes i:nth-child(3){left:48%;animation-delay:-4s}.smotes i:nth-child(4){left:62%;animation-delay:-11s;animation-duration:14s}.smotes i:nth-child(5){left:78%;animation-delay:-6s;animation-duration:18s}.smotes i:nth-child(6){left:90%;animation-delay:-9s}
+.seam{position:absolute;left:50%;top:0;bottom:0;width:0;z-index:4;pointer-events:none}
+.seamline{position:absolute;left:-1px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,rgba(240,235,255,.75) 26%,rgba(240,235,255,.75) 74%,transparent);box-shadow:0 0 22px 3px rgba(200,190,255,.45);animation:seamglow 4s ease-in-out infinite}
+@keyframes seamglow{0%,100%{opacity:.7}50%{opacity:1}}
+.seamx{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:26px;color:#f1ebff;background:rgba(10,7,22,.78);border:1px solid rgba(240,235,255,.4);backdrop-filter:blur(10px);box-shadow:0 0 34px rgba(200,190,255,.4),inset 0 1px 0 rgba(255,255,255,.18);animation:seampulse 3.2s ease-in-out infinite}
+@keyframes seampulse{0%,100%{box-shadow:0 0 26px rgba(200,190,255,.32),inset 0 1px 0 rgba(255,255,255,.18)}50%{box-shadow:0 0 48px rgba(200,190,255,.6),inset 0 1px 0 rgba(255,255,255,.18)}}
+.splitvig{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(180deg,rgba(4,3,11,.5),transparent 24%),radial-gradient(130% 100% at 50% 50%,transparent 62%,rgba(4,3,11,.5))}
+.crown{position:absolute;top:6.5vh;left:0;right:0;z-index:5;text-align:center;pointer-events:none;animation:fadeup 1s ease .15s both}
+.ckick{font-size:11px;letter-spacing:6px;text-transform:uppercase;color:#d3c9f0;text-shadow:0 2px 12px rgba(0,0,0,.9);margin-bottom:10px}
+.ctitle{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(52px,8.5vw,92px);letter-spacing:10px;padding-left:10px;line-height:1;background:linear-gradient(95deg,#cdbcf6 6%,#fff 28%,#efe9ff 46%,#ffd98a 64%,#fff 82%,#cdbcf6 96%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 4px 24px rgba(0,0,0,.95)) drop-shadow(0 0 38px rgba(190,170,255,.35));animation:shimmer 7s linear infinite}
+.cagents{margin-top:11px;font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:#b9aede;text-shadow:0 2px 10px rgba(0,0,0,.9);display:flex;justify-content:center;gap:12px}
+.cagents .cdot{opacity:.45}
+.dock{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:6;width:min(540px,94vw);display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 20px 11px;border-radius:18px;background:linear-gradient(180deg,rgba(12,9,26,.88),rgba(7,5,16,.93));border:1px solid var(--stroke);backdrop-filter:blur(16px);box-shadow:0 24px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.07);animation:fadeup .9s ease .35s both}
+.dock .career{margin:0 auto;animation:none}
+.dock .diffrow{margin:0}
+.dockrow{display:flex;align-items:center;gap:13px}
+.dlink{cursor:pointer;font-size:12px;letter-spacing:.5px;color:var(--mut);transition:.15s}
+.dlink:hover{color:rgb(var(--acc))}
+.dsep{color:var(--mut);opacity:.45}
+.ifoot2{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#847aa3}
+@media(max-width:760px){
+ .splitwrap{flex-direction:column}
+ .splitwrap:hover .side:not(:hover){filter:none}
+ .side:hover{flex-grow:1.2}
+ .sinner{bottom:7vh}
+ .smood{display:none}
+ .sname{font-size:clamp(26px,7vw,38px)}
+ .senter{margin-top:10px;padding:9px 22px;font-size:15px}
+ .seam{left:0;right:0;top:50%;bottom:auto;width:auto;height:0}
+ .seamline{left:0;right:0;top:-1px;bottom:auto;width:auto;height:2px;background:linear-gradient(90deg,transparent,rgba(240,235,255,.75) 26%,rgba(240,235,255,.75) 74%,transparent)}
+ .seamx{width:46px;height:46px;font-size:21px}
+ .crown{top:3.5vh}
+ .ctitle{letter-spacing:6px;padding-left:6px}
+ .dock{bottom:8px;padding:10px 14px 9px;gap:5px}
+ .dock .career{display:none}
+}
+.imoon,.moonbeams,.icloud,.ibat,.shootstar,.imanor,.ifactory{display:none}
 .lightning{position:absolute;inset:0;background:#cdd6ff;opacity:0;mix-blend-mode:screen;pointer-events:none;animation:lflash 8s infinite}
 @keyframes lflash{0%,5.4%,8%,100%{opacity:0}5.6%{opacity:.55}6.1%{opacity:.08}6.5%{opacity:.6}7%{opacity:0}}
 .imoon{position:absolute;top:4.5%;right:6%;width:122px;height:122px;border-radius:50%;background:radial-gradient(circle at 38% 36%,#fff,#e6ecff 52%,#aeb9e0);box-shadow:0 0 78px 18px rgba(200,216,255,.22),0 0 150px 44px rgba(140,160,230,.1);z-index:0;animation:fadein 2.2s ease both}
@@ -864,77 +923,45 @@ body.flick{animation:flick .56s steps(1) both}
 <div id="grade"><div class="grain"></div></div><span class="gcorner tl"></span><span class="gcorner tr"></span><span class="gcorner bl"></span><span class="gcorner br"></span>
 <div id="tutspot"></div><div id="coach"></div><div id="toast"></div>
 <div id="intro">
-  <div class="introsky"></div>
-  <div class="ihero"></div>
-  <div class="imoon"></div>
-  <div class="istars" id="istars"></div>
-  <div class="icloud"></div>
-  <div class="lightning"></div>
-  <span class="ibat b1">︵</span><span class="ibat b2">︵</span>
-  <div class="moonbeams"></div>
-  <div class="shootstar"></div>
-  <div class="iwisps"><i style="--x:13%;--d:0s;--t:14s"></i><i style="--x:29%;--d:3.5s;--t:17s"></i><i style="--x:61%;--d:6.5s;--t:15s"></i><i style="--x:79%;--d:2s;--t:19s"></i><i style="--x:46%;--d:9.5s;--t:16s"></i><i style="--x:90%;--d:5s;--t:18s"></i></div>
-  <div class="introfog"></div>
-  <div class="introvig"></div>
-  <svg class="imanor" viewBox="0 0 1200 360" preserveAspectRatio="none" aria-hidden="true">
-    <g class="sil">
-      <rect x="150" y="150" width="95" height="210"/><polygon points="142,152 197,90 252,152"/><rect x="193" y="74" width="7" height="18"/>
-      <rect x="245" y="205" width="212" height="155"/><polygon points="238,207 351,136 462,207"/>
-      <rect x="455" y="158" width="290" height="202"/><polygon points="446,160 600,64 754,160"/><polygon points="588,68 600,14 612,68"/><circle cx="600" cy="12" r="4.5"/>
-      <rect x="743" y="205" width="212" height="155"/><polygon points="738,207 849,136 962,207"/>
-      <rect x="955" y="150" width="95" height="210"/><polygon points="948,152 1003,90 1058,152"/><rect x="1000" y="74" width="7" height="18"/>
-      <rect x="0" y="352" width="1200" height="14"/>
-      <rect x="158" y="150" width="9" height="9"/><rect x="176" y="150" width="9" height="9"/><rect x="194" y="150" width="9" height="9"/><rect x="212" y="150" width="9" height="9"/><rect x="230" y="150" width="9" height="9"/>
-      <rect x="963" y="150" width="9" height="9"/><rect x="981" y="150" width="9" height="9"/><rect x="999" y="150" width="9" height="9"/><rect x="1017" y="150" width="9" height="9"/><rect x="1035" y="150" width="9" height="9"/>
-    </g>
-    <path class="rim" d="M142 152 L197 90 L252 152 M238 207 L351 136 L462 207 M446 160 L600 64 L754 160 M738 207 L849 136 L962 207 M948 152 L1003 90 L1058 152"/>
-    <circle class="w f" cx="600" cy="116" r="17"/>
-    <path class="w" d="M584 360 L584 312 Q600 290 616 312 L616 360 Z" opacity=".85"/>
-    <rect class="w" x="486" y="196" width="14" height="22" rx="2"/><rect class="w f" x="536" y="196" width="14" height="22" rx="2"/><rect class="w" x="650" y="196" width="14" height="22" rx="2"/><rect class="w g" x="700" y="196" width="14" height="22" rx="2"/>
-    <rect class="w" x="486" y="255" width="14" height="22" rx="2"/><rect class="w g f" x="700" y="255" width="14" height="22" rx="2"/>
-    <rect class="w" x="292" y="248" width="13" height="20" rx="2"/><rect class="w f" x="342" y="248" width="13" height="20" rx="2"/><rect class="w" x="392" y="248" width="13" height="20" rx="2"/><rect class="w" x="342" y="302" width="13" height="20" rx="2"/>
-    <rect class="w" x="795" y="248" width="13" height="20" rx="2"/><rect class="w f" x="845" y="248" width="13" height="20" rx="2"/><rect class="w g" x="895" y="248" width="13" height="20" rx="2"/>
-    <rect class="w" x="186" y="208" width="12" height="20" rx="2"/><rect class="w f" x="186" y="262" width="12" height="20" rx="2"/>
-    <rect class="w g" x="991" y="208" width="12" height="20" rx="2"/><rect class="w" x="991" y="262" width="12" height="20" rx="2"/>
-  </svg>
-  <svg class="ifactory" viewBox="0 0 1200 360" preserveAspectRatio="none" aria-hidden="true">
-    <g class="fsil">
-      <rect x="120" y="234" width="72" height="126"/>
-      <rect x="192" y="206" width="600" height="154"/>
-      <polygon points="192,206 232,170 232,206 272,170 272,206 312,170 312,206 352,170 352,206 392,170 392,206 432,170 432,206 472,170 472,206 512,170 512,206 552,170 552,206 592,170 592,206 632,170 632,206 672,170 672,206 712,170 712,206 752,170 752,206 792,170 792,206"/>
-      <rect x="792" y="238" width="180" height="122"/>
-      <rect x="606" y="84" width="34" height="126"/><rect x="656" y="108" width="28" height="102"/>
-      <polygon points="1000,150 1046,122 1092,150"/><rect x="1000" y="150" width="92" height="56" rx="8"/><rect x="1012" y="206" width="8" height="122"/><rect x="1042" y="206" width="8" height="122"/><rect x="1072" y="206" width="8" height="122"/>
-      <rect x="0" y="352" width="1200" height="14"/>
-    </g>
-    <g class="smk"><circle class="smoke" cx="623" cy="78" r="12"/><circle class="smoke s2" cx="623" cy="78" r="15"/><circle class="smoke s3" cx="670" cy="102" r="10"/></g>
-    <rect class="fdoor" x="430" y="280" width="120" height="80" rx="4"/>
-    <rect class="w" x="135" y="256" width="14" height="20" rx="2"/><rect class="w" x="160" y="256" width="14" height="20" rx="2"/><rect class="w g" x="135" y="300" width="14" height="20" rx="2"/>
-    <rect class="w" x="215" y="234" width="14" height="20" rx="2"/><rect class="w f" x="275" y="234" width="14" height="20" rx="2"/><rect class="w" x="335" y="234" width="14" height="20" rx="2"/><rect class="w" x="395" y="234" width="14" height="20" rx="2"/>
-    <rect class="w" x="700" y="234" width="14" height="20" rx="2"/><rect class="w g f" x="750" y="234" width="14" height="20" rx="2"/>
-    <rect class="w" x="240" y="300" width="14" height="20" rx="2"/><rect class="w" x="700" y="300" width="14" height="20" rx="2"/>
-    <rect class="w" x="815" y="266" width="14" height="20" rx="2"/><rect class="w f" x="860" y="266" width="14" height="20" rx="2"/><rect class="w" x="905" y="266" width="14" height="20" rx="2"/><rect class="w g" x="945" y="266" width="14" height="20" rx="2"/>
-  </svg>
-  <div class="introfog"></div>
-  <div class="iember" id="iember"></div>
-  <div class="introscrim"></div>
-  <div class="introcontent">
-    <div class="iswitch"><span class="isw on" data-t="spectral" onclick="setTheme('spectral')">🏰 Manor</span><span class="isw" data-t="helpers" onclick="setTheme('helpers')">🏭 Factory</span></div>
-    <div class="diffrow"><span class="difflbl">Difficulty</span><div class="diffswitch"><span class="dfw" data-d="casual" onclick="setDiff('casual')">Casual</span><span class="dfw on" data-d="auditor" onclick="setDiff('auditor')">Auditor</span><span class="dfw" data-d="nightmare" onclick="setDiff('nightmare')">Nightmare</span></div></div>
-    <div class="ikick" id="ikick">A security haunting · identity · data · breach</div>
-    <div class="ititle" id="ititleT">AFTERLOGIN</div>
-    <div class="irule"></div>
-    <div class="itag" id="itag">The manor wakes at midnight — and every door you stopped watching is the way in.</div>
-    <div class="iagents" id="iagents">
-      <div class="iag"><span class="ico">🛡</span><b>The Warden</b><i>reasons the safe call</i></div>
-      <div class="iag"><span class="ico">🔍</span><b>The Skeptic</b><i>contests the load-bearing</i></div>
-      <div class="iag"><span class="ico">✓</span><b>The Council</b><i>renders the verdict</i></div>
+  <div class="splitwrap">
+    <div class="side shunt" onclick="chooseWorld('spectral')" title="Enter the haunted manor">
+      <div class="sbg"></div>
+      <div class="istars" id="istars"></div>
+      <div class="lightning"></div>
+      <div class="iwisps"><i style="--x:18%;--d:0s;--t:14s"></i><i style="--x:40%;--d:3.5s;--t:17s"></i><i style="--x:66%;--d:6.5s;--t:15s"></i><i style="--x:86%;--d:2s;--t:19s"></i></div>
+      <div class="iember" id="iember"></div>
+      <div class="sveil"></div>
+      <div class="sinner">
+        <div class="sglyph">🕯️</div>
+        <div class="sname">The Hunt</div>
+        <div class="smood">A haunted security audit. Judge the manor&rsquo;s forgotten accounts before <b>The Hungry</b> reaches the Vault.</div>
+        <div class="senter">Begin the Hunt →</div>
+      </div>
     </div>
-    <button class="istart" id="istart" onclick="enterManor()">Enter the Manor</button>
-    <div class="icodexbadge" onclick="openCodex()" title="The real Microsoft security capability behind every game element"><span class="icb-ic">📖</span><span class="icb-tx"><b>Behind the Game</b><span>the real Microsoft controls →</span></span></div>
+    <div class="side spatrol" onclick="chooseWorld('helpers')" title="Enter the sunny helper factory">
+      <div class="sbg"></div>
+      <div class="smotes"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="sveil"></div>
+      <div class="sinner">
+        <div class="sglyph">☀️</div>
+        <div class="sname">Helper Patrol</div>
+        <div class="smood">A sunny tidy-up adventure. Round up the factory&rsquo;s wandering little helpers before the morning bell.</div>
+        <div class="senter">Start the Patrol →</div>
+      </div>
+    </div>
+  </div>
+  <div class="seam"><i class="seamline"></i><span class="seamx">×</span></div>
+  <div class="splitvig"></div>
+  <div class="crown">
+    <div class="ckick">One night · two worlds · real AI agents</div>
+    <div class="ctitle">AFTERLOGIN</div>
+    <div class="cagents"><span>🛡 The Warden</span><span class="cdot">·</span><span>🔍 The Skeptic</span><span class="cdot">·</span><span>✓ The Council</span></div>
+  </div>
+  <div class="dock">
+    <div class="diffrow"><span class="difflbl">Difficulty</span><div class="diffswitch"><span class="dfw" data-d="casual" onclick="setDiff('casual')">Casual</span><span class="dfw on" data-d="auditor" onclick="setDiff('auditor')">Auditor</span><span class="dfw" data-d="nightmare" onclick="setDiff('nightmare')">Nightmare</span></div></div>
     <div class="career" id="career"></div>
-    <div class="iscdemo" onclick="startShowcase()">▶ Watch the 90-second showcase</div>
-    <div class="ifoot">Synthetic data · powered by <b>Foundry IQ</b> + <b>Fabric IQ</b> · built with <b>Copilot</b></div>
+    <div class="dockrow"><span class="dlink" onclick="openCodex()">📖 Behind the Game</span><span class="dsep">·</span><span class="dlink" onclick="startShowcase()">▶ 90-second showcase</span></div>
+    <div class="ifoot2">Synthetic data · Foundry IQ + Fabric IQ · built with Copilot</div>
   </div>
 </div>
 
@@ -1398,6 +1425,7 @@ function updateIntroTheme(){const sp=theme()==='spectral';
  if(ag)ag.innerHTML=sp?'<div class="iag"><span class="ico">🛡</span><b>The Warden</b><i>reasons the safe call</i></div><div class="iag"><span class="ico">🔍</span><b>The Skeptic</b><i>contests the load-bearing</i></div><div class="iag"><span class="ico">✓</span><b>The Council</b><i>renders the verdict</i></div>':'<div class="iag"><span class="ico">🔎</span><b>The Checker</b><i>spots what each helper really does</i></div><div class="iag"><span class="ico">🧹</span><b>The Chaser</b><i>chases down the Gremlin</i></div><div class="iag"><span class="ico">✅</span><b>The Crew</b><i>makes the final call</i></div>';
  document.querySelectorAll('.iswitch .isw').forEach(b=>b.classList.toggle('on',b.getAttribute('data-t')===theme()));}
 function press(el){sfx('tick');el.style.transform='translateY(0) scale(.96)';setTimeout(()=>el.style.transform='',150);}
+function chooseWorld(t){setTheme(t);enterManor();}
 // ── audio (Web Audio synth — no files) ──
 var AC=null,masterGain=null,muted=false,ambientNodes=null;
 function audioInit(){if(AC)return;try{AC=new (window.AudioContext||window.webkitAudioContext)();masterGain=AC.createGain();masterGain.gain.value=muted?0:.85;masterGain.connect(AC.destination);startAmbient();}catch(e){}}
