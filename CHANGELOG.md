@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.26.1] - 2026-06-12 — Recorded 2¼-minute directed demo video
+
+- **`afterlogin-demo.webm`** — a directed ~135s tour recorded at 1600×900: boot unlock → both
+  worlds (hover-expand) → the **agent architecture explorer** → Divine/Summon with the **council
+  deliberating + cited evidence** → verdict cinematic → the **Token Thief kill-chain** (stage
+  tracker, attack telegraph, control hover-card, d20 over the crypt arena) → the living map →
+  the Dawn Breaks finale report. Ready for the submission portal or a voiceover.
+
 ## [0.26.0] - 2026-06-11 — Living mini-map + agent architecture explorer
 
 - **Living mini-map.** A corner mini-map shows the current floor at a glance: every room as a

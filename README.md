@@ -11,6 +11,7 @@ real multi-agent system with function tools, the **Model Context Protocol**, and
 **Azure AI Foundry** agent path.
 
 🎮 **Live:** https://victorious-plant-0c1e7790f.7.azurestaticapps.net
+🎬 **Demo video:** [`afterlogin-demo.webm`](afterlogin-demo.webm) — a 2¼-min directed tour (agents · combat · dawn)
 📖 In-game **"Behind the Game"** badge maps every element to the real Microsoft control.
 
 ---
