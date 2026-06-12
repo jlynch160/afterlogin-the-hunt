@@ -580,6 +580,34 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 [data-theme="helpers"] #nemesis .nmname{color:#a04a58}
 [data-theme="helpers"] .hint{color:#4a617c;opacity:.9}
 [data-theme="helpers"] .cprompt{color:#5a7390}
+/* living mini-map */
+#mini{position:fixed;right:20px;bottom:16px;width:152px;height:98px;z-index:7;border-radius:12px;background:rgba(10,7,22,.74);border:1px solid var(--stroke);backdrop-filter:blur(10px);cursor:pointer;box-shadow:0 14px 34px rgba(0,0,0,.45);transition:border-color .16s,transform .16s}
+#mini:hover{border-color:rgba(var(--acc),.55);transform:translateY(-2px)}
+[data-theme="helpers"] #mini{background:rgba(255,255,255,.82);border-color:rgba(70,120,170,.3)}
+.mnf{position:absolute;top:5px;left:9px;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut)}
+.mnin{position:absolute;inset:18px 12px 10px}
+.mnd{position:absolute;width:7px;height:7px;border-radius:50%;transform:translate(-50%,-50%);background:var(--c);box-shadow:0 0 6px var(--c)}
+.mnd.dn{opacity:.25;box-shadow:none}
+.mnd.me{box-shadow:0 0 0 2px rgba(var(--acc),.9),0 0 10px rgba(var(--acc),.7)}
+.mnd.ps{background:#ff3b5c;animation:mnps 1s ease-in-out infinite}
+.mnd.hg{width:10px;height:10px;background:#ff2b50;box-shadow:0 0 12px #ff2b50;animation:mnps .8s ease-in-out infinite}
+@keyframes mnps{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.45)}}
+@media(max-width:760px){#mini{display:none}}
+/* agent architecture explorer (codex) */
+.axp{margin-bottom:14px;padding:14px 15px 12px;border-radius:14px;background:linear-gradient(180deg,rgba(var(--acc),.07),rgba(255,255,255,.02));border:1px solid rgba(var(--acc),.35)}
+.axph{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mut);margin-bottom:11px}
+.axph b{color:rgb(var(--acc));text-transform:none;letter-spacing:.5px}
+.axrow{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}
+.axrow.ax2{margin-top:9px;gap:9px}
+.axn{display:inline-flex;flex-direction:column;align-items:center;gap:1px;font-size:11px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--stroke);border-radius:10px;padding:7px 11px;text-align:center}
+.axn small{font-size:7.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);font-weight:500}
+.axn.sm{padding:4px 8px;font-size:10px}
+.axn.alt{font-size:9.5px;color:var(--mut);background:rgba(255,255,255,.03)}
+.axg{display:inline-flex;gap:5px;padding:5px;border:1px dashed rgba(var(--acc),.4);border-radius:12px}
+.axf{width:20px;height:2px;background:repeating-linear-gradient(90deg,rgba(var(--acc),.85) 0 4px,transparent 4px 8px);animation:axflow .7s linear infinite}
+@keyframes axflow{to{background-position:8px 0}}
+.axnote{margin-top:11px;font-size:11px;line-height:1.6;color:var(--mut)}
+.axnote b{color:rgb(var(--acc))}
 /* ══ unified panel language — every surface speaks console ══ */
 .rite:active,.inv:active,.cbtn:active,.sbuy:active,.toggle:active,.senter:active,.xbtn:active,.dlink:active,.fb:active{transform:scale(.96)!important}
 .dossier{border-color:rgba(201,162,75,.3);box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08),inset 0 2px 0 -1px rgba(var(--acc),.35)}
@@ -1086,6 +1114,7 @@ body.flick{animation:flick .56s steps(1) both}
 <div class="mpop" id="mpop"></div>
 <div id="transition"></div>
 <div id="hsweep"><i class="he l"></i><i class="he r"></i></div>
+<div id="mini" title="The floor at a glance — click for the full map" onclick="try{document.getElementById('mapBtn').click()}catch(e){}"></div>
 <div id="wipe"></div>
 <div id="possess"><div class="pveins"></div><div class="ptext">POSSESSED</div></div>
 <div id="bossintro"><div class="biwrap"><div class="bilabel" id="biLabel">⚔ GUARDIAN RISES</div><div class="biportrait" id="biPortrait"></div><div class="biname" id="biName"></div><div class="bitease" id="biTease"></div></div></div>
@@ -1388,7 +1417,14 @@ function probeAgentTier(){try{fetch('/api/reason',{method:'POST',headers:{'Conte
 function huntAlarm(){if(document.getElementById('combat').classList.contains('show'))return;let e=document.getElementById('huntalarm');if(!e){e=document.createElement('div');e.id='huntalarm';document.body.appendChild(e);}e.classList.remove('go');void e.offsetWidth;e.classList.add('go');document.body.classList.remove('flick');void document.body.offsetWidth;document.body.classList.add('flick');setTimeout(()=>document.body.classList.remove('flick'),560);sfx('growl');nemSpeak('near');sealPrompt();}
 function sealPrompt(){let e=document.getElementById('sealbanner');if(!e){e=document.createElement('div');e.id='sealbanner';document.body.appendChild(e);}e.innerHTML='⚠ <b>'+nemName()+'</b> is in the next room <button onclick="sealDoor()">⛓ Seal the Door · 6🔮</button>';e.classList.add('on');clearTimeout(window._sealT);window._sealT=setTimeout(()=>{e.classList.remove('on');},5200);}
 function sealDoor(){if(combatTgt)return;const cost=6;if(essence<cost){sfx('tick');toast('Not enough essence to seal the door — '+cost+' 🔮 needed.');return;}essence-=cost;essSpent+=cost;freeze+=3;updEss();updateThreatUI();sfx('seal');const sb=document.getElementById('sealbanner');if(sb)sb.classList.remove('on');toast('⛓ A <b>Conditional Access</b> block seals the corridor — '+nemName()+' is held for 3 steps.');nemSpeak('seal');}
-function hungryFx(){try{const e=document.getElementById('hsweep');if(!e||!e.classList)return;e.classList.remove('go');void e.offsetWidth;e.classList.add('go');setTimeout(function(){e.classList.remove('go');},950);}catch(x){}}
+function renderMini(){try{const m=document.getElementById('mini');if(!m)return;const fr=ROOMS.filter(r=>r.floor===floor);if(!fr.length){m.innerHTML='';return;}
+ let h='<span class="mnf">'+(kid()?'☀':'🌙')+' F'+floor+'</span><div class="mnin">';
+ fr.forEach(r=>{const a=r.account;const st=a?ST[a]:null;let cls='mnd';
+  if(a&&st&&st.done)cls+=' dn';if(a&&st&&st.possessed)cls+=' ps';if(a&&a===cur)cls+=' me';if(H.room===r.id)cls+=' hg';
+  const col=a?GC[SOULS[a].grade]:'#8b86a8';
+  h+='<i class="'+cls+'" style="left:'+(r.nx*100).toFixed(1)+'%;top:'+(r.ny*100).toFixed(1)+'%;--c:'+col+'"></i>';});
+ m.innerHTML=h+'</div>';}catch(e){}}
+function hungryFx(){renderMini();try{const e=document.getElementById('hsweep');if(!e||!e.classList)return;e.classList.remove('go');void e.offsetWidth;e.classList.add('go');setTimeout(function(){e.classList.remove('go');},950);}catch(x){}}
 function essFly(){try{const tgt=document.getElementById('essN');if(!tgt||!tgt.getBoundingClientRect)return;const tr=tgt.getBoundingClientRect();if(!tr||tr.left===undefined)return;const sx=window.innerWidth/2,sy=window.innerHeight*.42;for(let i=0;i<5;i++){(function(i){const o=document.createElement('i');o.className='essorb';o.style.left=sx+(Math.random()*64-32)+'px';o.style.top=sy+(Math.random()*44-22)+'px';document.body.appendChild(o);setTimeout(function(){o.style.left=(tr.left+8)+'px';o.style.top=(tr.top+8)+'px';o.style.opacity=0;o.style.transform='scale(.4)';},40+i*85);setTimeout(function(){o.remove();const p=document.getElementById('essN');if(p&&p.parentElement&&p.parentElement.classList){p.parentElement.classList.remove('esspop');void p.parentElement.offsetWidth;p.parentElement.classList.add('esspop');}},640+i*85);})(i);}}catch(x){}}
 function hungryStep(){hungryFx();if(!hungryEnabled||combatTgt||document.getElementById('combat').classList.contains('show')||document.getElementById('store').classList.contains('show'))return;
  if(allAccts().every(a=>ST[a].done))return;
@@ -1472,7 +1508,7 @@ function possessAt(a){if(combatTgt)return;
  sfx('growl');nemSpeak('possess');if(B)setTimeout(()=>toast((B.tier==='boss'?'👑 <b>':'⚔ <b>')+B.name+'</b> — '+(B.tier==='boss'?'the Attic boss':'a floor guardian')+' · a <b>'+B.phases.length+'-stage</b> kill-chain. Read each stage.'),320);
  if(B){bossIntro(B);shakeScreen(true);}else{const pv=document.getElementById('possess');pv.querySelector('.ptext').textContent='POSSESSED';pv.classList.remove('go');void pv.offsetWidth;pv.classList.add('go');shakeScreen(true);}
  setTimeout(()=>{document.getElementById('combat').classList.add('show');},B?2050:1250);}
-function updateThreatUI(){const lbl=document.getElementById('dreadLbl'),bar=document.getElementById('dreadBar');if(!lbl)return;
+function updateThreatUI(){renderMini();const lbl=document.getElementById('dreadLbl'),bar=document.getElementById('dreadBar');if(!lbl)return;
  if(allAccts().every(a=>ST[a].done)){lbl.textContent='Cleansed';bar.style.width='0%';return;}
  const v=bfsNext(H.room,isVaultGoal),dist=v?v.dist:MAXD,prox=Math.max(5,Math.min(100,Math.round((1-dist/MAXD)*100)));
  const fr=roomFloor(H.room),fn=kid()?TMFLOORS[fr]:FLOORS[fr-1].name;
@@ -1722,7 +1758,12 @@ const CODEX=[
  {g:'The Reliquary',m:'Your security stack',d:'CAE, PIM, Conditional Access, Entra ID Governance, Defender XDR, Sentinel SOAR, ISPM — each rite is a real control.'},
  {g:'Essence',m:'The ROI of cleanup',d:'Every dormant account laid to rest cuts attack surface and licensing waste — cleanup creates value.'}
 ];
-function openCodex(){const el=document.getElementById('codexList');if(el)el.innerHTML=CODEX.map(c=>'<div class="cxitem"><div class="cxg">'+c.g+'</div><div class="cxm">↳ '+c.m+'</div><div class="cxd">'+c.d+'</div></div>').join('');document.getElementById('codex').classList.add('show');}
+function openCodex(){const el=document.getElementById('codexList');const tEl=document.getElementById('agenttier');const tier=tEl?tEl.textContent.replace('◈','').trim():'scripted';
+ const diag='<div class="axp"><div class="axph">⚙ The real system — <b id="axtier">'+tier+'</b> tier running now</div>'+
+ '<div class="axrow"><span class="axn">🎮 the game</span><i class="axf"></i><span class="axn">⚡ /api/reason</span><i class="axf"></i><span class="axg"><span class="axn sm">🛡 Warden</span><span class="axn sm">🔍 Skeptic</span><span class="axn sm">✓ Council</span></span><i class="axf"></i><span class="axn">🧰 identity tools<small>sign-ins · deps · OAuth · groups</small></span></div>'+
+ '<div class="axrow ax2"><span class="axn alt">⛓ MCP server — same tools, any agent (Copilot · VS Code · Foundry)</span><span class="axn alt">☁ Azure AI Foundry — optional connected-agents tier</span></div>'+
+ '<div class="axnote">The Warden and Skeptic each call real function tools over the identity store, investigate independently and debate; the Council issues a <b>cited</b> advisory — and never the verdict. The human judges. Layered fallback: Foundry → live agents → scripted.</div></div>';
+ if(el)el.innerHTML=diag+CODEX.map(c=>'<div class="cxitem"><div class="cxg">'+c.g+'</div><div class="cxm">↳ '+c.m+'</div><div class="cxd">'+c.d+'</div></div>').join('');document.getElementById('codex').classList.add('show');}
 function closeCodex(){document.getElementById('codex').classList.remove('show');}
 function reportSVG(){const d=new Date(),pad=n=>(n<10?'0':'')+n,date=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
  const total=allAccts().length,won=allAccts().every(a=>ST[a].done)&&wards>=0;

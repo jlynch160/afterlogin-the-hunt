@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.26.0] - 2026-06-11 — Living mini-map + agent architecture explorer
+
+- **Living mini-map.** A corner mini-map shows the current floor at a glance: every room as a
+  grade-colored dot, your position ringed in accent, possessed rooms pulsing red, and **the Hungry
+  as a larger pulsing red eye** moving in real time. Click it to open the full map. The strategic
+  layer is now always visible.
+- **Agent architecture explorer.** Behind the Game now opens with a live diagram of the real
+  system — game → /api/reason → Warden/Skeptic/Council → identity tools, with animated data-flow
+  connectors, the MCP + Foundry tiers, and **the currently-running agent tier** read live from the
+  probe. The codex is proof now, not prose — a built-in judge tour of the agentic core.
+
 ## [0.25.1] - 2026-06-11 — Factory console color fix + bottom-stack collisions
 
 - **Helper Patrol console buttons fixed** — Divine/Summon and the three rites were still manor-dark
