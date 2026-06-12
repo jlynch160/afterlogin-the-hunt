@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.22.0] - 2026-06-11 — Game-screen presentation: command console + HUD chips + stage light
+
+- **Command console.** Divine/Summon and the three judgment rites now sit in a framed, gold-edged
+  glass console at the bottom center (with an INVESTIGATE · THEN JUDGE plate and an accent top
+  line) — a real game command bar instead of floating buttons. The toast no longer covers the
+  Divine/Summon row (it slides in above the console), and the contextual hint docks over the console.
+- **HUD chips.** Every top-bar stat (clock, score, wards, discernment, the Hungry tracker) is now a
+  uniform glass chip with a stat-colored border; floor tabs styled as serif segments with a glowing
+  active state; per-rite icon colors (rest/bind/acknowledge).
+- **Stage light.** A soft spotlight cone falls on the spirit from above and an accent floor-glow
+  pools beneath the portrait; roster tiles gained grade-colored edge bars; testimony width tightened.
+
 ## [0.21.0] - 2026-06-11 — New loading screen: The Unlock
 
 - **The loader is now a door-opening sequence.** An ornate keyhole sigil draws itself in light inside

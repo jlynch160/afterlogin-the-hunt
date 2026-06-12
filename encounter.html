@@ -530,6 +530,43 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 .dlink:hover{color:rgb(var(--acc))}
 .dsep{color:var(--mut);opacity:.45}
 .ifoot2{position:absolute;left:18px;bottom:16px;z-index:6;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:#6e6590;text-shadow:0 1px 6px rgba(0,0,0,.8);animation:fadein 1.4s ease 1.6s both}
+/* ══ game-screen presentation: HUD chips, command console, stage light ══ */
+.right{gap:9px}
+.right .hudstat{background:rgba(12,9,26,.62);border:1px solid var(--stroke);border-radius:12px;padding:6px 12px;backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);display:inline-flex;align-items:center;gap:5px;font-size:16px}
+#scoreEl{border-color:rgba(var(--acc),.35)}
+#wardsEl{border-color:rgba(255,209,122,.32)}
+.hudstat.discern{border-color:rgba(160,130,240,.38)}
+.right .dawn{background:rgba(12,9,26,.62);border:1px solid var(--stroke);border-radius:12px;padding:6px 12px;backdrop-filter:blur(10px);font-size:17px}
+.right .prog{font-size:9px;line-height:1.4;text-align:right;max-width:74px}
+.dread{background:rgba(40,8,16,.5);border:1px solid rgba(255,90,120,.32);border-radius:12px;padding:6px 11px;backdrop-filter:blur(10px)}
+[data-theme="helpers"] .right .hudstat,[data-theme="helpers"] .right .dawn{background:rgba(255,255,255,.78);border-color:rgba(70,120,170,.3);color:#1f3550}
+.brand{font-size:21px;letter-spacing:4px}
+.ab{font-family:'Cormorant Garamond',serif;font-size:12.5px;font-weight:700;letter-spacing:1.6px;padding:7px 14px;border-radius:11px}
+.ab.on{color:rgb(var(--acc));border-color:rgba(var(--acc),.45);background:rgba(var(--acc),.09);box-shadow:0 0 16px rgba(var(--acc),.16)}
+.stage::before{content:"";position:absolute;left:50%;top:-10%;width:56vw;height:82vh;transform:translateX(-50%);pointer-events:none;background:radial-gradient(46% 58% at 50% 0%,rgba(216,200,255,.12),transparent 70%);mix-blend-mode:screen}
+.stage::after{content:"";position:absolute;left:50%;bottom:15%;width:430px;height:88px;transform:translateX(-50%);pointer-events:none;background:radial-gradient(50% 50% at 50% 50%,rgba(var(--acc),.15),transparent 72%);filter:blur(6px)}
+.testimony{max-width:470px;font-size:20px}
+.roster{left:16px}
+.tile{border-left:3px solid var(--gc,#666);padding:6px 6px 6px 8px}
+.tile.sel{border-left-color:rgb(var(--acc))}
+.inv{border-radius:11px;font-size:15px}
+.rite{font-size:16.5px;padding:12px 24px;border-radius:11px}
+.rites .rite:nth-child(1) .i{color:#9fb9e6}
+.rites .rite:nth-child(2) .i{color:#ffce5b}
+.rites .rite:nth-child(3) .i{color:rgb(var(--acc))}
+#toast{border-left:3px solid rgba(var(--acc),.75)}
+.actconsole{display:none}
+@media(min-width:761px){
+ .actconsole{display:block;position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:5;width:680px;max-width:94vw;height:140px;border-radius:20px;background:linear-gradient(180deg,rgba(16,11,30,.78),rgba(8,5,16,.9));border:1px solid rgba(201,162,75,.32);box-shadow:0 24px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(14px);pointer-events:none}
+ .actconsole::before{content:"";position:absolute;top:-1px;left:20%;right:20%;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,rgba(var(--acc),.6),transparent)}
+ .actconsole::after{content:"INVESTIGATE · THEN JUDGE";position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:8.5px;letter-spacing:3px;color:#9a8fc0;background:#0b0818;padding:2px 12px;border-radius:8px;border:1px solid var(--stroke);white-space:nowrap}
+ [data-theme="helpers"] .actconsole{background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(240,248,255,.92));border-color:rgba(60,120,170,.35)}
+ [data-theme="helpers"] .actconsole::after{background:#eef6fc;color:#3f5a72;border-color:rgba(60,120,170,.3)}
+ .dock2{bottom:88px;gap:10px;z-index:6}
+ .rites{bottom:26px;gap:11px;z-index:6}
+ .hint{bottom:160px;opacity:.8;font-size:9.5px;z-index:6}
+ #toast{bottom:196px}
+}
 @media(max-width:760px){
  .splitwrap{flex-direction:column}
  .splitwrap:hover .side:not(:hover){filter:none}
@@ -916,6 +953,7 @@ body.flick{animation:flick .56s steps(1) both}
 <div class="testimony" id="testimony"></div>
 <div class="dossier" id="dossier"></div>
 
+<div class="actconsole" aria-hidden="true"></div>
 <div class="dock2">
   <div class="inv" id="invD" onclick="press(this);divine()">◐ Divine <span class="iqb">Fabric IQ</span></div>
   <div class="inv" id="invS" onclick="press(this);summon()">◑ Summon · 4🔮 <span class="iqb">Foundry IQ</span></div>
