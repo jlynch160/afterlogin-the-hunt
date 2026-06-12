@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.23.2] - 2026-06-11 — Generated combat arena paintings (PNG upgrade)
+
+- **Two new generated arena plates** replace the vector stand-ins (the loader auto-prefers PNG):
+  the **manor crypt arena** — carved gothic arch alcoves, a moonbeam, candles, and a glowing
+  two-ring ritual circle with rune lights on the floor; and the **factory dusk arena** — three
+  glowing arched windows, a light shaft, machine silhouettes with pipes, and a spotlight ring
+  center-stage. Rendered with the in-house pixel painter (stone/floor noise texture, additive
+  glows, fog, vignette, grain).
+
 ## [0.23.1] - 2026-06-11 — Four new generated scene plates (procedurally painted PNGs)
 
 - **Generated four original images in-house** with a custom pixel renderer (gradients, additive
