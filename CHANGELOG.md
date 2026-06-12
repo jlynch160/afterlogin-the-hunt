@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.20.2] - 2026-06-11 — Landing layout fixes: slim one-row dock, no more overlap
+
+- **Fixed the dock covering Helper Patrol.** The bottom dock lost its centering to the same
+  animation-transform bug as the old menu (fadeup ended on transform:none) — it sat right-of-center
+  on top of the patrol nameplate. It now centers with margin auto (no transform) and is a **single
+  slim row** (difficulty · rank · daily · relics · links) instead of a tall card.
+- World nameplates raised clear of the dock; the agent strip is now readable glass chips; the seam
+  line fades out beneath the title instead of running through it; reduced the purple cast on the
+  factory side; footer whisper moved to the corner.
+
 ## [0.20.1] - 2026-06-11 — Landing polish pass: title sequence, parallax, living seam
 
 - **Title-sequence entrance.** The two worlds slide in from their edges, the seam draws itself down

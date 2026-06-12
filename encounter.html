@@ -465,8 +465,8 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 .spatrol .sbg{background-image:url('assets/helpers/hero.png');background-position:center 42%;animation-delay:-21s}
 .sveil{position:absolute;inset:0;z-index:2}
 .shunt .sveil{background:linear-gradient(180deg,rgba(5,4,12,.55),rgba(5,4,12,.06) 32%,rgba(5,4,12,.14) 56%,rgba(4,3,11,.92) 97%)}
-.spatrol .sveil{background:linear-gradient(180deg,rgba(64,38,98,.42),rgba(50,30,60,.05) 32%,rgba(58,32,18,.12) 56%,rgba(44,22,6,.88) 97%)}
-.sinner{position:absolute;left:0;right:0;bottom:10vh;z-index:3;text-align:center;padding:0 7%;pointer-events:none}
+.spatrol .sveil{background:linear-gradient(180deg,rgba(38,24,58,.26),rgba(50,30,60,.03) 30%,rgba(58,32,18,.1) 56%,rgba(40,20,5,.9) 97%)}
+.sinner{position:absolute;left:0;right:0;bottom:max(15vh,128px);z-index:3;text-align:center;padding:0 7%;pointer-events:none}
 .sglyph{font-size:38px;margin-bottom:8px;filter:drop-shadow(0 0 18px rgba(255,220,150,.55))}
 .shunt .sglyph{filter:drop-shadow(0 0 18px rgba(var(--acc),.65));animation:bootflame 2.6s ease-in-out infinite}
 .slabel{font-size:9.5px;letter-spacing:3.5px;text-transform:uppercase;margin-bottom:7px;opacity:.85;text-shadow:0 2px 8px rgba(0,0,0,.9)}
@@ -488,7 +488,7 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 .smotes i{position:absolute;bottom:-12px;width:5px;height:5px;border-radius:50%;background:rgba(255,224,140,.9);box-shadow:0 0 13px 3px rgba(255,210,110,.6);opacity:0;animation:wisp 16s ease-in-out infinite}
 .smotes i:nth-child(1){left:14%;animation-delay:-2s}.smotes i:nth-child(2){left:30%;animation-delay:-7s;animation-duration:19s}.smotes i:nth-child(3){left:48%;animation-delay:-4s}.smotes i:nth-child(4){left:62%;animation-delay:-11s;animation-duration:14s}.smotes i:nth-child(5){left:78%;animation-delay:-6s;animation-duration:18s}.smotes i:nth-child(6){left:90%;animation-delay:-9s}
 .seam{position:absolute;left:50%;top:0;bottom:0;width:0;z-index:4;pointer-events:none}
-.seamline{position:absolute;left:-1px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,rgba(240,235,255,.75) 26%,rgba(240,235,255,.75) 74%,transparent);box-shadow:0 0 22px 3px rgba(200,190,255,.45);transform-origin:50% 50%;animation:seamdraw 1.1s cubic-bezier(.3,.8,.3,1) .45s both,seamglow 4s ease-in-out infinite 1.6s}
+.seamline{position:absolute;left:-1px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent 0 21%,rgba(240,235,255,.7) 36%,rgba(240,235,255,.7) 72%,transparent 92%);box-shadow:0 0 22px 3px rgba(200,190,255,.4);transform-origin:50% 50%;animation:seamdraw 1.1s cubic-bezier(.3,.8,.3,1) .45s both,seamglow 4s ease-in-out infinite 1.6s}
 @keyframes seamdraw{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 @keyframes seamglow{0%,100%{opacity:.7}50%{opacity:1}}
 .seamline::after{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:repeating-linear-gradient(180deg,rgba(255,255,255,0) 0 16px,rgba(255,255,255,.9) 16px 22px);opacity:.45;-webkit-mask:linear-gradient(180deg,transparent,#000 28%,#000 72%,transparent);mask:linear-gradient(180deg,transparent,#000 28%,#000 72%,transparent);animation:seamflow 2.4s linear infinite}
@@ -511,23 +511,25 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 #intro:has(.shunt:hover) .ctitle{filter:drop-shadow(0 4px 24px rgba(0,0,0,.95)) drop-shadow(0 0 46px rgba(var(--acc),.5))}
 #intro:has(.spatrol:hover) .ctitle{filter:drop-shadow(0 4px 24px rgba(0,0,0,.95)) drop-shadow(0 0 46px rgba(255,200,90,.55))}
 .ctitle{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(52px,8.5vw,92px);letter-spacing:10px;padding-left:10px;line-height:1;background:linear-gradient(95deg,#cdbcf6 6%,#fff 28%,#efe9ff 46%,#ffd98a 64%,#fff 82%,#cdbcf6 96%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 4px 24px rgba(0,0,0,.95)) drop-shadow(0 0 38px rgba(190,170,255,.35));transition:filter .4s ease;animation:shimmer 7s linear infinite,fadeup 1s ease .1s both}
-.cagents{margin-top:11px;font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:#b9aede;text-shadow:0 2px 10px rgba(0,0,0,.9);display:flex;justify-content:center;gap:12px;animation:fadeup 1s ease .35s both}
-.cagents .cdot{opacity:.45}
-.dock{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:6;width:min(540px,94vw);display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 20px 11px;border-radius:18px;background:linear-gradient(180deg,rgba(12,9,26,.88),rgba(7,5,16,.93));border:1px solid var(--stroke);backdrop-filter:blur(16px);box-shadow:0 24px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.07);animation:fadeup .9s ease .35s both}
+.cagents{margin-top:14px;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;display:flex;justify-content:center;gap:9px;animation:fadeup 1s ease .35s both}
+.cagents span{color:#d8cff2;padding:6px 14px;border-radius:999px;border:1px solid rgba(235,228,255,.22);background:rgba(10,7,22,.55);backdrop-filter:blur(8px);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.cagents .cdot{display:none}
+.dock{position:absolute;left:0;right:0;bottom:14px;margin:0 auto;z-index:6;width:fit-content;max-width:96vw;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 18px;padding:10px 22px;border-radius:16px;background:linear-gradient(180deg,rgba(12,9,26,.9),rgba(7,5,16,.94));border:1px solid var(--stroke);backdrop-filter:blur(16px);box-shadow:0 24px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.07);animation:fadeup .9s ease .35s both}
 .dock::before{content:"";position:absolute;top:-1px;left:16%;right:16%;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,rgba(var(--acc),.7) 32%,rgba(255,206,90,.7) 68%,transparent)}
-.dock .career{margin:0 auto;animation:none}
-.dock .cvrow{gap:8px;font-size:11.5px}
-.dock .cvbar{margin:5px auto 0;width:200px;height:4px}
-.dock .cvdaily{margin:7px auto 0;padding:6px 12px;font-size:12px;max-width:300px}
-.dock .cvdaily span{font-size:9.5px;margin-top:1px}
-.dock .cvrelics{margin-top:7px;gap:6px}
-.dock .cvrelic{width:29px;height:29px;font-size:14px;border-radius:8px}
+.dock .career{margin:0;animation:none;width:auto;display:flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:8px 14px}
+.dock .cvrow{gap:8px;font-size:11.5px;flex-wrap:nowrap;white-space:nowrap}
+.dock .cvbar{margin:0;width:74px;height:4px}
+.dock .cvdaily{margin:0;padding:5px 11px;font-size:11.5px;max-width:none;white-space:nowrap}
+.dock .cvdaily span{display:none}
+.dock .cvrelics{margin:0;gap:5px}
+.dock .cvrh{display:none}
+.dock .cvrelic{width:27px;height:27px;font-size:13px;border-radius:8px}
 .dock .diffrow{margin:0}
 .dockrow{display:flex;align-items:center;gap:13px}
 .dlink{cursor:pointer;font-size:12px;letter-spacing:.5px;color:var(--mut);transition:.15s}
 .dlink:hover{color:rgb(var(--acc))}
 .dsep{color:var(--mut);opacity:.45}
-.ifoot2{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#847aa3}
+.ifoot2{position:absolute;left:18px;bottom:16px;z-index:6;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:#6e6590;text-shadow:0 1px 6px rgba(0,0,0,.8);animation:fadein 1.4s ease 1.6s both}
 @media(max-width:760px){
  .splitwrap{flex-direction:column}
  .splitwrap:hover .side:not(:hover){filter:none}
@@ -994,8 +996,8 @@ body.flick{animation:flick .56s steps(1) both}
     <div class="diffrow"><span class="difflbl">Difficulty</span><div class="diffswitch"><span class="dfw" data-d="casual" onclick="setDiff('casual')">Casual</span><span class="dfw on" data-d="auditor" onclick="setDiff('auditor')">Auditor</span><span class="dfw" data-d="nightmare" onclick="setDiff('nightmare')">Nightmare</span></div></div>
     <div class="career" id="career"></div>
     <div class="dockrow"><span class="dlink" onclick="openCodex()">📖 Behind the Game</span><span class="dsep">·</span><span class="dlink" onclick="startShowcase()">▶ 90-second showcase</span></div>
-    <div class="ifoot2">Synthetic data · Foundry IQ + Fabric IQ · built with Copilot</div>
   </div>
+  <div class="ifoot2">Synthetic data · Foundry IQ + Fabric IQ · built with Copilot</div>
 </div>
 
 <script>
