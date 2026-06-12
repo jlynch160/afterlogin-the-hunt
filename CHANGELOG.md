@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.21.0] - 2026-06-11 — New loading screen: The Unlock
+
+- **The loader is now a door-opening sequence.** An ornate keyhole sigil draws itself in light inside
+  the arcane ring while the progress arc completes; the lock *turns* with a golden light-burst —
+  and then the screen **splits open down the middle** (purple half left, gold half right), revealing
+  the two-world landing beneath. The loading screen literally unlocks the door into the game.
+- Key-flavored status lines (forging the night key… → unlocking the door…); the emoji crossfade and
+  halo are retired in favor of the drawn keyhole; halves carry per-world color accents; still
+  skippable on click/key and fast-tracked in ?demo mode.
+
 ## [0.20.2] - 2026-06-11 — Landing layout fixes: slim one-row dock, no more overlap
 
 - **Fixed the dock covering Helper Patrol.** The bottom dock lost its centering to the same

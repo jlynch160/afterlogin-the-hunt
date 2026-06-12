@@ -714,9 +714,21 @@ body.flick{animation:flick .56s steps(1) both}
 .iscdemo:hover{color:rgb(var(--acc))}
 [data-theme="helpers"] .iscdemo{color:#3f5a72}
 /* ── boot splash ── */
-#boot{position:fixed;inset:0;z-index:60;background:radial-gradient(circle at 78% 82%,rgba(255,196,92,.11),transparent 44%),radial-gradient(ellipse at 50% 36%,#241a44 0%,#120d28 45%,#070512 82%);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;transition:opacity .8s ease,visibility .8s}
-#boot.gone{opacity:0;visibility:hidden;pointer-events:none}
-#boot::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 200px 70px rgba(0,0,0,.65)}
+#boot{position:fixed;inset:0;z-index:60;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;transition:visibility 0s linear 1s}
+#boot.gone{visibility:hidden;pointer-events:none}
+.bhalf{position:absolute;top:0;bottom:0;width:50.5%;transition:transform .95s cubic-bezier(.78,.04,.22,1) .08s}
+.bhalf.bl{left:0;background:radial-gradient(120% 95% at 82% 42%,#1e1542 0%,#0b0718 72%)}
+.bhalf.br{right:0;background:radial-gradient(120% 95% at 18% 42%,#251a38 0%,#0d0914 72%)}
+.bhalf.bl::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 70% 72%,rgba(140,100,240,.13),transparent 70%)}
+.bhalf.br::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 30% 72%,rgba(255,196,92,.11),transparent 70%)}
+.bhalf.bl{box-shadow:inset -40px 0 80px -40px rgba(0,0,0,.5)}
+.bhalf.br{box-shadow:inset 40px 0 80px -40px rgba(0,0,0,.5)}
+#boot.gone .bhalf.bl{transform:translateX(-102%)}
+#boot.gone .bhalf.br{transform:translateX(102%)}
+#boot.gone .bootinner,#boot.gone .bootfog,#boot.gone .bootembers{opacity:0;transition:opacity .4s ease}
+#boot.gone .bootinner{transform:scale(1.07);transition:opacity .4s ease,transform .5s ease}
+#boot::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 200px 70px rgba(0,0,0,.6);transition:opacity .4s ease}
+#boot.gone::after{opacity:0}
 .bootfog{position:absolute;inset:-20%;pointer-events:none;background:radial-gradient(circle at 30% 38%,rgba(124,92,255,.20),transparent 45%),radial-gradient(circle at 72% 62%,rgba(90,60,180,.16),transparent 45%);filter:blur(8px);animation:bootfog 14s ease-in-out infinite alternate}
 @keyframes bootfog{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-3%,2%) scale(1.08)}}
 .bootembers{position:absolute;inset:0;overflow:hidden;pointer-events:none}
@@ -745,20 +757,20 @@ body.flick{animation:flick .56s steps(1) both}
 .r-ticks{stroke:rgba(190,165,255,.55);stroke-width:6;stroke-dasharray:1.5 15;animation:ringspin 26s linear infinite}
 .r-ticks2{stroke:rgba(255,205,120,.4);stroke-width:4;stroke-dasharray:1 11;animation:ringspin 18s linear infinite reverse}
 .r-prog{stroke:url(#bgprog);stroke-width:2.5;stroke-linecap:round;stroke-dasharray:540;stroke-dashoffset:540;transform:rotate(-90deg);filter:drop-shadow(0 0 6px rgba(190,150,255,.95));animation:ringdraw 1.9s cubic-bezier(.3,0,.2,1) forwards}
-.boothalo{position:absolute;left:50%;top:50%;width:160px;height:160px;margin:-80px 0 0 -80px;border-radius:50%;background:radial-gradient(circle,rgba(180,140,255,.42),rgba(255,200,110,.12) 55%,rgba(150,110,255,0) 72%);filter:blur(6px);pointer-events:none;animation:boothalo 2.6s ease-in-out infinite}
-.bootsigil{position:absolute;left:0;right:0;top:0;bottom:0;animation:bootflame 2.2s ease-in-out infinite}
-.bootsigil span{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font-size:50px}
-.bootsigil .gm{text-shadow:0 0 16px rgba(170,130,255,.8);animation:glyphA 4.6s ease-in-out infinite}
-.bootsigil .gf{text-shadow:0 0 16px rgba(255,200,110,.85);animation:glyphB 4.6s ease-in-out infinite}
-@keyframes glyphA{0%,40%{opacity:1}52%,90%{opacity:0}100%{opacity:1}}
-@keyframes glyphB{0%,40%{opacity:0}52%,90%{opacity:1}100%{opacity:0}}
+.bkey{position:absolute;left:50%;top:50%;width:100px;height:100px;margin:-50px 0 0 -50px;overflow:visible;animation:bkturn 2.45s ease both}
+.bkey .bkout{fill:none;stroke:#efe9ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:250;stroke-dashoffset:250;filter:drop-shadow(0 0 9px rgba(190,160,255,.9));animation:bkdraw 1.5s cubic-bezier(.4,0,.25,1) .15s forwards}
+@keyframes bkdraw{to{stroke-dashoffset:0}}
+.bkey .bkdot{fill:#ffd98a;opacity:0;filter:drop-shadow(0 0 9px rgba(255,205,120,.95));animation:bkdot .45s ease 1.5s forwards}
+@keyframes bkdot{to{opacity:1}}
+@keyframes bkturn{0%,76%{transform:rotate(0)}84%{transform:rotate(-13deg)}92%{transform:rotate(8deg)}100%{transform:rotate(0)}}
+.bootglow{position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:radial-gradient(circle,rgba(255,228,165,.95),rgba(170,130,255,.5) 45%,transparent 70%);opacity:0;transform:scale(.3);mix-blend-mode:screen;pointer-events:none;animation:bglowburst .75s cubic-bezier(.2,.7,.3,1) 1.95s forwards}
+@keyframes bglowburst{0%{opacity:0;transform:scale(.3)}30%{opacity:1}100%{opacity:0;transform:scale(2.7)}}
 .bootmodes{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:11px;margin:11px 0 22px;animation:bootbadgein .9s ease both .4s}
 .bm{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;padding:5px 13px;border-radius:999px;border:1px solid;white-space:nowrap}
 .bm-hunt{color:#cdbcff;border-color:rgba(150,110,255,.45);background:rgba(124,92,255,.12);text-shadow:0 0 12px rgba(150,110,255,.5)}
 .bm-patrol{color:#ffd98f;border-color:rgba(255,196,92,.5);background:rgba(255,196,92,.12);text-shadow:0 0 12px rgba(255,196,92,.5)}
 .bm-amp{color:#9385bd;font-size:13px;font-weight:700}
 @keyframes bootbadgein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@keyframes boothalo{0%,100%{transform:scale(.9);opacity:.55}50%{transform:scale(1.14);opacity:.92}}
 @keyframes auraspin{to{transform:rotate(360deg)}}
 @keyframes ringspin{to{transform:rotate(360deg)}}
 @keyframes ringdraw{0%{stroke-dashoffset:540}100%{stroke-dashoffset:80}}
@@ -879,7 +891,7 @@ body.flick{animation:flick .56s steps(1) both}
 </style>
 </head>
 <body>
-<div id="boot"><div class="bootfog"></div><div class="bootembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bootinner"><div class="bootcrest"><div class="bootaura"></div><div class="boothalo"></div><svg class="bootring" viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="bgprog" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6cff"/><stop offset="1" stop-color="#ffcf7a"/></linearGradient></defs><circle class="r-out" cx="100" cy="100" r="94"/><circle class="r-track" cx="100" cy="100" r="86"/><circle class="r-ticks" cx="100" cy="100" r="78"/><circle class="r-ticks2" cx="100" cy="100" r="66"/><circle class="r-prog" cx="100" cy="100" r="86"/></svg><div class="bootsigil"><span class="gm">🕯️</span><span class="gf">🏭</span></div></div><div class="bootmark">AFTERLOGIN</div><div class="bootmodes"><span class="bm bm-hunt">🕯️ The Hunt</span><span class="bm-amp">×</span><span class="bm bm-patrol">Helper Patrol ☀️</span></div><div class="bootbar"><i></i></div><div class="boottip" id="boottip">lighting the candles…</div></div></div>
+<div id="boot"><div class="bhalf bl"></div><div class="bhalf br"></div><div class="bootfog"></div><div class="bootembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bootinner"><div class="bootcrest"><div class="bootaura"></div><div class="bootglow"></div><svg class="bootring" viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="bgprog" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6cff"/><stop offset="1" stop-color="#ffcf7a"/></linearGradient></defs><circle class="r-out" cx="100" cy="100" r="94"/><circle class="r-track" cx="100" cy="100" r="86"/><circle class="r-ticks" cx="100" cy="100" r="78"/><circle class="r-ticks2" cx="100" cy="100" r="66"/><circle class="r-prog" cx="100" cy="100" r="86"/></svg><svg class="bkey" viewBox="0 0 120 120" aria-hidden="true"><path class="bkout" d="M60 30 a17 17 0 1 1 -0.01 0 M53 61 L45.5 93 L74.5 93 L67 61"/><circle class="bkdot" cx="60" cy="47" r="5.5"/></svg></div><div class="bootmark">AFTERLOGIN</div><div class="bootmodes"><span class="bm bm-hunt">🕯️ The Hunt</span><span class="bm-amp">×</span><span class="bm bm-patrol">Helper Patrol ☀️</span></div><div class="bootbar"><i></i></div><div class="boottip" id="boottip">forging the night key…</div></div></div>
 <div id="cursorglow"></div>
 <div id="bg"></div>
 <div class="candleglow"></div><div class="motes" id="motes"></div>
@@ -1677,10 +1689,10 @@ if(typeof document!=='undefined'&&document.addEventListener)document.addEventLis
 /* boot splash — cycling status, auto-dismiss + skip on click/key */
 (function(){if(typeof document==='undefined'||!document.getElementById)return;var b=document.getElementById('boot');if(!b||!b.classList||!document.addEventListener)return;
  var demo=(typeof location!=='undefined'&&location.search&&location.search.indexOf('demo')>=0);
- var tip=document.getElementById('boottip'),phrases=['lighting the candles…','booting the helper factory…','reading the ledgers…','waking the sunnyside crew…','summoning the council…','the hunt begins…'],pi=0,ti=null;
+ var tip=document.getElementById('boottip'),phrases=['forging the night key…','waking the manor…','booting the helper factory…','reading the ledgers…','summoning the council…','unlocking the door…'],pi=0,ti=null;
  if(tip&&!demo&&typeof setInterval!=='undefined'){ti=setInterval(function(){pi=(pi+1)%phrases.length;try{tip.style.opacity=0;setTimeout(function(){try{tip.textContent=phrases[pi];tip.style.opacity=1;}catch(e){}},220);}catch(e){}},440);}
  function go(){b.classList.add('gone');if(ti){clearInterval(ti);ti=null;}}
- var d=demo?500:2000;var t=setTimeout(go,d);
+ var d=demo?500:2450;var t=setTimeout(go,d);
  if(b.addEventListener)b.addEventListener('click',function(){clearTimeout(t);go();});
  document.addEventListener('keydown',function f(){clearTimeout(t);go();if(document.removeEventListener)document.removeEventListener('keydown',f);});})();
 /* landing parallax — the two worlds drift with the cursor */
