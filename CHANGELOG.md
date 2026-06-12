@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.20.1] - 2026-06-11 — Landing polish pass: title sequence, parallax, living seam
+
+- **Title-sequence entrance.** The two worlds slide in from their edges, the seam draws itself down
+  the screen, the × medallion pops in, and the crown/dock fade up — every load opens like a cinematic.
+- **Mouse parallax.** The two paintings drift subtly against the cursor (opposite directions) and the
+  AFTERLOGIN crown counter-drifts — the page feels dimensional. (Fine-pointer only, headless-safe.)
+- **Living seam.** Energy now visibly flows along the dividing line; hovering a world tints the
+  title glow green (Hunt) or gold (Patrol) via :has().
+- **Better patrol hero.** Swapped the factory side to the painterly sunny factory interior — a true
+  stylistic partner to the manor painting (no baked-in text).
+- **Craft details.** Per-side shift labels (Night shift / Day shift), poster corner brackets, film
+  grain, a crown glow halo, ✦ flourishes, and a compacted dock with a green→gold accent line.
+
 ## [0.20.0] - 2026-06-11 — All-new landing: the split-world diptych
 
 - **A completely new title screen.** The landing is now a cinematic split-screen diptych — the
