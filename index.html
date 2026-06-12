@@ -615,6 +615,32 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 [data-theme="helpers"] #store{background:radial-gradient(circle at 50% 38%,rgba(255,246,228,.38),rgba(70,40,14,.62) 80%),url('assets/helpers/store_bg.png') center/cover no-repeat}
 #dawn{background:radial-gradient(ellipse 140% 95% at 50% 128%,rgba(255,210,120,.42),rgba(255,160,86,.18) 38%,rgba(6,4,12,.8) 76%),url('assets/dawn.png') center/cover no-repeat}
 [data-theme="helpers"] #dawn{background:radial-gradient(ellipse 140% 95% at 50% 128%,rgba(255,225,150,.34),rgba(255,180,96,.14) 38%,rgba(20,12,30,.72) 78%),url('assets/helpers/dawn.png') center/cover no-repeat}
+/* living ghosts */
+.frame img{animation:ghb 7s ease-in-out infinite}
+@keyframes ghb{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.025);filter:brightness(1.08) saturate(1.05)}}
+.portrait .halo{animation:halop 5s ease-in-out infinite}
+@keyframes halop{0%,100%{opacity:.78;transform:scale(1)}50%{opacity:1;transform:scale(1.07)}}
+.frame::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(42% 30% at 50% 12%,rgba(255,255,255,.12),transparent 70%);mix-blend-mode:screen;animation:ghflick 9s steps(1) infinite}
+@keyframes ghflick{0%,91%,100%{opacity:.35}92%{opacity:1}94%{opacity:.15}96%{opacity:.8}}
+/* essence fly-to-HUD */
+.essorb{position:fixed;z-index:15;width:11px;height:11px;border-radius:50%;background:radial-gradient(circle,#fff,rgb(var(--acc)) 62%);box-shadow:0 0 12px rgba(var(--acc),.9);pointer-events:none;transition:left .6s cubic-bezier(.35,.05,.3,1),top .6s cubic-bezier(.35,.05,.3,1),opacity .6s,transform .6s}
+.esspop{animation:esspopk .35s ease}
+@keyframes esspopk{50%{transform:scale(1.3)}}
+/* the Hungry's presence */
+#hsweep{position:fixed;inset:0;z-index:9;pointer-events:none;display:none}
+#hsweep.go{display:block}
+#hsweep.go::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(70,0,14,.4) 50%,transparent 70%);animation:hswp .9s ease both}
+@keyframes hswp{from{transform:translateX(-55%)}to{transform:translateX(55%)}}
+#hsweep .he{position:absolute;width:7px;height:7px;border-radius:50%;background:#ff2b50;box-shadow:0 0 11px #ff2b50;opacity:0}
+#hsweep.go .he{animation:heblink .9s ease both}
+#hsweep .he.l{left:3.6%;top:40%}#hsweep .he.r{left:5%;top:40.3%}
+@keyframes heblink{18%,55%{opacity:1}100%{opacity:0}}
+/* floor atmospheres */
+#grade::before{content:"";position:absolute;inset:0;pointer-events:none;transition:background 1.2s ease}
+body[data-floor="1"] #grade::before{background:radial-gradient(100% 90% at 50% 100%,rgba(255,170,80,.09),transparent 58%)}
+body[data-floor="2"] #grade::before{background:linear-gradient(180deg,rgba(130,160,255,.08),transparent 46%),radial-gradient(100% 80% at 50% 0%,rgba(150,180,255,.07),transparent 60%)}
+body[data-floor="3"] #grade::before{background:radial-gradient(125% 105% at 50% 50%,transparent 48%,rgba(170,20,44,.14)),linear-gradient(180deg,rgba(130,16,40,.08),transparent 42%)}
+[data-theme="helpers"] body[data-floor="3"] #grade::before,body[data-theme="helpers"][data-floor="3"] #grade::before{background:radial-gradient(125% 105% at 50% 50%,transparent 52%,rgba(255,120,40,.12))}
 @media(max-width:760px){
  .splitwrap{flex-direction:column}
  .splitwrap:hover .side:not(:hover){filter:none}
@@ -1046,6 +1072,7 @@ body.flick{animation:flick .56s steps(1) both}
 </div>
 <div class="mpop" id="mpop"></div>
 <div id="transition"></div>
+<div id="hsweep"><i class="he l"></i><i class="he r"></i></div>
 <div id="wipe"></div>
 <div id="possess"><div class="pveins"></div><div class="ptext">POSSESSED</div></div>
 <div id="bossintro"><div class="biwrap"><div class="bilabel" id="biLabel">⚔ GUARDIAN RISES</div><div class="biportrait" id="biPortrait"></div><div class="biname" id="biName"></div><div class="bitease" id="biTease"></div></div></div>
@@ -1230,7 +1257,7 @@ function buildFloorTabs(){document.getElementById('actbar').innerHTML=FLOORS.map
 function sceneWipe(mid){const w=document.getElementById('wipe');if(!w){if(mid)mid();return;}w.classList.remove('cover','reveal');void w.offsetWidth;w.classList.add('cover');setTimeout(()=>{if(mid)mid();w.classList.remove('cover');void w.offsetWidth;w.classList.add('reveal');setTimeout(()=>w.classList.remove('reveal'),360);},300);}
 function setFloor(f){if(f>floorMax){sfx('tick');const ba=floorBossAcct(floor),bn=ba&&BOSSES[ba]?BOSSES[ba].name:'the guardian';toast('🔒 Defeat <b>'+bn+'</b> — clear this floor before you ascend.');return;}const changed=f!==floor;floor=f;const rebuild=()=>{buildFloorTabs();buildRoster();if(document.getElementById('map').classList.contains('show')){buildMap();const fl=document.getElementById('floor');if(fl){fl.style.animation='none';void fl.offsetWidth;fl.style.animation='floorin .42s ease';}}};if(changed){sfx('dissolve');sceneWipe(rebuild);}else rebuild();}
 
-function buildRoster(){const fn=kid()?TMFLOORS[floor]:FLOORS[floor-1].name;R.innerHTML='<div class="rhead">⌂ Rooms · <b>'+fn+'</b></div>';
+function buildRoster(){try{if(document.body&&document.body.setAttribute)document.body.setAttribute('data-floor',floor);}catch(e){}const fn=kid()?TMFLOORS[floor]:FLOORS[floor-1].name;R.innerHTML='<div class="rhead">⌂ Rooms · <b>'+fn+'</b></div>';
  acctRoomsOn(floor).forEach(r=>{const a=r.account,s=SOULS[a],t=document.createElement('div');t.className='tile'+(a===cur?' sel':'')+(ST[a].done?' done':'');t.style.setProperty('--gc',GC[s.grade]);
   const rb=roomSrc(a);
   t.innerHTML='<div class="timg" style="background:'+(rb?"url('"+rb+"') center/cover":"linear-gradient(160deg,#cfe0f2,#9fc0e0)")+'"><span class="tghost" style="background-image:url(\''+ghostSrc(a)+'\')"></span></div><div class="tinfo"><div class="troom">'+rname(r)+'</div><div class="tacc">'+s.label+'</div></div><div class="tg" style="color:'+GC[s.grade]+'">'+s.grade+'</div>';
@@ -1306,7 +1333,7 @@ function judge(idx){const a=cur,s=SOULS[a],st=ST[a];if(!a||st.done||!st.councilD
  const correct=idx===s.rite,polter=idx===0&&s.lb;const wasVerified=!!st.summoned;const dmult=discern>=75?1.25:discern<=25?0.8:1;
  const fl=document.getElementById('flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');
  const rs=document.getElementById('result');rs.classList.remove('go','bad');void rs.offsetWidth;
- if(correct){tutAdvance('judge');combo++;maxCombo=Math.max(maxCombo,combo);const _m=comboMult();score+=Math.round((GP[s.grade]||10)*_m*dmult);essence+=((ESS[s.grade]||3)+buffs.essBonus)*_m;updEss();setDiscern(discern+(wasVerified?9:-5));if(_m>1)comboPop();STATS.correct++;if(idx===0)STATS.rested++;else if(idx===1)STATS.bound++;else STATS.acked++;sfx('seal');setTimeout(()=>sfx('dissolve'),360);rs.textContent=RITES[idx];rs.classList.add('go');verdictFx(idx);document.querySelector('.frame').classList.add('dissolve');setTimeout(stardust,220);st.done=true;buildRoster();updateProg();updateHud();setTimeout(advance,1500);}
+ if(correct){tutAdvance('judge');combo++;maxCombo=Math.max(maxCombo,combo);const _m=comboMult();score+=Math.round((GP[s.grade]||10)*_m*dmult);essence+=((ESS[s.grade]||3)+buffs.essBonus)*_m;updEss();essFly();setDiscern(discern+(wasVerified?9:-5));if(_m>1)comboPop();STATS.correct++;if(idx===0)STATS.rested++;else if(idx===1)STATS.bound++;else STATS.acked++;sfx('seal');setTimeout(()=>sfx('dissolve'),360);rs.textContent=RITES[idx];rs.classList.add('go');verdictFx(idx);document.querySelector('.frame').classList.add('dissolve');setTimeout(stardust,220);st.done=true;buildRoster();updateProg();updateHud();setTimeout(advance,1500);}
  else if(polter){score=Math.max(0,score-(buffs.softPolter?10:25));STATS.poltergeists++;setDiscern(discern-10);sfx('fall');document.body.classList.add('shake');setTimeout(()=>document.body.classList.remove('shake'),420);rs.textContent='POLTERGEIST · you broke production';rs.classList.add('go','bad');st.done=true;st.broken=true;combo=0;const rid=roomOf(a)?roomOf(a).id:null;if(rid!=null)haunted[rid]=1;if(hungryEnabled){hungryStep();hungryStep();}toast('💀 The broken account <b>woke the Hungry</b> — it surges toward the Vault.');buildRoster();updateProg();updateHud();setTimeout(advance,1600);}
  else{rs.textContent='The spirit resists — your misjudgment wasted precious dark.';rs.classList.add('go','bad');combo=0;updateHud();if(hungryEnabled)hungryStep();}}
 
@@ -1348,7 +1375,9 @@ function probeAgentTier(){try{fetch('/api/reason',{method:'POST',headers:{'Conte
 function huntAlarm(){if(document.getElementById('combat').classList.contains('show'))return;let e=document.getElementById('huntalarm');if(!e){e=document.createElement('div');e.id='huntalarm';document.body.appendChild(e);}e.classList.remove('go');void e.offsetWidth;e.classList.add('go');document.body.classList.remove('flick');void document.body.offsetWidth;document.body.classList.add('flick');setTimeout(()=>document.body.classList.remove('flick'),560);sfx('growl');nemSpeak('near');sealPrompt();}
 function sealPrompt(){let e=document.getElementById('sealbanner');if(!e){e=document.createElement('div');e.id='sealbanner';document.body.appendChild(e);}e.innerHTML='⚠ <b>'+nemName()+'</b> is in the next room <button onclick="sealDoor()">⛓ Seal the Door · 6🔮</button>';e.classList.add('on');clearTimeout(window._sealT);window._sealT=setTimeout(()=>{e.classList.remove('on');},5200);}
 function sealDoor(){if(combatTgt)return;const cost=6;if(essence<cost){sfx('tick');toast('Not enough essence to seal the door — '+cost+' 🔮 needed.');return;}essence-=cost;essSpent+=cost;freeze+=3;updEss();updateThreatUI();sfx('seal');const sb=document.getElementById('sealbanner');if(sb)sb.classList.remove('on');toast('⛓ A <b>Conditional Access</b> block seals the corridor — '+nemName()+' is held for 3 steps.');nemSpeak('seal');}
-function hungryStep(){if(!hungryEnabled||combatTgt||document.getElementById('combat').classList.contains('show')||document.getElementById('store').classList.contains('show'))return;
+function hungryFx(){try{const e=document.getElementById('hsweep');if(!e||!e.classList)return;e.classList.remove('go');void e.offsetWidth;e.classList.add('go');setTimeout(function(){e.classList.remove('go');},950);}catch(x){}}
+function essFly(){try{const tgt=document.getElementById('essN');if(!tgt||!tgt.getBoundingClientRect)return;const tr=tgt.getBoundingClientRect();if(!tr||tr.left===undefined)return;const sx=window.innerWidth/2,sy=window.innerHeight*.42;for(let i=0;i<5;i++){(function(i){const o=document.createElement('i');o.className='essorb';o.style.left=sx+(Math.random()*64-32)+'px';o.style.top=sy+(Math.random()*44-22)+'px';document.body.appendChild(o);setTimeout(function(){o.style.left=(tr.left+8)+'px';o.style.top=(tr.top+8)+'px';o.style.opacity=0;o.style.transform='scale(.4)';},40+i*85);setTimeout(function(){o.remove();const p=document.getElementById('essN');if(p&&p.parentElement&&p.parentElement.classList){p.parentElement.classList.remove('esspop');void p.parentElement.offsetWidth;p.parentElement.classList.add('esspop');}},640+i*85);})(i);}}catch(x){}}
+function hungryStep(){hungryFx();if(!hungryEnabled||combatTgt||document.getElementById('combat').classList.contains('show')||document.getElementById('store').classList.contains('show'))return;
  if(allAccts().every(a=>ST[a].done))return;
  if(freeze>0){freeze--;updateThreatUI();return;}
  const res=bfsNext(H.room,isPrey)||bfsNext(H.room,isVaultGoal);if(!res||res.next==null)return;

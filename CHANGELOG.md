@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.25.0] - 2026-06-11 — Living ghosts, essence pickup, the Hungry on-screen, floor atmospheres
+
+- **Living ghosts.** The spirit portrait breathes (slow scale/brightness pulse), its halo swells,
+  and a spectral light occasionally flickers across the frame — the center of the screen is alive.
+- **Essence fly-to-HUD.** Correct judgments burst glowing essence orbs that arc into the 🔮 counter,
+  popping it as each lands.
+- **The Hungry has a presence.** Every time the predator moves, a dark shadow sweeps across the
+  screen and red eyes blink at the edge of the dark — dread you can see, not just a bar.
+- **Floor atmospheres.** Each floor carries its own ambient grade — warm candlelight on the ground
+  floor, cold blue moonlight on the upper floor, a red-tinged closing vignette in the attic
+  (softened to warm orange in Helper Patrol). Ascending visibly raises the stakes.
+
 ## [0.24.0] - 2026-06-11 — Combat + judging: telegraphs, kill-chain tracker, verdict cinematics, control cards
 
 - **Attack telegraphs.** The boss now winds up visibly (⚠ forging a golden key / hollowing your
