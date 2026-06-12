@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.19.0] - 2026-06-11 — Painted landing page + professional UX pass
+
+- **The landing page is now the artwork.** The menu backdrop is a full-bleed painted hero — the
+  moonlit manor (The Hunt) / the robot-helpers welcome office (Helper Patrol) — with a slow Ken
+  Burns drift and cinematic scrims; the procedural SVG silhouettes, moon/sun, stars and bats are
+  retired. Tighter content rhythm (title glow refined, slimmer agent cards, compact badges) and the
+  column scrolls instead of clipping on short screens.
+- **Professional foundations.** Custom thin scrollbars everywhere (no more OS scrollbars in the case
+  file/store/codex), keyboard focus rings, brand selection color, font smoothing, and
+  prefers-reduced-motion support.
+- **Real fixes.** The judgment result text + flash were off-center (left:40%) — now centered. The
+  frozen ⏱ 04:12 HUD clock is now a real narrative clock that advances toward 6:00 dawn as souls
+  are judged. The HUD gets a legibility scrim in both themes; chips gained hover states; combat
+  scrolls instead of clipping on short screens; orphaned CSS removed.
+
 ## [0.18.0] - 2026-06-11 — Cinematic boss intros + Dawn victory sequence
 
 - **Boss-intro splash cards.** When a guardian (or the final boss) rises, a cinematic card slams in:
