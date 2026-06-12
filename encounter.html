@@ -564,9 +564,22 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
  [data-theme="helpers"] .actconsole::after{background:#eef6fc;color:#3f5a72;border-color:rgba(60,120,170,.3)}
  .dock2{bottom:88px;gap:10px;z-index:6}
  .rites{bottom:26px;gap:11px;z-index:6}
- .hint{bottom:160px;opacity:.8;font-size:9.5px;z-index:6}
- #toast{bottom:196px}
+ .hint{bottom:174px;opacity:.85;font-size:9.5px;z-index:6}
+ #toast{bottom:208px}
+ #nemesis{bottom:30%}
 }
+/* helpers-theme console buttons (were manor-dark on the light console) */
+[data-theme="helpers"] .inv{background:rgba(255,255,255,.88);color:#23425e;border-color:rgba(70,120,170,.35)}
+[data-theme="helpers"] .inv:hover{border-color:rgba(45,180,140,.6)}
+[data-theme="helpers"] .inv.on{color:#0c6b46;background:rgba(45,180,140,.14);border-color:rgba(45,180,140,.5)}
+[data-theme="helpers"] .rite{background:linear-gradient(180deg,#ffffff,#edf4fb);color:#1f3550;border-color:rgba(180,140,60,.55)}
+[data-theme="helpers"] .rite .i{color:#c9892a}
+[data-theme="helpers"] .rite:hover{border-color:#2db48c;box-shadow:0 14px 30px rgba(70,110,150,.25),0 0 22px rgba(45,180,140,.25)}
+[data-theme="helpers"] .rites.locked{opacity:.55}
+[data-theme="helpers"] #nemesis{color:#b32440;text-shadow:0 1px 8px rgba(255,255,255,.55)}
+[data-theme="helpers"] #nemesis .nmname{color:#a04a58}
+[data-theme="helpers"] .hint{color:#4a617c;opacity:.9}
+[data-theme="helpers"] .cprompt{color:#5a7390}
 /* ══ unified panel language — every surface speaks console ══ */
 .rite:active,.inv:active,.cbtn:active,.sbuy:active,.toggle:active,.senter:active,.xbtn:active,.dlink:active,.fb:active{transform:scale(.96)!important}
 .dossier{border-color:rgba(201,162,75,.3);box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08),inset 0 2px 0 -1px rgba(var(--acc),.35)}

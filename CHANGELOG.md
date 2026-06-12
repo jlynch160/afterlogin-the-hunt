@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.25.1] - 2026-06-11 — Factory console color fix + bottom-stack collisions
+
+- **Helper Patrol console buttons fixed** — Divine/Summon and the three rites were still manor-dark
+  (unreadable blobs) on the light factory console; they now use light surfaces with slate text,
+  amber rite icons, and mint hovers. Locked rites are less washed out.
+- **Collision fixes** — the nemesis taunt no longer overlaps the Divine/Summon row (raised above the
+  console, with a readable dark-red helpers variant), and the contextual hint no longer collides
+  with the INVESTIGATE · THEN JUDGE plate; toast raised accordingly.
+
 ## [0.25.0] - 2026-06-11 — Living ghosts, essence pickup, the Hungry on-screen, floor atmospheres
 
 - **Living ghosts.** The spirit portrait breathes (slow scale/brightness pulse), its halo swells,
