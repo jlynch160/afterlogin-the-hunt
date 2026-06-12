@@ -584,6 +584,32 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 .cbtn.rem{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border-color:rgba(255,255,255,.14)}
 .cbtn.rem:hover{border-color:rgba(var(--acc),.6);background:rgba(var(--acc),.08)}
 [data-theme="helpers"] .cwrap{background:linear-gradient(180deg,rgba(46,28,40,.82),rgba(24,12,20,.9))}
+/* kill-chain tracker + telegraph + hover-cards + verdict fx */
+.cchain{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 0}
+.ck{display:inline-flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);border:1px solid var(--stroke);border-radius:999px;padding:3px 9px;background:rgba(255,255,255,.04)}
+.ck em{font-style:normal;max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck.cur{color:#ffd17a;border-color:rgba(255,209,122,.55);box-shadow:0 0 12px rgba(255,200,80,.25)}
+.ck.done{color:rgb(var(--acc));border-color:rgba(var(--acc),.4);opacity:.7;text-decoration:line-through}
+.ckl{width:13px;height:1px;background:var(--stroke)}
+.ctele{margin:9px auto 0;font-size:11px;letter-spacing:.4px;color:#ffb4c2;background:rgba(120,10,30,.32);border:1px solid rgba(255,90,120,.38);border-radius:10px;padding:6px 13px;width:fit-content;max-width:94%;animation:telep 1.6s ease-in-out infinite}
+@keyframes telep{0%,100%{box-shadow:0 0 6px rgba(255,60,90,.18)}50%{box-shadow:0 0 18px rgba(255,60,90,.45)}}
+#ctip{position:fixed;z-index:30;width:262px;background:linear-gradient(180deg,rgba(16,11,30,.97),rgba(8,5,16,.98));border:1px solid rgba(var(--acc),.42);border-radius:12px;padding:11px 14px;font-size:11px;line-height:1.55;color:var(--ink);box-shadow:0 18px 44px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .15s;transform:translateY(-100%)}
+#ctip.on{opacity:1}
+#ctip b{display:block;font-family:'Cormorant Garamond',serif;font-size:15.5px}
+#ctip em{display:block;font-style:normal;font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:rgb(var(--acc));margin:2px 0 6px}
+.vfx{position:fixed;inset:0;z-index:12;pointer-events:none}
+.vbeam{position:absolute;left:50%;top:0;bottom:26%;width:150px;transform:translateX(-50%);background:linear-gradient(180deg,rgba(255,255,255,0),rgba(200,235,255,.5) 40%,rgba(160,220,255,.08));mix-blend-mode:screen;animation:vbeamf 1.55s ease both}
+@keyframes vbeamf{0%{opacity:0}22%{opacity:1}78%{opacity:1}100%{opacity:0}}
+.vsoul{position:absolute;left:50%;top:56%;font-size:30px;color:#dff2ff;text-shadow:0 0 22px #9fd8ff;animation:vsoulf 1.55s ease both}
+@keyframes vsoulf{0%{opacity:0;transform:translate(-50%,0)}22%{opacity:1}100%{opacity:0;transform:translate(-50%,-46vh)}}
+.vchain{position:absolute;left:50%;top:44%;font-size:62px;color:#ffce5b;text-shadow:0 0 26px rgba(255,200,80,.75);animation:vchf .9s cubic-bezier(.2,1.3,.4,1) both}
+.vchain.c1{transform:translate(-80%,-50%) rotate(-24deg)}
+.vchain.c2{transform:translate(-20%,-50%) rotate(22deg);animation-delay:.12s}
+@keyframes vchf{0%{opacity:0;scale:2.3}55%{opacity:1}100%{opacity:.92;scale:1}}
+.vseal{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);width:110px;height:110px;border-radius:50%;display:grid;place-items:center;font-size:48px;color:rgb(var(--acc));border:3px solid rgba(var(--acc),.8);box-shadow:0 0 42px rgba(var(--acc),.5),inset 0 0 24px rgba(var(--acc),.22);animation:vsealf .7s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes vsealf{0%{opacity:0;transform:translate(-50%,-50%) scale(2.4) rotate(-14deg)}100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+.vbanner{position:absolute;left:50%;bottom:23%;transform:translateX(-50%);white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;color:#eafff4;background:rgba(8,20,14,.86);border:1px solid rgba(var(--acc),.5);border-radius:999px;padding:8px 19px;box-shadow:0 0 24px rgba(var(--acc),.22);animation:fadeup .5s ease .12s both}
+.vfx1 .vbanner{color:#fff2d4;border-color:rgba(255,206,90,.5);background:rgba(30,18,4,.86);box-shadow:0 0 24px rgba(255,200,80,.22)}
 /* generated scene plates */
 #store{background:radial-gradient(circle at 50% 38%,rgba(34,20,64,.6),rgba(4,3,11,.84) 78%),url('assets/store_bg.png') center/cover no-repeat}
 [data-theme="helpers"] #store{background:radial-gradient(circle at 50% 38%,rgba(255,246,228,.38),rgba(70,40,14,.62) 80%),url('assets/helpers/store_bg.png') center/cover no-repeat}
@@ -988,7 +1014,7 @@ body.flick{animation:flick .56s steps(1) both}
 <div class="hint" id="hint">Divine + Summon to uncover the truth, then pass judgment</div>
 <div class="tag">Encounter · real engine data</div>
 
-<div id="combat"><div class="cwrap"><div class="cimg" id="cimg"></div><div class="ct" id="combatTitle">The Hungry</div><div class="cs" id="combatSub">an account takeover · it possessed the spirit</div><div class="chp"><i id="chp"></i></div><div class="cresolve"><span class="crlbl">🛡 your Resolve</span><div class="crbar"><i id="crbar"></i></div></div><div class="cdie"><div class="dstage"><div class="d20" id="d20"><div class="d20i"><svg viewBox="0 0 100 100"><g class="facets"><polygon points="50,27 11,27 50,4" fill="#4a3a72"/><polygon points="50,27 50,4 89,27" fill="#5a4788"/><polygon points="50,27 11,27 28,70" fill="#36284f"/><polygon points="50,27 28,70 72,70" fill="#6b53a0"/><polygon points="50,27 72,70 89,27" fill="#42325f"/><polygon points="28,70 11,27 11,73" fill="#2c2046"/><polygon points="28,70 11,73 50,96" fill="#36284f"/><polygon points="28,70 72,70 50,96" fill="#42325f"/><polygon points="72,70 50,96 89,73" fill="#2c2046"/><polygon points="72,70 89,73 89,27" fill="#36284f"/></g><polygon class="rim" points="50,4 89,27 89,73 50,96 11,73 11,27" fill="none"/><text class="num" id="d20n" x="50" y="54" text-anchor="middle" dominant-baseline="middle">20</text></svg></div></div><div class="dshadow"></div></div></div><div class="cprompt">Choose a remediation — the <b>d20</b> decides how well it lands</div><div class="cactions" id="cactions"></div><div class="cteach" id="cteach"></div></div></div>
+<div id="combat"><div class="cwrap"><div class="cimg" id="cimg"></div><div class="ct" id="combatTitle">The Hungry</div><div class="cs" id="combatSub">an account takeover · it possessed the spirit</div><div class="cchain" id="cchain"></div><div class="ctele" id="ctele"></div><div class="chp"><i id="chp"></i></div><div class="cresolve"><span class="crlbl">🛡 your Resolve</span><div class="crbar"><i id="crbar"></i></div></div><div class="cdie"><div class="dstage"><div class="d20" id="d20"><div class="d20i"><svg viewBox="0 0 100 100"><g class="facets"><polygon points="50,27 11,27 50,4" fill="#4a3a72"/><polygon points="50,27 50,4 89,27" fill="#5a4788"/><polygon points="50,27 11,27 28,70" fill="#36284f"/><polygon points="50,27 28,70 72,70" fill="#6b53a0"/><polygon points="50,27 72,70 89,27" fill="#42325f"/><polygon points="28,70 11,27 11,73" fill="#2c2046"/><polygon points="28,70 11,73 50,96" fill="#36284f"/><polygon points="28,70 72,70 50,96" fill="#42325f"/><polygon points="72,70 50,96 89,73" fill="#2c2046"/><polygon points="72,70 89,73 89,27" fill="#36284f"/></g><polygon class="rim" points="50,4 89,27 89,73 50,96 11,73 11,27" fill="none"/><text class="num" id="d20n" x="50" y="54" text-anchor="middle" dominant-baseline="middle">20</text></svg></div></div><div class="dshadow"></div></div></div><div class="cprompt">Choose a remediation — the <b>d20</b> decides how well it lands</div><div class="cactions" id="cactions"></div><div class="cteach" id="cteach"></div></div></div>
 
 <div id="store"><div class="storeaura"></div><div class="storemotes" id="storeMotes"></div><div class="storewrap">
   <div class="storehead"><div><div class="sh1" id="storeTitle">🕯️ The Reliquary</div><div class="sh2" id="storeSub">Essence — the residue of every spirit you lay to rest — pools here.</div></div><div class="sbal"><span class="balorb">🔮</span><b id="essN2">0</b><span id="balLabel">essence</span></div><span class="storeclose" onclick="closeStore()">✕</span></div>
@@ -1280,7 +1306,7 @@ function judge(idx){const a=cur,s=SOULS[a],st=ST[a];if(!a||st.done||!st.councilD
  const correct=idx===s.rite,polter=idx===0&&s.lb;const wasVerified=!!st.summoned;const dmult=discern>=75?1.25:discern<=25?0.8:1;
  const fl=document.getElementById('flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');
  const rs=document.getElementById('result');rs.classList.remove('go','bad');void rs.offsetWidth;
- if(correct){tutAdvance('judge');combo++;maxCombo=Math.max(maxCombo,combo);const _m=comboMult();score+=Math.round((GP[s.grade]||10)*_m*dmult);essence+=((ESS[s.grade]||3)+buffs.essBonus)*_m;updEss();setDiscern(discern+(wasVerified?9:-5));if(_m>1)comboPop();STATS.correct++;if(idx===0)STATS.rested++;else if(idx===1)STATS.bound++;else STATS.acked++;sfx('seal');setTimeout(()=>sfx('dissolve'),360);rs.textContent=RITES[idx];rs.classList.add('go');document.querySelector('.frame').classList.add('dissolve');setTimeout(stardust,220);st.done=true;buildRoster();updateProg();updateHud();setTimeout(advance,1500);}
+ if(correct){tutAdvance('judge');combo++;maxCombo=Math.max(maxCombo,combo);const _m=comboMult();score+=Math.round((GP[s.grade]||10)*_m*dmult);essence+=((ESS[s.grade]||3)+buffs.essBonus)*_m;updEss();setDiscern(discern+(wasVerified?9:-5));if(_m>1)comboPop();STATS.correct++;if(idx===0)STATS.rested++;else if(idx===1)STATS.bound++;else STATS.acked++;sfx('seal');setTimeout(()=>sfx('dissolve'),360);rs.textContent=RITES[idx];rs.classList.add('go');verdictFx(idx);document.querySelector('.frame').classList.add('dissolve');setTimeout(stardust,220);st.done=true;buildRoster();updateProg();updateHud();setTimeout(advance,1500);}
  else if(polter){score=Math.max(0,score-(buffs.softPolter?10:25));STATS.poltergeists++;setDiscern(discern-10);sfx('fall');document.body.classList.add('shake');setTimeout(()=>document.body.classList.remove('shake'),420);rs.textContent='POLTERGEIST · you broke production';rs.classList.add('go','bad');st.done=true;st.broken=true;combo=0;const rid=roomOf(a)?roomOf(a).id:null;if(rid!=null)haunted[rid]=1;if(hungryEnabled){hungryStep();hungryStep();}toast('💀 The broken account <b>woke the Hungry</b> — it surges toward the Vault.');buildRoster();updateProg();updateHud();setTimeout(advance,1600);}
  else{rs.textContent='The spirit resists — your misjudgment wasted precious dark.';rs.classList.add('go','bad');combo=0;updateHud();if(hungryEnabled)hungryStep();}}
 
@@ -1400,7 +1426,7 @@ function possessAt(a){if(combatTgt)return;
  try{const cb=document.getElementById('combat');cb.style.removeProperty('--arena');const ab=kid()?'assets/helpers/arena':'assets/arena';const tl=function(ext,next){const ai=new Image();ai.onload=function(){cb.style.setProperty('--arena',"url('"+ab+ext+"')");};if(next)ai.onerror=next;ai.src=ab+ext;};tl('.png',function(){tl('.svg');});}catch(e){}
  document.getElementById('combatTitle').textContent=B?B.name:nemName();
  document.getElementById('combatSub').textContent=B?('Stage 1/'+B.phases.length+' · '+B.phases[0].sub):'an account takeover · '+nemName()+' wears the spirit';
- lastRem=[];updateCombatUI();dealRemedies();cteachMsg('Read the attack above, then pick the control that actually stops it — the wrong tool will whiff.');var _d=document.getElementById('d20');if(_d){_d.className='d20';document.getElementById('d20n').textContent='20';}
+ lastRem=[];cNext=planMove();showTele();updateCombatUI();dealRemedies();cteachMsg('Read the attack above, then pick the control that actually stops it — the wrong tool will whiff.');var _d=document.getElementById('d20');if(_d){_d.className='d20';document.getElementById('d20n').textContent='20';}
  sfx('growl');nemSpeak('possess');if(B)setTimeout(()=>toast((B.tier==='boss'?'👑 <b>':'⚔ <b>')+B.name+'</b> — '+(B.tier==='boss'?'the Attic boss':'a floor guardian')+' · a <b>'+B.phases.length+'-stage</b> kill-chain. Read each stage.'),320);
  if(B){bossIntro(B);shakeScreen(true);}else{const pv=document.getElementById('possess');pv.querySelector('.ptext').textContent='POSSESSED';pv.classList.remove('go');void pv.offsetWidth;pv.classList.add('go');shakeScreen(true);}
  setTimeout(()=>{document.getElementById('combat').classList.add('show');},B?2050:1250);}
@@ -1421,14 +1447,14 @@ function nextPhase(){const B=BOSSES[combatTgt];if(!B||!B.phases)return;combatPha
  cteachMsg('⛓ The attack escalates — <b>'+ph.sub+'</b>. A new stage needs a new control.',false);
  toast('⛓ <b>Stage '+(combatPhase+1)+'/'+B.phases.length+'</b> — '+ph.sub);
  updateCombatUI();dealRemedies();cLock=false;}
-function dealRemedies(){if(!combatTgt)return;const ph=curPhase(),ideal=(ph&&ph.weak)?REMEDIES.find(r=>r.id===ph.weak):null;
+function dealRemedies(){if(!combatTgt)return;renderChain();const ph=curPhase(),ideal=(ph&&ph.weak)?REMEDIES.find(r=>r.id===ph.weak):null;
  let others=REMEDIES.filter(r=>(!ideal||r.id!==ideal.id)&&!lastRem.includes(r.id));
  if(others.length<2)others=REMEDIES.filter(r=>!ideal||r.id!==ideal.id);
  others=others.sort(()=>Math.random()-0.5).slice(0,ideal?2:3);
  const picks=(ideal?[ideal].concat(others):others).sort(()=>Math.random()-0.5);
  lastRem=picks.map(r=>r.id);
  const el=document.getElementById('cactions');if(!el)return;
- el.innerHTML=picks.map(r=>{const rec=!!(buffs.analyst&&ideal&&r.id===ideal.id);return '<button class="cbtn rem'+(rec?' reco':'')+'" onclick="useRemedy(\''+r.id+'\')"><span class="ric">'+r.ic+'</span><span class="rtx"><b>'+r.name+(rec?' <span class="recostar">★ recommended</span>':'')+'</b><small>'+r.ctrl+'</small></span></button>';}).join('');}
+ el.innerHTML=picks.map(r=>{const rec=!!(buffs.analyst&&ideal&&r.id===ideal.id);return '<button class="cbtn rem'+(rec?' reco':'')+'" onclick="useRemedy(\''+r.id+'\')" onmouseenter="remTip(event,\''+r.id+'\')" onmouseleave="hideTip()"><span class="ric">'+r.ic+'</span><span class="rtx"><b>'+r.name+(rec?' <span class="recostar">★ recommended</span>':'')+'</b><small>'+r.ctrl+'</small></span></button>';}).join('');}
 function cteachMsg(t,bad){const el=document.getElementById('cteach');if(!el)return;el.className='cteach show'+(bad?' bad':' good');el.innerHTML=t;}
 function useRemedy(id){if(cBusy())return;const r=REMEDIES.find(x=>x.id===id);if(!r)return;cLock=true;const ph=curPhase(),ideal=!!(ph&&ph.weak===id),fx=(ph&&ph.fx&&ph.fx[id])||null;
  const el=document.getElementById('cactions');if(el)el.querySelectorAll('button').forEach(b=>b.classList.add('off'));
@@ -1446,10 +1472,15 @@ function useRemedy(id){if(cBusy())return;const r=REMEDIES.find(x=>x.id===id);if(
    toast(r.ic+' <b>'+r.name+'</b> — '+tag+' · −'+dmg+(crit?' CRIT!':''));
    cteachMsg((bad?'✗ ':((ideal||(fx&&fx.t==='good'))?'✓ ':'• '))+'<b>'+r.name+'</b>: '+(why||''),bad);}
   afterAction();}},55);}
-function bossTurn(){const B=BOSSES[combatTgt],nm=B?B.name:nemName(),base=B?(B.floor>=3?10:B.floor===2?8:6):6,r=Math.random();let msg,dmg=0;
- if(B&&r<0.20){const hl=B.floor>=3?12:7;thp=Math.min(thpMax,thp+hl);msg='forges a golden key — heals +'+hl+' HP';}
- else if(r<0.34){cWeaken=(B&&B.floor>=3)?4:3;msg='hollows your hand — your next remediation lands weaker';}
- else {dmg=base+(Math.random()*3|0);msg='drives at your defenses';}
+var cNext=null;
+function planMove(){const B=BOSSES[combatTgt],r=Math.random();if(B&&r<0.20)return{k:'heal',t:'⚠ winding up · forging a golden key — it will HEAL. Land your control now.'};if(r<0.34)return{k:'weaken',t:'⚠ winding up · hollowing your hand — your NEXT control will land weaker.'};return{k:'strike',t:'⚠ winding up · a direct strike at your Resolve — a shield would blunt it.'};}
+function showTele(){const e=document.getElementById('ctele');if(!e)return;if(cNext){e.innerHTML=cNext.t;e.style.display='';}else e.style.display='none';}
+function renderChain(){const e=document.getElementById('cchain');if(!e)return;const B=BOSSES[combatTgt];if(!B||!B.phases||B.phases.length<2){e.innerHTML='';return;}e.innerHTML=B.phases.map(function(p,i){return '<span class="ck'+(i<combatPhase?' done':i===combatPhase?' cur':'')+'" title="'+p.sub+'">'+(i<combatPhase?'✕':(i+1))+'<em>'+p.sub.split('—')[0].split('·')[0].trim()+'</em></span>';}).join('<i class="ckl"></i>');}
+function bossTurn(){const B=BOSSES[combatTgt],nm=B?B.name:nemName(),base=B?(B.floor>=3?10:B.floor===2?8:6):6;const mv=cNext||planMove();let msg,dmg=0;
+ if(mv.k==='heal'&&B){const hl=B.floor>=3?12:7;thp=Math.min(thpMax,thp+hl);msg='forges a golden key — heals +'+hl+' HP';}
+ else if(mv.k==='weaken'){cWeaken=(B&&B.floor>=3)?4:3;msg='hollows your hand — your next remediation lands weaker';}
+ else {dmg=base+(Math.random()*3|0);msg='drives at your defenses';if(cHarden)msg+=' — your shield blunts it';}
+ cNext=planMove();showTele();
  if(cHarden&&dmg>0){dmg=Math.floor(dmg/2);cHarden=false;}
  if(dmg>0){resolve-=dmg;floatRes(dmg);combatFx('phit',380);shakeScreen(dmg>=8);}
  sfx('growl');toast('👁 <b>'+nm+'</b> '+msg+(dmg>0?' · −'+dmg+' Resolve':'')+'.');
@@ -1462,6 +1493,10 @@ function shakeScreen(big){const b=document.body;b.classList.remove('shake','shak
 function bossIntro(B){const bi=document.getElementById('bossintro');if(!bi||!B)return;const img=kid()?'assets/helpers/'+B.art+'.png':'assets/'+B.art+'.png';document.getElementById('biLabel').textContent=B.tier==='boss'?'👑 THE FINAL BOSS RISES':'⚔ A GUARDIAN RISES';document.getElementById('biPortrait').style.background="url('"+img+"') center/cover";document.getElementById('biName').textContent=B.name;document.getElementById('biTease').textContent=B.phases.length+'-stage kill-chain · '+(B.phases[0]&&B.phases[0].sub||'');bi.classList.remove('go');void bi.offsetWidth;bi.classList.add('go');setTimeout(()=>bi.classList.remove('go'),2050);}
 function flashBoss(crit){const c=document.getElementById('cimg');if(!c)return;c.classList.remove('hit','hitcrit');void c.offsetWidth;c.classList.add(crit?'hitcrit':'hit');setTimeout(()=>c.classList.remove('hit','hitcrit'),crit?460:340);}
 function combatFx(cls,ms){const cb=document.getElementById('combat');if(!cb)return;cb.classList.remove(cls);void cb.offsetWidth;cb.classList.add(cls);setTimeout(()=>cb.classList.remove(cls),ms);}
+function verdictFx(idx){try{const o=document.createElement('div');o.className='vfx vfx'+idx;o.innerHTML=(idx===0?'<i class="vbeam"></i><span class="vsoul">✦</span>':idx===1?'<span class="vchain c1">⛓</span><span class="vchain c2">⛓</span>':'<span class="vseal">✓</span>')+'<span class="vbanner">'+(['Lifecycle workflow · account disabled · access removed','Bound · scoped credential + Sentinel watch active','Access review certified · least-privilege confirmed'][idx]||'')+'</span>';document.body.appendChild(o);setTimeout(function(){o.remove();},1700);}catch(e){}}
+var _tip=null;
+function remTip(e,id){try{const r=REMEDIES.find(x=>x.id===id);if(!r)return;const ph=curPhase(),fx=(ph&&ph.fx&&ph.fx[id])||null;const body=fx?fx.why:(r.kind==='shield'?'A protective control — absorbs the next blow and buys time, but does not remove the threat itself.':'A response control — its power depends on matching it to this stage of the attack.');if(!_tip){_tip=document.createElement('div');_tip.id='ctip';document.body.appendChild(_tip);}_tip.innerHTML='<b>'+r.name+'</b><em>'+r.ctrl+'</em>'+body;const b=e.currentTarget.getBoundingClientRect();_tip.style.left=Math.min(window.innerWidth-280,b.right+12)+'px';_tip.style.top=Math.max(8,b.top-6)+'px';_tip.classList.add('on');}catch(e2){}}
+function hideTip(){if(_tip)_tip.classList.remove('on');}
 function floatDmg(dmg,crit){const el=document.createElement('div');el.className='cdmg'+(crit?' crit':'');el.textContent='−'+dmg+(crit?' CRIT!':'');const w=document.querySelector('.cwrap');if(w){w.appendChild(el);setTimeout(()=>el.remove(),1100);}}
 function floatRes(n,heal){const el=document.createElement('div');el.className='cdmg res'+(heal?' heal':'');el.textContent=(heal?'+':'−')+n+' 🛡';const w=document.querySelector('.cwrap');if(w){w.appendChild(el);setTimeout(()=>el.remove(),1100);}}
 function banish(){document.getElementById('combat').classList.remove('show');const t=combatTgt;combatTgt=null;if(t)ST[t].possessed=false;const Bb=BOSSES[t];score+=Bb?Bb.score:15;essence+=Bb?Bb.ess:5;updEss();STATS.banishes++;sfx('banish');shakeScreen(true);nemSpeak('banish');H.room=0;Object.keys(haunted).forEach(k=>delete haunted[k]);updateHud();updateThreatUI();const rs=document.getElementById('result');rs.classList.remove('bad');rs.textContent='⚔ Kill-chain Severed';rs.classList.remove('go');void rs.offsetWidth;rs.classList.add('go');const fl=document.getElementById('flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');

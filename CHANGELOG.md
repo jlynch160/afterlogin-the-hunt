@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.24.0] - 2026-06-11 — Combat + judging: telegraphs, kill-chain tracker, verdict cinematics, control cards
+
+- **Attack telegraphs.** The boss now winds up visibly (⚠ forging a golden key / hollowing your
+  hand / a direct strike) so you counter BEFORE the hit — proactive defense, like real SOC work.
+  Shields now blunt a telegraphed strike with credit in the log.
+- **Kill-chain stage tracker.** Multi-stage bosses show their chain as pills across the combat panel
+  — current stage glowing amber, defeated stages struck through green. The MITRE mental model, at a
+  glance.
+- **Verdict cinematics.** Each judgment plays its rite: Lay to Rest — the soul ascends a light
+  shaft; Bind & Watch — golden chains slam across the frame; Acknowledge — a green seal stamps. Each
+  with a banner naming the real control executed (lifecycle workflow / scoped credential + Sentinel
+  watch / access review certified).
+- **Control hover-cards.** Hover any remediation mid-fight for a card: the real control name and
+  what it does (or does NOT do) at this stage — the game becomes a flashcard deck in combat.
+
 ## [0.23.2] - 2026-06-11 — Generated combat arena paintings (PNG upgrade)
 
 - **Two new generated arena plates** replace the vector stand-ins (the loader auto-prefers PNG):
