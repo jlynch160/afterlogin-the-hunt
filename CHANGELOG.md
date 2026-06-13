@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.31.0] - 2026-06-13 — Contest-compliance: real Foundry IQ grounding + precise claims
+
+- **Real Foundry IQ integration, wired in.** Summon now calls /api/ground (permission-aware, cited
+  grounded retrieval over Azure AI Search) and surfaces the citations in the council’s Foundry IQ
+  evidence with a ● Grounded via Foundry IQ badge. Falls back to baked evidence until provisioned —
+  see SETUP-IQ.md to activate (~10 min).
+- **Corrected overclaims** to be precise/defensible: the in-game footer no longer says built with
+  Copilot / Foundry IQ + Fabric IQ; it now states the actual stack (Foundry IQ grounded retrieval ·
+  MCP · Azure AI Foundry · synthetic data). README gains a Required-criteria checklist (Foundry IQ
+  real; Fabric IQ noted as thematic; a truthful GitHub Copilot placeholder) and a Copilot/Foundry-IQ
+  architecture diagram. Added SETUP-IQ.md provisioning runbook.
+
 ## [0.30.0] - 2026-06-13 — Interactive architecture map + game-screen rail fix
 
 - **Architecture map is now interactive.** Tap any node to open a detail popover explaining what it

@@ -24,6 +24,7 @@ each call function tools over an identity store, investigate independently, *deb
 
 ```mermaid
 flowchart LR
+  Dev[GitHub Copilot<br/>in VS Code] -. builds / drives .-> G
   G[Game UI<br/>encounter + combat] -->|account| API[/api/reason<br/>Azure Function/]
   subgraph Council [Multi-agent council]
     W[🛡 Warden agent] -->|debate| S[🔍 Skeptic agent] --> C[✓ Council agent]
@@ -31,10 +32,28 @@ flowchart LR
   API --> Council
   Council -->|tool calls| T[(Identity tools<br/>signin · deps · oauth · groups)]
   T -->|cited results| Council
+  API -->|grounded query| FIQ[Foundry IQ<br/>Azure AI Search<br/>grounded retrieval]
+  FIQ -->|cited evidence| C
   Council -->|warden · skeptic · verdict<br/>+ citations + trace| G
-  T -. also exposed over .-> MCP[[MCP server<br/>Copilot / VS Code / Foundry]]
+  T -. also exposed over .-> MCP[[MCP server<br/>GitHub Copilot / VS Code / Foundry]]
   API -. optional .-> F[Azure AI Foundry<br/>connected agents]
 ```
+
+### ✅ Required-criteria checklist (Microsoft Agents League — Creative Apps)
+- **Microsoft IQ integration → Foundry IQ.** `/api/ground` performs real permission-aware, **cited
+  grounded retrieval over Azure AI Search** (Foundry IQ); the game surfaces those citations as the
+  council's *Foundry IQ · cited evidence* with a "● Grounded via Foundry IQ" badge. Activate by
+  provisioning a Search index + setting `FOUNDRY_SEARCH_*` (see [`SETUP-IQ.md`](SETUP-IQ.md)); falls
+  back to baked evidence when unconfigured. *(The in-game "Fabric IQ" label is a thematic nod to data
+  lineage, not a Fabric integration — the real IQ layer here is Foundry IQ.)*
+- **GitHub Copilot** *(required — fill this in truthfully before submitting):* document your **actual**
+  GitHub Copilot usage — which code Copilot helped write, Copilot Chat sessions for debugging/
+  explanation, and ideally a short clip of Copilot in VS Code. A concrete, verifiable hook: the same
+  identity tools are exposed over **MCP**, so you can connect this MCP server to **GitHub Copilot in
+  VS Code / Copilot CLI** and drive the agents' tools from a Copilot chat — record that. *(Do not
+  claim Copilot usage you didn't do.)*
+- **Creative application.** A playable, cinematic security-training game — see the live URL + demo.
+- **Architecture diagram.** Above.
 
 **Three tiers, each falling back safely:**
 

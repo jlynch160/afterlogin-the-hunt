@@ -121,6 +121,9 @@ button:focus-visible,[onclick]:focus-visible{outline:2px solid rgba(var(--acc),.
 .fg svg{width:100%;height:auto;overflow:visible}.fg .flowdash{animation:fdash 1s linear infinite}@keyframes fdash{to{stroke-dashoffset:-22}}
 .ev{font-size:11.5px;color:var(--ink);line-height:1.45;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
 .ev b{color:#fff}
+.grbadge{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#7dffb0;background:rgba(45,210,150,.12);border:1px solid rgba(45,210,150,.34);border-radius:6px;padding:3px 8px;display:inline-block;margin:2px 0 8px}
+.ev.gr{border-left:2px solid rgba(45,210,150,.55);padding-left:9px;margin-bottom:4px}
+.ev.gr .grsrc{display:block;font-family:ui-monospace,Menlo,monospace;font-size:9px;color:var(--mut);margin-top:3px}
 .actbar{display:flex;gap:4px}
 .ab{cursor:pointer;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--mut);padding:6px 12px;border-radius:16px;border:1px solid transparent;transition:.18s}
 .ab.on{color:var(--ink);border-color:var(--stroke);background:var(--glass)}
@@ -1325,7 +1328,7 @@ body.flick{animation:flick .56s steps(1) both}
     <div class="career" id="career"></div>
     <div class="dockrow"><span class="dlink" onclick="openCodex()">📖 Behind the Game</span><span class="dsep">·</span><span class="dlink" onclick="openArch()">🗺 Live architecture</span><span class="dsep">·</span><span class="dlink" onclick="startShowcase()">▶ 90-second showcase</span></div>
   </div>
-  <div class="ifoot2">Synthetic data · Foundry IQ + Fabric IQ · built with Copilot</div>
+  <div class="ifoot2">Synthetic data · no PII · Foundry IQ grounded retrieval · MCP · Azure AI Foundry</div>
 </div>
 
 <script>
@@ -1481,7 +1484,7 @@ function renderDossier(a){const s=SOULS[a],st=ST[a],lb=s.lb;let h='<h4>The Case 
    h+='</svg>'+(!sm?'<div style="color:#b7a9e8;font-size:11px;margin-top:4px">'+N+' binding'+(N>1?'s':'')+' mapped — status <b>unverified</b>. <b>Summon</b> to reveal which are live.</div>':(liveN?'<div style="color:#ff3b5c;font-size:11px;font-weight:600;margin-top:4px">⚠ '+liveN+' live, load-bearing binding'+(liveN>1?'s':'')+' — do not delete</div>':'<div style="color:'+GC[s.grade]+';font-size:11px;margin-top:4px">verified: no live bindings — safe to retire</div>'));}
  else h+='<div class="locknote">⊘ Divine to map what depends on it.</div>';
  h+='</div><div class="rev"><div class="rh">🔎 <b>Foundry IQ</b> · cited evidence</div>';
- if(st.summoned)h+=(s.ev||[]).map(e=>'<div class="ev">'+e+'</div>').join('');
+ if(st.summoned){if(st.ground&&st.ground.grounded&&st.ground.citations&&st.ground.citations.length){h+='<div class="grbadge">● Grounded via Foundry IQ · Azure AI Search</div>'+st.ground.citations.map(c=>'<div class="ev gr"><b>'+(c.title||'source')+'</b> '+((c.snippet||'').replace(/[<>]/g,''))+'<span class="grsrc">'+(c.source||'')+(c.score!=null?' · score '+(Math.round(c.score*100)/100):'')+'</span></div>').join('');}h+=(s.ev||[]).map(e=>'<div class="ev">'+e+'</div>').join('');}
  else h+='<div class="locknote">⊘ <b>Summon</b> (costs <b>'+summonCost()+'</b> 🔮) for the decisive evidence — it verifies the live bindings, unlocks the Skeptic’s full read, and reveals the council’s confidence.</div>';
  h+='</div>';
  if(st.divined)h+='<div class="council"><div class="ch">◈ Agent Council deliberates</div><div class="ag'+(st.councilDone?' on':'')+'" id="ag0"><span class="agav">🛡</span><span class="agtx"><b>Warden</b> <span class="sp"></span></span></div><div class="ag'+(st.councilDone?' on':'')+'" id="ag1"><span class="agav">🔍</span><span class="agtx"><b>Skeptic</b> <span class="sp"></span></span></div><div class="ag'+(st.councilDone?' on':'')+'" id="ag2"><span class="agav">✓</span><span class="agtx"><b>Council</b> <span class="sp"></span></span></div></div><div class="vyours">⚖ The verdict is <b>yours</b> — the agents advise and flag their own doubts; weigh the evidence and decide.</div>';
@@ -1505,7 +1508,8 @@ function show(){const a=cur,s=SOULS[a],st=ST[a];
  updateProg();}
 
 function divine(){if(!cur)return;const st=ST[cur];if(st.divined)return;st.divined=true;document.getElementById('invD').classList.add('on');renderDossier(cur);if(!st.councilDone)runCouncil(cur);tutAdvance('divine');}
-function summon(){if(!cur)return;const st=ST[cur];if(st.summoned)return;const c=tutActive?0:summonCost();if(essence<c){sfx('tick');toast('Not enough essence to Summon (need '+c+' 🔮) — judge on what you have, or earn more by laying spirits to rest.');return;}if(c){essence-=c;essSpent+=c;updEss();}st.summoned=true;renderDossier(cur);const iS=document.getElementById('invS');iS.classList.add('on');iS.innerHTML='◑ Summoned ✓ <span class="iqb">Foundry IQ</span>';runCouncil(cur);toast('🔎 <b>Foundry IQ</b> — evidence in. The live bindings are verified and the council reaches its full read.');tutAdvance('summon');}
+function fetchGround(a){try{const s=SOULS[a];if(!s)return;const q=encodeURIComponent((s.label||a)+' '+(s.kind||'account')+' '+(s.lb?'load-bearing live dependencies':'stale unused access')+' remediation control');fetch('/api/ground?q='+q).then(r=>r.ok?r.json():null).then(d=>{if(d&&d.grounded&&d.citations&&d.citations.length){ST[a].ground=d;if(cur===a&&ST[a].summoned)renderDossier(a);}}).catch(()=>{});}catch(e){}}
+function summon(){if(!cur)return;const st=ST[cur];if(st.summoned)return;const c=tutActive?0:summonCost();if(essence<c){sfx('tick');toast('Not enough essence to Summon (need '+c+' 🔮) — judge on what you have, or earn more by laying spirits to rest.');return;}if(c){essence-=c;essSpent+=c;updEss();}st.summoned=true;fetchGround(cur);renderDossier(cur);const iS=document.getElementById('invS');iS.classList.add('on');iS.innerHTML='◑ Summoned ✓ <span class="iqb">Foundry IQ</span>';runCouncil(cur);toast('🔎 <b>Foundry IQ</b> — evidence in. The live bindings are verified and the council reaches its full read.');tutAdvance('summon');}
 async function runCouncil(a){if(!document.getElementById('ag0'))return;const c=ai(a),sm=ST[a].summoned,showC=DIFF[diff].conf&&!modis('fog');
  let w=c.w,sk=sm?c.s:'I can read the surface, but I cannot confirm it without the cited evidence — Summon to be certain.',liveAI=false,agData=null;
  if(sm){const ch0=document.querySelector('#dossier .council .ch');if(ch0)ch0.innerHTML='◈ Agent Council · <span style="color:rgb(var(--acc))">🔧 agents investigating…</span>';const got=await fetchCouncil(a).catch(()=>null);if(cur===a&&got){w=got.w;sk=got.s;liveAI=true;agData=got;}}
@@ -2023,7 +2027,7 @@ function reportSVG(){const d=new Date(),pad=n=>(n<10?'0':'')+n,date=d.getFullYea
  +rowsSvg
  +'<rect x="150" y="650" width="300" height="60" rx="11" fill="rgba('+acc+',.14)" stroke="rgb('+acc+')"/>'
  +'<text x="300" y="688" text-anchor="middle" fill="rgb('+acc+')" font-size="24" font-weight="bold" font-family="Georgia,serif">'+verdict+'</text>'
- +'<text x="300" y="754" text-anchor="middle" fill="#8a83a8" font-size="12" letter-spacing="1.5" font-family="Georgia,serif">Synthetic data · Foundry IQ + Fabric IQ + Copilot</text>'
+ +'<text x="300" y="754" text-anchor="middle" fill="#8a83a8" font-size="12" letter-spacing="1.5" font-family="Georgia,serif">Synthetic data · no PII · Foundry IQ grounded retrieval · MCP</text>'
  +'</svg>';}
 function saveReport(){try{const svg=reportSVG();const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'});const url=URL.createObjectURL(blob);const img=new Image();
  img.onload=function(){try{const c=document.createElement('canvas');c.width=600;c.height=800;c.getContext('2d').drawImage(img,0,0);URL.revokeObjectURL(url);c.toBlob(function(b){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='afterlogin-audit-report.png';document.body.appendChild(a);a.click();a.remove();},'image/png');}catch(e){const a=document.createElement('a');a.href=url;a.download='afterlogin-audit-report.svg';a.click();}};
