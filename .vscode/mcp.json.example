@@ -1,0 +1,10 @@
+{
+  "servers": {
+    "afterlogin-identity": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["server.js", "--stdio"],
+      "cwd": "${workspaceFolder}/mcp"
+    }
+  }
+}
