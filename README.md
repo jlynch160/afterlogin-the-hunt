@@ -40,12 +40,15 @@ flowchart LR
 ```
 
 ### ✅ Required-criteria checklist (Microsoft Agents League — Creative Apps)
-- **Microsoft IQ integration → Foundry IQ.** `/api/ground` performs real permission-aware, **cited
-  grounded retrieval over Azure AI Search** (Foundry IQ); the game surfaces those citations as the
-  council's *Foundry IQ · cited evidence* with a "● Grounded via Foundry IQ" badge. Activate by
-  provisioning a Search index + setting `FOUNDRY_SEARCH_*` (see [`SETUP-IQ.md`](SETUP-IQ.md)); falls
-  back to baked evidence when unconfigured. *(The in-game "Fabric IQ" label is a thematic nod to data
-  lineage, not a Fabric integration — the real IQ layer here is Foundry IQ.)*
+- **Microsoft IQ integration → Foundry IQ. ✅ LIVE.** `/api/ground` performs real permission-aware,
+  **cited grounded retrieval over Azure AI Search** (Foundry IQ) against the `afterlogin-knowledge`
+  index; the game surfaces those citations as the council's *Foundry IQ · cited evidence* with a
+  "● Grounded via Foundry IQ" badge. Verify:
+  `curl "https://victorious-plant-0c1e7790f.7.azurestaticapps.net/api/ground?q=load-bearing+service+account"`
+  → `grounded:true` with ranked citations. Reproduce from scratch with [`go-live.ps1`](go-live.ps1) /
+  [`SETUP-IQ.md`](SETUP-IQ.md); it falls back to baked evidence when unconfigured. *(The in-game
+  "Fabric IQ" label is a thematic nod to data lineage, not a Fabric integration — the real, active IQ
+  layer is Foundry IQ.)*
 - **GitHub Copilot** *(required — fill this in truthfully before submitting):* document your **actual**
   GitHub Copilot usage — which code Copilot helped write, Copilot Chat sessions for debugging/
   explanation, and ideally a short clip of Copilot in VS Code. A concrete, verifiable hook: the same
