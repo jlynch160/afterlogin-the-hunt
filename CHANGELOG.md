@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.30.0] - 2026-06-13 — Interactive architecture map + game-screen rail fix
+
+- **Architecture map is now interactive.** Tap any node to open a detail popover explaining what it
+  does — and for the agents/tools/MCP, the exact function tools it calls (Warden → get_signin_activity
+  + get_dependencies; Skeptic → get_oauth_grants + get_group_memberships; etc.). Selecting a node
+  highlights it and its connected data-edges. Nodes lift on hover; opens focused on /api/reason.
+- **Fixed the game-screen objective rail** colliding with the top HUD — it now sits as a slim status
+  pill just above the action console (where the loop actually happens), and the redundant static
+  console plate was retired.
+
 ## [0.29.0] - 2026-06-13 — Live Architecture Map
 
 - **A full-screen, animated map of the real system.** Game → /api/reason → Warden/Skeptic/Council

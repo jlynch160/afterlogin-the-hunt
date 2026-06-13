@@ -559,13 +559,13 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 @media(min-width:761px){
  .actconsole{display:block;position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:5;width:680px;max-width:94vw;height:140px;border-radius:20px;background:linear-gradient(180deg,rgba(16,11,30,.78),rgba(8,5,16,.9));border:1px solid rgba(201,162,75,.32);box-shadow:0 24px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(14px);pointer-events:none}
  .actconsole::before{content:"";position:absolute;top:-1px;left:20%;right:20%;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,rgba(var(--acc),.6),transparent)}
- .actconsole::after{content:"INVESTIGATE · THEN JUDGE";position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:8.5px;letter-spacing:3px;color:#9a8fc0;background:#0b0818;padding:2px 12px;border-radius:8px;border:1px solid var(--stroke);white-space:nowrap}
+ .actconsole::after{content:"";display:none;position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:8.5px;letter-spacing:3px;color:#9a8fc0;background:#0b0818;padding:2px 12px;border-radius:8px;border:1px solid var(--stroke);white-space:nowrap}
  [data-theme="helpers"] .actconsole{background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(240,248,255,.92));border-color:rgba(60,120,170,.35)}
  [data-theme="helpers"] .actconsole::after{background:#eef6fc;color:#3f5a72;border-color:rgba(60,120,170,.3)}
  .dock2{bottom:88px;gap:10px;z-index:6}
  .rites{bottom:26px;gap:11px;z-index:6}
- .hint{bottom:174px;opacity:.85;font-size:9.5px;z-index:6}
- #toast{bottom:208px}
+ .hint{bottom:200px;opacity:.8;font-size:9.5px;z-index:6}
+ #toast{bottom:236px}
  #nemesis{bottom:30%}
 }
 /* helpers-theme console buttons (were manor-dark on the light console) */
@@ -656,7 +656,7 @@ body.pro .prolbl{display:block;animation:fadein .3s ease}
 #proBtn.on{color:rgb(var(--acc));border-color:rgba(var(--acc),.55);background:rgba(var(--acc),.12);box-shadow:0 0 16px rgba(var(--acc),.2)}
 body.pro .inv .iqb{opacity:1;box-shadow:0 0 10px rgba(var(--acc),.25)}
 /* ══ objective + loop rail ══ */
-#looprail{position:fixed;top:60px;left:50%;transform:translateX(-50%) translateY(-8px);z-index:5;display:none;align-items:center;gap:11px;padding:6px 16px;border-radius:999px;background:rgba(12,9,26,.66);border:1px solid var(--stroke);backdrop-filter:blur(12px);box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transition:opacity .35s,transform .35s;pointer-events:none;max-width:94vw}
+#looprail{position:fixed;bottom:162px;left:50%;transform:translateX(-50%) translateY(8px);z-index:6;display:none;align-items:center;gap:11px;padding:6px 16px;border-radius:999px;background:rgba(12,9,26,.78);border:1px solid var(--stroke);backdrop-filter:blur(12px);box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transition:opacity .35s,transform .35s;pointer-events:none;max-width:94vw}
 #looprail.on{display:flex;opacity:1;transform:translateX(-50%) translateY(0)}
 [data-theme="helpers"] #looprail{background:rgba(255,255,255,.82);border-color:rgba(70,120,170,.3)}
 .lrgoal{font-size:10px;letter-spacing:.4px;color:var(--mut);white-space:nowrap}
@@ -698,7 +698,23 @@ body.pro .inv .iqb{opacity:1;box-shadow:0 0 10px rgba(var(--acc),.25)}
 .a-model{stroke:#ffce5b;color:#ffce5b}
 .a-foundry{stroke:#9a8bff;color:#9a8bff;stroke-dasharray:3 9;opacity:.6}
 .ae.fire{stroke-width:3;opacity:1;animation-duration:.5s;filter:drop-shadow(0 0 7px currentColor)}
-.amn{position:absolute;transform:translate(-50%,-50%);z-index:2;width:150px;text-align:center;padding:11px 12px;border-radius:14px;background:linear-gradient(180deg,rgba(20,14,38,.92),rgba(11,8,22,.95));border:1px solid var(--stroke);box-shadow:0 14px 34px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(8px);transition:transform .25s,box-shadow .25s,border-color .25s;animation:amin .5s ease both}
+.amn{position:absolute;transform:translate(-50%,-50%);z-index:2;width:150px;text-align:center;padding:11px 12px;border-radius:14px;cursor:pointer;background:linear-gradient(180deg,rgba(20,14,38,.92),rgba(11,8,22,.95));border:1px solid var(--stroke);box-shadow:0 14px 34px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(8px);transition:transform .2s,box-shadow .2s,border-color .2s;animation:amin .5s ease both}
+.amn:hover{transform:translate(-50%,-50%) scale(1.06);border-color:rgba(var(--acc),.6);box-shadow:0 16px 40px rgba(0,0,0,.55),0 0 26px rgba(var(--acc),.22)}
+.amn.sel{border-color:rgb(var(--acc));box-shadow:0 16px 44px rgba(0,0,0,.55),0 0 0 2px rgba(var(--acc),.7),0 0 34px rgba(var(--acc),.42);transform:translate(-50%,-50%) scale(1.06)}
+.ae.hl{stroke-width:3.4;opacity:1;filter:drop-shadow(0 0 7px currentColor)}
+#amdetail{position:fixed;z-index:48;width:300px;max-width:92vw;padding:15px 16px;border-radius:15px;background:linear-gradient(180deg,rgba(18,12,32,.98),rgba(9,6,18,.99));border:1px solid rgba(var(--acc),.45);box-shadow:0 24px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07);opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .18s,transform .18s}
+#amdetail.on{opacity:1;transform:none;pointer-events:auto}
+.amdh{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.amdi{font-size:27px;flex:0 0 auto}
+.amdh b{display:block;font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:#f0eaff;line-height:1.05}
+.amdtag{display:block;font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:rgb(var(--acc));margin-top:2px}
+.amdd{font-size:12px;line-height:1.62;color:#cfc7ea}.amdd b{color:#f0eaff;font-weight:600}
+.amdal{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);margin:12px 0 6px}
+.amda{display:flex;flex-wrap:wrap;gap:5px}
+.amda span{font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#9fe6ff;background:rgba(90,209,255,.1);border:1px solid rgba(90,209,255,.28);border-radius:6px;padding:3px 7px}
+[data-theme="helpers"] #amdetail{background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(244,250,255,.99));border-color:rgba(60,120,170,.45)}
+[data-theme="helpers"] .amdh b{color:#1f3550}[data-theme="helpers"] .amdd{color:#3a4f68}[data-theme="helpers"] .amdd b{color:#102338}
+.amhint{color:rgb(var(--acc));font-size:11px;letter-spacing:.4px}
 @keyframes amin{from{opacity:0;transform:translate(-50%,-42%) scale(.9)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 .amn .ami{font-size:23px;filter:drop-shadow(0 0 8px rgba(0,0,0,.5))}
 .amn b{display:block;font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;color:#f0eaff;margin-top:3px;line-height:1.1}
@@ -1257,7 +1273,7 @@ body.flick{animation:flick .56s steps(1) both}
     <div class="amn nt-tool" id="an-tools" style="left:50%;top:73%"><span class="ami">🧰</span><b>Identity tools</b><i>signin · deps · oauth · groups</i></div>
     <div class="amn nt-store" id="an-store" style="left:50%;top:93%"><span class="ami">🗄️</span><b>Identity store</b><i>synthetic · no PII</i></div>
   </div>
-  <div class="amfoot" id="amfoot">The <b>Warden</b> &amp; <b>Skeptic</b> call real function tools and debate; the <b>Council</b> synthesises a cited advisory — and never the verdict. <b>You</b> decide. <span id="amres"></span></div>
+  <div class="amfoot" id="amfoot"><span class="amhint">▸ Tap any node to see what it does · ▶ Run a live investigation to watch the agents fire</span><span id="amres"></span></div>
 </div>
 <div id="wipe"></div>
 <div id="briefing"><div class="brbackdrop"></div><div class="brwrap"><div class="brkick" id="brkick">Mission Briefing</div><div class="brstage"><div class="brico" id="brico">🛡️</div></div><div class="brh" id="brh"></div><div class="brb" id="brb"></div><div class="brmap" id="brmap"></div><div class="brfoot"><span class="brskip" onclick="endBriefing()">Skip briefing</span><div class="brdots" id="brdots"></div><button class="brnext" id="brnext" onclick="briefNext()">Next →</button></div></div></div>
@@ -1933,7 +1949,30 @@ const CODEX=[
  {g:'The Reliquary',m:'Your security stack',d:'CAE, PIM, Conditional Access, Entra ID Governance, Defender XDR, Sentinel SOAR, ISPM — each rite is a real control.'},
  {g:'Essence',m:'The ROI of cleanup',d:'Every dormant account laid to rest cuts attack surface and licensing waste — cleanup creates value.'}
 ];
-function openArch(){const el=document.getElementById('archmap');if(!el)return;el.classList.add('on');archProbe();}
+const AMINFO={
+ game:{ic:'🎮',t:'The Game',tag:'client · the UI',d:'The encounter &amp; combat screen. It sends the account you’re investigating to <b>/api/reason</b>, then renders the council’s cited advice and streams the live tool-call trace on screen.'},
+ model:{ic:'🧠',t:'The Model',tag:'LLM provider',d:'The model powering every agent — <b>GitHub Models</b> (free) or <b>Azure OpenAI</b> (in-tenant). Each agent turn is a real function-calling chat completion. Set a token and the agents go live.'},
+ api:{ic:'⚡',t:'/api/reason',tag:'orchestrator · Azure Function',d:'Runs the multi-agent loop: <b>Warden → Skeptic → Council</b>. It executes their tool calls against the identity store and returns a cited advisory + the full reasoning trace.',alh:'Falls back, in order',a:['Azure AI Foundry','live agents','scripted']},
+ foundry:{ic:'☁️',t:'Azure AI Foundry',tag:'optional agent tier',d:'When provisioned, the council runs as real <b>Foundry connected-agents</b> (threads / runs + function-tool execution) — keeping inference inside your tenant.'},
+ warden:{ic:'🛡️',t:'The Warden',tag:'agent 1 · reasons the safe call',d:'Reads the surface signals and proposes the cautious, correct action — what’s active, and what still depends on the account.',alh:'Tools it calls',a:['get_signin_activity','get_dependencies']},
+ skeptic:{ic:'🔍',t:'The Skeptic',tag:'agent 2 · adversarial',d:'Hunts the contradicting signal the Warden may have missed — a hidden grant, standing privilege. It <b>debates</b> the Warden so the read is stress-tested, never rubber-stamped.',alh:'Tools it calls',a:['get_oauth_grants','get_group_memberships']},
+ council:{ic:'✓',t:'The Council',tag:'agent 3 · synthesis',d:'Weighs the Warden and Skeptic into a <b>cited</b> advisory with a confidence score — and deliberately <b>never names the verdict</b>. The human makes the call. This is the human-in-the-loop discipline, by design.'},
+ mcp:{ic:'⛓️',t:'MCP server',tag:'Model Context Protocol',d:'Exposes the exact same identity tools over <b>MCP</b>, so any agent — Copilot, VS Code, Claude, Foundry — can drive them. Protocol-validated; the same engine, usable anywhere.',alh:'Exposes',a:['list_accounts','get_signin_activity','get_dependencies','get_oauth_grants','get_group_memberships']},
+ tools:{ic:'🧰',t:'Identity tools',tag:'function tools',d:'The real functions the agents call to investigate. Each returns <b>cited</b> evidence — Entra sign-in logs, CMDB dependencies, OAuth consent audit, directory groups.',alh:'The four tools',a:['get_signin_activity','get_dependencies','get_oauth_grants','get_group_memberships']},
+ store:{ic:'🗄️',t:'Identity store',tag:'data · synthetic',d:'A synthetic directory of service accounts, admins and users — each with sign-in activity, dependencies, OAuth grants and group memberships. <b>No real PII.</b>'}
+};
+function amHi(key){try{document.querySelectorAll('#archmap .ae').forEach(p=>{const parts=(p.getAttribute('data-e')||'').split('-');p.classList.toggle('hl',parts.indexOf(key)>=0);});}catch(e){}}
+function amClear(){try{document.querySelectorAll('#archmap .amn').forEach(n=>n.classList.remove('sel'));document.querySelectorAll('#archmap .ae').forEach(p=>p.classList.remove('hl'));const d=document.getElementById('amdetail');if(d)d.classList.remove('on');}catch(e){}}
+function amSelect(id){const info=AMINFO[id],node=document.getElementById('an-'+id);if(!info||!node)return;
+ document.querySelectorAll('#archmap .amn').forEach(n=>n.classList.remove('sel'));node.classList.add('sel');amHi(id);sfx('tick');
+ let d=document.getElementById('amdetail');if(!d){d=document.createElement('div');d.id='amdetail';d.onclick=e=>e.stopPropagation();document.getElementById('archmap').appendChild(d);}
+ d.innerHTML='<div class="amdh"><span class="amdi">'+info.ic+'</span><div><b>'+info.t+'</b><span class="amdtag">'+info.tag+'</span></div></div><div class="amdd">'+info.d+'</div>'+(info.a&&info.a.length?'<div class="amdal">'+info.alh+'</div><div class="amda">'+info.a.map(x=>'<span>'+x+'</span>').join('')+'</div>':'');
+ const r=node.getBoundingClientRect(),dw=300;let left=r.right+14;if(left+dw>window.innerWidth-14)left=r.left-dw-14;if(left<14)left=Math.max(14,Math.min(window.innerWidth-dw-14,r.left+r.width/2-dw/2));
+ let top=r.top-10;if(top+250>window.innerHeight)top=Math.max(66,window.innerHeight-262);d.style.left=left+'px';d.style.top=top+'px';d.classList.add('on');}
+function openArch(){const el=document.getElementById('archmap');if(!el)return;el.classList.add('on');archProbe();amClear();
+ el.querySelectorAll('.amn').forEach(n=>{n.onclick=(e)=>{e.stopPropagation();amSelect(n.id.replace('an-',''));};});
+ const st=el.querySelector('.amstage');if(st)st.onclick=()=>amClear();
+ amSelect('api');}
 function closeArch(){const el=document.getElementById('archmap');if(el)el.classList.remove('on');}
 function archProbe(){try{fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({probe:true})}).then(r=>r.ok?r.json():null).then(d=>{const b=document.getElementById('amlive');if(!b)return;if(d&&d.foundry){b.textContent='● Foundry agents · live';b.className='amlive foundry';}else if(d&&d.configured&&d.source){b.textContent='● Live agents · '+(d.model||d.source);b.className='amlive live';}else{b.textContent='○ Scripted — set a model token for live agents';b.className='amlive';}}).catch(()=>{});}catch(e){}}
 function amLight(id,cls,on){const n=document.getElementById('an-'+id);if(n)n.classList[on?'add':'remove'](cls||'live');}
