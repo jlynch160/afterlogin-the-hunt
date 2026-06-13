@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.27.0] - 2026-06-13 — Mission briefing: why this exists + how it trains real security skills
+
+- **A guided briefing now plays when you Begin.** Choosing The Hunt or Helper Patrol opens a
+  cinematic 5-beat walkthrough (Risk → Investigate → Verify → Real skills → Survive) that explains
+  WHY the game exists (forgotten/over-privileged identities are the #1 breach vector), HOW you play
+  (investigate with the AI council, but verify before you judge — human-in-the-loop), and HOW every
+  move maps to a real Microsoft control (Lay to Rest = deprovision, Bind & Watch = Conditional
+  Access + monitoring, Acknowledge = access review; the right control stops the right attack). Skippable,
+  theme-aware, with a progress map + dots. Makes the training purpose unmistakable from the first click.
+
 ## [0.26.1] - 2026-06-12 — Recorded 2¼-minute directed demo video
 
 - **`afterlogin-demo.webm`** — a directed ~135s tour recorded at 1600×900: boot unlock → both
