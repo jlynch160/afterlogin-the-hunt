@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.28.0] - 2026-06-13 — Legibility pass: Pro view, objective rail, training debrief
+
+- **Pro view (🎓).** A HUD toggle reveals the real Microsoft control behind every judgment — Lay to
+  Rest → Deprovision/lifecycle workflow · Bind & Watch → Conditional Access + monitoring · Acknowledge
+  → certify/access review. Persists across sessions. Makes the security depth legible to judges.
+- **Objective + loop rail.** A slim always-on tracker shows the loop (Investigate → Verify → Judge)
+  with your current step lit, plus the goal and souls-judged count — no more "what do I do now?".
+- **Training debrief.** Dawn and defeat now list the real attack-response you practiced this run —
+  stolen session token (≠ password reset), illicit OAuth grant, Tier-0 admin takeover, load-bearing
+  account binding, evidence cross-examination — so the lesson lands and sticks.
+
 ## [0.27.0] - 2026-06-13 — Mission briefing: why this exists + how it trains real security skills
 
 - **A guided briefing now plays when you Begin.** Choosing The Hunt or Helper Patrol opens a
