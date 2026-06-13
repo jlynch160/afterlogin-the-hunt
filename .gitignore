@@ -18,3 +18,7 @@ Thumbs.db
 *.log
 .backup/
 .swa/
+
+# raw source art (kept locally, not shipped)
+New folder/
+index-classic.html
