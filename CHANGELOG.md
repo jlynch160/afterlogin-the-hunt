@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.29.0] - 2026-06-13 — Live Architecture Map
+
+- **A full-screen, animated map of the real system.** Game → /api/reason → Warden/Skeptic/Council
+  → identity tools → store, with the MCP server and Azure AI Foundry tiers and the model provider —
+  drawn as glowing glass nodes on a grid, connected by colored flowing data-edges (agents green,
+  tools blue, MCP violet, model gold, Foundry dashed).
+- **It actually runs the agents.** A ▶ Run a live investigation button fires a real /api/reason
+  call and lights up the path from the returned trace — Warden → tool → Skeptic → tool → Council —
+  then prints the tier, latency, tool-call count and confidence. The header probes and shows the
+  live tier (Scripted / Live agents · model / Foundry). The clearest possible proof the agents are
+  real. Open it from the menu dock (🗺 Live architecture) or inside Behind the Game.
+
 ## [0.28.0] - 2026-06-13 — Legibility pass: Pro view, objective rail, training debrief
 
 - **Pro view (🎓).** A HUD toggle reveals the real Microsoft control behind every judgment — Lay to

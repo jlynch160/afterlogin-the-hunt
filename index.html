@@ -608,6 +608,8 @@ body.shakeBig{animation:shkBig .52s cubic-bezier(.36,.07,.19,.97)}@keyframes shk
 @keyframes axflow{to{background-position:8px 0}}
 .axnote{margin-top:11px;font-size:11px;line-height:1.6;color:var(--mut)}
 .axnote b{color:rgb(var(--acc))}
+.axopen{display:block;width:100%;margin-top:13px;cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;color:#06231a;background:linear-gradient(180deg,rgba(var(--acc),.95),rgba(var(--acc),.72));border:none;border-radius:11px;padding:11px;box-shadow:0 8px 22px rgba(var(--acc),.28);transition:transform .15s}
+.axopen:hover{transform:translateY(-2px)}.axopen:active{transform:scale(.97)}
 /* ══ mission briefing — why this exists + how it trains ══ */
 #briefing{position:fixed;inset:0;z-index:45;display:none;place-items:center;overflow:hidden}
 #briefing.on{display:grid;animation:fadein .5s ease}
@@ -671,6 +673,50 @@ body.pro .inv .iqb{opacity:1;box-shadow:0 0 10px rgba(var(--acc),.25)}
 .debrief .dbh{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#7dffb0;font-weight:700;margin-bottom:9px;text-align:center}
 .debrief .dbl{font-size:11.5px;line-height:1.55;color:#dff3e8;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05)}
 .debrief .dbl:last-child{border-bottom:0}
+/* ══ live architecture map ══ */
+#archmap{position:fixed;inset:0;z-index:46;display:none;flex-direction:column;background:radial-gradient(120% 90% at 50% 0%,#1a1338,#0b0820 60%,#060410)}
+#archmap.on{display:flex;animation:fadein .35s ease}
+.amgrid{position:absolute;inset:0;pointer-events:none;opacity:.5;background:linear-gradient(rgba(150,120,230,.07) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,rgba(150,120,230,.07) 1px,transparent 1px) 0 0/40px 40px;-webkit-mask:radial-gradient(120% 90% at 50% 36%,#000,transparent 80%);mask:radial-gradient(120% 90% at 50% 36%,#000,transparent 80%)}
+.amhead{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:18px 26px;gap:14px;flex-wrap:wrap}
+.amh1{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:700;color:#f0eaff;display:flex;align-items:center;gap:13px}
+.amlive{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);border:1px solid var(--stroke);border-radius:999px;padding:4px 12px}
+.amlive.live{color:#0b231a;background:rgb(var(--acc));border-color:transparent;box-shadow:0 0 16px rgba(var(--acc),.45);animation:appulse 1.4s ease-in-out infinite}
+.amlive.foundry{color:#1a0d04;background:#ffce5b;border-color:transparent;box-shadow:0 0 16px rgba(255,200,80,.45)}
+.amhb{display:flex;align-items:center;gap:14px}
+.amrun{cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;color:#06231a;background:linear-gradient(180deg,rgba(var(--acc),.98),rgba(var(--acc),.74));border:none;border-radius:11px;padding:9px 20px;box-shadow:0 8px 22px rgba(var(--acc),.3);transition:transform .15s}
+.amrun:hover{transform:translateY(-2px)}.amrun:active{transform:scale(.96)}
+.amrun.busy{opacity:.6;pointer-events:none}
+.amx{cursor:pointer;font-size:20px;color:var(--mut);padding:4px 10px;border-radius:9px}.amx:hover{color:#fff;background:rgba(255,255,255,.08)}
+.amstage{position:relative;z-index:2;flex:1;margin:0 auto;width:min(1060px,96vw)}
+.amedges{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ae{fill:none;stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:5 8;animation:amflow 1.1s linear infinite;opacity:.85;filter:drop-shadow(0 0 3px currentColor)}
+@keyframes amflow{to{stroke-dashoffset:-13}}
+.a-struct{stroke:rgba(200,190,255,.55);color:rgba(200,190,255,.6)}
+.a-agent{stroke:rgb(var(--acc));color:rgb(var(--acc))}
+.a-tool{stroke:#5ad1ff;color:#5ad1ff}
+.a-mcp{stroke:#b58bff;color:#b58bff}
+.a-model{stroke:#ffce5b;color:#ffce5b}
+.a-foundry{stroke:#9a8bff;color:#9a8bff;stroke-dasharray:3 9;opacity:.6}
+.ae.fire{stroke-width:3;opacity:1;animation-duration:.5s;filter:drop-shadow(0 0 7px currentColor)}
+.amn{position:absolute;transform:translate(-50%,-50%);z-index:2;width:150px;text-align:center;padding:11px 12px;border-radius:14px;background:linear-gradient(180deg,rgba(20,14,38,.92),rgba(11,8,22,.95));border:1px solid var(--stroke);box-shadow:0 14px 34px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(8px);transition:transform .25s,box-shadow .25s,border-color .25s;animation:amin .5s ease both}
+@keyframes amin{from{opacity:0;transform:translate(-50%,-42%) scale(.9)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.amn .ami{font-size:23px;filter:drop-shadow(0 0 8px rgba(0,0,0,.5))}
+.amn b{display:block;font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;color:#f0eaff;margin-top:3px;line-height:1.1}
+.amn i{display:block;font-style:normal;font-size:8.5px;letter-spacing:.4px;color:var(--mut);margin-top:2px;line-height:1.3}
+.nt-agent{border-color:rgba(var(--acc),.4)}
+.nt-tool{border-color:rgba(90,209,255,.4)}
+.nt-mcp{border-color:rgba(181,139,255,.4)}.nt-foundry{border-color:rgba(154,139,255,.38)}.nt-model{border-color:rgba(255,206,91,.38)}
+.nt-api{border-color:rgba(200,190,255,.5);box-shadow:0 14px 40px rgba(0,0,0,.55),0 0 30px rgba(150,120,255,.18)}
+.amn.live{border-color:rgb(var(--acc));box-shadow:0 14px 40px rgba(0,0,0,.55),0 0 0 2px rgba(var(--acc),.6),0 0 34px rgba(var(--acc),.5);transform:translate(-50%,-50%) scale(1.08)}
+.amn.live .ami{animation:appulse .7s ease-in-out infinite}
+.amn.tick{border-color:#5ad1ff;box-shadow:0 14px 40px rgba(0,0,0,.55),0 0 0 2px rgba(90,209,255,.6),0 0 30px rgba(90,209,255,.5)}
+.amfoot{position:relative;z-index:3;text-align:center;padding:14px 26px 20px;font-size:12px;line-height:1.6;color:var(--mut);max-width:760px;margin:0 auto}
+.amfoot b{color:#e9e2ff;font-weight:600}
+#amres{display:block;margin-top:7px;color:rgb(var(--acc));font-family:ui-monospace,Menlo,monospace;font-size:11px}
+[data-theme="helpers"] #archmap{background:radial-gradient(120% 90% at 50% 0%,#eaf2fb,#d7e6f4 60%,#c4d7ea)}
+[data-theme="helpers"] .amh1,[data-theme="helpers"] .amn b{color:#1f3550}
+[data-theme="helpers"] .amn{background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(240,247,255,.97))}
+@media(max-width:760px){.amn{width:104px;padding:8px}.amn i{display:none}.amn b{font-size:12px}.amh1{font-size:18px}.amstage{width:98vw}}
 /* ══ unified panel language — every surface speaks console ══ */
 .rite:active,.inv:active,.cbtn:active,.sbuy:active,.toggle:active,.senter:active,.xbtn:active,.dlink:active,.fb:active{transform:scale(.96)!important}
 .dossier{border-color:rgba(201,162,75,.3);box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08),inset 0 2px 0 -1px rgba(var(--acc),.35)}
@@ -1179,6 +1225,40 @@ body.flick{animation:flick .56s steps(1) both}
 <div id="hsweep"><i class="he l"></i><i class="he r"></i></div>
 <div id="mini" title="The floor at a glance — click for the full map" onclick="try{document.getElementById('mapBtn').click()}catch(e){}"></div>
 <div id="looprail"></div>
+<div id="archmap">
+  <div class="amgrid"></div>
+  <div class="amhead">
+    <div class="amh1">⚙ Live System Architecture <span class="amlive" id="amlive">○ checking…</span></div>
+    <div class="amhb"><button class="amrun" id="amrun" onclick="archRun()">▶ Run a live investigation</button><span class="amx" onclick="closeArch()" title="Close">✕</span></div>
+  </div>
+  <div class="amstage">
+    <svg class="amedges" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
+      <path class="ae a-struct" data-e="game-api" d="M500 60 L500 162"/>
+      <path class="ae a-model" data-e="model-api" d="M130 150 C 300 156 380 160 500 162"/>
+      <path class="ae a-foundry" data-e="api-foundry" d="M500 162 C 680 156 790 152 870 150"/>
+      <path class="ae a-agent" data-e="api-warden" d="M500 162 C 360 210 290 250 250 300"/>
+      <path class="ae a-agent" data-e="api-skeptic" d="M500 162 L500 300"/>
+      <path class="ae a-agent" data-e="api-council" d="M500 162 C 640 210 710 250 750 300"/>
+      <path class="ae a-agent" data-e="warden-skeptic" d="M250 300 L500 300"/>
+      <path class="ae a-agent" data-e="skeptic-council" d="M500 300 L750 300"/>
+      <path class="ae a-tool" data-e="warden-tools" d="M250 300 C 320 370 420 410 500 438"/>
+      <path class="ae a-tool" data-e="skeptic-tools" d="M500 300 L500 438"/>
+      <path class="ae a-tool" data-e="tools-store" d="M500 438 L500 558"/>
+      <path class="ae a-mcp" data-e="tools-mcp" d="M500 438 L130 438"/>
+    </svg>
+    <div class="amn nt-game" id="an-game" style="left:50%;top:10%"><span class="ami">🎮</span><b>The Game</b><i>encounter · combat</i></div>
+    <div class="amn nt-model" id="an-model" style="left:13%;top:25%"><span class="ami">🧠</span><b>Model</b><i>GitHub Models / Azure OpenAI</i></div>
+    <div class="amn nt-api" id="an-api" style="left:50%;top:27%"><span class="ami">⚡</span><b>/api/reason</b><i>orchestrator</i></div>
+    <div class="amn nt-foundry" id="an-foundry" style="left:87%;top:25%"><span class="ami">☁️</span><b>Azure AI Foundry</b><i>connected-agents tier</i></div>
+    <div class="amn nt-agent" id="an-warden" style="left:25%;top:50%"><span class="ami">🛡️</span><b>Warden</b><i>reasons the safe call</i></div>
+    <div class="amn nt-agent" id="an-skeptic" style="left:50%;top:50%"><span class="ami">🔍</span><b>Skeptic</b><i>contests it</i></div>
+    <div class="amn nt-agent" id="an-council" style="left:75%;top:50%"><span class="ami">✓</span><b>Council</b><i>cited advisory · no verdict</i></div>
+    <div class="amn nt-mcp" id="an-mcp" style="left:13%;top:73%"><span class="ami">⛓️</span><b>MCP server</b><i>same tools · any agent</i></div>
+    <div class="amn nt-tool" id="an-tools" style="left:50%;top:73%"><span class="ami">🧰</span><b>Identity tools</b><i>signin · deps · oauth · groups</i></div>
+    <div class="amn nt-store" id="an-store" style="left:50%;top:93%"><span class="ami">🗄️</span><b>Identity store</b><i>synthetic · no PII</i></div>
+  </div>
+  <div class="amfoot" id="amfoot">The <b>Warden</b> &amp; <b>Skeptic</b> call real function tools and debate; the <b>Council</b> synthesises a cited advisory — and never the verdict. <b>You</b> decide. <span id="amres"></span></div>
+</div>
 <div id="wipe"></div>
 <div id="briefing"><div class="brbackdrop"></div><div class="brwrap"><div class="brkick" id="brkick">Mission Briefing</div><div class="brstage"><div class="brico" id="brico">🛡️</div></div><div class="brh" id="brh"></div><div class="brb" id="brb"></div><div class="brmap" id="brmap"></div><div class="brfoot"><span class="brskip" onclick="endBriefing()">Skip briefing</span><div class="brdots" id="brdots"></div><button class="brnext" id="brnext" onclick="briefNext()">Next →</button></div></div></div>
 <div id="possess"><div class="pveins"></div><div class="ptext">POSSESSED</div></div>
@@ -1227,7 +1307,7 @@ body.flick{animation:flick .56s steps(1) both}
   <div class="dock">
     <div class="diffrow"><span class="difflbl">Difficulty</span><div class="diffswitch"><span class="dfw" data-d="casual" onclick="setDiff('casual')">Casual</span><span class="dfw on" data-d="auditor" onclick="setDiff('auditor')">Auditor</span><span class="dfw" data-d="nightmare" onclick="setDiff('nightmare')">Nightmare</span></div></div>
     <div class="career" id="career"></div>
-    <div class="dockrow"><span class="dlink" onclick="openCodex()">📖 Behind the Game</span><span class="dsep">·</span><span class="dlink" onclick="startShowcase()">▶ 90-second showcase</span></div>
+    <div class="dockrow"><span class="dlink" onclick="openCodex()">📖 Behind the Game</span><span class="dsep">·</span><span class="dlink" onclick="openArch()">🗺 Live architecture</span><span class="dsep">·</span><span class="dlink" onclick="startShowcase()">▶ 90-second showcase</span></div>
   </div>
   <div class="ifoot2">Synthetic data · Foundry IQ + Fabric IQ · built with Copilot</div>
 </div>
@@ -1853,11 +1933,36 @@ const CODEX=[
  {g:'The Reliquary',m:'Your security stack',d:'CAE, PIM, Conditional Access, Entra ID Governance, Defender XDR, Sentinel SOAR, ISPM — each rite is a real control.'},
  {g:'Essence',m:'The ROI of cleanup',d:'Every dormant account laid to rest cuts attack surface and licensing waste — cleanup creates value.'}
 ];
+function openArch(){const el=document.getElementById('archmap');if(!el)return;el.classList.add('on');archProbe();}
+function closeArch(){const el=document.getElementById('archmap');if(el)el.classList.remove('on');}
+function archProbe(){try{fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({probe:true})}).then(r=>r.ok?r.json():null).then(d=>{const b=document.getElementById('amlive');if(!b)return;if(d&&d.foundry){b.textContent='● Foundry agents · live';b.className='amlive foundry';}else if(d&&d.configured&&d.source){b.textContent='● Live agents · '+(d.model||d.source);b.className='amlive live';}else{b.textContent='○ Scripted — set a model token for live agents';b.className='amlive';}}).catch(()=>{});}catch(e){}}
+function amLight(id,cls,on){const n=document.getElementById('an-'+id);if(n)n.classList[on?'add':'remove'](cls||'live');}
+function amFire(edge,on){try{const ps=document.querySelectorAll('.ae[data-e="'+edge+'"]');for(let i=0;i<ps.length;i++)ps[i].classList[on?'add':'remove']('fire');}catch(e){}}
+function archRun(){const btn=document.getElementById('amrun'),res=document.getElementById('amres');if(!btn||btn.classList.contains('busy'))return;btn.classList.add('busy');btn.textContent='● investigating…';if(res)res.textContent='';
+ ['game','model','api','foundry','warden','skeptic','council','mcp','tools','store'].forEach(id=>{amLight(id,'live',false);amLight(id,'tick',false);});
+ amLight('game',null,true);amFire('game-api',true);
+ setTimeout(()=>{amLight('game',null,false);amLight('api',null,true);amFire('game-api',false);amFire('model-api',true);},520);
+ var done=false;
+ const finish=(d)=>{if(done)return;done=true;amFire('model-api',false);
+  const tr=(d&&d.trace&&d.trace.length)?d.trace:[{agent:'Warden',tool:'get_signin_activity'},{agent:'Skeptic',tool:'get_dependencies'},{agent:'Council'}];
+  let i=0;const step=()=>{
+   if(i>=tr.length){amLight('warden',null,false);amLight('skeptic',null,false);amLight('tools','tick',false);amLight('council',null,true);
+    const src=d?(d.foundry?'Azure AI Foundry agents':(d.agentic?('live agents · '+(d.model||d.source)):'scripted council — set a token for live agents')):'scripted council (offline)';
+    const lat=d&&d.latency?(' · '+d.latency+'ms'):'';const tc=(d&&typeof d.toolCalls!=='undefined')?(' · '+d.toolCalls+' tool calls'):'';const cf=(d&&d.confidence)?(' · '+Math.round(d.confidence*100)+'% confidence'):'';
+    if(res)res.textContent='▸ '+src+lat+tc+cf;
+    setTimeout(()=>{amLight('council',null,false);btn.classList.remove('busy');btn.textContent='▶ Run a live investigation';},1600);return;}
+   const e=tr[i],lw=(e.agent||'').toLowerCase();const who=lw.indexOf('skept')>=0?'skeptic':lw.indexOf('coun')>=0?'council':'warden';
+   amLight('warden',null,false);amLight('skeptic',null,false);amLight('council',null,false);amLight(who,null,true);amFire('api-'+who,true);setTimeout(()=>amFire('api-'+who,false),760);
+   if(e.tool){amFire(who+'-tools',true);amLight('tools','tick',true);amFire('tools-store',true);setTimeout(()=>{amFire(who+'-tools',false);amFire('tools-store',false);amLight('tools','tick',false);},760);}
+   i++;setTimeout(step,1000);};
+  setTimeout(step,700);};
+ try{fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({account:'billing',name:'svc-billing-reconcile'})}).then(r=>r.ok?r.json():null).then(finish).catch(()=>finish(null));}catch(e){finish(null);}
+ setTimeout(()=>finish(null),9000);}
 function openCodex(){const el=document.getElementById('codexList');const tEl=document.getElementById('agenttier');const tier=tEl?tEl.textContent.replace('◈','').trim():'scripted';
  const diag='<div class="axp"><div class="axph">⚙ The real system — <b id="axtier">'+tier+'</b> tier running now</div>'+
  '<div class="axrow"><span class="axn">🎮 the game</span><i class="axf"></i><span class="axn">⚡ /api/reason</span><i class="axf"></i><span class="axg"><span class="axn sm">🛡 Warden</span><span class="axn sm">🔍 Skeptic</span><span class="axn sm">✓ Council</span></span><i class="axf"></i><span class="axn">🧰 identity tools<small>sign-ins · deps · OAuth · groups</small></span></div>'+
  '<div class="axrow ax2"><span class="axn alt">⛓ MCP server — same tools, any agent (Copilot · VS Code · Foundry)</span><span class="axn alt">☁ Azure AI Foundry — optional connected-agents tier</span></div>'+
- '<div class="axnote">The Warden and Skeptic each call real function tools over the identity store, investigate independently and debate; the Council issues a <b>cited</b> advisory — and never the verdict. The human judges. Layered fallback: Foundry → live agents → scripted.</div></div>';
+ '<div class="axnote">The Warden and Skeptic each call real function tools over the identity store, investigate independently and debate; the Council issues a <b>cited</b> advisory — and never the verdict. The human judges. Layered fallback: Foundry → live agents → scripted.</div><button class="axopen" onclick="document.getElementById(\'codex\').classList.remove(\'show\');openArch()">🗺 Open the live architecture map →</button></div>';
  if(el)el.innerHTML=diag+CODEX.map(c=>'<div class="cxitem"><div class="cxg">'+c.g+'</div><div class="cxm">↳ '+c.m+'</div><div class="cxd">'+c.d+'</div></div>').join('');document.getElementById('codex').classList.add('show');}
 function closeCodex(){document.getElementById('codex').classList.remove('show');}
 function reportSVG(){const d=new Date(),pad=n=>(n<10?'0':'')+n,date=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
@@ -1959,7 +2064,7 @@ buildFloorTabs();buildRoster();show();updateHud();updateThreatUI();updateIntroTh
 loadSave();renderCareer();probeAgentTier();proInit();
 window._hungryT=setTimeout(hungryLoop,DIFF[diff].hms);
 if(typeof location!=='undefined'&&location.search&&location.search.indexOf('demo')>=0)setTimeout(startShowcase,700);
-if(typeof document!=='undefined'&&document.addEventListener)document.addEventListener('keydown',e=>{if(e.key==='Escape'&&showcaseOn)stopShowcase();});
+if(typeof document!=='undefined'&&document.addEventListener)document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(showcaseOn)stopShowcase();closeArch();}});
 /* boot splash — cycling status, auto-dismiss + skip on click/key */
 (function(){if(typeof document==='undefined'||!document.getElementById)return;var b=document.getElementById('boot');if(!b||!b.classList||!document.addEventListener)return;
  var demo=(typeof location!=='undefined'&&location.search&&location.search.indexOf('demo')>=0);
