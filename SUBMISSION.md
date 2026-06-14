@@ -1,67 +1,58 @@
-# Afterlogin: The Hunt — Submission
+# Afterlogin: The Hunt × Helper Patrol — Submission
 
-## One-liner
-A game that trains identity-attack response, powered by a **real multi-agent system** —
-Warden & Skeptic agents call tools to investigate, debate, and reach a **cited** advisory;
-the human makes the call.
+> Paste-ready copy for the Microsoft Agents League entry form (Creative Apps track).
+> Live app: https://victorious-plant-0c1e7790f.7.azurestaticapps.net
+> Repo: https://github.com/jlynch160/afterlogin-the-hunt
 
-## What it is
-The night auditor of a haunted estate triages "spirits" (forgotten accounts) before dawn.
-An **Agent Council** investigates each one and advises — but the player decides. Neglect a
-high-risk account and an adversary (**The Hollow**) takes it over, triggering a **multi-stage
-kill-chain** the player fights by **choosing the control that actually remediates the attack**
-(the right one is decisive; the wrong one whiffs with a one-line *why*). It's wrapped as a
-polished game with two themes (haunted manor / cheery factory), boss-gated floors, a dice
-combat system, ranks, a daily challenge, and a shareable audit report.
+---
 
-## Why it matters
-Forgotten and over-privileged identities are a top breach vector, and the *gotchas* are
-exactly what people get wrong (a password reset doesn't kill a stolen session token; revoking
-sessions doesn't remove an OAuth grant; MFA doesn't strip standing Global Admin). Afterlogin
-teaches the **threat → correct-control** mapping and the **human-in-the-loop** discipline of
-not blindly trusting AI — through play.
+## Elevator pitch (one line)
+A cinematic game that trains real identity-security judgment — powered by genuine, tool-calling AI agents that investigate, debate, and cite their evidence, while *you* make the call.
 
-## How it works (the agentic core)
-- **`/api/reason`** is a genuine **multi-agent, tool-calling** endpoint. The **Warden** and
-  **Skeptic** each call function tools (`get_signin_activity`, `get_dependencies`,
-  `get_oauth_grants`, `get_group_memberships`) over a synthetic identity store, investigate
-  independently, **debate**, and a **Council** agent synthesises a **cited** advisory + confidence
-  — never naming the verdict.
-- **MCP server** (`mcp/`) exposes the same tools over the **Model Context Protocol**
-  (protocol-validated), so Copilot / VS Code / Foundry can drive them too.
-- **Azure AI Foundry** path (`foundry/`) turns the council into real **connected-agents** with a
-  one-command provisioning script; `/api/reason` routes to it when configured.
-- The game **streams the live tool-call trace** on screen ("● live agents · N tools", with model,
-  latency, and citations) — the agentic behaviour is visible, not claimed.
-- Layered fallback: **Foundry → inline agents → scripted**, so it always works.
-- **Synthetic data only — no PII.**
+## Inspiration
+Almost every modern breach happens **after** login — a dormant account, an over-permissioned service principal, a forgotten OAuth grant. The tooling to *detect* these is everywhere; what's missing is **trained human judgment** to act on them under pressure. Dashboards don't build that instinct. Games do. I wanted to turn the nightly grind of an identity analyst into something you'd actually *want* to practice — and to prove that AI agents can be a teammate in that loop without taking the human out of it.
 
-## Microsoft tech used
-Azure Static Web Apps + managed Azure Functions · Azure OpenAI / GitHub Models (function calling)
-· **Model Context Protocol** (`@modelcontextprotocol/sdk`) · **Azure AI Foundry Agent Service**
-(`@azure/ai-agents`) · Entra/Defender/Purview/Sentinel concepts as the real controls behind the game.
+## What it does
+Afterlogin is one engine wearing two faces:
 
-## Mapped to judging criteria
-- **Innovation** — a *game* as an agent front-end; agents that teach by being honest-but-uncertain;
-  the same tools usable in-game *and* from any MCP client.
-- **Technical implementation** — real multi-agent tool-calling loop, MCP server, Foundry path,
-  CI/CD, graceful layered fallback. Validated end-to-end.
-- **Use of the platform** — MCP + Foundry connected-agents + Azure OpenAI tool calling, deployed
-  on Azure SWA, in-tenant inference option.
-- **Impact** — teaches real attack-response and identity-governance judgment, with the exact
-  gotchas, to a broad audience.
-- **Demo quality** — a memorable, polished product (most submissions are bare chat UIs) with a
-  self-running showcase mode and an in-game "Behind the Game" architecture reveal.
+- **The Hunt** — a tense, gothic SOC night for security pros. You investigate haunted "souls" (synthetic identities) that represent real misconfigurations, and you decide their fate: revoke, quarantine, restore.
+- **Helper Patrol** — the *same* engine reskinned as a bright, coached factory game for beginners, with guardrails and plain-language explanations.
 
-## Try it
-**Live:** https://victorious-plant-0c1e7790f.7.azurestaticapps.net
-**Repo:** https://github.com/jlynch160/afterlogin-the-hunt — see `README.md` (architecture) and
-`mcp/` / `foundry/` for the agent layers.
+In both, when you investigate an identity you **Summon the council**: a **Warden** agent and a **Skeptic** agent each call real function tools over an identity store, investigate independently, and **debate**. A **Council** agent then synthesizes a **cited advisory** — and deliberately *never* issues the verdict. **You** do. Human-in-the-loop isn't a disclaimer here; it's the core mechanic, and the game scores you on judging *after* verifying.
 
-## 90-second demo path
-1. Read a case → **Divine** (map dependencies) → **Summon** (the agents investigate via tools; the
-   trace streams on screen) → judge a clearly-live account: **Acknowledge**.
-2. A *load-bearing* trap that **looks** dormant → overrule the surface read → **Bind & Watch**.
-3. Neglect an account → **The Hollow** takes it → fight the kill-chain by picking the **right
-   remediation** each stage (wrong tool whiffs with a why) → **Dawn**.
-4. Open **📖 Behind the Game** → every element maps to a real Microsoft control.
+## How I built it
+- **Frontend:** a single self-contained HTML file — DOM/CSS/SVG/Web Audio, zero dependencies — with a theme engine that swaps the entire game between the two worlds from one data attribute.
+- **Agents:** `POST /api/reason` (Azure Function) runs a real **multi-agent, tool-calling loop** on **`gpt-4o` via GitHub Models**. The Warden and Skeptic call four function tools (`get_signin_activity`, `get_dependencies`, `get_oauth_grants`, `get_group_memberships`), loop until they can answer, then the Council cites and concludes.
+- **Grounding:** `POST /api/ground` is a live **Foundry IQ** integration — permission-aware, cited grounded retrieval over **Azure AI Search**. The council's evidence is real, ranked, and sourced.
+- **Interoperability:** the same identity tools are exposed over the **Model Context Protocol** (`mcp/`), so the agents' tools can be driven from **GitHub Copilot in VS Code** or any MCP client.
+- **Resilience:** three execution tiers fall back safely — Azure AI Foundry connected-agents → inline live agents → a scripted tier — so the app *always* works, even offline.
+- **Platform:** Azure Static Web Apps + managed Functions, with GitHub Actions CI/CD on every push.
+- **A live architecture map** inside the app pings every endpoint on open and color-codes each of ~35 components by its *real* status — 10 of 11 services verify green live.
+
+## Challenges I ran into
+- Keeping it **honest**: agents that say "I'm not sure" are more useful — and harder to build — than agents that always sound confident. The Council is explicitly forbidden from issuing the verdict.
+- **One engine, two tones**: making the same logic feel like both a horror game and a friendly trainer without forking the codebase.
+- **Provably-real, not theater**: wiring genuine tool-calling, real grounded retrieval, and a live status board so a judge can *verify* the agents are real rather than take my word for it.
+- Doing it all as a **single deployable file** with a graceful fallback at every tier.
+
+## Accomplishments I'm proud of
+- The council is a **genuine multi-agent debate**, not a single prompt — and you can watch the real tool-call trace on screen.
+- **Foundry IQ grounding is live and cited**, verifiable in-app.
+- A **human-in-the-loop mechanic** that actually teaches: the game rewards verifying before judging.
+- One codebase that serves **both** a SOC professional and a complete beginner.
+
+## What I learned
+That the most valuable role for an AI agent in security isn't to decide — it's to **investigate well and argue honestly** so the human decides better. Designing for that changed every prompt, score, and UI choice in the app.
+
+## What's next
+- Pluggable real-tenant connectors (Entra ID sign-in logs) behind the same tool interface.
+- A team mode where multiple analysts judge the same night and compare calls.
+- More floors/scenarios authored from real incident patterns.
+
+## Built with
+`Azure AI Foundry` · `Foundry IQ (Azure AI Search)` · `Azure OpenAI / GitHub Models (gpt-4o)` · `Model Context Protocol` · `GitHub Copilot` · `Azure Functions` · `Azure Static Web Apps` · `GitHub Actions` · `HTML/CSS/SVG/Web Audio (zero-dependency)`
+
+## Links
+- **Play it live:** https://victorious-plant-0c1e7790f.7.azurestaticapps.net
+- **Source:** https://github.com/jlynch160/afterlogin-the-hunt
+- **Demo video:** _(add your YouTube/Vimeo URL here)_
