@@ -112,7 +112,7 @@ button and watch the real agents fire.
 | ⛓️ | **MCP server** — the same identity tools exposed over the Model Context Protocol for **GitHub Copilot / VS Code / Foundry** |
 | ☁️ | **Azure AI Foundry** connected-agents tier (optional), with graceful fallback: Foundry → live agents → scripted |
 | 🗺️ | **Interactive Live Architecture Map** — tap any node for what it does; **"Run a live investigation"** fires the real agents and lights the path |
-| 🎓 | **Real training** — telegraphed kill-chains, a MITRE-style stage tracker, control hover-cards, and a run-end "what you practiced" debrief |
+| 🎓 | **Real training** — telegraphed kill-chains, an attack-technique stage tracker, control hover-cards, and a run-end "what you practiced" debrief |
 | 🎬 | **Cinematic UX** — keyhole boot, split-world landing, living encounters, arena combat, sunrise finale (8 original generated artworks) |
 | ♻️ | **Roguelite depth** — Discernment meter, relics, daily challenge, ranks, cross-examine deduction |
 
@@ -250,7 +250,7 @@ Connect it to GitHub Copilot in ~5 min → [`COPILOT.md`](COPILOT.md).
   **Vault** (Tier-0) and you lose. Visible on a live mini-map + screen-edge shadow sweeps.
 - **Boss kill-chains** — neglected accounts get taken over by **The Token Thief** (stolen session),
   **The Consent Daemon** (OAuth grant), **The Hollow** (admin takeover). Multi-stage fights with
-  **attack telegraphs**, a **MITRE-style stage tracker**, a d20, and **control hover-cards**; the right
+  **attack telegraphs**, an **attack-technique stage tracker**, a d20, and **control hover-cards**; the right
   control is decisive, the wrong one whiffs *with a "why."*
 - **Discernment meter** — judging *after* verifying (Summon) raises it (Clear-eyed ≥75 → score ×1.25);
   blind calls breed Hubris (≤25 → ×0.8). The human-in-the-loop discipline, scored.
@@ -400,15 +400,18 @@ CHANGELOG.md                  full version history
 
 ## 🏆 Judging-criteria mapping
 
-| Criterion | How Afterlogin meets it |
+Mapped to the official Agents League rubric:
+
+| Criterion (weight) | How Afterlogin meets it |
 |---|---|
-| **Creative application** | A playable, cinematic security-training game — most entries are chat UIs or dashboards |
-| **Microsoft IQ integration** | ✅ **Foundry IQ** — live, cited grounded retrieval over Azure AI Search (verifiable in-app) |
-| **Live agents** | ✅ **Real `gpt-4o` tool-calling agents** running in the deployed app — Warden ↔ Skeptic debate + cited Council |
-| **GitHub Copilot** | MCP server driven from Copilot in VS Code (see [`COPILOT.md`](COPILOT.md)) + documented build usage |
-| **Innovation** | Game-as-agent-frontend; honest-but-uncertain agents; human-in-the-loop as a *mechanic* |
-| **Technical depth** | Real multi-agent tool-calling loop, MCP, Foundry path, Foundry IQ grounding, CI/CD, graceful fallback |
-| **Impact** | Trains the human judgment that prevents the #1 breach vector — for pros *and* beginners |
+| **Accuracy (20%)** | Agents call **real function tools** over the identity store; the Council issues a **cited** advisory grounded in **Foundry IQ** retrieval — every claim is sourced and checkable, never hallucinated |
+| **Reasoning (20%)** | A genuine **multi-agent tool-calling loop** — Warden and Skeptic investigate independently, **debate**, and a Council synthesizes; the real tool-call trace + `gpt-4o` latency are shown on screen |
+| **Creativity (15%)** | A playable, cinematic **security-training game** — one engine, two worlds (gothic SOC night ⟷ helper factory) — where the human-in-the-loop is the *mechanic*, not a disclaimer |
+| **UX / Presentation (15%)** | Single-file, zero-dependency app; cinematic onboarding, Pro view, objective rail, debrief, and a **live architecture map** that verifies its own services on open |
+| **Reliability / Safety (20%)** | **Synthetic data only** (no PII); the Council **never** issues the verdict (human decides); three execution tiers with **graceful fallback** (Foundry → live agents → scripted) so it always works |
+| **Community vote (10%)** | Approachable to *both* SOC pros and complete beginners — the same engine, two faces — built to be shared and played |
+
+**Required-tech checklist:** ✅ **Microsoft IQ** — Foundry IQ live & cited · ✅ **Creative Apps tool** — GitHub Copilot drives the MCP server ([`COPILOT.md`](COPILOT.md)) · ✅ Public repo · ✅ Architecture diagram (below) · ✅ Demo video ≤ 5 min.
 
 ---
 

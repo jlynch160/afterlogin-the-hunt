@@ -5,6 +5,17 @@ repo's **Identity-Governance MCP server** to **GitHub Copilot in VS Code** and d
 real tools from a Copilot Chat. The Creative Apps track explicitly asks for exactly this
 ("build MCP servers that integrate directly with GitHub Copilot").
 
+## ✅ Do-this checklist (the whole thing, in order)
+- [ ] **Build in VS Code with GitHub Copilot on** (so your build genuinely uses it)
+- [ ] `cd mcp && npm install`
+- [ ] Rename `.vscode/mcp.json.example` → `.vscode/mcp.json` (step 1)
+- [ ] **MCP: List Servers** → start `afterlogin-identity` → see **5 tools** healthy   📸 **screenshot #1**
+- [ ] Copilot Chat → **Agent** mode → 🔧 tools → check `afterlogin-identity`
+- [ ] Paste a prompt from step 3 → watch Copilot call the tools + reason   📸 **screenshot #2** (and screen-record ~30–60s for the demo)
+- [ ] Write one true sentence about it in the README (step 4)
+
+> Two screenshots + one honest README line = the GitHub Copilot requirement, fully satisfied and verifiable. Save the screenshots as `docs/copilot-mcp-1.png` and `docs/copilot-mcp-2.png` and link them in the README.
+
 ## Prerequisites
 - **VS Code** (1.102+), **GitHub Copilot** + **Copilot Chat** extensions, signed in with a Copilot
   plan, and **Node 18+**.

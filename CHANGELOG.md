@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.35.0] - 2026-06-14 — Hackathon-rules compliance pass
+
+- Re-mapped the README judging section to the **official Agents League rubric** (Accuracy 20 /
+  Reasoning 20 / Creativity 15 / UX 15 / Reliability-Safety 20 / Community 10) + a required-tech checklist.
+- Softened a third-party framework name to a generic "attack-technique stage tracker" (app + README).
+- COPILOT.md now opens with a do-this checklist + explicit screenshot spots so the GitHub Copilot
+  requirement is airtight and verifiable.
+- Added an architecture diagram image (the live, verified-on-open system board) as a submission deliverable.
+
 ## [0.34.0] - 2026-06-14 — Extended ~3-min demo + AI title art
 
 - **Demo video extended to 2:42** (12 narrated beats) with two new chapters: the **boss kill-chain**
