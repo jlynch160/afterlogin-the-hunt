@@ -2018,7 +2018,7 @@ function archPin(id){const n=ARCH_BYID[id];if(!n)return;ARCH_PINNED=id;try{sfx('
  document.querySelectorAll('#amcols .amnode').forEach(e=>e.classList.remove('sel'));const el=document.querySelector('#amcols .amnode[data-id="'+id+'"]');if(el)el.classList.add('sel');
  const d=document.getElementById('amdetail2');if(d)d.innerHTML='<div class="amdh"><b>'+n.t+'</b><span class="amtag" style="--tc:'+(ARCH_TAGCOL[n.tag]||'#9a9')+'">'+n.tag+'</span></div><div class="amdsub">'+ARCH_TAGNAME[n.tag]+(n.live?' &middot; &#9679; live':'')+'</div><div class="amdd">'+(n.d||n.sub)+'</div>';
  archHover(id);}
-function archTrace(){const btn=document.getElementById('amrun');if(!btn||btn.classList.contains('busy'))return;buildArch();btn.classList.add('busy');btn.textContent='&#9679; tracing turn...';
+function archTrace(){const btn=document.getElementById('amrun');if(!btn||btn.classList.contains('busy'))return;buildArch();btn.classList.add('busy');btn.textContent='● tracing turn…';
  ARCH_PINNED=null;archUnhover();document.querySelectorAll('#amcols .amnode').forEach(e=>e.classList.remove('flow','sel'));
  var trace=null;try{fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({account:'billing',name:'svc-billing-reconcile'})}).then(r=>r.ok?r.json():null).then(d=>{trace=d;}).catch(()=>{});}catch(e){}
  var ph=1;const step=()=>{
