@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.32.0] - 2026-06-14 — Live Architecture board, rebuilt as a categorized systems map
+
+- **The architecture map is now a full systems board.** Six labelled lanes — THE AUDITOR (inputs) →
+  a boxed REASONING CORE → TOOLS & GROUNDING → AZURE → THE STAGE → THE VERDICT — of ~33 type-tagged
+  node cards (LLM / DET / RAG / MCP / IDX / FUNC / GFX / OUT…), each with a one-line role, a phase
+  badge, and a green dot for live Azure services. A numbered "life of a turn" ribbon runs across the
+  top (You choose → … → The night is remembered).
+- **Interactive:** hover any node to light its phase (ribbon + phase-mates); click to pin its full
+  detail in the sidebar; a Legend explains every tag. **⚡ Trace a turn** fires a real /api/reason
+  call and walks the flow phase-by-phase through the board, reporting the live tier. Theme-aware.
+
 ## [0.31.0] - 2026-06-13 — Contest-compliance: real Foundry IQ grounding + precise claims
 
 - **Real Foundry IQ integration, wired in.** Summon now calls /api/ground (permission-aware, cited
