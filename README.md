@@ -1,5 +1,9 @@
 <div align="center">
 
+<img src="afterlogin-title.png" alt="Afterlogin — The Hunt × Helper Patrol: one keyhole between a haunted manor and a helper factory" width="840"/>
+
+<sub><i>Key art generated with Azure OpenAI <code>gpt-image-2</code> — the two worlds, joined by the keyhole.</i></sub>
+
 # 🕯️ Afterlogin — The Hunt × Helper Patrol
 
 ### A cinematic game that *trains real identity-security response* — powered by genuine, tool-calling AI agents.

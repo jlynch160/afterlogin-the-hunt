@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.34.0] - 2026-06-14 — Extended ~3-min demo + AI title art
+
+- **Demo video extended to 2:42** (12 narrated beats) with two new chapters: the **boss kill-chain**
+  combat (The Token Thief — real remediation controls mapped to MITRE technique) and an **interop**
+  beat showing the MCP server driving the same tools from GitHub Copilot / VS Code / Foundry.
+- **Cinematic title card** generated with Azure OpenAI `gpt-image-2` — the two worlds joined by the
+  keyhole — opens the video with a slow Ken Burns push-in, and is now the README hero image.
+- Narration via Azure Neural TTS (en-GB-RyanNeural); audio and video remain frame-accurately aligned.
+
 ## [0.33.2] - 2026-06-14 — README + repo home reflect the now-live agents
 
 - README: added a **Live Agents · gpt-4o** badge and a top "Status — fully live" callout; rewrote the
