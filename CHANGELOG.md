@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.33.0] - 2026-06-14 — The architecture board is now verified-live
+
+- **Real health check on open.** Opening the map now pings the live endpoints — POST `/api/reason`
+  (probe) and GET `/api/ground` — and lights every node by the *actual* response, not a static flag:
+  **green = verified live, pinged just now**; **amber = standby, built but needs a token**. A node
+  briefly pulses lilac while probing.
+- A successful grounded retrieval lights the **Foundry IQ / Azure AI Search / Knowledge-index** lane
+  green; a configured model lights the **Warden / Skeptic / Council / model-router** nodes green (amber
+  until a token is set); any response at all proves the **Functions + SWA + Action** infra live.
+- Header subtitle now reports the live tally ("N verified live · M standby") and the legend explains
+  both states.
+
 ## [0.32.0] - 2026-06-14 — Live Architecture board, rebuilt as a categorized systems map
 
 - **The architecture map is now a full systems board.** Six labelled lanes — THE AUDITOR (inputs) →

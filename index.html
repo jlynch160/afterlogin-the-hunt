@@ -714,6 +714,17 @@ body.pro .inv .iqb{opacity:1;box-shadow:0 0 10px rgba(var(--acc),.25)}
 .amtag{flex:0 0 auto;font-family:ui-monospace,monospace;font-size:7.5px;font-weight:700;letter-spacing:.4px;color:var(--tc);border:1px solid var(--tc);border-radius:4px;padding:1px 4px}
 .amns{font-size:9.5px;color:#8f88b6;margin-top:3px;line-height:1.3}
 .amlivedot{position:absolute;bottom:8px;right:9px;width:6px;height:6px;border-radius:50%;background:#3ef0a0;box-shadow:0 0 8px #3ef0a0;animation:appulse 1.6s ease-in-out infinite}
+/* verified-live health states — set by a real ping of /api/reason + /api/ground on open */
+.amnode.amprobing{border-color:rgba(150,120,230,.45)}
+.amnode.amprobing::after{content:"";position:absolute;bottom:8px;right:9px;width:6px;height:6px;border-radius:50%;background:#9a8fc8;box-shadow:0 0 8px #9a8fc8;animation:appulse .8s ease-in-out infinite}
+.amnode.amok{border-color:rgba(62,240,160,.4);box-shadow:0 0 0 1px rgba(62,240,160,.32),0 0 18px -6px #3ef0a0}
+.amnode.amok .amlivedot{background:#3ef0a0;box-shadow:0 0 9px #3ef0a0}
+.amnode.amstandby{opacity:.72}
+.amnode.amstandby .amlivedot{background:#ffb454;box-shadow:0 0 6px rgba(255,180,84,.7);animation:none}
+.amnode.amok:not(:has(.amlivedot))::after,.amnode.amstandby:not(:has(.amlivedot))::after{content:"";position:absolute;bottom:8px;right:9px;width:6px;height:6px;border-radius:50%}
+.amnode.amok:not(:has(.amlivedot))::after{background:#3ef0a0;box-shadow:0 0 8px #3ef0a0;animation:appulse 1.6s ease-in-out infinite}
+.amnode.amstandby:not(:has(.amlivedot))::after{background:#ffb454;box-shadow:0 0 6px rgba(255,180,84,.7)}
+[data-theme="helpers"] .amnode.amstandby{opacity:.82}
 .amside{flex:0 0 232px;border-left:1px solid rgba(255,255,255,.07);padding:14px 16px;overflow:auto;background:rgba(8,5,18,.42)}
 .amsh{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#867eae;font-weight:700;margin:15px 0 7px}.amsh:first-child{margin-top:0}
 .amsp{font-size:11px;line-height:1.62;color:#a59ed0}.amsp b{color:#e8e2ff}
@@ -1992,9 +2003,9 @@ function buildArch(){if(ARCH_BUILT)return;
  const rb=document.getElementById('amribbon');if(rb)rb.innerHTML='<span class="amrlbl">The life of a turn</span>'+ARCH_PHASES.map((p,i)=>'<span class="amph" data-p="'+p.n+'"><b>'+p.n+'</b>'+p.t+'</span>'+(i<7?'<i class="amarr">&rarr;</i>':'')).join('');
  const cc=document.getElementById('amcols');if(cc)cc.innerHTML=ARCH_COLS.map((c,ci)=>{
   const nodes=c.nodes.map((n,ni)=>{const id='a'+ci+'_'+ni;ARCH_BYID[id]=n;
-   return '<div class="amnode" data-id="'+id+'"'+(n.p?' data-p="'+n.p+'"':'')+' style="--tc:'+(ARCH_TAGCOL[n.tag]||'#9a9')+'">'+(n.p?'<span class="amnb">'+n.p+'</span>':'')+'<div class="amntop"><span class="amnt">'+n.t+'</span><span class="amtag">'+n.tag+'</span></div><div class="amns">'+n.sub+'</div>'+(n.live?'<i class="amlivedot" title="live Azure service"></i>':'')+'</div>';}).join('');
+   return '<div class="amnode" data-id="'+id+'" data-t="'+n.t.replace(/"/g,'')+'"'+(n.p?' data-p="'+n.p+'"':'')+' style="--tc:'+(ARCH_TAGCOL[n.tag]||'#9a9')+'">'+(n.p?'<span class="amnb">'+n.p+'</span>':'')+'<div class="amntop"><span class="amnt">'+n.t+'</span><span class="amtag">'+n.tag+'</span></div><div class="amns">'+n.sub+'</div>'+(n.live?'<i class="amlivedot" title="live Azure service"></i>':'')+'</div>';}).join('');
   return '<div class="amcol'+(c.box?' boxed':'')+'"><div class="amch">'+(c.box?'&#9707; ':'')+c.h+' <span>'+c.sub+' · '+c.nodes.length+'</span></div>'+nodes+'</div>';}).join('');
- const lg=document.getElementById('amleg');if(lg)lg.innerHTML=Object.keys(ARCH_TAGNAME).map(k=>'<span class="amlgi"><b style="color:'+ARCH_TAGCOL[k]+'">'+k+'</b> '+ARCH_TAGNAME[k]+'</span>').join('')+'<span class="amlgi"><i class="amlivedot lgd"></i> live Azure service</span>';
+ const lg=document.getElementById('amleg');if(lg)lg.innerHTML=Object.keys(ARCH_TAGNAME).map(k=>'<span class="amlgi"><b style="color:'+ARCH_TAGCOL[k]+'">'+k+'</b> '+ARCH_TAGNAME[k]+'</span>').join('')+'<span class="amlgi" style="margin-top:4px"><i class="lgd" style="width:6px;height:6px;border-radius:50%;background:#3ef0a0;box-shadow:0 0 7px #3ef0a0"></i> <b style="color:#3ef0a0">verified live</b> — pinged just now</span><span class="amlgi"><i class="lgd" style="width:6px;height:6px;border-radius:50%;background:#ffb454;box-shadow:0 0 6px rgba(255,180,84,.7)"></i> <b style="color:#ffb454">standby</b> — built, needs a token</span>';
  if(cc)cc.querySelectorAll('.amnode').forEach(el=>{el.onmouseenter=()=>archHover(el.getAttribute('data-id'));el.onmouseleave=archUnhover;el.onclick=(e)=>{e.stopPropagation();archPin(el.getAttribute('data-id'));};});
  ARCH_BUILT=true;}
 function archHover(id){const n=ARCH_BYID[id];if(!n)return;
@@ -2018,10 +2029,36 @@ function archTrace(){const btn=document.getElementById('amrun');if(!btn||btn.cla
   const rp=document.querySelector('#amribbon .amph[data-p="'+ph+'"]');if(rp)rp.classList.add('on');
   document.querySelectorAll('#amcols .amnode[data-p="'+ph+'"]').forEach(e=>e.classList.add('flow'));
   try{sfx('tick');}catch(e){}ph++;setTimeout(step,1050);};setTimeout(step,300);}
-function openArch(){const el=document.getElementById('archmap');if(!el)return;buildArch();el.classList.add('on');archProbe();
+function openArch(){const el=document.getElementById('archmap');if(!el)return;buildArch();el.classList.add('on');archHealth();
  const bd=el.querySelector('.ambody');if(bd)bd.onclick=(e)=>{if(e.target.closest&&e.target.closest('.amnode'))return;ARCH_PINNED=null;document.querySelectorAll('#amcols .amnode').forEach(n=>n.classList.remove('sel'));archUnhover();};}
 function closeArch(){const el=document.getElementById('archmap');if(el)el.classList.remove('on');}
-function archProbe(){try{fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({probe:true})}).then(r=>r.ok?r.json():null).then(d=>{const b=document.getElementById('amlive');if(!b)return;if(d&&d.foundry){b.textContent='● Foundry agents live';b.className='amlive live';}else if(d&&d.configured&&d.source){b.textContent='● Live agents · '+(d.model||d.source);b.className='amlive live';}else{b.textContent='○ Scripted (set a token for live agents)';b.className='amlive';}}).catch(()=>{});}catch(e){}}
+// mark nodes whose title matches a regex as verified-live (green) or standby (amber)
+function archMark(re,state){document.querySelectorAll('#amcols .amnode').forEach(el=>{const t=el.getAttribute('data-t')||'';if(re.test(t)){el.classList.remove('amok','amstandby','amprobing');el.classList.add(state);}});archCount();}
+function archCount(){const v=document.querySelectorAll('#amcols .amnode.amok').length,s=document.querySelectorAll('#amcols .amnode.amstandby').length;const sub=document.getElementById('amsub');if(!sub)return;const total=ARCH_COLS.reduce((a,c)=>a+(c.nodes?c.nodes.length:0),0);sub.innerHTML='THE HUNT &times; HELPER PATROL &middot; '+total+' parts &middot; <b style="color:#3ef0a0">'+v+' verified live</b>'+(s?' &middot; '+s+' standby':'');}
+// real health: ping the live endpoints on open and light each node by the actual response
+function archHealth(){
+ document.querySelectorAll('#amcols .amnode').forEach(el=>el.classList.remove('amok','amstandby'));
+ const RE_AGENTS=/Warden|Skeptic|Council|api\/reason|GitHub Models|Azure OpenAI|model router/i,
+       RE_FND=/Azure AI Foundry|Connected agents/i,
+       RE_INFRA=/Azure Functions|Static Web App|Azure SWA|GitHub Action/i,
+       RE_GROUND=/Foundry IQ|Azure AI Search|Knowledge index|api\/ground/i;
+ archMark(new RegExp(RE_AGENTS.source+'|'+RE_FND.source+'|'+RE_INFRA.source+'|'+RE_GROUND.source,'i'),'amprobing');
+ const badge=(d)=>{const b=document.getElementById('amlive');if(!b)return;if(d&&d.foundry){b.textContent='● Foundry agents live';b.className='amlive live';}else if(d&&d.configured&&d.source){b.textContent='● Live agents · '+(d.model||d.source);b.className='amlive live';}else{b.textContent='○ Scripted · set a token for live agents';b.className='amlive';}};
+ // 1) the reasoning/agent tier + the Functions runtime that answered
+ fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({probe:true})})
+  .then(r=>r.ok?r.json():null).then(d=>{
+    badge(d);
+    archMark(RE_INFRA,'amok');                                    // a response proves Functions + SWA + Action are live
+    const liveAgents=!!(d&&d.configured&&d.source);
+    archMark(RE_AGENTS,liveAgents?'amok':'amstandby');
+    archMark(RE_FND,(d&&d.foundry)?'amok':'amstandby');
+  }).catch(()=>{badge(null);archMark(RE_AGENTS,'amstandby');archMark(RE_FND,'amstandby');});
+ // 2) the grounding tier — a real cited retrieval proves Foundry IQ + Search + the index
+ fetch('/api/ground?q=service%20account').then(r=>r.ok?r.json():null).then(d=>{
+    archMark(RE_GROUND,(d&&d.grounded)?'amok':'amstandby');
+  }).catch(()=>{archMark(RE_GROUND,'amstandby');});
+}
+function archProbe(){archHealth();}
 function openCodex(){const el=document.getElementById('codexList');const tEl=document.getElementById('agenttier');const tier=tEl?tEl.textContent.replace('◈','').trim():'scripted';
  const diag='<div class="axp"><div class="axph">⚙ The real system — <b id="axtier">'+tier+'</b> tier running now</div>'+
  '<div class="axrow"><span class="axn">🎮 the game</span><i class="axf"></i><span class="axn">⚡ /api/reason</span><i class="axf"></i><span class="axg"><span class="axn sm">🛡 Warden</span><span class="axn sm">🔍 Skeptic</span><span class="axn sm">✓ Council</span></span><i class="axf"></i><span class="axn">🧰 identity tools<small>sign-ins · deps · OAuth · groups</small></span></div>'+
