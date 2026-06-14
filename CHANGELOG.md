@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.33.1] - 2026-06-14 — Harden the live model path
+
+- `/api/reason` `chat()` no longer assumes a well-formed model response: a non-200, an empty body, a
+  content-filtered reply, or a missing `choices[0].message` now throws a clear, logged error and falls
+  cleanly through to the inline agents / scripted tier instead of a cryptic 500. Makes flipping to live
+  agents safe even when the model rate-limits or filters a turn.
+
 ## [0.33.0] - 2026-06-14 — The architecture board is now verified-live
 
 - **Real health check on open.** Opening the map now pings the live endpoints — POST `/api/reason`

@@ -130,9 +130,11 @@ async function chat(ep, messages, useTools) {
   const body = { model: ep.model, messages: messages, temperature: 0.4, max_tokens: 400 };
   if (useTools) { body.tools = TOOLS; body.tool_choice = 'auto'; }
   const r = await fetch(ep.url, { method: 'POST', headers: ep.headers, body: JSON.stringify(body) });
-  if (!r.ok) throw new Error('model HTTP ' + r.status);
-  const j = await r.json();
-  return j.choices[0].message;
+  if (!r.ok) { let d = ''; try { d = (await r.text()).slice(0, 180); } catch (e) {} throw new Error('model HTTP ' + r.status + (d ? ' · ' + d : '')); }
+  const j = await r.json().catch(() => null);
+  const msg = j && j.choices && j.choices[0] && j.choices[0].message;
+  if (!msg) throw new Error('model returned no message' + (j && j.error ? ' · ' + (j.error.message || j.error.code || '') : ''));
+  return msg;
 }
 
 // one tool-using agent: loops call -> run tools -> call again until it answers (max 4 turns)
