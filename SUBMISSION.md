@@ -52,7 +52,15 @@ That the most valuable role for an AI agent in security isn't to decide — it's
 ## Built with
 `Azure AI Foundry` · `Foundry IQ (Azure AI Search)` · `Azure OpenAI / GitHub Models (gpt-4o)` · `Model Context Protocol` · `GitHub Copilot` · `Azure Functions` · `Azure Static Web Apps` · `GitHub Actions` · `HTML/CSS/SVG/Web Audio (zero-dependency)`
 
+## Architecture diagram
+The required architecture diagram is **`architecture.png`** (the app's own live architecture map) — the
+six-lane system board from input → reasoning core → grounding → Azure → stage → verdict, with each of
+~35 parts color-coded by real status (10 of 11 services verified live, agents on `gpt-4o`, grounding on
+Foundry IQ). It illustrates exactly how the solution uses Microsoft Foundry IQ / Azure AI Search and the
+GitHub Copilot–compatible MCP server. Also rendered as a mermaid diagram in the README.
+
 ## Links
 - **Play it live:** https://victorious-plant-0c1e7790f.7.azurestaticapps.net
 - **Source:** https://github.com/jlynch160/afterlogin-the-hunt
+- **Architecture diagram:** `architecture.png` (in the repo root)
 - **Demo video:** _(add your YouTube/Vimeo URL here)_

@@ -141,6 +141,13 @@ flowchart LR
   API -. optional .-> F[Azure AI Foundry<br/>connected agents]
 ```
 
+### Live architecture (the submission diagram)
+
+The app ships a **live architecture map** that pings every endpoint on open and color-codes each of
+its ~35 parts by *real* status. Here it is showing **10 of 11 services verified live**, agents on `gpt-4o`:
+
+![Afterlogin live architecture — 6 lanes from input to verdict, 10 of 11 Azure services verified live, running on gpt-4o with Foundry IQ grounding](architecture.png)
+
 **Three execution tiers, each falling back safely:**
 
 | Tier | What runs | Status |
