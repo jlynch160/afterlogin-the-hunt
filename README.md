@@ -7,6 +7,7 @@
 *One engine, two faces: a tense SOC night for security pros, and a coached training game for everyone else.*
 
 [![Live Demo](https://img.shields.io/badge/▶_Play_Live-Azure_Static_Web_Apps-7c3aed?style=for-the-badge)](https://victorious-plant-0c1e7790f.7.azurestaticapps.net)
+[![Live Agents](https://img.shields.io/badge/Live_Agents-gpt--4o_·_tool--calling-20F593?style=for-the-badge)](#-how-it-works)
 [![Foundry IQ](https://img.shields.io/badge/Foundry_IQ-Live_grounded_retrieval-20F593?style=for-the-badge)](#-microsoft-iq-integration--foundry-iq)
 [![MCP](https://img.shields.io/badge/MCP-Identity_tools_server-5ad1ff?style=for-the-badge)](mcp/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-c9a24b?style=for-the-badge)](LICENSE)
@@ -14,7 +15,11 @@
 **Built for the [Microsoft Agents League](https://aka.ms/agentsleague) · Creative Apps track**
 `Azure AI Foundry` · `Model Context Protocol` · `Azure OpenAI / GitHub Models` · `GitHub Copilot` · `Azure Static Web Apps`
 
-[**▶ Play it**](https://victorious-plant-0c1e7790f.7.azurestaticapps.net) · [**Demo video**](afterlogin-demo.webm) · [**Architecture**](#-how-it-works) · [**Try in 60 s**](#-quick-start)
+[**▶ Play it**](https://victorious-plant-0c1e7790f.7.azurestaticapps.net) · [**Architecture**](#-how-it-works) · [**Try in 60 s**](#-quick-start)
+
+> **Status — fully live.** The deployed app is running **real tool-calling agents** (`gpt-4o` via GitHub
+> Models) and **Foundry IQ** grounded retrieval right now. Open the in-app **🗺 Live architecture** map and
+> it pings the endpoints live — **10 of 11 services verify green**, badge reads **● Live agents · gpt-4o**.
 
 </div>
 
@@ -134,11 +139,11 @@ flowchart LR
 
 **Three execution tiers, each falling back safely:**
 
-| Tier | What runs | Activate |
+| Tier | What runs | Status |
 |---|---|---|
-| **Azure AI Foundry** | Warden/Skeptic/Council as Foundry connected-agents | `foundry/setup.mjs` + `FOUNDRY_*` settings |
-| **Inline agents** *(default)* | tool-calling loop in the Function (Azure OpenAI / GitHub Models) | set a model token |
-| **Scripted** | curated reasoning, no model | always works (offline) |
+| **Inline agents** ← *running now* | tool-calling loop in the Function — `gpt-4o` via GitHub Models | ✅ **live** in the deployed app |
+| **Azure AI Foundry** *(optional)* | Warden/Skeptic/Council as Foundry connected-agents | available via `foundry/setup.mjs` + `FOUNDRY_*` |
+| **Scripted** | curated reasoning, no model | always-on safety net (works offline) |
 
 A live run shows **"● live agents · N tools"** and streams the real tool-call trace on screen (model ·
 latency · citations). The four function tools — `get_signin_activity`, `get_dependencies`,
@@ -394,7 +399,8 @@ CHANGELOG.md                  full version history
 | Criterion | How Afterlogin meets it |
 |---|---|
 | **Creative application** | A playable, cinematic security-training game — most entries are chat UIs or dashboards |
-| **Microsoft IQ integration** | ✅ **Foundry IQ** — live, cited grounded retrieval over Azure AI Search |
+| **Microsoft IQ integration** | ✅ **Foundry IQ** — live, cited grounded retrieval over Azure AI Search (verifiable in-app) |
+| **Live agents** | ✅ **Real `gpt-4o` tool-calling agents** running in the deployed app — Warden ↔ Skeptic debate + cited Council |
 | **GitHub Copilot** | MCP server driven from Copilot in VS Code (see [`COPILOT.md`](COPILOT.md)) + documented build usage |
 | **Innovation** | Game-as-agent-frontend; honest-but-uncertain agents; human-in-the-loop as a *mechanic* |
 | **Technical depth** | Real multi-agent tool-calling loop, MCP, Foundry path, Foundry IQ grounding, CI/CD, graceful fallback |

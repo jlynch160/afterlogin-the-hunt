@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.33.2] - 2026-06-14 — README + repo home reflect the now-live agents
+
+- README: added a **Live Agents · gpt-4o** badge and a top "Status — fully live" callout; rewrote the
+  execution-tier table so the inline tool-calling tier is marked **running now (✅ live)**; added a
+  **Live agents** row to the judging-criteria map; removed a stale demo-video link.
+- GitHub repo home page: updated description, set the website to the live app, added discovery topics.
+
 ## [0.33.1] - 2026-06-14 — Harden the live model path
 
 - `/api/reason` `chat()` no longer assumes a well-formed model response: a non-200, an empty body, a
