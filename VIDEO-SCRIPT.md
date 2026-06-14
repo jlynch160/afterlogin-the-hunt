@@ -1,6 +1,6 @@
 # 🎬 Afterlogin — Demo Video Talk Track (ElevenLabs-ready)
 
-**Specs:** ~3 min 45 s (the rule allows 5 min max). Record screen with Snip at 1600×900.
+**Specs:** ~4 min (allowing for natural pauses while footage plays; ~520 words) (the rule allows 5 min max). Record screen with Snip at 1600×900.
 Generate the narration in ElevenLabs (a calm, confident voice — e.g. *Adam*, *Daniel*, or *Brian* —
 at ~0.9× pace), then lay it over the captured footage.
 
@@ -11,23 +11,23 @@ Microsoft IQ (Foundry IQ) → GitHub Copilot → innovation, technical depth, an
 
 ## ▶️ ElevenLabs paste block (just the narration — copy this whole block)
 
-> Forgotten and over-privileged identities are the number one way attackers get into an organization. A stale admin. A service account no one owns. An app granted access that nobody reviews. The hard part isn't the tooling — it's the human judgment to know which door to close. Afterlogin is a game that trains it.
+> Forgotten and over-privileged identities are the number one way attackers get into an organization. A stale admin no one deprovisioned. A service account whose owner left. An app granted tenant-wide access that nobody reviews. Every identity someone stopped watching is a door left unlocked — and the hard part isn't the tooling. It's the human judgment to know which door to close. Afterlogin is a game that trains exactly that.
 >
-> One engine, two worlds. A tense security night for the pros — and a friendly, coached version for everyone else. You're the night auditor of a haunted estate, and every spirit is a real, forgotten account you have to judge before dawn.
+> One engine, two worlds. A tense security night for the professionals — and a friendly, fully coached version for everyone else. You play the night auditor of a haunted estate, where every restless spirit is a real, forgotten account you have to judge before dawn breaks.
 >
-> You investigate each one. Divine maps what depends on it. Summon sends a real, multi-agent council: a Warden and a Skeptic that call live tools and debate each other, and a Council that delivers a cited recommendation — but never the final verdict.
+> You investigate each one. Divine maps what still depends on it. Then Summon sends in a real, multi-agent council. The Warden reasons the safe, cautious call. The Skeptic is adversarial — it hunts the contradicting signal the Warden may have missed: a hidden grant, standing privilege. They actually debate. And only then does the Council synthesize a cited recommendation — with a confidence score, and deliberately, never the final verdict.
 >
-> That evidence is grounded by Foundry IQ — real, cited retrieval over Azure AI Search. The green "grounded" badge you see is live data, not decoration.
+> Every one of those agents is calling real function tools — sign-in activity, dependencies, OAuth grants, group memberships — and their evidence is grounded by Foundry IQ: real, permission-aware, cited retrieval over Azure AI Search. The green "grounded" badge you see is live data, not decoration.
 >
-> Because the AI advises, but you decide. A Discernment meter rewards you for verifying before you act, and penalizes rubber-stamping the AI — the discipline of working safely with AI, turned into a mechanic. And every action maps to a real Microsoft control: deprovision, conditional access, an access review.
+> Because here's the thesis: the AI advises, but you decide. A Discernment meter rewards you for verifying before you act — and quietly penalizes rubber-stamping the AI. That's the discipline of working safely with AI, turned into a game mechanic. And every move you make maps to a real Microsoft control — deprovision an account, bind it under conditional access, or certify it in an access review.
 >
-> Neglect a high-risk account, and it gets taken over. Now you fight the attack itself — and you win by choosing the control that actually stops it. A stolen session token needs a session revoke, not a password reset. The right control is decisive. The wrong one fails — and tells you why.
+> Neglect a high-risk account, and an adversary takes it over. Now you fight the attack itself — and you win by choosing the control that actually stops it. A stolen session token needs a session revoke, not a password reset. An illicit consent grant needs the app removed, not just the session killed. The right control is decisive. The wrong one fails — and tells you exactly why. It's real attack-response training, disguised as a boss fight.
 >
-> And this whole identity engine is exposed as an M-C-P server — so I can drive the exact same tools straight from GitHub Copilot, in VS Code. Same agents, same investigation, now inside Copilot.
+> And this entire identity engine is exposed as an M-C-P server — so I can drive the exact same tools straight from GitHub Copilot, inside VS Code. Same agents, same investigation, now in Copilot Chat.
 >
-> Best of all — it's real, and you can watch it run. This is the live architecture map. One click fires the agents and lights the path: the orchestrator, the Warden, the tools, the Skeptic, the Council — with real latency and real citations.
+> Best of all, none of this is a mock-up — and you can watch it run. This is the live architecture map. One click fires the real agents and lights the path: the orchestrator, the Warden, the tools, the Skeptic, the Council — with real latency and real citations streaming back.
 >
-> Afterlogin trains the human judgment that prevents the number one breach vector — for security pros and total beginners alike. A genuinely playable game, a real multi-agent system, Foundry IQ grounding, and GitHub Copilot. Built for the Microsoft Agents League. Survive the night.
+> Afterlogin trains the human judgment that prevents the number one breach vector — for seasoned security pros and total beginners alike. A genuinely playable game. A real multi-agent system. Foundry IQ grounding. And GitHub Copilot. Built for the Microsoft Agents League. Survive the night.
 
 ---
 
