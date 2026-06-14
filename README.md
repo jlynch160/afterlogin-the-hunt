@@ -1,26 +1,119 @@
-# 🕯️ Afterlogin: The Hunt
+<div align="center">
 
-**A game that trains identity-attack response — powered by real, tool-calling AI agents.**
-You're the night auditor of a haunted estate. Every "spirit" is a forgotten account; the
-**Agent Council** investigates and advises, but *you* decide its fate — and when a neglected
-account is taken over, you fight the **kill-chain** by choosing the control that actually
-remediates the attack.
+# 🕯️ Afterlogin — The Hunt × Helper Patrol
 
-Built for the **Microsoft Agents League**. The narrative is a haunted house; the engine is a
-real multi-agent system with function tools, the **Model Context Protocol**, and an optional
-**Azure AI Foundry** agent path.
+### A cinematic game that *trains real identity-security response* — powered by genuine, tool-calling AI agents.
 
-🎮 **Live:** https://victorious-plant-0c1e7790f.7.azurestaticapps.net
-🎬 **Demo video:** [`afterlogin-demo.webm`](afterlogin-demo.webm) — a 2¼-min directed tour (agents · combat · dawn)
-📖 In-game **"Behind the Game"** badge maps every element to the real Microsoft control.
+*One engine, two faces: a tense SOC night for security pros, and a coached training game for everyone else.*
+
+[![Live Demo](https://img.shields.io/badge/▶_Play_Live-Azure_Static_Web_Apps-7c3aed?style=for-the-badge)](https://victorious-plant-0c1e7790f.7.azurestaticapps.net)
+[![Foundry IQ](https://img.shields.io/badge/Foundry_IQ-Live_grounded_retrieval-20F593?style=for-the-badge)](#-microsoft-iq-integration--foundry-iq)
+[![MCP](https://img.shields.io/badge/MCP-Identity_tools_server-5ad1ff?style=for-the-badge)](mcp/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-c9a24b?style=for-the-badge)](LICENSE)
+
+**Built for the [Microsoft Agents League](https://aka.ms/agentsleague) · Creative Apps track**
+`Azure AI Foundry` · `Model Context Protocol` · `Azure OpenAI / GitHub Models` · `GitHub Copilot` · `Azure Static Web Apps`
+
+[**▶ Play it**](https://victorious-plant-0c1e7790f.7.azurestaticapps.net) · [**Demo video**](afterlogin-demo.webm) · [**Architecture**](#-how-it-works) · [**Try in 60 s**](#-quick-start)
+
+</div>
 
 ---
 
-## Why it's actually agentic (not a chatbot)
+## 📑 Table of contents
+- [Overview](#-overview)
+- [The problem](#-the-problem)
+- [The solution](#-the-solution)
+- [Key features](#-key-features)
+- [How it works](#-how-it-works)
+- [Microsoft IQ integration → Foundry IQ](#-microsoft-iq-integration--foundry-iq)
+- [GitHub Copilot](#-github-copilot)
+- [What you actually learn](#-what-you-actually-learn)
+- [Quick start](#-quick-start)
+- [Deployment](#-deployment)
+- [Project structure](#-project-structure)
+- [Judging-criteria mapping](#-judging-criteria-mapping)
+- [Security & responsible AI](#-security--responsible-ai)
+- [Tech stack](#-tech-stack)
+- [License](#-license)
 
-The council is a genuine **multi-agent, tool-calling** system. The **Warden** and **Skeptic**
-each call function tools over an identity store, investigate independently, *debate*, and a
-**Council** agent synthesises a **cited** advisory — and never names the verdict (human decides).
+---
+
+## 🌙 Overview
+
+**Afterlogin** is a playable, cinematic security-training game. You are the **night auditor of a haunted
+estate** — every "spirit" is a real, forgotten identity (a stale admin, an unowned service account, an
+over-permissioned app). An **AI agent council** investigates each one and *advises* — but it can be
+wrong, and it never makes the call. **You** decide its fate before dawn. Neglect a high-risk account and
+an adversary takes it over, triggering a **multi-stage attack kill-chain** you fight by choosing the
+control that *actually* stops the attack.
+
+It ships in two skins from one engine: **🕯️ The Hunt** (haunted manor, for security pros) and
+**☀️ Helper Patrol** (a friendly factory, for coached beginners).
+
+> 🎮 **Play now:** https://victorious-plant-0c1e7790f.7.azurestaticapps.net
+
+---
+
+## 🎯 The problem
+
+> **Forgotten and over-privileged identities are the #1 way attackers get into an organization.**
+
+A dormant admin no one deprovisioned. A service account whose owner left. An app granted tenant-wide
+consent that nobody reviews. Every identity someone *stopped watching* is a door left unlocked — and the
+hard part isn't the tooling, it's the **human judgment**: knowing which account is safe to remove, which
+is load-bearing, and which control *actually* stops a given attack. The classic, expensive mistakes:
+
+- A **password reset** doesn't kill a **stolen session token**.
+- **Revoking sessions** doesn't remove an **illicit OAuth grant**.
+- **MFA** doesn't strip **standing Global Admin**.
+
+And as teams adopt AI copilots for security, a *new* discipline matters: **not blindly trusting the AI** —
+verifying before you act. There's little that *trains* that judgment in a way people actually want to do.
+
+---
+
+## 💡 The solution
+
+Afterlogin turns identity-attack response into a game you *want* to play — and every move maps to a
+**real Microsoft control**:
+
+| In the game | Real control |
+|---|---|
+| **Divine** an account | Map its dependencies / lineage |
+| **Summon** the council | Multi-agent investigation + **Foundry IQ** grounded, cited evidence |
+| **Lay to Rest** | Deprovision via a lifecycle workflow |
+| **Bind & Watch** | Conditional Access + monitoring |
+| **Acknowledge** | Certify in an access review |
+| **Boss kill-chain** | Pick the control that remediates the live attack |
+
+The AI **advises**; the human **decides** (a **Discernment** meter rewards verifying over rubber-stamping —
+human-in-the-loop, made a mechanic). A **Pro view** surfaces the real control behind every action, a
+**mission briefing** explains the why on first launch, and a **live architecture map** lets a judge press a
+button and watch the real agents fire.
+
+---
+
+## ✨ Key features
+
+| | Feature |
+|---|---|
+| 🤖 | **Real multi-agent system** — Warden + Skeptic *debate* via function tools; a Council synthesises a **cited** advisory and never names the verdict |
+| 🔎 | **Foundry IQ grounded retrieval** (live) — Azure AI Search–backed, cited evidence in the council |
+| ⛓️ | **MCP server** — the same identity tools exposed over the Model Context Protocol for **GitHub Copilot / VS Code / Foundry** |
+| ☁️ | **Azure AI Foundry** connected-agents tier (optional), with graceful fallback: Foundry → live agents → scripted |
+| 🗺️ | **Interactive Live Architecture Map** — tap any node for what it does; **"Run a live investigation"** fires the real agents and lights the path |
+| 🎓 | **Real training** — telegraphed kill-chains, a MITRE-style stage tracker, control hover-cards, and a run-end "what you practiced" debrief |
+| 🎬 | **Cinematic UX** — keyhole boot, split-world landing, living encounters, arena combat, sunrise finale (8 original generated artworks) |
+| ♻️ | **Roguelite depth** — Discernment meter, relics, daily challenge, ranks, cross-examine deduction |
+
+---
+
+## 🧠 How it works
+
+The council is a genuine **multi-agent, tool-calling** system — not a single chatbot. The **Warden** and
+**Skeptic** each call function tools over a synthetic identity store, investigate independently, **debate**,
+and a **Council** agent synthesises a **cited** advisory.
 
 ```mermaid
 flowchart LR
@@ -39,26 +132,7 @@ flowchart LR
   API -. optional .-> F[Azure AI Foundry<br/>connected agents]
 ```
 
-### ✅ Required-criteria checklist (Microsoft Agents League — Creative Apps)
-- **Microsoft IQ integration → Foundry IQ. ✅ LIVE.** `/api/ground` performs real permission-aware,
-  **cited grounded retrieval over Azure AI Search** (Foundry IQ) against the `afterlogin-knowledge`
-  index; the game surfaces those citations as the council's *Foundry IQ · cited evidence* with a
-  "● Grounded via Foundry IQ" badge. Verify:
-  `curl "https://victorious-plant-0c1e7790f.7.azurestaticapps.net/api/ground?q=load-bearing+service+account"`
-  → `grounded:true` with ranked citations. Reproduce from scratch with [`go-live.ps1`](go-live.ps1) /
-  [`SETUP-IQ.md`](SETUP-IQ.md); it falls back to baked evidence when unconfigured. *(The in-game
-  "Fabric IQ" label is a thematic nod to data lineage, not a Fabric integration — the real, active IQ
-  layer is Foundry IQ.)*
-- **GitHub Copilot** *(required — fill this in truthfully before submitting):* document your **actual**
-  GitHub Copilot usage — which code Copilot helped write, Copilot Chat sessions for debugging/
-  explanation, and ideally a short clip of Copilot in VS Code. A concrete, verifiable hook: the same
-  identity tools are exposed over **MCP**, so you can connect this MCP server to **GitHub Copilot in
-  VS Code / Copilot CLI** and drive the agents' tools from a Copilot chat — record that. *(Do not
-  claim Copilot usage you didn't do.)*
-- **Creative application.** A playable, cinematic security-training game — see the live URL + demo.
-- **Architecture diagram.** Above.
-
-**Three tiers, each falling back safely:**
+**Three execution tiers, each falling back safely:**
 
 | Tier | What runs | Activate |
 |---|---|---|
@@ -66,68 +140,295 @@ flowchart LR
 | **Inline agents** *(default)* | tool-calling loop in the Function (Azure OpenAI / GitHub Models) | set a model token |
 | **Scripted** | curated reasoning, no model | always works (offline) |
 
-A live run shows **"● live agents · N tools"** and streams the real tool-call trace in an
-on-screen panel (model · latency · citations).
+A live run shows **"● live agents · N tools"** and streams the real tool-call trace on screen (model ·
+latency · citations). The four function tools — `get_signin_activity`, `get_dependencies`,
+`get_oauth_grants`, `get_group_memberships` — are **also exposed over MCP** ([`mcp/`](mcp/)).
 
 ---
 
-## The tools (real, protocol-validated)
+## 🔬 Technical deep dive
 
-The agents call these over function-calling, and the **same tools are exposed over MCP**
-([`mcp/`](mcp/)) so Copilot / VS Code / Claude / Foundry can drive them too:
+<details>
+<summary><b>1 · The multi-agent tool-calling loop</b> (how the agents actually reason)</summary>
 
-- `get_signin_activity` · `get_dependencies` · `get_oauth_grants` · `get_group_memberships`
+<br/>
 
-Each result is **cited** (Entra sign-in logs, Purview runbook index, CMDB, OAuth consent audit).
-**Synthetic data only — no real PII.**
+`POST /api/reason` orchestrates three agents over a synthetic identity store
+([`api/reason/index.js`](api/reason/index.js)):
 
-## Real attack-response training
+1. **Provider selection** — `provider()` picks the model backend from env: Azure OpenAI →
+   GitHub Models → OpenAI; returns `null` (→ scripted fallback) if none configured.
+2. **Warden agent** — runs `runAgent(WARDEN_SYS, …)`: a bounded **function-calling loop** (max 4 turns).
+   The model decides which tools to call; the loop executes `runTool(name, record)`, pushes a proper
+   `{role:'tool', tool_call_id, content}` message back, and continues until the model answers. Every
+   tool call is recorded to a `trace` entry `{agent, tool, result}`.
+3. **Skeptic agent** — same loop with an **adversarial** system prompt: it's told to hunt the
+   contradicting signal the Warden may have missed, and is given the Warden's read to contest.
+4. **Council agent** — synthesises Warden + Skeptic into a **cited** advisory + a confidence score,
+   and is explicitly instructed to **never name the verdict** (the human decides).
+5. **Foundry IQ grounding** — the council's evidence is enriched by `/api/ground` (Azure AI Search).
+6. **Layered fallback** — `Azure AI Foundry (foundry.js) → inline agents → scripted` so it always works.
 
-Each boss is a real attack as a **multi-stage kill-chain**; the **right control is decisive, the
-wrong one whiffs with a "why"** (the gotchas people get wrong):
+The browser renders the returned `trace` live in an on-screen panel (agent → tool → snippet, with
+model · latency · citation count).
 
-- **Stolen session token (AiTM)** → ✅ Revoke Sessions · ❌ password reset *doesn't kill a live token*
-- **Illicit OAuth consent** → ✅ Revoke the grant · ❌ revoking sessions *leaves the app's access*
-- **Domain-admin compromise** → ✅ Strip PIM + rotate krbtgt · ❌ MFA *won't remove standing privilege*
+</details>
 
-The investigation loop teaches **identity governance**: don't delete a *load-bearing* service
-account, verify live bindings before deprovisioning, and keep a human in the loop.
+<details>
+<summary><b>2 · API reference</b> (request / response contracts)</summary>
+
+<br/>
+
+**`POST /api/reason`** — run the multi-agent council on one account.
+```jsonc
+// request
+{ "account": "billing", "name": "svc-billing-reconcile" }
+// response
+{
+  "configured": true, "agentic": true, "source": "github-models", "model": "gpt-4o",
+  "warden":  "…surface read…", "skeptic": "…contesting read…",
+  "council": "…cited advisory (no verdict)…", "confidence": 0.78,
+  "citations": ["Entra sign-in logs", "CMDB", "OAuth consent audit"],
+  "toolCalls": 4, "latency": 1840,
+  "trace": [ { "agent": "Warden", "tool": "get_signin_activity", "result": "…" }, … ]
+}
+```
+
+**`POST /api/reason`** with `{ "probe": true }` — cheap tier check (no agent run):
+```jsonc
+{ "configured": true, "source": "github-models", "foundry": false, "model": "gpt-4o" }
+```
+
+**`GET /api/ground?q=<question>`** — Foundry IQ grounded retrieval over Azure AI Search:
+```jsonc
+{ "grounded": true, "question": "…", "answers": [ … ],
+  "citations": [ { "title": "…", "source": "…", "score": 4.41, "snippet": "…" } ] }
+// unconfigured → { "grounded": false, "fallback": true }
+```
+
+</details>
+
+<details>
+<summary><b>3 · The MCP server</b> (5 tools, protocol-validated)</summary>
+
+<br/>
+
+[`mcp/server.js`](mcp/server.js) exposes the identity-governance tools over the **Model Context
+Protocol** (StreamableHTTP on `/mcp`, or `--stdio`), so **GitHub Copilot, VS Code, Claude or Foundry**
+can drive them. Validate with `npm test` (in-memory protocol client). Tools:
+
+| Tool | Returns |
+|---|---|
+| `list_accounts` | every account + grade + one-line summary |
+| `get_signin_activity` | last interactive / non-interactive sign-in, source-cited |
+| `get_dependencies` | what binds to the account + whether each binding is **live** |
+| `get_oauth_grants` | delegated / app-only consents and their scope |
+| `get_group_memberships` | groups & roles (standing privilege) |
+
+Connect it to GitHub Copilot in ~5 min → [`COPILOT.md`](COPILOT.md).
+
+</details>
+
+<details>
+<summary><b>4 · Game systems in depth</b></summary>
+
+<br/>
+
+- **Core loop** — select a room (account) → **Divine** (map dependencies; preliminary council read) →
+  **Summon** (full agent investigation + Foundry IQ evidence; costs essence) → **Judge**
+  (Lay to Rest / Bind & Watch / Acknowledge). Judge every soul before **dawn**.
+- **The Hungry** — a predator that paths the corridors toward neglected high-risk accounts; reach the
+  **Vault** (Tier-0) and you lose. Visible on a live mini-map + screen-edge shadow sweeps.
+- **Boss kill-chains** — neglected accounts get taken over by **The Token Thief** (stolen session),
+  **The Consent Daemon** (OAuth grant), **The Hollow** (admin takeover). Multi-stage fights with
+  **attack telegraphs**, a **MITRE-style stage tracker**, a d20, and **control hover-cards**; the right
+  control is decisive, the wrong one whiffs *with a "why."*
+- **Discernment meter** — judging *after* verifying (Summon) raises it (Clear-eyed ≥75 → score ×1.25);
+  blind calls breed Hubris (≤25 → ×0.8). The human-in-the-loop discipline, scored.
+- **Cross-examine** — predict load-bearing vs. safe *before* the AI confirms it; rewards reasoning.
+- **Roguelite** — Discernment, **Relics** (lifetime-unlocked starting boons), daily challenge with
+  modifiers, ranks, badges, combo multiplier, and a run-end training debrief.
+- **Boss-gated floors** — Ground → Upper → Attic; a floor's guardian must be confronted to ascend.
+- **Difficulty** — Casual / Auditor / Nightmare tune council confidence, summon cost, and the Hungry.
+
+</details>
+
+<details>
+<summary><b>5 · The synthetic identity store</b> (data model — no PII)</summary>
+
+<br/>
+
+The store ([`api/reason/index.js`](api/reason/index.js), mirrored in [`mcp/server.js`](mcp/server.js))
+is a fabricated directory. Each record:
+```jsonc
+"svc-billing-reconcile": {
+  "signin":      { "interactive": "412 days ago", "noninteractive": "3 hours ago" },
+  "dependencies":[ { "label": "nightly AP-Close job", "live": true } ],
+  "oauthGrants": [ … ],
+  "groups":      [ "Finance-Apps", "…" ],
+  "source":      "Entra sign-in logs · CMDB · OAuth consent audit"
+}
+```
+Accounts span service accounts, admins (incl. break-glass), guests, kiosks and users — each graded
+F→A. **No real people, tenants, or credentials.**
+
+</details>
+
+<details>
+<summary><b>6 · Themes, art & UX</b></summary>
+
+<br/>
+
+One engine, two `data-theme` skins: **spectral** (haunted manor) and **helpers** (sunny factory).
+8 original generated artworks (painted room backdrops + combat arenas, authored via a custom pixel
+renderer and AI image tools). Cinematic flow: keyhole-unlock boot → split-world landing (mouse
+parallax) → mission briefing → living encounter stage → arena combat → sunrise finale. Accessibility:
+`prefers-reduced-motion` support, keyboard focus rings, fine-pointer-only effects, responsive ≤760px.
+
+</details>
 
 ---
 
-## Run it
+## 🔎 Microsoft IQ integration → Foundry IQ
 
-**Game (static, zero-dep):**
+**✅ Live and verifiable.** [`api/ground`](api/ground/index.js) performs real, permission-aware,
+**cited grounded retrieval over Azure AI Search** (Foundry IQ) against the `afterlogin-knowledge` index.
+The game surfaces those citations as the council's *Foundry IQ · cited evidence*, badged
+**"● Grounded via Foundry IQ."**
+
+```bash
+curl "https://victorious-plant-0c1e7790f.7.azurestaticapps.net/api/ground?q=load-bearing+service+account"
+# → {"grounded":true,"citations":[{"title":"Load-bearing service accounts","source":"Identity Governance - lifecycle", ...}]}
+```
+
+Reproduce from scratch in ~10 min: [`go-live.ps1`](go-live.ps1) / [`SETUP-IQ.md`](SETUP-IQ.md). It falls
+back to baked evidence when unconfigured. *(The in-game "Fabric IQ" label is a thematic nod to data
+lineage — the real, active IQ layer is Foundry IQ.)*
+
+---
+
+## 🐙 GitHub Copilot
+
+> *Document your **actual** GitHub Copilot usage here before submitting — and only what's true.*
+
+A concrete, on-spec hook the track explicitly asks for: this repo's **MCP server** exposes the identity
+tools so you can **connect it to GitHub Copilot in VS Code / Copilot CLI** and drive the agents' tools
+from a Copilot chat. See [`COPILOT.md`](COPILOT.md) for the 5-minute setup — *that* is a real, recordable
+GitHub Copilot integration. Also note the Copilot Chat sessions you used while building (debugging,
+explanation, generation). **Don't claim usage you didn't do.**
+
+---
+
+## 🎓 What you actually learn
+
+Each boss is a real attack as a **multi-stage kill-chain**; the **right control is decisive, the wrong one
+whiffs with a "why"**:
+
+| Attack | ✅ Decisive control | ❌ Common mistake |
+|---|---|---|
+| **Stolen session token (AiTM)** | Revoke sign-in sessions / CAE | password reset *(doesn't kill a live token)* |
+| **Illicit OAuth consent** | Remove the enterprise-app grant | revoke sessions *(leaves the app's access)* |
+| **Tier-0 / domain-admin takeover** | Strip standing privilege + rotate secrets | MFA *(won't remove standing access)* |
+
+Plus the governance instincts: don't delete a *load-bearing* service account, verify live bindings before
+deprovisioning, and keep a **human in the loop**.
+
+---
+
+## 🚀 Quick start
+
+**Just want to play?** → **[open the live game](https://victorious-plant-0c1e7790f.7.azurestaticapps.net)**, click a world, follow the mission briefing.
+
+**Run the game locally** (single file, zero dependencies):
 ```bash
 python -m http.server 8080   # then open http://localhost:8080
 ```
-**MCP server:**
+
+**Run the MCP server** (validate over the protocol, then connect to Copilot — see [`COPILOT.md`](COPILOT.md)):
 ```bash
-cd mcp && npm install && npm test   # validate over the protocol
-npm start                           # HTTP  /mcp   (or: npm run stdio)
+cd mcp && npm install && npm test   # protocol-validated
+npm start                           # HTTP /mcp   (or: npm run stdio)
 ```
-**Foundry agents:** see [`foundry/README.md`](foundry/README.md).
 
-## Deploy (Azure Static Web Apps + managed Functions)
+**Activate the live integrations** (Foundry IQ + live agents) — after `az login`:
+```powershell
+./go-live.ps1 -Sku basic -ModelToken github_pat_xxxxx   # Foundry IQ + live agents
+./go-live.ps1 -Sku basic                                # Foundry IQ only
+```
 
-Push to `master` → GitHub Action builds the Function and deploys the whole app.
-Turn the live agents on with one app setting:
+---
+
+## ☁️ Deployment
+
+Hosted on **Azure Static Web Apps + managed Azure Functions**. Push to `master` → a GitHub Action builds
+the Functions and deploys the whole app.
+
 ```bash
-az staticwebapp appsettings set -n afterlogin -g rg-afterlogin --setting-names GITHUB_MODELS_TOKEN=<token>
+# turn the live agents on (server-side; never in the repo)
+az staticwebapp appsettings set -n afterlogin -g rg-afterlogin --setting-names GITHUB_MODELS_TOKEN=YOURTOKEN
 # or AZURE_OPENAI_ENDPOINT + AZURE_OPENAI_KEY (+ AZURE_OPENAI_DEPLOYMENT) to keep inference in-tenant
 ```
 
-## Tech
-Azure Static Web Apps · Azure Functions (Node) · Azure OpenAI / GitHub Models · **Model Context
-Protocol** (`@modelcontextprotocol/sdk`) · **Azure AI Foundry** (`@azure/ai-agents`) · Web Audio.
-Frontend: a single zero-dependency `index.html` (DOM + SVG + Canvas-free).
+---
 
-## Repo
+## 📁 Project structure
+
 ```
-index.html              the game (also encounter.html, the dev copy)
-api/reason/             /api/reason — inline multi-agent endpoint + foundry.js tier
-mcp/                    Identity-Governance MCP server (+ Dockerfile, tests)
-foundry/                Foundry agent provisioning (setup.mjs) + runbook
-assets/                 painted room + ghost art
-CHANGELOG.md            full history
+index.html / encounter.html   the game (single file; encounter.html is the dev copy)
+api/
+  reason/                     /api/reason — multi-agent tool-calling endpoint + foundry.js tier
+  ground/                     /api/ground — Foundry IQ grounded retrieval (Azure AI Search)
+mcp/                          Identity-Governance MCP server (+ tests, Dockerfile, README)
+foundry/                      Azure AI Foundry agent provisioning (setup.mjs) + runbook
+assets/  ·  assets/helpers/   painted room / ghost / arena art (manor + factory themes)
+go-live.ps1  ·  SETUP-IQ.md   one-shot Foundry IQ + token activation
+COPILOT.md                    connect the MCP server to GitHub Copilot in VS Code
+SUBMISSION.md · PITCH.md      judge-facing writeups
+CHANGELOG.md                  full version history
 ```
+
+---
+
+## 🏆 Judging-criteria mapping
+
+| Criterion | How Afterlogin meets it |
+|---|---|
+| **Creative application** | A playable, cinematic security-training game — most entries are chat UIs or dashboards |
+| **Microsoft IQ integration** | ✅ **Foundry IQ** — live, cited grounded retrieval over Azure AI Search |
+| **GitHub Copilot** | MCP server driven from Copilot in VS Code (see [`COPILOT.md`](COPILOT.md)) + documented build usage |
+| **Innovation** | Game-as-agent-frontend; honest-but-uncertain agents; human-in-the-loop as a *mechanic* |
+| **Technical depth** | Real multi-agent tool-calling loop, MCP, Foundry path, Foundry IQ grounding, CI/CD, graceful fallback |
+| **Impact** | Trains the human judgment that prevents the #1 breach vector — for pros *and* beginners |
+
+---
+
+## 🔒 Security & responsible AI
+
+- **Synthetic data only — no real PII.** Every account, sign-in, dependency and grant is fabricated.
+- **No secrets in the repo.** Model tokens and Search keys live only in Azure app settings; `.env*`, keys
+  and `.vscode/mcp.json` are git-ignored; the repo is secret-scanned.
+- **Honest AI.** The council surfaces its own uncertainty and never states a false verdict; the human decides.
+- **Layered fallback** means the app always works, even offline (scripted tier).
+
+---
+
+## 🛠️ Tech stack
+
+`Azure Static Web Apps` · `Azure Functions (Node)` · `Azure AI Foundry` (`@azure/ai-agents`) ·
+`Azure AI Search` (Foundry IQ) · `Azure OpenAI / GitHub Models` (function calling) ·
+**`Model Context Protocol`** (`@modelcontextprotocol/sdk`) · `GitHub Copilot` (VS Code) · Web Audio.
+Frontend: a single zero-dependency `index.html` (DOM + SVG, no framework).
+
+---
+
+## 📄 License
+
+[MIT](LICENSE) © 2026 Jeff Lynch. All in-game identity data is synthetic; no real personal data is included.
+
+<div align="center">
+
+*Built for the Microsoft Agents League. The narrative is a haunted house — the engine is a real multi-agent system.*
+
+**[▶ Play Afterlogin](https://victorious-plant-0c1e7790f.7.azurestaticapps.net)**
+
+</div>
